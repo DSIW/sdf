@@ -1,0 +1,117 @@
+[user]
+  name = NAME
+  email = EMAIL
+  logallrefupdates = true
+[color]
+  ui = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  diff = auto
+[log]
+  decorate = full
+[alias]
+  plr = pull --rebase
+  st = status -sb
+  cl = clone
+  ci = commit -v
+  fix-commit = commit --fixup
+  fixup = commit --fixup HEAD
+  br = branch
+  df = diff
+  diffword = diff --word-diff
+  dc = diff --cached
+  diff-commit = diff-tree -p
+  sm = submodule
+  cp = cherry-pick -x
+  cpc = cherry-pick --continue
+  cps = cherry-pick --skip
+  cpa = cherry-pick --abort
+  dt = difftool
+  rbm = rebase master
+  rbi = rebase -i
+  rbc = rebase --continue
+  rbs = rebase --skip
+  rba = rebase --abort
+  mt = mergetool
+  a = add -p
+  co = checkout
+  cob = checkout -b
+  cop = checkout -p
+  com = checkout master
+  rh = reset HEAD
+  amend = commit --amend
+  stash-unadded = stash -k
+  sl = stash list
+  sp = stash pop
+
+  clean-remote-branches = remote prune origin
+  clean-merged-branches = !/bin/sh -c 'git branch --merged | grep -v \\* | xargs -n 1 git branch -d' -
+
+  ; Log
+  lg = log -p
+  lol = log --graph --decorate --pretty=format:'%Cred%h%Creset [%C(blue)%an%Creset %C(yellow)%ar%Creset]%C(red bold)%d%Creset %s' --abbrev-commit
+  lola = log --graph --decorate --pretty=format:'%Cred%h%Creset [%C(blue)%an%Creset %C(yellow)%ar%Creset]%C(red bold)%d%Creset %s' --abbrev-commit --all
+
+  ; List
+  ls = ls-files
+  ign = ls-files -o -i --exclude-standard
+
+  unstage = reset HEAD --
+  undo = reset HEAD~1 --mixed
+  last = log -1 HEAD
+
+  ; Plural
+  remotes = remote -v
+  branches = branch -a
+  tags = tag -l
+
+  ; Assume changes
+  ignchg = update-index --assume-unchanged
+  noignchg = update-index --no-assume-unchanged
+
+  ; source: http://haacked.com/archive/2014/07/28/github-flow-aliases/
+  ec = config --global -e
+  up = !git pull --rebase --prune $@ && git submodule update --init --recursive
+  cm = !git add -A && git commit -m
+  save = !git add -A && git commit -m "SAVEPOINT"
+  cleanup = !git commit -m "cleanup"
+  wip = !git add -u && git commit -m "WIP"
+  wipe = !git add -A && git commit -qm "WIPE SAVEPOINT" && git reset HEAD~1 --hard
+[merge]
+  tool = vimdiff
+  ff = no
+  summary = true
+  verbosity = 1
+[core]
+	autocrlf = false
+  editor = vim
+[branch]
+  autosetupmerge = true
+  autosetuprebase = always
+[rerere]
+  enabled = true
+[mergetool]
+  prompt = false
+[difftool]
+  prompt = false
+[diff]
+  ; Git diff will use (i)ndex, (w)ork tree, (c)ommit and (o)bject
+  ; instead of a/b/c/d as prefixes for patches
+  mnemonicprefix = true
+	algorithm = patience
+[push]
+	default = tracking
+	;default = current
+[help]
+  autocorrect = 0
+[gc]
+  auto=1
+[mergetool "vimdiff"]
+  cmd="vim -c 'Gvdiff' $MERGED" # use fugitive.vim for 3-way merge
+  keepbackup=false
+[rebase]
+	autostash = true
+	autosquash = true
+[apply]
+	whitespace = nowarn
