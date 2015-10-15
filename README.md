@@ -1,4 +1,4 @@
-# SDF Project
+# SDF Project ![travis-ci](https://travis-ci.org/DSIW/sdf.svg)
 
 ## Getting started
 
