@@ -20,6 +20,10 @@
 1. Start and enable nginx service (e.g. `systemctl start nginx.service; systemctl enable nginx.service`)
 1. Now you can request the site via `http://sdf.localhost` if local server is running via `python manage.py runserver 3001`.
 
+## Notices
+
+* We use [Twitter Bootstrap 3](http://getbootstrap.com)
+
 ## Important Style Guide
 
 ### Python

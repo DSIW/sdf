@@ -1,3 +1,5 @@
 Django==1.8.5
+django-bootstrap3==6.2.2
 invoke==0.11.1
 uWSGI==2.0.11.2
+wheel==0.24.0
