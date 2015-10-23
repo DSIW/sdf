@@ -84,3 +84,5 @@ pip-selfcheck.json
 ### Custom ###
 
 db.sqlite3
+.idea
+app/migrations/*
