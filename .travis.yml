@@ -1,7 +1,10 @@
 language: python
 python:
   - "3.5"
-script: python manage.py test
+script:
+  - python manage.py makemigrations
+  - python manage.py migrate
+  - python manage.py test
 notifications:
   slack:
     secure: cgDiuNizDmiKT1OY1ClqgpqHXz8BB9TsGPGymXJHZvs8BgxHxWtbztG6h6l9QawYnY8k0ys73gq7j99PgK48Pj53MRULJl3K+QIMwEeAMNRM7psbjD8WlNqaLsPVbPZVsK83EL8RWGmdCoHgGEfh7nchslA7xwrlAmGz2eZZLshu9x2qNX+2juVUGIv2/1+0/2u8Es5ui0Yh0OD/8A5hNLnw0tGrinZLpchksulIpnBDeDg9pL/HlQ6qgDjRXKEohoMFz/7QTTRYHCEfjG26+lZdyfwb5gf9nTgAFCsYK5vEURP1fJDhXaORAZuBG3vvxijXpCE+GKCJoN/i2OjV80crTHwKX74ozpeHEmROhAzpxFuRoiIcAcHd1Ez3BqJk3k/aCS7nFy8EP+EsysbWgIg30DXHrwmHHcfOk5gNvIxHe7sSF74IoDBQ1mOsm1K8P0m2oh5aZeZ4R/7GI6xL6dVxaaPKR2Ea/PLp64sWzthxgveiSaJCygVGot0QtjIpJUzDG2IU2BJlFJpzdJSoE6SPXVAUd0k2K6aO3yydUaSxkl/b+pNZ0lRznyVh6XfOSzmRrQ4NXX2QmwWOO8SkcvEGDUdkCFL3mbbZ1KXIyUUFLhf8nT8J2HzvdsUXJZ98dMPxuLhZTdEkDy2rZhkFyZ/13LkFkWiLu0BLtP6rKls=
