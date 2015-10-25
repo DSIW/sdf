@@ -3,10 +3,6 @@
 {% block body_classes %}Benutzer Archiv{% endblock %}
 
 {% block content %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-
     <div class="col-md-12 col-xs-12 col-lg-12">
         <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#newBook"><i class="fa fa-plus"></i> Neues Buch anlegen
         </button>
