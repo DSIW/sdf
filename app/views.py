@@ -1,4 +1,3 @@
-from _testcapi import instancemethod
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.forms.models import modelformset_factory
