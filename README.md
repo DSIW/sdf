@@ -22,9 +22,18 @@
 
 ## Requirements
 
+* `decorator`: Required by `ipython`
 * `django-extensions`: Enhanced commands: `./manage.py (show_urls|validate_templates|shell_plus|runserver_plus)`
 * `invoke`: Invoke commands
+* `ipython`: Interactive shell with history support. Run `./manage.py shell_plus`
+* `ipython-genutils`: Required by `ipython`
+* `path.py`: Required by `ipython`
+* `pexpect`: Required by `ipython`
+* `pickleshare`: Required by `ipython`
+* `ptyprocess`: Required by `ipython`
+* `simplegeneric`: Required by `ipython`
 * `six`: Required by `django-extensions`
+* `traitlets`: Required by `ipython`
 * `uWSGI`: Fast Application Server Container as interface for nginx in production mode
 * `wheel`: required for installation of pure python and native C extension packages
 
