@@ -22,8 +22,10 @@
 
 ## Requirements
 
-* `uWSGI`: Fast Application Server Container as interface for nginx in production mode
+* `django-extensions`: Enhanced commands: `./manage.py (show_urls|validate_templates|shell_plus|runserver_plus)`
 * `invoke`: Invoke commands
+* `six`: Required by `django-extensions`
+* `uWSGI`: Fast Application Server Container as interface for nginx in production mode
 * `wheel`: required for installation of pure python and native C extension packages
 
 ## Notices
