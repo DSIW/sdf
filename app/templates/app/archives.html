@@ -37,7 +37,7 @@
                         <a href="{% url 'archivesEditPage' book.id %}" class="btn btn-default" aria-label="Bearbeiten" title="Bearbeiten">
                             <span class="fa fa-edit" aria-hidden="true"></span>
                         </a>
-                        <a class="btn btn-default" aria-label="Löschen" title="Löschen">
+                        <a href="{% url 'deleteBook' book.id %}" data-method="delete" data-confirm="true" class="btn btn-danger" aria-label="Löschen" title="Löschen">
                             <span class="fa fa-remove" aria-hidden="true"></span>
                         </a>
 

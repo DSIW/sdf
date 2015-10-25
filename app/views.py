@@ -6,6 +6,9 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib import messages
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 
 from .forms import NewBookForm
 from .models import Book
@@ -76,4 +79,13 @@ def archivesEditPageView(request, book_id):
         "book": bookEdit,
     },  RequestContext(request))
 
+def deleteBook(request, id):
+    if request.method == 'DELETE':
+        book = get_object_or_404(Book, id=id)
+        book.delete()
+        messages.add_message(request, messages.SUCCESS, 'Das Buch wurde erfolgreich gelöscht!')
+        # use GET request for redirected location via HTTP status code 303 (see other).
+        return HttpResponseRedirect(reverse('archivesPage'), status=303)
+    else:
+        raise("Use http method DELETE for deleting a book.")
 
