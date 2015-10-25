@@ -34,33 +34,32 @@
 
     <div class="col-md-12 col-xs-12 col-lg-12" style="padding-top: 15px">
         <h1>Ihre angelegten Bücher</h1>
-        {% for books in allSavedCustomerBooks %}
+        {% for book in allSavedCustomerBooks %}
             <ul class="list-group">
                 <li class="list-group-item" style="height: 55px">
                     <div style="float: right">
-                        <a class="btn btn-default" aria-label="Bearbeiten" title="Bearbeiten"
-                                href="{% url 'archivesEditPage' books.id %}">
-                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                        <a href="{% url 'archivesEditPage' book.id %}" class="btn btn-default" aria-label="Bearbeiten" title="Bearbeiten">
+                            <span class="fa fa-edit" aria-hidden="true"></span>
                         </a>
                         <a class="btn btn-default" aria-label="Löschen" title="Löschen">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </a>
 
-                        {% if not books.isOnStoreWindow %}
+                        {% if not book.isOnStoreWindow %}
                             <a class="btn btn-default" aria-label="Zum Schaufenster hinzufügen"
                                title="Buch zum Schaufenster hinzufügen">
                                 <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                             </a>
                         {% endif %}
 
-                        {% if books.isOnStoreWindow %}
+                        {% if book.isOnStoreWindow %}
                             <a class="btn btn-default" aria-label="Zum Schaufenster entfernen"
                                title="Buch aus Schaufenster entfernen">
                                 <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
                             </a>
                         {% endif %}
                     </div>
-                    <h4 style="vertical-align: middle">{{ books.name }}</h4>
+                    <h4 style="vertical-align: middle">{{ book.name }}</h4>
                 </li>
             </ul>
         {% endfor %}
