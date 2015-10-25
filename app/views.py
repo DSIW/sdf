@@ -66,18 +66,20 @@ def archivesEditPageView(request, book_id):
     bookEdit = Book.objects.get(pk=book_id);
     editBookFormSet = NewBookForm(instance=bookEdit)
 
+    response = render_to_response(template_name, {
+        "formset": editBookFormSet,
+        "book": bookEdit,
+    },  RequestContext(request))
     if request.method == 'POST':
         try:
             formset = NewBookForm(request.POST, instance=Book.objects.get(pk=book_id))
             NewBookForm.validateAndUpateBook(formset)
             messages.add_message(request, messages.SUCCESS, 'Das Buch wurde erfolgreich aktualisiert!')
+            response = HttpResponseRedirect(reverse('archivesPage'))
         except ValidationError as e:
             messages.add_message(request, messages.ERROR, 'Das Buch konnte leider nicht aktualisiert werden!')
+    return response
 
-    return render_to_response(template_name, {
-        "formset": editBookFormSet,
-        "book": bookEdit,
-    },  RequestContext(request))
 
 def deleteBook(request, id):
     if request.method == 'DELETE':
