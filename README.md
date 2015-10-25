@@ -41,6 +41,7 @@
 ## Notices
 
 * We use [Twitter Bootstrap 3](http://getbootstrap.com)
+* We use [Fontawesome Icons](http://fontawesome.io/icons)
 
 ## Important Style Guide
 

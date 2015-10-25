@@ -8,7 +8,7 @@
     {% endfor %}
 
     <div class="col-md-12 col-xs-12 col-lg-12">
-        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#newBook">Neues Buch anlegen
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#newBook"><i class="fa fa-plus"></i> Neues Buch anlegen
         </button>
         <div id="newBook" class="{% if collapsed %}collapse{% endif %}" style="padding-top: 15px">
             <form role="form" method="post" action="">
@@ -42,20 +42,20 @@
                             <span class="fa fa-edit" aria-hidden="true"></span>
                         </a>
                         <a class="btn btn-default" aria-label="Löschen" title="Löschen">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            <span class="fa fa-remove" aria-hidden="true"></span>
                         </a>
 
                         {% if not book.isOnStoreWindow %}
                             <a class="btn btn-default" aria-label="Zum Schaufenster hinzufügen"
                                title="Buch zum Schaufenster hinzufügen">
-                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                                <span class="fa fa-check-circle" aria-hidden="true"></span>
                             </a>
                         {% endif %}
 
                         {% if book.isOnStoreWindow %}
                             <a class="btn btn-default" aria-label="Zum Schaufenster entfernen"
                                title="Buch aus Schaufenster entfernen">
-                                <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+                                <span class="fa fa-remove" aria-hidden="true"></span>
                             </a>
                         {% endif %}
                     </div>
