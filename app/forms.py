@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 from .models import Book
 
-class NewBookForm(forms.ModelForm):
+class BookForm(forms.ModelForm):
     '''
     Klasse zum erstellen der Buch Form
     widgets: Defintion wie die Eingabefelder auszusehen haben. Hier am Beispiel css Klasse von Bootstrap genutzt und Vorschau eingebaut
@@ -14,13 +14,13 @@ class NewBookForm(forms.ModelForm):
         model = Book
         exclude = ['Id', 'isOnStoreWindow']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Buchname'}),
-            'author': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Author des Buches'}),
-            'language': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Sprache des Buches'}),
-            'releaseDate': forms.DateInput(attrs={'class': 'form-control datepicker', 'placeholder': 'Veröffentlichungsdatum', 'data-date-format': 'dd.mm yyyy', 'data-provide': 'datepicker'}),
-            'pageNumber': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Seitenzahl'}),
-            'isbn10': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ISBN-10 Nummer'}),
-            'isbn13': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ISBN-13 Nummer'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'author': forms.TextInput(attrs={'class': 'form-control'}),
+            'language': forms.TextInput(attrs={'class': 'form-control'}),
+            'releaseDate': forms.DateInput(attrs={'class': 'form-control datepicker', 'data-provide': 'datepicker'}),
+            'pageNumber': forms.TextInput(attrs={'class': 'form-control'}),
+            'isbn10': forms.TextInput(attrs={'class': 'form-control'}),
+            'isbn13': forms.TextInput(attrs={'class': 'form-control'}),
         }
         labels = {
             'name': _('Buchname'),
@@ -49,20 +49,6 @@ class NewBookForm(forms.ModelForm):
 
             if(is_really_valid):
                 formset.save()
-            else:
-                raise ValidationError("Es gab leere Eingabefelder")
-        else:
-            raise ValidationError("Eingabefelder waren nicht valide")
-
-    def validateAndUpateBook(form):
-        '''Diese Methode wird zum aktulaisieren eines Buches genutzt
-        '''
-        if form.is_valid():
-            is_really_valid = True
-            if not 'name' in form.cleaned_data:
-                is_really_valid = False
-            if(is_really_valid):
-                form.save()
             else:
                 raise ValidationError("Es gab leere Eingabefelder")
         else:

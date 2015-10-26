@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 
-from .forms import NewBookForm
+from .forms import BookForm
 from .models import Book
 
 class StartPageView(TemplateView):
@@ -30,11 +30,11 @@ def archivesPageView(request):
     template_name = 'app/archives.html'
     collapsed = False
 
-    newBookFormSet = modelformset_factory(Book, NewBookForm)
+    newBookFormSet = modelformset_factory(Book, BookForm)
     if request.method == 'POST':
         try:
             formset = newBookFormSet(request.POST)
-            NewBookForm.validateAndSaveNewBook(formset)
+            BookForm.validateAndSaveNewBook(formset)
             formset = newBookFormSet(queryset=Book.objects.none())
             collapsed = True
             messages.add_message(request, messages.SUCCESS, 'Das Buch wurde erfolgreich angelegt!')
@@ -59,23 +59,23 @@ def archivesEditPageView(request, book_id):
     Diese Methode aktualisiert ein Buch
     :param request:  Request dder gesendet wurde
     :param book_id: Buch ID welches aktualisiert werden soll
-    :return:formset: Die Form die generiert wird aus dem Model
+    :return:form: Die Form die generiert wird aus dem Model
     '''
     template_name = 'app/archives_edit.html'
     bookEdit = Book.objects.get(pk=book_id);
-    editBookFormSet = NewBookForm(instance=bookEdit)
+    bookForm = BookForm(instance=bookEdit)
 
     response = render_to_response(template_name, {
-        "formset": editBookFormSet,
+        "form": bookForm,
         "book": bookEdit,
     },  RequestContext(request))
     if request.method == 'POST':
         try:
-            formset = NewBookForm(request.POST, instance=Book.objects.get(pk=book_id))
-            NewBookForm.validateAndUpateBook(formset)
+            form = BookForm(request.POST, instance=Book.objects.get(pk=book_id))
+            form.save()
             messages.add_message(request, messages.SUCCESS, 'Das Buch wurde erfolgreich aktualisiert!')
             response = HttpResponseRedirect(reverse('archivesPage'))
-        except ValidationError as e:
+        except ValueError as e:
             messages.add_message(request, messages.ERROR, 'Das Buch konnte leider nicht aktualisiert werden!')
     return response
 

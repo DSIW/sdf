@@ -1,3 +1,5 @@
 jQuery(function(){
-  $('.datepicker').datepicker();
+  $('.button-collapse').sideNav();
+  $('.parallax').parallax();
+  $('.datepicker').datepicker({format: 'DD.MM.YYYY'});
 });
