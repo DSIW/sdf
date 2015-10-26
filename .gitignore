@@ -84,3 +84,7 @@ pip-selfcheck.json
 ### Custom ###
 
 db.sqlite3
+
+## pyCharm ##
+.idea/
+
