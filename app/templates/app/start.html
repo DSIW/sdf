@@ -5,10 +5,8 @@
 {% block content %}
   <div class="jumbotron">
     <h1>Hallo Nutzer!</h1>
-    {% if user.is_authenticated %}
-        <p><a class="btn btn-primary btn-lg" href="./logout" role="button">Abmelden</a></p>
-    {% else %}
-        <p><a class="btn btn-primary btn-lg" href="./login" role="button">Anmelden</a></p>
+    {% if not user.is_authenticated %}
+        <p><a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Anmelden</a></p>
     {% endif %}
   </div>
 {% endblock %}

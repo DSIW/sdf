@@ -14,7 +14,7 @@
 {{ form.password.label_tag }} {{ form.password }}
 
 <input type="submit" value="login" />
-<input type="hidden" name="next" value="/" />
+<input type="hidden" name="next" value="{% url 'startPage' %}" />
 </form>
 
 {# Assumes you setup the password_reset view in your URLconf #}

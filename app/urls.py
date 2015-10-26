@@ -9,8 +9,8 @@ urlpatterns = [
     url(r'^$', views.StartPageView.as_view(), name='startPage'),
 
     # session
-    url(r'^login$', auth_views.login, {}),
-    url(r'^logout$', auth_views.logout, {'template_name': 'app/start.html'}),
+    url(r'^login$', auth_views.login, name='login'),
+    url(r'^logout$', auth_views.logout, name='url'),
 
     # books
     url(r'^archive/', views.archivesPageView, name='archivesPage'),

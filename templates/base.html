@@ -50,7 +50,7 @@
                         <li><a href="{% url 'archivesPage' %}">Archiv</a></li>
                         <li><a href="#">Einstellungen</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Abmelden</a></li>
+                        <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
                     </ul>
                 </li>
                 {% endif %}
