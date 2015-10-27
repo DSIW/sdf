@@ -40,8 +40,9 @@
 
 ## Notices
 
-* We use [Twitter Bootstrap 3](http://getbootstrap.com)
-* We use [Fontawesome Icons](http://fontawesome.io/icons)
+* We use [Material Design](http://materializecss.com)
+* We use [Material Icons](https://www.google.com/design/icons/)
+* We use [Fontawesome Icons](http://fontawesome.io/icons) if no icon in Material Design exists
 
 ## Important Style Guide
 
