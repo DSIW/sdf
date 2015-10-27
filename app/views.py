@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
-from django.forms.models import modelformset_factory
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib import messages
@@ -24,34 +23,30 @@ def archivesPageView(request):
     '''
     Diese Methode zeigt alle vorhandenen Buecher an und ermoeglicht es ein neues Buch zu speichern
     :param request: Der Request der erzeugt wurde
-    :return: formset: Die Form die sich generiert aus dem Model, collapsed: Status ob "Neues Buch hinzufuegen" angezeigt werden soll
-    allSavedCustomerBooks: Alle gespeicherten Buecher
+    :return: form: Die Form die sich generiert aus dem Model, collapsed: Status ob "Neues Buch hinzufuegen" angezeigt werden soll
+    allBooks: Alle Buecher
     '''
     template_name = 'app/archives.html'
     collapsed = False
 
-    newBookFormSet = modelformset_factory(Book, BookForm)
     if request.method == 'POST':
         try:
-            formset = newBookFormSet(request.POST)
-            BookForm.validateAndSaveNewBook(formset)
-            formset = newBookFormSet(queryset=Book.objects.none())
+            form = BookForm(request.POST)
+            form.save()
             collapsed = True
             messages.add_message(request, messages.SUCCESS, 'Das Buch wurde erfolgreich angelegt!')
-        except ValidationError as e:
+        except ValueError as e:
             messages.add_message(request, messages.ERROR, 'Das Buch konnte leider nicht gespeichert werden!')
     else:
-        formset = newBookFormSet(queryset=Book.objects.none())
+        form = BookForm()
         collapsed = True
 
-    allSavedCustomerBooks=Book.objects.all();
-
-
+    allBooks = Book.objects.all();
 
     return render_to_response(template_name, {
-        "formset": formset,
+        "form": form,
         "collapsed": collapsed,
-        "allSavedCustomerBooks": allSavedCustomerBooks,
+        "allBooks": allBooks,
     },  RequestContext(request))
 
 def archivesEditPageView(request, book_id):
@@ -62,12 +57,12 @@ def archivesEditPageView(request, book_id):
     :return:form: Die Form die generiert wird aus dem Model
     '''
     template_name = 'app/archives_edit.html'
-    bookEdit = Book.objects.get(pk=book_id);
-    bookForm = BookForm(instance=bookEdit)
+    book = Book.objects.get(pk=book_id);
+    bookForm = BookForm(instance=book)
 
     response = render_to_response(template_name, {
         "form": bookForm,
-        "book": bookEdit,
+        "book": book,
     },  RequestContext(request))
     if request.method == 'POST':
         try:

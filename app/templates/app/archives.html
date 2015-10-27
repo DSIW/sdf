@@ -5,23 +5,7 @@
 {% block content %}
     <div class="container">
         <div id="newBook" class="{% if collapsed %}collapse{% endif %}" style="padding-top: 15px">
-            <form role="form" method="post" action="">
-                {% csrf_token %}
-                {{ formset.management_form }}
-                {% for form in formset %}
-                    {% for field in form.visible_fields %}
-                        <div class="input-field {% if field.errors %}has-error{% endif %}">
-                            <label>{{ field.label }}</label>
-                            {% if field.errors %} <span class="help-block" style="display: inline">(
-                                {% for error in field.errors %}
-                                    {{ error|escape }}
-                                {% endfor %})</span>{% endif %}
-                            {{ field }}
-                        </div>
-                    {% endfor %}
-                {% endfor %}
-                <button type="submit" class="btn waves-effect waves-light">Speichern</button>
-            </form>
+            {% include 'app/_book_form.html' with form=form %}
         </div>
     </div>
 
@@ -33,7 +17,7 @@
                     <a class="secondary-content btn-flat" data-toggle="collapse" data-target="#newBook">Buch anlegen</a>
                 </h4>
             </li>
-            {% for book in allSavedCustomerBooks %}
+            {% for book in allBooks %}
             <li class="collection-item">
                 <div>
                     {{ book.name }}

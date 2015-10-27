@@ -11,21 +11,7 @@
             </h1>
         </div>
         <div class="row">
-            <form role="form" method="post" action="">
-                {% csrf_token %}
-
-                {% for field in form.visible_fields %}
-                <div class="input-field {% if field.errors %}has-error{% endif %}">
-                    <label>{{ field.label }}</label>
-                    {% if field.errors %} <span class="help-block" style="display: inline">(
-                    {% for error in field.errors %}
-                        {{ error|escape }}
-                    {% endfor %})</span>{% endif %}
-                    {{ field }}
-                </div>
-                {% endfor %}
-                <button type="submit" class="btn waves-effect waves-light">Aktualisieren <i class="material-icons right">send</i></button>
-            </form>
+            {% include 'app/_book_form.html' with form=form %}
         </div>
     </div>
 {% endblock %}
