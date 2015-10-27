@@ -134,7 +134,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 }
 
 .collection {
-  overflow: visible;
+  overflow: visible; /* show dropdown menu */
 }
 
 .dropdown-content li > a
@@ -145,8 +145,23 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 
 .input-field label {
   left: 0;
+  z-index: -1; /* react on click at input */
 }
 
 .btn-flat {
   color: #26a69a;
+}
+
+.input-field.has-error label {
+  color: #B71C1C;
+}
+.input-field.has-error input {
+  border-bottom-color: #B71C1C;
+}
+.input-field.has-error .help-block {
+  display: inline;
+  position: relative;
+  top: -16px;
+  color: #b71c1c;
+  font-size: 0.8rem;
 }
