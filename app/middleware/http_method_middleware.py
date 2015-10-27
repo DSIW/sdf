@@ -4,7 +4,7 @@ class HttpMethodMiddleware(object):
     # return None: continue with other middlewares
     # return HttpResponse: response directly to client
     def process_request(self, request):
-        method = request.REQUEST.get('_method', request.method)
+        method = request.POST.get('_method', request.method)
         if method.lower() == 'put':
             request.method = 'PUT'
             request.META['REQUEST_METHOD'] = 'PUT'
