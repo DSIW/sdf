@@ -87,23 +87,19 @@
         // Modal
         var modalHeader = '';
         if (settings.title !== '') {
-            modalHeader =
-                '<div class="modal-header">' +
-                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-                    '<h4 class="modal-title">' + settings.title+'</h4>' +
-                '</div>';
+            modalHeader = '<h4 class="modal-title">' + settings.title+'</h4>';
         }
         var modalHTML =
-                '<div class="confirmation-modal modal fade" tabindex="-1" role="dialog">' +
+                '<div class="modal" tabindex="-1" role="dialog">' +
                     '<div class="'+ settings.dialogClass +'">' +
                         '<div class="modal-content">' +
                             modalHeader +
                             '<div class="modal-body">' + settings.text + '</div>' +
                             '<div class="modal-footer">' +
-                                '<button class="confirm btn ' + settings.confirmButtonClass + '" type="button" data-dismiss="modal">' +
+                                '<a class="modal-action modal-close waves-effect btn-flat confirm ' + settings.confirmButtonClass + '" type="button" data-dismiss="modal">' +
                                     settings.confirmButton +
-                                '</button>' +
-                                '<button class="cancel btn ' + settings.cancelButtonClass + '" type="button" data-dismiss="modal">' +
+                                '</a>' +
+                                '<button class="modal-action modal-close waves-effect btn-flat cancel ' + settings.cancelButtonClass + '" type="button" data-dismiss="modal">' +
                                     settings.cancelButton +
                                 '</button>' +
                             '</div>' +
@@ -128,7 +124,7 @@
 
         // Show the modal
         $("body").append(modal);
-        modal.modal('show');
+        modal.openModal();
     };
 
     /**

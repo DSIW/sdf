@@ -3,61 +3,41 @@
 {% block body_classes %}archive{% endblock %}
 
 {% block content %}
-    <div class="col-md-12 col-xs-12 col-lg-12">
-        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#newBook"><i class="fa fa-plus"></i> Neues Buch anlegen
-        </button>
+    <div class="container">
         <div id="newBook" class="{% if collapsed %}collapse{% endif %}" style="padding-top: 15px">
-            <form role="form" method="post" action="">
-                {% csrf_token %}
-                {{ formset.management_form }}
-                {% for form in formset %}
-                    {% for field in form.visible_fields %}
-                        <div class="form-group  {% if field.errors %}has-error{% endif %}">
-                            {{ field.label_tag }}
-                            {% if field.errors %} <span class="help-block" style="display: inline">(
-                                {% for error in field.errors %}
-                                    {{ error|escape }}
-                                {% endfor %})</span>{% endif %}
-                            {{ field }}
-                        </div>
-                    {% endfor %}
-                {% endfor %}
-                <button type="submit" class="btn btn-info">Speichern</button>
-            </form>
+            {% include 'app/_book_form.html' with form=form %}
         </div>
     </div>
 
+    <div class="container">
+        <ul class="collection with-header" style="margin-top: 35px">
+            <li class="collection-header">
+                <h4>
+                    Ihre Bücher
+                    <a class="secondary-content btn-flat" data-toggle="collapse" data-target="#newBook">Buch anlegen</a>
+                </h4>
+            </li>
+            {% for book in allBooks %}
+            <li class="collection-item">
+                <div>
+                    {{ book.name }}
 
-    <div class="col-md-12 col-xs-12 col-lg-12" style="padding-top: 15px">
-        <h1>Ihre angelegten Bücher</h1>
-        {% for book in allSavedCustomerBooks %}
-            <ul class="list-group">
-                <li class="list-group-item" style="height: 55px">
-                    <div style="float: right">
-                        <a href="{% url 'archivesEditPage' book.id %}" class="btn btn-default" aria-label="Bearbeiten" title="Bearbeiten">
-                            <span class="fa fa-edit" aria-hidden="true"></span>
-                        </a>
-                        <a href="{% url 'deleteBook' book.id %}" data-method="delete" data-confirm="true" class="btn btn-danger" aria-label="Löschen" title="Löschen">
-                            <span class="fa fa-remove" aria-hidden="true"></span>
-                        </a>
-
+                    <a class='secondary-content dropdown-button' href='javascript:void(0);' data-activates='book-{{ book.id }}-actions' data-constrainwidth="false">
+                        <i class="material-icons">more_vert</i>
+                    </a>
+                    <ul id='book-{{ book.id }}-actions' class='dropdown-content'>
                         {% if not book.isOnStoreWindow %}
-                            <a class="btn btn-default" aria-label="Zum Schaufenster hinzufügen"
-                               title="Buch zum Schaufenster hinzufügen">
-                                <span class="fa fa-check-circle" aria-hidden="true"></span>
-                            </a>
+                        <li><a href="#">Veröffentlichen</a></li>
                         {% endif %}
-
                         {% if book.isOnStoreWindow %}
-                            <a class="btn btn-default" aria-label="Zum Schaufenster entfernen"
-                               title="Buch aus Schaufenster entfernen">
-                                <span class="fa fa-remove" aria-hidden="true"></span>
-                            </a>
+                        <li><a href="#">Nicht veröffentlichen</a></li>
                         {% endif %}
-                    </div>
-                    <h4 style="vertical-align: middle">{{ book.name }}</h4>
-                </li>
-            </ul>
-        {% endfor %}
+                        <li><a href="{% url 'archivesEditPage' book.id %}">Bearbeiten</a></li>
+                        <li><a href="{% url 'deleteBook' book.id %}" data-method="delete" data-confirm="true" title="Löschen">Löschen</a></li>
+                    </ul>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 {% endblock %}

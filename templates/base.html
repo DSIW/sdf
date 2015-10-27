@@ -8,9 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
 
-    <link type="text/css" href="{% static "css/bootstrap.css" %}" rel="stylesheet">
-    <link type="text/css" href="{% static "css/bootstrap-datepicker.css" %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link type="text/css" href="{% static "css/materialize.css" %}" rel="stylesheet">
     <link type="text/css" href="{% static "css/font-awesome.css" %}" rel="stylesheet">
     <link type="text/css" href="{% static "css/style.css" %}" rel="stylesheet">
 
@@ -19,75 +22,73 @@
 
 <body class="{% block body_classes %}{% endblock %}">
 
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{% url "startPage" %}">SHB</a>
-        </div>
+  <nav class="white" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="{% url "startPage" %}" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
+      {% if user.is_authenticated %}
+      <ul class="right hide-on-med-and-down">
+        <li><a href="{% url 'archivesPage' %}">Archiv</a></li>
+        <li><a href="#">Einstellungen</a></li>
+        <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
+      </ul>
+      {% endif %}
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <form class="navbar-form navbar-right" role="search">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Buchtitel">
-                </div>
-                <button type="submit" class="btn btn-default">Suche</button>
-            </form>
-            <ul class="nav navbar-nav navbar-right">
-                {% if user.is_authenticated %}
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">{{ user.username }} <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'archivesPage' %}">Archiv</a></li>
-                        <li><a href="#">Einstellungen</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
-                    </ul>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
+      {% if user.is_authenticated %}
+      <ul id="nav-mobile" class="side-nav">
+        <li><a href="{% url 'archivesPage' %}">Archiv</a></li>
+        <li><a href="#">Einstellungen</a></li>
+        <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
+      </ul>
+      {% endif %}
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
-</nav>
+  </nav>
 
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="col-md-12">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-            {% endfor %}
+  <main>
+    {% for message in messages %}
+      <div class="container z-depth-1 alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
 
-            {% block content %}
-            {% endblock %}
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <footer class="page-footer grey darken-4">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <p class="grey-text text-lighten-4">Wir sind ein Team von Studenten, die an diesem Projekt arbeiten, als wäre es ein Vollzeitjob. Jegliche Art der Hilfe ist willkommen, um das Projekt weiterzubringen.</p>
         </div>
-    </div>
-
-    <div class="footer">
-        <div class="container">
-            <p>&copy; HTW 2015</p>
+        <div class="col l3 s12">
+          <p></p>
         </div>
+        <div class="col l3 s12">
+          <ul>
+            <li><a class="white-text" href="#!">Impressum</a></li>
+            <li><a class="white-text" href="#!">Datenschutz</a></li>
+            <li><a class="white-text" href="#!">Affiliate</a></li>
+            <li><a class="white-text" href="#!">Team</a></li>
+            <li><a class="white-text" href="#!">Job</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
+    <div class="footer-copyright">
+      <div class="container">
+      Made by us with love.
+      </div>
+    </div>
+  </footer>
 
-</div>
 
-
-<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-
+<script type="text/javascript" src="{% static "js/widgets.js" %}"></script>
 <script type="text/javascript" src="{% static "js/jquery.cookie.js" %}"></script>
 <script type="text/javascript" src="{% static "js/moment.js" %}"></script>
 <script type="text/javascript" src="{% static "js/moment-de.js" %}"></script>
 <script type="text/javascript" src="{% static "js/moment-isocalendar.js" %}"></script>
 <script type="text/javascript" src="{% static "js/bootstrap.js" %}"></script>
-<script type="text/javascript" src="{% static "js/bootstrap-datepicker.js" %}"></script>
+<script type="text/javascript" src="{% static "js/knockout-3.3.0.js" %}"></script>
+<script type="text/javascript" src="{% static "js/materialize.js" %}"></script>
 <script type="text/javascript" src="{% static "js/jquery.confirm.js" %}"></script>
 <script type="text/javascript" src="{% static "js/rails.js" %}"></script>
 <script type="text/javascript" src="{% static "js/confirmation.js" %}"></script>
