@@ -31,25 +31,3 @@ class BookForm(forms.ModelForm):
             'isbn10': _('ISBN-10'),
             'isbn13': _('ISBN-13'),
         }
-
-    def validateAndSaveNewBook(formset):
-        '''
-        Diese Methode prueft ob die Eingaben alle erfolgreich waren is_valid(). Danach wird geprueft ob ueberhaupt Eingaben gemacht worden sind.
-        Wenn alles erfolgreich war wird das neue Buch gespeichert
-        :param formset: Buch Form
-        :return: None
-        '''
-        if formset.is_valid():
-            ''' Pruefe ob Benutzer ueberhaupt Eingaben gemacht hat '''
-            is_really_valid = True
-            for form in formset.forms:
-                if not 'name' in form.cleaned_data:
-                    is_really_valid = False
-                    break
-
-            if(is_really_valid):
-                formset.save()
-            else:
-                raise ValidationError("Es gab leere Eingabefelder")
-        else:
-            raise ValidationError("Eingabefelder waren nicht valide")
