@@ -12,7 +12,7 @@ class BookForm(forms.ModelForm):
     labels: Definition was bei den Label Tags auf der Oberflaeche erscheinen soll. Wenn dies nicht definiert worde ist wird der Attributenname der Modellklasse genommen
     '''
     class Meta:
-        GENDER = (
+        LANGUAGES = (
             ('DE', _("Deutsch")),
             ('EN', _("Englisch")),
             ('FR', _("Französisch")),
@@ -21,7 +21,7 @@ class BookForm(forms.ModelForm):
         model = Book
         exclude = ['Id', 'isOnStoreWindow']
         widgets = {
-            'language': forms.Select(choices=GENDER),
+            'language': forms.Select(choices=LANGUAGES),
             'releaseDate': forms.DateInput(attrs={'class': 'datepicker'}),
         }
         labels = {
