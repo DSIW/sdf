@@ -11,3 +11,5 @@ class Book(models.Model):
     isbn10 = models.CharField(max_length=100)
     isbn13 = models.CharField(max_length=100)
     isOnStoreWindow = models.BooleanField(default=False)
+    def __str__(self):
+        return self.name + ", " + self.author + " (" + self.language + ", " + str(self.releaseDate) + ")"
