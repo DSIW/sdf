@@ -165,3 +165,13 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   color: #b71c1c;
   font-size: 0.8rem;
 }
+
+.input-field .select-wrapper + label {
+  position: absolute;
+  top: -14px;
+  font-size: 0.8rem;
+}
+
+.select-wrapper {
+  padding-bottom: 1px; /* hack for following input-field */
+}

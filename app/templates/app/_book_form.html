@@ -3,8 +3,8 @@
 
     {% for field in form.visible_fields %}
     <div class="input-field {% if field.errors %}has-error{% endif %}">
-        <label>{{ field.label }}</label>
         {{ field }}
+        <label>{{ field.label }}</label>
         {% if field.errors %}
             <span class="help-block">
                 {% for error in field.errors %}
