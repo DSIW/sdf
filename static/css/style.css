@@ -87,6 +87,13 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   color: inherit;
 }
 
+.text-right {
+  text-align: right;
+}
+
+
+/* Components */
+
 .alert {
   margin-top: 30px;
   margin-bottom: 30px;
@@ -115,6 +122,8 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .alert-info {
   color: #1976D2;
 }
+
+/* Twitter Bootstrap */
 
 .collapse {
   display: none;
@@ -204,4 +213,25 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
 
 .select-wrapper {
   padding-bottom: 1px; /* hack for following input-field */
+}
+
+
+/* Showcase */
+.showcase .card-book {
+  max-width: 210px;
+  height: 460px;
+  float: left;
+  margin: 0 20px 20px 0;
+}
+
+.showcase .card-book .card-image {
+  height: 310px;
+}
+.showcase .card-book .seller-rating {
+  margin-top: 2px;
+}
+.showcase .card-book .seller-rating-star {
+  font-size: 1em;
+  width: 12px;
+  color: #FCC32A;
 }

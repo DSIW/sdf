@@ -1,0 +1,37 @@
+{% load staticfiles %}
+
+<div class="card card-book small">
+    <div class="card-image waves-effect waves-block waves-light">
+        <img class="activator" src="{% static "img/book-cover-example.png" %}">
+    </div>
+    <div class="card-content">
+        <span class="card-title activator grey-text text-darken-4 book-title">{{ book.name }}<i class="material-icons right">more_vert</i></span>
+        <p class="author">{{ book.author }}</p>
+        <p class="seller-rating left">
+            <i class="material-icons seller-rating-star">star</i>
+            <i class="material-icons seller-rating-star">star</i>
+            <i class="material-icons seller-rating-star">star</i>
+            <i class="material-icons seller-rating-star">star_half</i>
+            <i class="material-icons seller-rating-star">star_border</i>
+        </p>
+        <p class="price right">7,00 €</p>
+    </div>
+    <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4">{{ book.name }}<i class="material-icons right">close</i></span>
+        <p class="text-right">Autor: <strong>{{ book.author }}</strong></p>
+        <p class="text-right">Seitenanzahl: <strong>{{ book.pageNumber }}</strong></p>
+        <p class="text-right">Verkäufer: <strong>Max Mustermann</strong></p>
+        <p class="text-right">Ort: <strong>Seesemannstr., Berlin</strong></p>
+        <p class="text-right">Verkäuferbewertung: <strong></strong></p>
+        <p class="seller-rating right">
+            <i class="material-icons seller-rating-star">star</i>
+            <i class="material-icons seller-rating-star">star</i>
+            <i class="material-icons seller-rating-star">star</i>
+            <i class="material-icons seller-rating-star">star_half</i>
+            <i class="material-icons seller-rating-star">star_border</i>
+        </p>
+        <div class="card-action">
+            <a href="#" class="right">Für 7,00 € kaufen</a>
+        </div>
+    </div>
+</div>

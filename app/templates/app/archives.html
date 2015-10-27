@@ -27,10 +27,10 @@
                     </a>
                     <ul id='book-{{ book.id }}-actions' class='dropdown-content'>
                         {% if not book.isOnStoreWindow %}
-                        <li><a href="#">Veröffentlichen</a></li>
+                        <li><a href="{% url 'publishBook' book.id %}" data-method="put">Veröffentlichen</a></li>
                         {% endif %}
                         {% if book.isOnStoreWindow %}
-                        <li><a href="#">Nicht veröffentlichen</a></li>
+                        <li><a href="{% url 'unpublishBook' book.id %}" data-method="put">Nicht veröffentlichen</a></li>
                         {% endif %}
                         <li><a href="{% url 'archivesEditPage' book.id %}">Bearbeiten</a></li>
                         <li><a href="{% url 'deleteBook' book.id %}" data-method="delete" data-confirm="true" title="Löschen">Löschen</a></li>

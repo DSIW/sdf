@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block body_classes %}showcase{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{ showcaseUser.username }} Schaufenster</h1>
+
+        {% for book in books %}
+            {% include 'app/_book_card.html' with book=book %}
+        {% endfor %}
+    </div>
+{% endblock %}

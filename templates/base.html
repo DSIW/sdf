@@ -43,6 +43,7 @@
         <ul id="nav-mobile" class="side-nav">
             <li><a href="{% url 'searchBook' %}">Suche</a></li>
             {% if user.is_authenticated %}
+                <li><a href="{% url 'user-showcase' 1 %}">Mein Schaufenster</a></li>
                 <li><a href="{% url 'archivesPage' %}">Archiv</a></li>
                 <li><a href="#">Einstellungen</a></li>
                 <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>

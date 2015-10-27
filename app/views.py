@@ -1,4 +1,7 @@
 # coding=utf-8
+
+import datetime
+
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.shortcuts import render_to_response
@@ -15,6 +18,7 @@ from .models import User
 from .forms import BookForm
 from .forms import RegistrationForm
 from .models import Book
+from django.contrib.auth.models  import User
 
 class StartPageView(TemplateView):
     template_name = 'app/start.html'
@@ -117,3 +121,41 @@ def searchBookResults(request):
         "results": search_results,
     },  RequestContext(request))
 
+
+def publishBook(request, id):
+    if request.method == 'PUT':
+        book = get_object_or_404(Book, id=id)
+        book.isOnStoreWindow = True
+        book.releaseDate = datetime.date.today().strftime("%Y-%m-%d")
+        book.save()
+        messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun zum Verkauf angeboten!')
+        # use GET request for redirected location via HTTP status code 303 (see other).
+        return HttpResponseRedirect(reverse('user-showcase', kwargs={'user_id': book.user_id}), status=303)
+    else:
+        raise("Use http method PUT for publishing a book.")
+
+
+def unpublishBook(request, id):
+    if request.method == 'PUT':
+        book = get_object_or_404(Book, id=id)
+        book.isOnStoreWindow = False
+        book.releaseDate = "2015-01-01"
+        book.save()
+        messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun nicht mehr zum Verkauf angeboten!')
+        # use GET request for redirected location via HTTP status code 303 (see other).
+        return HttpResponseRedirect(reverse('user-showcase', kwargs={'user_id': book.user_id}), status=303)
+    else:
+        raise("Use http method PUT for unpublishing a book.")
+
+
+def showcaseView(request, user_id):
+    template_name = 'app/showcase.html'
+
+    user = User.objects.filter(pk=user_id).first()
+    # TODO: Filter by user_id
+    books = list(Book.objects.filter(isOnStoreWindow=True).all())
+
+    return render_to_response(template_name, {
+        "showcaseUser": user,
+        "books": books,
+    },  RequestContext(request))
