@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
@@ -20,4 +20,8 @@ urlpatterns = [
 
     # accounts
     url(r'^accounts/register/$', views.register_user, name='register'),
+
+    # search
+    url(r'^search/$', views.searchBook, name='searchBook'),
+    url(r'^search/results', views.searchBookResults, name='searchBookResults'),
 ]
