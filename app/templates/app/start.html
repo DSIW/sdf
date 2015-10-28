@@ -12,9 +12,12 @@
         <div class="row center">
           <h5 class="header col s12 light">Plattform für Non-E-Books</h5>
         </div>
+        {% if not user.is_authenticated %}
         <div class="row center">
           <a class="btn-large waves-effect waves-light brown" href="{% url 'login' %}" role="button">Anmelden</a>
+          <a class="btn-large waves-effect waves-light brown" href="{% url 'register' %}" role="button">Registrieren</a>
         </div>
+        {% endif %}
         <br><br>
 
       </div>

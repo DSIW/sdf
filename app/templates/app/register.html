@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block body_classes %}page-login{% endblock %}
+
+{% block content %}
+    <div class="container">
+      <h1>Account erstellen</h1>
+
+      <form action="{% url 'register' %}" method="post">{% csrf_token %}
+          {% for field in form.visible_fields %}
+          <div class="input-field {% if field.errors %}has-error{% endif %}">
+              {{ field }}
+              <label>{{ field.label }}</label>
+              {% if field.errors %}
+                  <span class="help-block">
+                      {% for error in field.errors %}
+                          {{ error|escape }}
+                      {% endfor %}
+                  </span>
+              {% endif %}
+          </div>
+          {% endfor %}
+          <input type="submit" class="btn btn-success" value="Account erstellen">
+      </form>
+    </div>
+{% endblock %}
