@@ -22,64 +22,66 @@
 
 <body class="{% block body_classes %}{% endblock %}">
 
-  <nav class="white" role="navigation">
+<nav class="white" role="navigation">
     <div class="nav-wrapper container">
-      <a id="logo-container" href="{% url "startPage" %}" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
-      {% if user.is_authenticated %}
-      <ul class="right hide-on-med-and-down">
-        <li><a href="{% url 'archivesPage' %}">Archiv</a></li>
-        <li><a href="#">Einstellungen</a></li>
-        <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
-      </ul>
-      {% endif %}
+        <a id="logo-container" href="{% url "startPage" %}" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="{% url 'searchBook' %}">Suche</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'archivesPage' %}">Archiv</a></li>
+                <li><a href="#">Einstellungen</a></li>
+                <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
+                </ul>
+            {% endif %}
 
-      {% if user.is_authenticated %}
-      <ul id="nav-mobile" class="side-nav">
-        <li><a href="{% url 'archivesPage' %}">Archiv</a></li>
-        <li><a href="#">Einstellungen</a></li>
-        <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
-      </ul>
-      {% endif %}
-      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="side-nav">
+            <li><a href="{% url 'searchBook' %}">Suche</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'archivesPage' %}">Archiv</a></li>
+                <li><a href="#">Einstellungen</a></li>
+                <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
+                </ul>
+            {% endif %}
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
-  </nav>
+</nav>
 
-  <main>
+<main>
     {% for message in messages %}
-      <div class="container z-depth-1 alert alert-{{ message.tags }}">{{ message }}</div>
+        <div class="container z-depth-1 alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %}
 
     {% block content %}
     {% endblock %}
-  </main>
+</main>
 
-  <footer class="page-footer grey darken-4">
+<footer class="page-footer grey darken-4">
     <div class="container">
-      <div class="row">
-        <div class="col l6 s12">
-          <p class="grey-text text-lighten-4">Wir sind ein Team von Studenten, die an diesem Projekt arbeiten, als wäre es ein Vollzeitjob. Jegliche Art der Hilfe ist willkommen, um das Projekt weiterzubringen.</p>
+        <div class="row">
+            <div class="col l6 s12">
+                <p class="grey-text text-lighten-4">Wir sind ein Team von Studenten, die an diesem Projekt arbeiten, als
+                    wäre es ein Vollzeitjob. Jegliche Art der Hilfe ist willkommen, um das Projekt weiterzubringen.</p>
+            </div>
+            <div class="col l3 s12">
+                <p></p>
+            </div>
+            <div class="col l3 s12">
+                <ul>
+                    <li><a class="white-text" href="#!">Impressum</a></li>
+                    <li><a class="white-text" href="#!">Datenschutz</a></li>
+                    <li><a class="white-text" href="#!">Affiliate</a></li>
+                    <li><a class="white-text" href="#!">Team</a></li>
+                    <li><a class="white-text" href="#!">Job</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="col l3 s12">
-          <p></p>
-        </div>
-        <div class="col l3 s12">
-          <ul>
-            <li><a class="white-text" href="#!">Impressum</a></li>
-            <li><a class="white-text" href="#!">Datenschutz</a></li>
-            <li><a class="white-text" href="#!">Affiliate</a></li>
-            <li><a class="white-text" href="#!">Team</a></li>
-            <li><a class="white-text" href="#!">Job</a></li>
-            <li><a class="white-text" href="#!">AGB</a></li>
-          </ul>
-        </div>
-      </div>
     </div>
     <div class="footer-copyright">
-      <div class="container">
-      Made by us with love.
-      </div>
+        <div class="container">
+            Made by us with love.
+        </div>
     </div>
-  </footer>
+</footer>
 
 
 <script type="text/javascript" src="{% static "js/widgets.js" %}"></script>

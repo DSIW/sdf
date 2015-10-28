@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+import watson
 from .models import User
 
 
@@ -97,3 +98,22 @@ def deleteBook(request, id):
         return HttpResponseRedirect(reverse('archivesPage'), status=303)
     else:
         raise BaseException("Use http method DELETE for deleting a book.")
+
+def searchBook(request):
+    template_name = 'app/search.html'
+
+    return render_to_response(template_name, {
+    },  RequestContext(request))
+
+def searchBookResults(request):
+    template_name = 'app/search_result.html'
+    if request.method == 'GET':
+        if not request.GET.get("search_string", ""):
+            return HttpResponseRedirect(reverse('searchBook'), status=303)
+        print("search string: "+request.GET.get("search_string", ""))
+        search_results = watson.search(request.GET.get("search_string", ""))
+
+    return render_to_response(template_name, {
+        "results": search_results,
+    },  RequestContext(request))
+
