@@ -6366,9 +6366,6 @@ input[type=text], input[type=password], input[type=email], input[type=url], inpu
   padding-left: 4rem;
   width: calc(100% - 4rem); }
   .input-field input[type=search]:focus {
-    background-color: #fff;
-    border: 0;
-    box-shadow: none;
     color: #444; }
     .input-field input[type=search]:focus + label i, .input-field input[type=search]:focus ~ .mdi-navigation-close, .input-field input[type=search]:focus ~ .material-icons {
       color: #444; }

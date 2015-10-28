@@ -147,6 +147,36 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   left: 0;
   z-index: -1; /* react on click at input */
 }
+nav .input-field.search-field label {
+  z-index: 0;
+}
+nav .input-field.search-field i {
+  line-height: 45px;
+}
+nav .input-field.search-field label i {
+  color: rgba(0, 0, 0, 0.5);
+  line-height: 45px;
+}
+nav .input-field.search-field input[type=search]:focus {
+  color: #444;
+  border-bottom-color: #26a69a;
+}
+.input-field input[type=search] {
+  padding-left: 2.5rem;
+  width: calc(100% - 2.5rem);
+}
+nav .input-field.search-field input[type=search] {
+  color: #444;
+  border-bottom: 1px solid #ccc;
+  line-height: 45px;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  width: 179px;
+}
+
+nav .input-field input[type=search]:focus + label i, .input-field input[type=search]:focus ~ .mdi-navigation-close, .input-field input[type=search]:focus ~ .material-icons {
+  color: #444;
+}
 
 .btn-flat {
   color: #26a69a;
