@@ -1,5 +1,6 @@
 # coding=utf-8
 from django.db import models
+from django.contrib.auth.models  import User
 
 # Create your models here.
 class Book(models.Model):
@@ -13,3 +14,6 @@ class Book(models.Model):
     isOnStoreWindow = models.BooleanField(default=False)
     def __str__(self):
         return self.name + ", " + self.author + " (" + self.language + ", " + str(self.releaseDate) + ")"
+
+class User(User):
+    paypal= models.CharField(max_length=50)

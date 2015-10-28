@@ -8,8 +8,11 @@ from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from .models import User
+
 
 from .forms import BookForm
+from .forms import RegistrationForm
 from .models import Book
 
 class StartPageView(TemplateView):
@@ -19,6 +22,16 @@ class StartPageView(TemplateView):
         context = super(StartPageView, self).get_context_data(**kwargs)
         return context
 
+def register_user(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'Sie haben sich erfolgreich registriert.')
+            return HttpResponseRedirect(reverse('startPage'))
+    else:
+        form = RegistrationForm()
+    return render_to_response('app/register.html', {'form': form}, RequestContext(request))
 
 def archivesPageView(request):
     '''
@@ -83,5 +96,4 @@ def deleteBook(request, id):
         # use GET request for redirected location via HTTP status code 303 (see other).
         return HttpResponseRedirect(reverse('archivesPage'), status=303)
     else:
-        raise("Use http method DELETE for deleting a book.")
-
+        raise BaseException("Use http method DELETE for deleting a book.")
