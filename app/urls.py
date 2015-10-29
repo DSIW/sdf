@@ -20,7 +20,7 @@ urlpatterns = [
 
     # accounts
     url(r'^accounts/register/$', views.register_user, name='register'),
-    url(r'^accounts/(?P<user_id>[0-9]+)/edit/$', views.edit_profile, name='edit_profile'),
+    url(r'^accounts/(?P<pk>[0-9]+)/edit/$', views.UserUpdate.as_view(), name='edit_profile'),
 
     # search
     url(r'^search/$', views.searchBook, name='searchBook'),

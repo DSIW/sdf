@@ -1,6 +1,7 @@
 # coding=utf-8
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
+from django.views.generic.edit import UpdateView
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib import messages
@@ -12,7 +13,6 @@ import watson
 from .models import User
 
 
-from .forms import EditProfileForm
 from .forms import BookForm
 from .forms import RegistrationForm
 from .models import Book
@@ -119,27 +119,10 @@ def searchBookResults(request):
     },  RequestContext(request))
 
 
+class UserUpdate(UpdateView):
+    model = User
+    fields = ['username','first_name', 'last_name', 'email', 'paypal']
+    template_name_suffix = '_update_form'
 
-def edit_profile(request, user_id):
-    user = get_object_or_404(User, id=user_id);
-
-    if request.method == 'PUT':
-        form = EditProfileForm(request.PUT, request=request, instance=user)
-        if form.is_valid():
-            form.save()
-            messages.add_message(request, messages.SUCCESS, 'Ihr Account wurde erfolgreich aktualisiert.')
-            return HttpResponseRedirect(reverse('startPage'))
-        else:
-            return render_to_response('app/edit_profile.html', {
-                'form': EditProfileForm(request.PUT, request=request, instance=user),
-                'user': user
-            }, RequestContext(request))
-    elif request.method == 'GET':
-        return render_to_response('app/edit_profile.html', {
-            'form': EditProfileForm(request=request, instance=user),
-            'user': user
-        }, RequestContext(request))
-    else:
-        raise BaseException("Use http method PUT for editing a profile.")
-    return HttpResponseRedirect(reverse('startPage'))
-
+    def get_success_url(self):
+        return reverse('startPage')
