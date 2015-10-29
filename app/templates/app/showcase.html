@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="container">
-        <h1>{{ showcaseUser.username }} Schaufenster</h1>
+        <h1>Schaufenster von <span class="orange-text text-lighten-1">{{ showcaseUser.username }}</span></h1>
 
         {% for book in books %}
             {% include 'app/_book_card.html' with book=book %}
