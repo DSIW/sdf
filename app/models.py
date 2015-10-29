@@ -16,4 +16,5 @@ class Book(models.Model):
         return self.name + ", " + self.author + " (" + self.language + ", " + str(self.releaseDate) + ")"
 
 class User(User):
-    paypal= models.CharField(max_length=50)
+    user_ptr = models.OneToOneField(User)
+    paypal = models.CharField(max_length=50)
