@@ -1,4 +1,6 @@
+{% load template_extras %}
 {% load staticfiles %}
+
 
 <div class="card card-book small">
     <div class="card-image waves-effect waves-block waves-light">
@@ -14,14 +16,14 @@
             <i class="material-icons seller-rating-star">star_half</i>
             <i class="material-icons seller-rating-star">star_border</i>
         </p>
-        <p class="price right">7,00 €</p>
+        <p class="price right">{{ offer.totalPrice|currency }}</p>
     </div>
     <div class="card-reveal">
         <span class="card-title grey-text text-darken-4">{{ book.name }}<i class="material-icons right">close</i></span>
         <p class="text-right">Autor: <strong>{{ book.author }}</strong></p>
         <p class="text-right">Seitenanzahl: <strong>{{ book.pageNumber }}</strong></p>
-        <p class="text-right">Verkäufer: <strong>Max Mustermann</strong></p>
-        <p class="text-right">Ort: <strong>Seesemannstr., Berlin</strong></p>
+        <p class="text-right">Verkäufer: <strong>{{ user.full_name }}</strong></p>
+        <p class="text-right">Ort: <strong>{{ user.location }}</strong></p>
         <p class="text-right">Verkäuferbewertung: <strong></strong></p>
         <p class="seller-rating right">
             <i class="material-icons seller-rating-star">star</i>
@@ -31,7 +33,7 @@
             <i class="material-icons seller-rating-star">star_border</i>
         </p>
         <div class="card-action">
-            <a href="#" class="right">Für 7,00 € kaufen</a>
+            <a href="#" class="right">Für {{ offer.totalPrice|currency }} kaufen</a>
         </div>
     </div>
 </div>

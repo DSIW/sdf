@@ -12,13 +12,10 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 import watson
-from .models import User
 
-
+from .models import User, Book, Offer
 from .forms import BookForm
 from .forms import RegistrationForm
-from .models import Book
-from django.contrib.auth.models  import User
 
 class StartPageView(TemplateView):
     template_name = 'app/start.html'
@@ -51,10 +48,15 @@ def archivesPageView(request):
     if request.method == 'POST':
         try:
             form = BookForm(request.POST)
-            form.save()
+
+            formObject = form.save(commit=False)
+            formObject.user_id = request.user.id
+            formObject.save()
+
             collapsed = True
             messages.add_message(request, messages.SUCCESS, 'Das Buch wurde erfolgreich angelegt!')
         except ValueError as e:
+            print(e)
             messages.add_message(request, messages.ERROR, 'Das Buch konnte leider nicht gespeichert werden!')
     else:
         form = BookForm()
@@ -125,9 +127,10 @@ def searchBookResults(request):
 def publishBook(request, id):
     if request.method == 'PUT':
         book = get_object_or_404(Book, id=id)
-        book.isOnStoreWindow = True
-        book.releaseDate = datetime.date.today().strftime("%Y-%m-%d")
-        book.save()
+
+        offer = Offer(seller_user_id=request.user.id, book=book, price=12.0, shipping_price=10.00)
+        offer.save()
+
         messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun zum Verkauf angeboten!')
         # use GET request for redirected location via HTTP status code 303 (see other).
         return HttpResponseRedirect(reverse('user-showcase', kwargs={'user_id': book.user_id}), status=303)
@@ -138,7 +141,6 @@ def publishBook(request, id):
 def unpublishBook(request, id):
     if request.method == 'PUT':
         book = get_object_or_404(Book, id=id)
-        book.isOnStoreWindow = False
         book.releaseDate = "2015-01-01"
         book.save()
         messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun nicht mehr zum Verkauf angeboten!')
@@ -151,11 +153,16 @@ def unpublishBook(request, id):
 def showcaseView(request, user_id):
     template_name = 'app/showcase.html'
 
-    user = User.objects.filter(pk=user_id).first()
-    # TODO: Filter by user_id
-    books = list(Book.objects.filter(isOnStoreWindow=True).all())
 
-    return render_to_response(template_name, {
-        "showcaseUser": user,
-        "books": books,
+
+    user = User.objects.filter(pk=user_id).first()
+
+    offers = Offer.objects.filter(seller_user_id=user_id).all()
+    bookIds = offers.values_list('book', flat=True)
+    books = list( Book.objects.filter( id__in=bookIds ).all() )
+
+    return render_to_response( template_name, {
+        "user":   user,
+        "offers": offers,
+        "books":  books,
     },  RequestContext(request))

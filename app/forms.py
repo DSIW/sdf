@@ -23,7 +23,7 @@ class BookForm(forms.ModelForm):
             ('SP', _("Spanisch")),
         )
         model = Book
-        exclude = ['Id', 'isOnStoreWindow']
+        exclude = ['Id', 'user']
         widgets = {
             'language': forms.Select(choices=LANGUAGES),
             'releaseDate': forms.DateInput(attrs={'class': 'datepicker'}),
