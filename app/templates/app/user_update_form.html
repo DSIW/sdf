@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Account aktualisieren{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1>Account bearbeiten</h1>
+
+    <form action="{% url 'edit_profile' user.id %}" method="post">{% csrf_token %}
+        <input type="hidden" name="_method" value="put" />
+        {% for field in form.visible_fields %}
+        <div class="input-field {% if field.errors %}has-error{% endif %}">
+            {{ field }}
+            <label>{{ field.label }}</label>
+            {% if field.errors %}
+                <span class="help-block">
+                    {% for error in field.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                </span>
+            {% endif %}
+        </div>
+        {% endfor %}
+      <input type="submit" class="btn btn-success" value="Account aktualisieren">
+    </form>
+  </div>
+{% endblock %}

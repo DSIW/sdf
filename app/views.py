@@ -1,6 +1,7 @@
 # coding=utf-8
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
+from django.views.generic.edit import UpdateView
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib import messages
@@ -117,3 +118,11 @@ def searchBookResults(request):
         "results": search_results,
     },  RequestContext(request))
 
+
+class UserUpdate(UpdateView):
+    model = User
+    fields = ['username','first_name', 'last_name', 'email', 'paypal']
+    template_name_suffix = '_update_form'
+
+    def get_success_url(self):
+        return reverse('startPage')
