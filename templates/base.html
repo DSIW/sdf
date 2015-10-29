@@ -27,7 +27,7 @@
         {% if user.is_authenticated %}
             <ul class="right hide-on-med-and-down">
                 <li><a href="{% url 'archivesPage' %}">Archiv</a></li>
-                <li><a href="#">Einstellungen</a></li>
+                <li><a href="{% url 'edit_profile' user.id %}">Mein Profil</a></li>
                 <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
             </ul>
         {% endif %}
@@ -44,7 +44,7 @@
             <li><a href="{% url 'searchBook' %}">Suche</a></li>
             {% if user.is_authenticated %}
                 <li><a href="{% url 'archivesPage' %}">Archiv</a></li>
-                <li><a href="#">Einstellungen</a></li>
+                <li><a href="{% url 'edit_profile' user.id %}">Mein Profil</a></li>
                 <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
                 </ul>
             {% endif %}

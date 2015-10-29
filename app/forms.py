@@ -39,6 +39,24 @@ class BookForm(forms.ModelForm):
         }
 
 
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username','first_name', 'last_name', 'email', 'paypal')
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(EditProfileForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        user = super(EditProfileForm, self).save(commit=False)
+        user.email = self.cleaned_data['email']
+        user.paypal = self.cleaned_data['paypal']
+
+        if commit:
+            user.save()
+
+
 class RegistrationForm(UserCreationForm):
     first_name = forms.TextInput()
     last_name = forms.TextInput()
