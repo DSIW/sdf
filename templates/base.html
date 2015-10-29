@@ -26,6 +26,7 @@
         <a id="logo-container" href="{% url "startPage" %}" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
         {% if user.is_authenticated %}
             <ul class="right hide-on-med-and-down">
+                <li><a href="{% url 'user-showcase' user.id %}">Mein Schaufenster</a></li>
                 <li><a href="{% url 'archivesPage' %}">Archiv</a></li>
                 <li><a href="#">Einstellungen</a></li>
                 <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
@@ -43,7 +44,7 @@
         <ul id="nav-mobile" class="side-nav">
             <li><a href="{% url 'searchBook' %}">Suche</a></li>
             {% if user.is_authenticated %}
-                <li><a href="{% url 'user-showcase' 1 %}">Mein Schaufenster</a></li>
+                <li><a href="{% url 'user-showcase' user.id %}">Mein Schaufenster</a></li>
                 <li><a href="{% url 'archivesPage' %}">Archiv</a></li>
                 <li><a href="#">Einstellungen</a></li>
                 <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
