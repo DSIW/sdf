@@ -1,26 +1,32 @@
+# coding=utf-8
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.forms import ModelForm
+
+from .models import User
+from django.contrib.auth.forms import UserCreationForm
 
 from .models import Book
 
-class NewBookForm(forms.ModelForm):
+class BookForm(forms.ModelForm):
     '''
     Klasse zum erstellen der Buch Form
     widgets: Defintion wie die Eingabefelder auszusehen haben. Hier am Beispiel css Klasse von Bootstrap genutzt und Vorschau eingebaut
     labels: Definition was bei den Label Tags auf der Oberflaeche erscheinen soll. Wenn dies nicht definiert worde ist wird der Attributenname der Modellklasse genommen
     '''
     class Meta:
+        LANGUAGES = (
+            ('DE', _("Deutsch")),
+            ('EN', _("Englisch")),
+            ('FR', _("Französisch")),
+            ('SP', _("Spanisch")),
+        )
         model = Book
         exclude = ['Id', 'isOnStoreWindow']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Buchname'}),
-            'author': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Author des Buches'}),
-            'language': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Sprache des Buches'}),
-            'releaseDate': forms.DateInput(attrs={'class': 'form-control datepicker', 'placeholder': 'Veröffentlichungsdatum', 'data-date-format': 'dd.mm yyyy', 'data-provide': 'datepicker'}),
-            'pageNumber': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Seitenzahl'}),
-            'isbn10': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ISBN-10 Nummer'}),
-            'isbn13': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ISBN-13 Nummer'}),
+            'language': forms.Select(choices=LANGUAGES),
+            'releaseDate': forms.DateInput(attrs={'class': 'datepicker'}),
         }
         labels = {
             'name': _('Buchname'),
@@ -32,38 +38,33 @@ class NewBookForm(forms.ModelForm):
             'isbn13': _('ISBN-13'),
         }
 
-    def validateAndSaveNewBook(formset):
-        '''
-        Diese Methode prueft ob die Eingaben alle erfolgreich waren is_valid(). Danach wird geprueft ob ueberhaupt Eingaben gemacht worden sind.
-        Wenn alles erfolgreich war wird das neue Buch gespeichert
-        :param formset: Buch Form
-        :return: None
-        '''
-        if formset.is_valid():
-            ''' Pruefe ob Benutzer ueberhaupt Eingaben gemacht hat '''
-            is_really_valid = True
-            for form in formset.forms:
-                if not 'name' in form.cleaned_data:
-                    is_really_valid = False
-                    break
 
-            if(is_really_valid):
-                formset.save()
-            else:
-                raise ValidationError("Es gab leere Eingabefelder")
-        else:
-            raise ValidationError("Eingabefelder waren nicht valide")
+class RegistrationForm(UserCreationForm):
+    first_name = forms.TextInput()
+    last_name = forms.TextInput()
 
-    def validateAndUpateBook(form):
-        '''Diese Methode wird zum aktulaisieren eines Buches genutzt
-        '''
-        if form.is_valid():
-            is_really_valid = True
-            if not 'name' in form.cleaned_data:
-                is_really_valid = False
-            if(is_really_valid):
-                form.save()
-            else:
-                raise ValidationError("Es gab leere Eingabefelder")
-        else:
-            raise ValidationError("Eingabefelder waren nicht valide")
+    paypal = forms.EmailInput()
+    email = forms.EmailInput()
+
+    def __init__(self, *args, **kwargs):
+        super(RegistrationForm, self).__init__(*args, **kwargs)
+
+        self.fields['username'].help_text = None
+        self.fields['password2'].help_text = None
+        self.fields['email'].required = True
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ('username','first_name', 'last_name', 'email','paypal', 'password1', 'password1')
+
+
+    def save(self, commit=True):
+        user = super(RegistrationForm, self).save(commit=False)
+        user.email = self.cleaned_data['email']
+        user.paypal = self.cleaned_data['paypal']
+
+        if commit:
+            user.save()

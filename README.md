@@ -20,9 +20,41 @@
 1. Start and enable nginx service (e.g. `systemctl start nginx.service; systemctl enable nginx.service`)
 1. Now you can request the site via `http://sdf.localhost` if local server is running via `python manage.py runserver 3001`.
 
+## Requirements
+
+* `decorator`: Required by `ipython`
+* `django-extensions`: Enhanced commands: `./manage.py (show_urls|validate_templates|shell_plus|runserver_plus)`
+* `invoke`: Invoke commands
+* `ipython`: Interactive shell with history support. Run `./manage.py shell_plus`
+* `ipython-genutils`: Required by `ipython`
+* `path.py`: Required by `ipython`
+* `pexpect`: Required by `ipython`
+* `pickleshare`: Required by `ipython`
+* `ptyprocess`: Required by `ipython`
+* `simplegeneric`: Required by `ipython`
+* `six`: Required by `django-extensions`
+* `traitlets`: Required by `ipython`
+* `uWSGI`: Fast Application Server Container as interface for nginx in production mode
+* `Werkzeug`: Optional dependency of `django-extensions`
+* `wheel`: required for installation of pure python and native C extension packages
+* `django-watson`: Required for searching
+
 ## Notices
 
-* We use [Twitter Bootstrap 3](http://getbootstrap.com)
+* We use [Material Design](http://materializecss.com)
+* We use [Material Icons](https://www.google.com/design/icons/)
+* We use [Fontawesome Icons](http://fontawesome.io/icons) if no icon in Material Design exists
+
+## Getting search to work
+
+For `watson` to work, you need to execute the following tasks:
+
+1. `manage.py syncdb`
+1. `manage.py installwatson`
+
+If you already have a populated database, you also need to build the indices:
+
+1. `manage.py buildwatson`
 
 ## Important Style Guide
 

@@ -1,35 +1,17 @@
 {% extends 'base.html' %}
 
-{% block body_classes %}Buch bearbeiten{% endblock %}
+{% block body_classes %}books-edit{% endblock %}
 
 {% block content %}
-    <h1>Das Buch "{{ book.name }}" aktualisieren</h1>
-
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-
-    <div class="col-md-12 col-xs-12 col-lg-12">
-        <form role="form" method="post" action="">
-            {% csrf_token %}
-
-            {% for field in formset.visible_fields %}
-                <div class="form-group  {% if field.errors %}has-error{% endif %}">
-                    {{ field.label_tag }}
-                    {% if field.errors %} <span class="help-block" style="display: inline">(
-                        {% for error in field.errors %}
-                            {{ error|escape }}
-                        {% endfor %})</span>{% endif %}
-                    {{ field }}
-                </div>
-            {% endfor %}
-            <button type="submit" class="btn btn-info">Aktualisieren</button>
-        </form>
+    <div class="container">
+        <div class="row">
+            <h1>
+                <span class="grey-text title-type">Buch</span><br />
+                <span class="orange-text text-lighten-1">{{ book.name }}</span>
+            </h1>
+        </div>
+        <div class="row">
+            {% include 'app/_book_form.html' with form=form %}
+        </div>
     </div>
-
-    <script>
-        window.onload = function () {
-            $('.datepicker').datepicker();
-        }
-    </script>
 {% endblock %}

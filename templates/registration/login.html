@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block body_classes %}page-login{% endblock %}
+
+{% block content %}
+
+  <div class="container">
+    {% if form.errors %}
+      <div class="z-depth-1 alert alert-error">Benutzername oder Passwort sind falsch!</div>
+    {% endif %}
+
+    <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{% url 'startPage' %}" />
+
+      <div class="input-field">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+      </div>
+      <div class="input-field">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+      </div>
+
+      <input type="submit" value="login" class="btn" />
+    </form>
+
+    {# Assumes you setup the password_reset view in your URLconf #}
+    <p><a href="{% url 'password_reset' %}">Passwort vergessen?</a></p>
+  </div>
+
+{% endblock %}
