@@ -21,6 +21,7 @@ urlpatterns = [
     # accounts
     url(r'^accounts/register/$', views.register_user, name='register'),
     url(r'^accounts/(?P<pk>[0-9]+)/edit/$', views.UserUpdate.as_view(), name='edit_profile'),
+    url(r'^accounts/password/', views.changePassword, name='change_password'),
 
     # search
     url(r'^search/$', views.searchBook, name='searchBook'),

@@ -1,5 +1,7 @@
 # coding=utf-8
 from django.shortcuts import render
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import UpdateView
 from django.shortcuts import render_to_response
@@ -126,3 +128,17 @@ class UserUpdate(UpdateView):
 
     def get_success_url(self):
         return reverse('startPage')
+
+
+def changePassword(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, request.user)
+            messages.add_message(request, messages.SUCCESS, 'Das Passwort wurde erfolgreich geändert')
+            return HttpResponseRedirect(reverse('startPage'))
+    else:
+        form = PasswordChangeForm(user=request.user)
+    return render_to_response('app/change_password.html', {'form': form}, RequestContext(request))
+
