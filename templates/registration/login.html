@@ -9,10 +9,8 @@
       <div class="z-depth-1 alert alert-error">Benutzername oder Passwort sind falsch!</div>
     {% endif %}
 
-    <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+    <form method="post" action="{% url 'django.contrib.auth.views.login' %}{% if next %}?next=/{{next}}{% endif %}">
       {% csrf_token %}
-      <input type="hidden" name="next" value="{% url 'startPage' %}" />
-
       <div class="input-field">
         {{ form.username.label_tag }}
         {{ form.username }}
