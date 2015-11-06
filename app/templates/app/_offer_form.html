@@ -24,3 +24,17 @@
     <button type="submit" class="btn waves-effect waves-light">Speichern <i class="material-icons right">send</i></button>
 </form>
 {% endif %}
+
+<script>
+    function sdf_handleOfferFormVisibility()
+    {
+        var inputParentSiblings = $("#id_offer_form_checkbox").parent().siblings(".input-field");
+        var inputCousins = inputParentSiblings.children("input");
+
+        var checkedStatus = $("#id_offer_form_checkbox").prop( "checked" );
+        inputCousins.prop('disabled', !checkedStatus);
+        inputParentSiblings.css('display', ( checkedStatus ? "block" : "none" ));
+    }
+    $("#id_offer_form_checkbox").change( sdf_handleOfferFormVisibility );
+    sdf_handleOfferFormVisibility();
+</script>
