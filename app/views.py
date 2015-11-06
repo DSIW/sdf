@@ -18,6 +18,81 @@ from .models import User, Book, Offer
 from .forms import BookForm, OfferForm, RegistrationForm
 
 
+def showEditBook(request, book_id, offerEnabled):
+    template_name = 'app/archives_edit.html'
+
+    if book_id is not None:
+        book = Book.objects.get(pk=book_id)
+        book_form = BookForm(instance=book)
+
+        offer = None
+        offers = Offer.objects.filter(book_id=book_id).all()
+        if len(offers) > 0:
+            offer = Offer.objects.get(pk=offers.first().id)
+        offer_form = OfferForm(instance=offer)
+    else:
+        book_form = BookForm()
+        offer_form = OfferForm()
+
+    if offerEnabled is None:
+        offer_form.initial['offer_form_checkbox'] = (True if offer is not None else False)
+    else:
+        offer_form.initial['offer_form_checkbox'] = offerEnabled
+
+    return render_to_response(template_name, {
+        "form": book_form,
+        "offer_form": offer_form,
+    }, RequestContext(request))
+
+
+def handleEditBook(request, book_id):
+    if request.method == 'POST':
+        offer = None
+
+        if book_id is not None:
+            book = Book.objects.get(pk=book_id)
+            offers = Offer.objects.filter(book_id=book_id).all()
+            # TODO: only one offer per book should exist, combine book_id, seller_user_id to one primary key ?
+            # no combined primary keys in django available: https://code.djangoproject.com/wiki/MultipleColumnPrimaryKeys
+            # -> use unique_together constraint
+            # Maybe this will not be needed since it is not decided yet how user bidding will be handled
+            if len(offers) > 0:
+                offer = Offer.objects.get(pk=offers.first().id)
+
+            book_form = BookForm(request.POST, instance=book)
+            offer_form = OfferForm(request.POST, instance=offer)
+
+        else:
+            book_form = BookForm(request.POST)
+            offer_form = OfferForm(request.POST)
+
+        try:
+            if book_id is not None:
+                book_form_obj = book_form.save()
+            else:
+                book_form_obj = book_form.save(commit=False)
+                book_form_obj.user_id = request.user.id
+                book_form_obj.save()
+
+            if 'offer_form_checkbox' in request.POST and request.POST['offer_form_checkbox']:
+                offer_form_obj = offer_form.save(commit=False)
+
+                # reseting book_id and seller_user_id in case this will be a new offer
+                offer_form_obj.book_id = book_form_obj.id
+                offer_form_obj.seller_user_id = book_form_obj.user_id
+                offer_form_obj.save()
+
+            # TODO: test, what happens when offer_form_checkbox is not in POST ?
+            elif offer:
+                offer.delete()
+            return True
+
+        except ValueError as e:
+            print(e)
+
+    return False
+
+
 class StartPageView(TemplateView):
     template_name = 'app/start.html'
 
@@ -74,67 +149,6 @@ def archivesPageView(request):
     }, RequestContext(request))
 
 
-def showEditBook(request, book_id, offerEnabled):
-    template_name = 'app/archives_edit.html'
-    book = Book.objects.get(pk=book_id)
-    book_form = BookForm(instance=book)
-
-    offer = None
-    offers = Offer.objects.filter(book_id=book_id).all()
-    if len(offers) > 0:
-        offer = Offer.objects.get(pk=offers.first().id)
-    offer_form = OfferForm(instance=offer)
-
-    if offerEnabled is None:
-        offer_form.initial['offer_form_checkbox'] = (True if offer is not None else False)
-    else:
-        offer_form.initial['offer_form_checkbox'] = offerEnabled
-
-    return render_to_response(template_name, {
-        "form": book_form,
-        "offer_form": offer_form,
-        "book": book,
-    }, RequestContext(request))
-
-
-def handleEditBook(request, book_id):
-    book = Book.objects.get(pk=book_id)
-    offer = None
-    offers = Offer.objects.filter(book_id=book_id).all()
-    # TODO: only one offer per book should exist, combine book_id, seller_user_id to one primary key ?
-    # no combined primary keys in django available: https://code.djangoproject.com/wiki/MultipleColumnPrimaryKeys
-    # -> use unique_together constraint
-    # Maybe this will not be needed since it is not decided yet how user bidding will be handled
-    if len(offers) > 0:
-        offer = Offer.objects.get(pk=offers.first().id)
-
-    if request.method == 'POST':
-        book_form = BookForm(request.POST, instance=book)
-        offer_form = OfferForm(request.POST, instance=offer)
-
-        try:
-            form_obj = book_form.save()
-
-            if 'offer_form_checkbox' in request.POST and request.POST['offer_form_checkbox']:
-                offer_form_obj = offer_form.save(commit=False)
-
-                # reseting book_id and seller_user_id in case this will be a new offer
-                offer_form_obj.book_id = form_obj.id
-                offer_form_obj.seller_user_id = form_obj.user_id
-                offer_form_obj.save()
-
-            # TODO: test, what happens when offer_form_checkbox is not in POST ?
-            elif offer:
-                offer.delete()
-            return True
-
-        except ValueError as e:
-            print(e)
-
-    return False
-
-
-
 def archivesEditPageView(request, book_id):
     '''
     Diese Methode aktualisiert ein Buch
@@ -184,6 +198,19 @@ def searchBookResults(request):
     return render_to_response(template_name, {
         "results": search_results,
     }, RequestContext(request))
+
+
+def createBook(request):
+    if request.method == 'POST':
+        ret_val = handleEditBook(request, None)
+
+        if ret_val:
+            messages.add_message(request, messages.SUCCESS, 'Das Buch wurde erfolgreich angelegt!')
+            return HttpResponseRedirect(reverse('archivesPage'))
+        else:
+            messages.add_message(request, messages.ERROR, 'Das Buch konnte leider nicht angelegt werden!')
+
+    return showEditBook(request, None, False)
 
 
 def publishBook(request, book_id):

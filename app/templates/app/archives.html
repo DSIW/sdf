@@ -14,7 +14,7 @@
             <li class="collection-header">
                 <h4>
                     Ihre Bücher
-                    <a class="secondary-content btn-flat" data-toggle="collapse" data-target="#newBook">Buch anlegen</a>
+                    <a class="secondary-content btn-flat" href="{% url 'createBook' %}">Buch anlegen</a>
                 </h4>
             </li>
             {% for book in allBooks %}
