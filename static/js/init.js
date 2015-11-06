@@ -7,4 +7,9 @@ jQuery(function(){
     selectMonths: true, // Creates a dropdown to control month
     selectYears: 15 // Creates a dropdown of 15 years to control year
   });
+  $('textarea').addClass('materialize-textarea');
+  $('input[type=checkbox]').addClass('filled-in');
+  $('input[type=checkbox] + label').on('click', function(event) {
+    $(this).siblings('input').click();
+  });
 });

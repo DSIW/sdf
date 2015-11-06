@@ -152,11 +152,17 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   text-transform: uppercase;
 }
 
+.input-field {
+  min-height: 51px;
+}
 .input-field label {
   left: 0;
   z-index: -1; /* react on click at input */
 }
 nav .input-field.search-field label {
+  z-index: 0;
+}
+.input-field input[type="checkbox"] + label {
   z-index: 0;
 }
 nav .input-field.search-field i {
