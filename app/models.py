@@ -7,19 +7,18 @@ class User(AuthUser):
     location = models.CharField(max_length=255)
     user_ptr = models.OneToOneField(AuthUser)
     paypal = models.CharField(max_length=255)
+    #TODO: userRating: rating: <int> 0..10, rating_text, reviewer_user_id, user_id, timestamp
 
     def __str__(self):
         return self.location + ", " + self.user_ptr + ", " + self.paypal
 
     def full_name(self):
-        if (self.first_name != "" and self.last_name != ""):
+        if self.first_name != "" and self.last_name != "":
             return "%s %s" % (self.first_name, self.last_name)
         else:
             return self.username
 
 
-#TODO: (maybe)
-# userRating: rating: <int> 0..10, rating_text, reviewer_user_id, user_id, timestamp
 
 # Create your models here. Unique primary key ids are automatically generated !
 class Book(models.Model):

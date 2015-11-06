@@ -1,13 +1,32 @@
 # coding=utf-8
 from django import forms
-from django.utils.translation import ugettext_lazy as _
-from django.core.exceptions import ValidationError
-from django.forms import ModelForm
-
-from .models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.utils.translation import ugettext_lazy as _
+from django.forms.utils import ErrorDict
 
-from .models import Book
+from .models import User, Book, Offer
+
+
+class OfferForm(forms.ModelForm):
+    offer_form_checkbox = forms.BooleanField(label=_('Verkaufen'))
+
+    class Meta:
+        model = Offer
+        fields = ['offer_form_checkbox', 'price', 'shipping_price']
+        exclude = ['id', 'book', 'seller_user']
+        labels = {
+            'price': _('Buchpreis'),
+            'shipping_price': _('Versandpreis'),
+        }
+
+    # Returns errors only if user has actually changed the form
+    def full_clean(self):
+        if not self.has_changed():
+            self._errors = ErrorDict()
+            return
+
+        return super(OfferForm, self).full_clean()
+
 
 class BookForm(forms.ModelForm):
     '''

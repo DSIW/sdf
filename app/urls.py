@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^books/(?P<book_id>[0-9]+)/edit',         views.archivesEditPageView, name='archivesEditPage'),
     url(r'^books/(?P<id>[0-9]+)/delete$',           views.deleteBook,           name='deleteBook'),
     url(r'^accounts/(?P<user_id>[0-9]+)/showcase$', views.showcaseView,         name='user-showcase'),
-    url(r'^books/(?P<id>[0-9]+)/publish$',          views.publishBook,          name='publishBook'),
+    url(r'^books/(?P<book_id>[0-9]+)/publish$',     views.publishBook,          name='publishBook'),
     url(r'^books/(?P<id>[0-9]+)/unpublish$',        views.unpublishBook,        name='unpublishBook'),
 
     # accounts
