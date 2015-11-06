@@ -1,0 +1,26 @@
+{% if not embedded %}
+<form id="offer_form" role="form" method="post" action="">
+    {% csrf_token %}
+{% endif %}
+
+
+    {% csrf_token %}
+
+    {% for field in form.visible_fields %}
+    <div class="input-field {% if field.errors %}has-error{% endif %}">
+        {{ field }}
+        <label>{{ field.label }}</label>
+        {% if field.errors %}
+            <span class="help-block">
+                {% for error in field.errors %}
+                    {{ error|escape }}
+                {% endfor %}
+            </span>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+{% if not embedded %}
+    <button type="submit" class="btn waves-effect waves-light">Speichern <i class="material-icons right">send</i></button>
+</form>
+{% endif %}

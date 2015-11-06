@@ -27,7 +27,7 @@
                     </a>
                     <ul id='book-{{ book.id }}-actions' class='dropdown-content'>
                         <!-- TODO: if not book.isOnStoreWindow -->
-                        <li><a href="{% url 'publishBook' book.id %}" data-method="post">Veröffentlichen</a></li>
+                        <li><a href="{% url 'publishBook' book.id %}">Veröffentlichen</a></li>
 
                         <!-- TODO: if book.isOnStoreWindow
                         <li><a href=" url 'unpublishBook' book.id " data-method="put">Nicht veröffentlichen</a></li>

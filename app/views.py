@@ -25,6 +25,7 @@ class StartPageView(TemplateView):
         context = super(StartPageView, self).get_context_data(**kwargs)
         return context
 
+
 def register_user(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -35,6 +36,7 @@ def register_user(request):
     else:
         form = RegistrationForm()
     return render_to_response('app/register.html', {'form': form}, RequestContext(request))
+
 
 def archivesPageView(request):
     '''
