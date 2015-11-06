@@ -115,36 +115,14 @@ def register_user(request):
 
 def archivesPageView(request):
     '''
-    Diese Methode zeigt alle vorhandenen Buecher an und ermoeglicht es ein neues Buch zu speichern
+    Diese Methode zeigt alle vorhandenen Buecher an
     :param request: Der Request der erzeugt wurde
-    :return: form: Die Form die sich generiert aus dem Model, collapsed: Status ob "Neues Buch hinzufuegen" angezeigt werden soll
-    allBooks: Alle Buecher
+    :return: allBooks: Alle Buecher
     '''
     template_name = 'app/archives.html'
-    collapsed = False
-
-    if request.method == 'POST':
-        try:
-            form = BookForm(request.POST)
-
-            formObject = form.save(commit=False)
-            formObject.user_id = request.user.id
-            formObject.save()
-
-            collapsed = True
-            messages.add_message(request, messages.SUCCESS, 'Das Buch wurde erfolgreich angelegt!')
-        except ValueError as e:
-            print(e)
-            messages.add_message(request, messages.ERROR, 'Das Buch konnte leider nicht gespeichert werden!')
-    else:
-        form = BookForm()
-        collapsed = True
-
     allBooks = Book.objects.all();
 
     return render_to_response(template_name, {
-        "form": form,
-        "collapsed": collapsed,
         "allBooks": allBooks,
     }, RequestContext(request))
 
