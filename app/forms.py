@@ -79,7 +79,10 @@ class RegistrationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'paypal', 'password1', 'password1')
+        fields = ('username', 'first_name', 'last_name', 'email', 'location', 'paypal', 'password1', 'password1')
+        labels = {
+            'location': _('Ort'),
+        }
 
     def save(self, commit=True):
         user = super(RegistrationForm, self).save(commit=False)
