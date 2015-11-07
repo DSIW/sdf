@@ -1,4 +1,4 @@
-<form role="form" method="get" action="{% url 'searchBookResults' %}">
+<form role="form" method="get" action="{% url 'app_book:searchBookResults' %}">
     <div class="input-field {% if field.errors %}has-error{% endif %}">
         <div class="input-field col s6">
             <input name="search_string" type="text" value="{{ request.GET.search_string }}">
