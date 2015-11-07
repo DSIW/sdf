@@ -8,6 +8,7 @@ from .models import User, ConfirmEmail
 from django.core.mail import send_mail
 from django.contrib.auth.forms import UserCreationForm
 from sdf import settings
+from django.core.urlresolvers import reverse
 
 class RegistrationForm(UserCreationForm):
     first_name = forms.TextInput()
@@ -43,7 +44,7 @@ class RegistrationForm(UserCreationForm):
 
     def sendConfirmEmail(self, request, user):
         confirmId = get_random_string(length=32)
-        link = 'http://' + HttpRequest.get_host(request) + '/accounts/emailconfirm/' + confirmId
+        link = 'http://' + HttpRequest.get_host(request) + reverse('confirm_email') + confirmId
         emailMessage = 'Sehr geehrte/er Frau / Herr '+ request.POST.get('last_name') + ', <br><br>vielen dank für die Registrierung in book².<br> Zur Bestätigung Ihrer E-Mail Adresse betätigen Sie bitte folgenden Link: <a href="' + link + '">Bestätigen</a><br>Sollten Sie den Link nicht nutzen könnten dann kopieren Sie bitte folgende URL in Ihren Browser:<br> ' + link + '<br><br>Wir wünschen Ihnen viel Spaß beim Shoppen<br>Ihr book² team'
 
         send_mail('Registrierungsbestätigung book²', emailMessage, settings.EMAIL_HOST_USER,

@@ -6,7 +6,6 @@ from django.template import RequestContext
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from .models import User, ConfirmEmail
 
 from .forms import RegistrationForm

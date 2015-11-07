@@ -9,5 +9,5 @@ class ShbAppConfig(AppConfig):
     def ready(self):
         # imports here to circumvent RemovedInDjango19Warning: Model doesn't declare an explicit app_label
         import watson
-        from appbook.models import Book
+        from app_book.models import Book
         watson.register(Book.objects.filter(isOnStoreWindow=True))

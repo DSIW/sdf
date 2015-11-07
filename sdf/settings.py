@@ -41,8 +41,8 @@ INSTALLED_APPS = (
     'watson',
     'django_extensions',
     'app',
-    'appbook',
-    'appuser',
+    'app_book',
+    'app_user',
 )
 
 MIDDLEWARE_CLASSES = (
