@@ -225,7 +225,7 @@ def publishBook(request, book_id):
 
         if ret_val:
             messages.add_message(request, messages.SUCCESS, 'Das Buch wurde erfolgreich aktualisiert und nun zum Verkauf angeboten!')
-            return HttpResponseRedirect(reverse('app_book:user-showcase', kwargs={'user_id': request.user.id}), status=303)
+            return HttpResponseRedirect(reverse('app_book:showcase', kwargs={'user_id': request.user.id}), status=303)
         else:
             messages.add_message(request, messages.ERROR, 'Das Buch konnte leider nicht aktualisiert werden!')
 
@@ -239,7 +239,7 @@ def unpublishBook(request, id):
         book.save()
         messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun nicht mehr zum Verkauf angeboten!')
         # use GET request for redirected location via HTTP status code 303 (see other).
-        return HttpResponseRedirect(reverse('app_book:user-showcase', kwargs={'user_id': book.user_id}), status=303)
+        return HttpResponseRedirect(reverse('app_book:showcase', kwargs={'user_id': book.user_id}), status=303)
     else:
         raise ("Use http method PUT for unpublishing a book.")
 
