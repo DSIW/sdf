@@ -8,7 +8,7 @@
             <li class="collection-header">
                 <h4>
                     Ihre Bücher
-                    <a class="secondary-content btn-flat" href="{% url 'createBook' %}">Buch anlegen</a>
+                    <a class="secondary-content btn-flat" href="{% url 'app_book:createBook' %}">Buch anlegen</a>
                 </h4>
             </li>
             {% for book in allBooks %}
@@ -21,10 +21,10 @@
                     </a>
                     <ul id='book-{{ book.id }}-actions' class='dropdown-content'>
                         {% if not book.isOnStoreWindow %}
-                        <li><a href="{% url 'publishBook' book.id %}">Veröffentlichen</a></li>
+                        <li><a href="{% url 'app_book:publishBook' book.id %}">Veröffentlichen</a></li>
                         {% endif %}
                         {% if book.isOnStoreWindow %}
-                        <li><a href="{% url 'publishBook' book.id %}">Nicht veröffentlichen</a></li>
+                        <li><a href="{% url 'app_book:publishBook' book.id %}">Nicht veröffentlichen</a></li>
                         {% endif %}
                         <li><a href="{% url 'app_book:archivesEditPage' book.id %}">Bearbeiten</a></li>
                         <li><a href="{% url 'app_book:deleteBook' book.id %}" data-method="delete" data-confirm="true" title="Löschen">Löschen</a></li>

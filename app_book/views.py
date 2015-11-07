@@ -14,7 +14,7 @@ import watson
 
 
 def showEditBook(request, book_id, offerEnabled):
-    template_name = 'app/archives_edit.html'
+    template_name = 'app_book/archives_edit.html'
 
     if book_id is not None:
         book = Book.objects.get(pk=book_id)
@@ -94,7 +94,7 @@ def archivesPageView(request):
     :param request: Der Request der erzeugt wurde
     :return: allBooks: Alle Buecher
     '''
-    template_name = 'app/archives.html'
+    template_name = 'app_book/archives.html'
     allBooks = Book.objects.all();
 
     return render_to_response(template_name, {
@@ -225,7 +225,7 @@ def publishBook(request, book_id):
 
         if ret_val:
             messages.add_message(request, messages.SUCCESS, 'Das Buch wurde erfolgreich aktualisiert und nun zum Verkauf angeboten!')
-            return HttpResponseRedirect(reverse('user-showcase', kwargs={'user_id': request.user.id}), status=303)
+            return HttpResponseRedirect(reverse('app_book:user-showcase', kwargs={'user_id': request.user.id}), status=303)
         else:
             messages.add_message(request, messages.ERROR, 'Das Buch konnte leider nicht aktualisiert werden!')
 
@@ -239,13 +239,13 @@ def unpublishBook(request, id):
         book.save()
         messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun nicht mehr zum Verkauf angeboten!')
         # use GET request for redirected location via HTTP status code 303 (see other).
-        return HttpResponseRedirect(reverse('user-showcase', kwargs={'user_id': book.user_id}), status=303)
+        return HttpResponseRedirect(reverse('app_book:user-showcase', kwargs={'user_id': book.user_id}), status=303)
     else:
         raise ("Use http method PUT for unpublishing a book.")
 
 
 def showcaseView(request, user_id):
-    template_name = 'app/showcase.html'
+    template_name = 'app_book/showcase.html'
 
     user = User.objects.filter(pk=user_id).first()
 
