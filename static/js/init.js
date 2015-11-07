@@ -12,4 +12,8 @@ jQuery(function(){
   $('input[type=checkbox] + label').on('click', function(event) {
     $(this).siblings('input').click();
   });
+
+  $('.js-alert-hide').on('click', function(event) {
+    $(this).parents('.alert').fadeOut();
+  });
 });

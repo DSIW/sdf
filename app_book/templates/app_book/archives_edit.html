@@ -13,7 +13,7 @@
         <form role="form" method="post" action="">
             {% csrf_token %}
             <div class="row">
-                {% include 'app/_book_form.html' with form=form embedded=True %}
+                {% include 'app_book/_book_form.html' with form=form embedded=True %}
             </div>
 
             <div class="row">

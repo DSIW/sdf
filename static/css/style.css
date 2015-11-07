@@ -95,32 +95,78 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 /* Components */
 
 .alert {
-  margin-top: 30px;
-  margin-bottom: 30px;
+  position: absolute;
+  left: 50%;
+  top: 75px;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background-color: white;
   font-weight: 300;
   font-size: 1.2em;
   padding: 10px;
   border-radius: 2px;
-  letter-spacing: 0.5px;
   border: 1px solid;
-  border-left: 5px solid;
+}
+
+.alert i {
+  line-height: 23px;
+  vertical-align: middle;
+}
+
+.alert i.alert-icon {
+  position: absolute;
+  background-color: #388E3C;
+  color: #FFF;
+  padding: 7px;
+  padding-top: 11px;
+  line-height: 100%;
+  vertical-align: middle;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+}
+
+.alert i.alert-hide {
+  position: absolute;
+  right: 10px;
+  top: 12px;
+  cursor: pointer;
+}
+
+.alert .message {
+  margin-left: 40px;
+  margin-right: 40px;
+  letter-spacing: 0.5px;
 }
 
 .alert-error,
 .alert-danger {
   color: #B71C1C;
 }
+.alert-error i.alert-icon,
+.alert-danger i.alert-icon {
+  background-color: #B71C1C;
+}
 
 .alert-warning {
   color: #F57C00;
+}
+.alert-warning i.alert-icon {
+  background-color: #F57C00;
 }
 
 .alert-success {
   color: #388E3C;
 }
+.alert-success i.alert-icon {
+  background-color: #388E3C;
+}
 
 .alert-info {
   color: #1976D2;
+}
+.alert-info i.alert-icon {
+  background-color: #1976D2;
 }
 
 /* Twitter Bootstrap */

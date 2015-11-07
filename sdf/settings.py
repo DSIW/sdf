@@ -26,7 +26,9 @@ SECRET_KEY = 'pnetpl9^b1=ir(t!_6vf%d#p3y8%)_7n7y=p(@%zi20))a7*4)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '.htw-berlin.de', # Allow domain and subdomains
+]
 
 
 # Application definition
@@ -42,6 +44,8 @@ INSTALLED_APPS = (
     'watson',
     'django_extensions',
     'app',
+    'app_book',
+    'app_user',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -76,6 +80,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sdf.wsgi.application'
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'mail.gmx.net'
+EMAIL_PORT = '587'
+EMAIL_HOST_PASSWORD = 'htwberlin'
+EMAIL_HOST_USER = 'sdf-phb@gmx.de'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
