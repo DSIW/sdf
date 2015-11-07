@@ -79,10 +79,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sdf.wsgi.application'
 
+EMAIL_USE_TLS = True
 EMAIL_HOST = 'mail.gmx.net'
+EMAIL_PORT = '587'
 EMAIL_HOST_PASSWORD = 'htwberlin'
 EMAIL_HOST_USER = 'sdf-phb@gmx.de'
-EMAIL_PORT = '587'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
