@@ -41,5 +41,6 @@ def confirm_email(request, uuid):
     user = confirmEmail.user;
     user.emailConfirm = True;
     user.save();
+    messages.add_message(request, messages.SUCCESS, 'Ihre E-Mail Adresse ' + user.email + ' wurde erfolgreich bestätigt')
 
-    return render_to_response('app/confirmemail.html', {'email': user.email}, RequestContext(request))
+    return render_to_response('app/start.html', {}, RequestContext(request))
