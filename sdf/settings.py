@@ -26,7 +26,9 @@ SECRET_KEY = 'pnetpl9^b1=ir(t!_6vf%d#p3y8%)_7n7y=p(@%zi20))a7*4)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '.htw-berlin.de', # Allow domain and subdomains
+]
 
 
 # Application definition
