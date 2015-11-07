@@ -37,14 +37,18 @@ class UserUpdate(UpdateView):
         return reverse('app:startPage')
 
 def confirm_email(request, uuid):
-    confirmEmail = ConfirmEmail.objects.get(uuid=uuid);
-    print(confirmEmail);
-    user = confirmEmail.user;
-    user.emailConfirm = True;
-    user.save();
-    messages.add_message(request, messages.SUCCESS, 'Ihre E-Mail Adresse ' + user.email + ' wurde erfolgreich bestätigt')
-
-    return render_to_response('app/start.html', {}, RequestContext(request))
+    confirmEmail = ConfirmEmail.objects.filter(uuid=uuid).first()
+    if confirmEmail is not None:
+        user = confirmEmail.user
+        if user.emailConfirm:
+            messages.add_message(request, messages.INFO, 'Ihre E-Mail Adresse ' + user.email + ' ist bereits bestätigt')
+        else:
+            user.emailConfirm = True
+            user.save()
+            messages.add_message(request, messages.SUCCESS, 'Ihre E-Mail Adresse ' + user.email + ' wurde erfolgreich bestätigt')
+    else:
+        messages.add_message(request, messages.ERROR, 'Ihre E-Mail Adresse konnte nicht bestätigt werden')
+    return HttpResponseRedirect(reverse('app:startPage'))
 
 
 def changePassword(request):
