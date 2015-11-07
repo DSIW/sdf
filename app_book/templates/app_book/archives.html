@@ -5,7 +5,7 @@
 {% block content %}
     <div class="container">
         <div id="newBook" class="{% if collapsed %}collapse{% endif %}" style="padding-top: 15px">
-            {% include 'app/_book_form.html' with form=form %}
+            {% include 'app_book/_book_form.html' with form=form %}
         </div>
     </div>
 
@@ -32,8 +32,8 @@
                         {% if book.isOnStoreWindow %}
                         <li><a href="#">Nicht veröffentlichen</a></li>
                         {% endif %}
-                        <li><a href="{% url 'archivesEditPage' book.id %}">Bearbeiten</a></li>
-                        <li><a href="{% url 'deleteBook' book.id %}" data-method="delete" data-confirm="true" title="Löschen">Löschen</a></li>
+                        <li><a href="{% url 'app_book:archivesEditPage' book.id %}">Bearbeiten</a></li>
+                        <li><a href="{% url 'app_book:deleteBook' book.id %}" data-method="delete" data-confirm="true" title="Löschen">Löschen</a></li>
                     </ul>
                 </div>
             </li>

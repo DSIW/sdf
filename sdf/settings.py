@@ -43,6 +43,8 @@ INSTALLED_APPS = (
     'watson',
     'django_extensions',
     'app',
+    'app_book',
+    'app_user',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -77,6 +79,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sdf.wsgi.application'
 
+EMAIL_HOST = 'mail.gmx.net'
+EMAIL_HOST_PASSWORD = 'htwberlin'
+EMAIL_HOST_USER = 'sdf-phb@gmx.de'
+EMAIL_PORT = '587'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
