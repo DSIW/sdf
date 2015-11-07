@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^', include('app.urls')),
-    url(r'^', include('appbook.urls')),
-    url(r'^', include('appuser.urls')),
+    url(r'^', include('app_book.urls')),
+    url(r'^', include('app_user.urls')),
     url(r'^', include('django.contrib.auth.urls')),
 ]
