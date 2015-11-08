@@ -86,6 +86,7 @@ pip-selfcheck.json
 db.sqlite3
 *.orig
 migrations
+!scripts
 
 ## pyCharm ##
 .idea/
