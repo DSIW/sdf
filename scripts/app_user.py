@@ -140,6 +140,7 @@ def import_data():
     auth_user_admin.first_name = 'Admin'
     auth_user_admin.last_name = 'Admin'
     auth_user_admin.email = 'admin@admin.de'
+    auth_user_admin.emailConfirm = True
     auth_user_admin.paypal = auth_user_admin.email
     auth_user_admin.is_staff = True
     auth_user_admin.is_active = True
@@ -154,6 +155,7 @@ def import_data():
     auth_user_1.first_name = 'Max'
     auth_user_1.last_name = 'Mustermann'
     auth_user_1.email = 'max@mustermann.de'
+    auth_user_1.emailConfirm = True
     auth_user_1.paypal = auth_user_1.email
     auth_user_1.is_staff = False
     auth_user_1.is_active = True
