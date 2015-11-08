@@ -30,6 +30,7 @@
 * `pexpect`: Required by `ipython`
 * `pickleshare`: Required by `ipython`
 * `ptyprocess`: Required by `ipython`
+* `python-dateutil`: Required by `./reset_db.sh`
 * `simplegeneric`: Required by `ipython`
 * `six`: Required by `django-extensions`
 * `traitlets`: Required by `ipython`
