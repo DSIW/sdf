@@ -133,8 +133,10 @@ def import_data():
     # Processing model: Book
 
     from app_book.models import Book
+    from app_book.models import User
 
     app_book_1 = Book()
+    app_book_1.user = User.objects.filter(username='mustermann').first()
     app_book_1.name = 'Lightweight Django'
     app_book_1.author = 'Julia Elman, Mark Lavin'
     app_book_1.language = 'EN'
@@ -142,10 +144,11 @@ def import_data():
     app_book_1.pageNumber = 243
     app_book_1.isbn10 = '149194594X'
     app_book_1.isbn13 = '978-1491945940'
-    app_book_1.isOnStoreWindow = False
+    app_book_1.description = 'Julia Elman has been working her brand of web skills for nearly a decade. She started out as a designer for an internal marketing group at a travel agency in Los Angeles, and quickly honed her skills as a web designer using HTML/CSS. Julia joined the Caktus Consulting Group in 2011 and is thrilled to work with some of the most talented developers this side of the Mississippi. She is actively involved with Girl Develop It RDU as an instructor to help contribute in educating women pursuing a career in technology. Mark is a lead Python/Django developer at Caktus Consulting Group in Carrboro, NC. He also runs a small homebrewing website written in Django called brewedbyus.com. He came to Python web development after a few years pricing derivatives on Wall Street. Mark maintains a number of open source projects primarily related to Django development and frequently contributes back to projects used by Caktus. When he isn't programming, Mark enjoys spending time with his wife and daughter, brewing beer, and running.'
     app_book_1 = importer.save_or_locate(app_book_1)
 
     app_book_2 = Book()
+    app_book_2.user = User.objects.filter(username='mustermann').first()
     app_book_2.name = 'Hands-on Django: Going Beyond the Polls'
     app_book_2.author = 'Brandon Lorenz'
     app_book_2.language = 'EN'
@@ -153,10 +156,11 @@ def import_data():
     app_book_2.pageNumber = 0
     app_book_2.isbn10 = '144936781X'
     app_book_2.isbn13 = '978-1449367817'
-    app_book_2.isOnStoreWindow = False
+    app_book_2.description = ''
     app_book_2 = importer.save_or_locate(app_book_2)
 
     app_book_3 = Book()
+    app_book_3.user = User.objects.filter(username='mustermann').first()
     app_book_3.name = 'Test-Driven Development with Python'
     app_book_3.author = 'Harry J.W. Percival'
     app_book_3.language = 'EN'
@@ -164,5 +168,5 @@ def import_data():
     app_book_3.pageNumber = 478
     app_book_3.isbn10 = '1449364829'
     app_book_3.isbn13 = '978-1449364823'
-    app_book_3.isOnStoreWindow = False
+    app_book_3.description = ''
     app_book_3 = importer.save_or_locate(app_book_3)
