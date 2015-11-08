@@ -34,7 +34,6 @@
 * `simplegeneric`: Required by `ipython`
 * `six`: Required by `django-extensions`
 * `traitlets`: Required by `ipython`
-* `uWSGI`: Fast Application Server Container as interface for nginx in production mode
 * `Werkzeug`: Optional dependency of `django-extensions`
 * `wheel`: required for installation of pure python and native C extension packages
 * `django-watson`: Required for searching
