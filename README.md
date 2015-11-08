@@ -9,8 +9,7 @@
 1. `cd sdf`
 1. Create a new environment named `django_sdf` via `mkvirtualenv django_sdf`
 1. Install required packages via `pip install -r requirements.txt`
-1. Migrate your DB via `python manage.py migrate`
-1. Run server in development mode on port 3001 via `python manage.py runserver 3001`
+1. Reset your DB via `./reset_db.sh`. This will migrate your DB and some seed data will be imported.
 1. Open the app via `http://localhost:3001`
 
 ## Setup nginx (optional)
@@ -31,10 +30,10 @@
 * `pexpect`: Required by `ipython`
 * `pickleshare`: Required by `ipython`
 * `ptyprocess`: Required by `ipython`
+* `python-dateutil`: Required by `./reset_db.sh`
 * `simplegeneric`: Required by `ipython`
 * `six`: Required by `django-extensions`
 * `traitlets`: Required by `ipython`
-* `uWSGI`: Fast Application Server Container as interface for nginx in production mode
 * `Werkzeug`: Optional dependency of `django-extensions`
 * `wheel`: required for installation of pure python and native C extension packages
 * `django-watson`: Required for searching

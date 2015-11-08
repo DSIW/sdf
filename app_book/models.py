@@ -4,7 +4,7 @@ from app_user.models import User
 
 # Create your models here.
 class Book(models.Model):
-    user = models.ForeignKey(User, default=None)
+    user = models.ForeignKey(User)
 
     name= models.CharField(max_length=200)
     author = models.CharField(max_length=200)
@@ -20,8 +20,8 @@ class Book(models.Model):
 
 
 class Offer(models.Model):
-    seller_user = models.ForeignKey(User, default=None)
-    book = models.ForeignKey(Book, default=None)
+    seller_user = models.ForeignKey(User)
+    book = models.ForeignKey(Book)
     price = models.FloatField()
     shipping_price = models.FloatField()
 
