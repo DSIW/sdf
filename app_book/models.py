@@ -13,7 +13,7 @@ class Book(models.Model):
     pageNumber = models.IntegerField(default=1)
     isbn10 = models.CharField(max_length=100)
     isbn13 = models.CharField(max_length=100)
-    description = models.TextField(default="")
+    description = models.TextField(default="", blank=True)
 
     def __str__(self):
         return self.name + ", " + self.author + " (" + self.language + ", " + str(self.releaseDate) + ")"
