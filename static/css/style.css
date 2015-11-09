@@ -270,14 +270,34 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
 
 /* Showcase */
 .showcase .card-book {
-  max-width: 210px;
-  height: 460px;
+  max-width: 294px;
+  min-height: 460px;
   float: left;
   margin: 0 20px 20px 0;
+}
+.showcase .card-open {
+  position: absolute;
+  right: 5px;
+  top: 320px;
+}
+.showcase .card-close {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
+.showcase .card-book .card-title {
+  line-height: 28px;
+  min-height: 60px;
 }
 
 .showcase .card-book .card-image {
   height: 310px;
+}
+.showcase .card-book .card-reveal p {
+  border-bottom: 1px dashed #ddd;
+}
+.showcase .card-book .card-reveal p strong {
+  float: right;
 }
 .showcase .card-book .seller-rating {
   margin-top: 2px;

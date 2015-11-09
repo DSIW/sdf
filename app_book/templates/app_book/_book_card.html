@@ -7,7 +7,8 @@
         <img class="activator" src="{% static "img/book-cover-example.png" %}">
     </div>
     <div class="card-content">
-        <span class="card-title activator grey-text text-darken-4 book-title">{{ book.name }}<i class="material-icons right">more_vert</i></span>
+        <i class="card-title activator grey-text text-darken-4 material-icons card-open">more_vert</i>
+        <p class="card-title activator grey-text text-darken-4 book-title">{{ book.name }}</p>
         <p class="author">{{ book.author }}</p>
         <p class="seller-rating left">
             <i class="material-icons seller-rating-star">star</i>
@@ -16,21 +17,25 @@
             <i class="material-icons seller-rating-star">star_half</i>
             <i class="material-icons seller-rating-star">star_border</i>
         </p>
-        <p class="price right">{{ offer.totalPrice|currency }}</p>
+        <p class="card-title activator grey-text text-darken-4 price right">{{ offer.totalPrice|currency }}</p>
     </div>
     <div class="card-reveal">
-        <span class="card-title grey-text text-darken-4">{{ book.name }}<i class="material-icons right">close</i></span>
-        <p class="text-right">Autor: <strong>{{ book.author }}</strong></p>
-        <p class="text-right">Seitenanzahl: <strong>{{ book.pageNumber }}</strong></p>
-        <p class="text-right">Verkäufer: <strong>{{ user.full_name }}</strong></p>
-        <p class="text-right">Ort: <strong>{{ user.location }}</strong></p>
-        <p class="text-right">Verkäuferbewertung: <strong></strong></p>
-        <p class="seller-rating right">
-            <i class="material-icons seller-rating-star">star</i>
-            <i class="material-icons seller-rating-star">star</i>
-            <i class="material-icons seller-rating-star">star</i>
-            <i class="material-icons seller-rating-star">star_half</i>
-            <i class="material-icons seller-rating-star">star_border</i>
+        <i class="card-title activator grey-text text-darken-4 material-icons card-close">close</i>
+        <span class="card-title grey-text text-darken-4">{{ book.name }}</span>
+        <p>Autor: <strong>{{ book.author }}</strong></p>
+        <p>Seitenanzahl: <strong>{{ book.pageNumber }}</strong></p>
+        <p>Verkäufer: <strong>{{ user.full_name }}</strong></p>
+        <p>Ort: <strong>{{ user.location }}</strong></p>
+        <p>Verkäuferbewertung:
+            <strong>
+                <span class="seller-rating">
+                  <i class="material-icons seller-rating-star">star</i>
+                  <i class="material-icons seller-rating-star">star</i>
+                  <i class="material-icons seller-rating-star">star</i>
+                  <i class="material-icons seller-rating-star">star_half</i>
+                  <i class="material-icons seller-rating-star">star_border</i>
+                </span>
+            </strong>
         </p>
         <div class="card-action">
             <a href="#" class="right">Für {{ offer.totalPrice|currency }} kaufen</a>
