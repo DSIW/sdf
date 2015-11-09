@@ -287,3 +287,21 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
   width: 12px;
   color: #FCC32A;
 }
+
+
+/* Offer */
+.offer-state {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 100%;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.offer-state.active {
+  background: #4caf50;
+  box-shadow: 0px 0px 10px rgba(76, 175, 80, 0.65);
+}
+.offer-state.inactive {
+  background: #bdbdbd;
+}

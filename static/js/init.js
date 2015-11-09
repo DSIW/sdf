@@ -9,6 +9,7 @@ jQuery(function(){
   });
   $('textarea').addClass('materialize-textarea');
   $('textarea').trigger('autoresize');
+  $('.tooltipped').tooltip({position: 'top', delay: 15});
   $('input[type=checkbox]').addClass('filled-in');
   $('input[type=checkbox] + label').on('click', function(event) {
     $(this).siblings('input').click();

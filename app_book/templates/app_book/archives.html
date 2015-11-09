@@ -14,6 +14,7 @@
             {% for book in allBooks %}
             <li class="collection-item">
                 <div>
+                    <i class="offer-state {% if book.is_published %}active{% else %}inactive{% endif %} tooltipped" data-tooltip="Status: {% if book.is_published %}Öffentlich{% else %}Nicht öffentlich{% endif %}"></i>
                     {{ book.name }}
 
                     <a class='secondary-content dropdown-button' href='javascript:void(0);' data-activates='book-{{ book.id }}-actions' data-constrainwidth="false">
