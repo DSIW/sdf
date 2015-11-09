@@ -10,7 +10,7 @@ class Book(models.Model):
     author = models.CharField(max_length=200)
     language = models.CharField(max_length=100)
     releaseDate = models.DateField('release_date')
-    pageNumber = models.IntegerField(default=1)
+    pageNumber = models.IntegerField(default=0)
     isbn10 = models.CharField(max_length=100)
     isbn13 = models.CharField(max_length=100)
     description = models.TextField(default="", blank=True)
