@@ -19,11 +19,7 @@ def showEditBook(request, book_id, offerEnabled):
     if book_id is not None:
         book = Book.objects.get(pk=book_id)
         book_form = BookForm(instance=book)
-
-        offer = None
-        offers = Offer.objects.filter(book_id=book_id).all()
-        if len(offers) > 0:
-            offer = Offer.objects.get(pk=offers.first().id)
+        offer = book.offer_set.first()
         offer_form = OfferForm(instance=offer)
     else:
         book_form = BookForm()
@@ -42,17 +38,10 @@ def showEditBook(request, book_id, offerEnabled):
 
 def handleEditBook(request, book_id):
     if request.method == 'POST':
-        offer = None
 
         if book_id is not None:
             book = Book.objects.get(pk=book_id)
-            offers = Offer.objects.filter(book_id=book_id).all()
-            # TODO: only one offer per book should exist, combine book_id, seller_user_id to one primary key ?
-            # no combined primary keys in django available: https://code.djangoproject.com/wiki/MultipleColumnPrimaryKeys
-            # -> use unique_together constraint
-            # Maybe this will not be needed since it is not decided yet how user bidding will be handled
-            if len(offers) > 0:
-                offer = Offer.objects.get(pk=offers.first().id)
+            offer = book.offer_set.first()
 
             book_form = BookForm(request.POST, instance=book)
             offer_form = OfferForm(request.POST, instance=offer)
@@ -75,11 +64,8 @@ def handleEditBook(request, book_id):
                 # reseting book_id and seller_user_id in case this will be a new offer
                 offer_form_obj.book_id = book_form_obj.id
                 offer_form_obj.seller_user_id = book_form_obj.user_id
+                offer_form_obj.active = True
                 offer_form_obj.save()
-
-            # TODO: test, what happens when offer_form_checkbox is not in POST ?
-            elif offer:
-                offer.delete()
             return True
 
         except ValueError as e:
@@ -235,8 +221,10 @@ def publishBook(request, book_id):
 def unpublishBook(request, id):
     if request.method == 'PUT':
         book = get_object_or_404(Book, id=id)
-        book.releaseDate = "2015-01-01"
-        book.save()
+        offer = book.offer_set.first()
+        if offer is not None:
+            offer.active = False
+            offer.save()
         messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun nicht mehr zum Verkauf angeboten!')
         # use GET request for redirected location via HTTP status code 303 (see other).
         return HttpResponseRedirect(reverse('app_book:showcase', kwargs={'user_id': book.user_id}), status=303)
@@ -249,9 +237,9 @@ def showcaseView(request, user_id):
 
     user = User.objects.filter(pk=user_id).first()
 
-    offers = Offer.objects.filter(seller_user_id=user_id).all()
+    offers = Offer.objects.filter(seller_user_id=user_id, active=True).all()
     bookIds = offers.values_list('book', flat=True)
-    books = list(Book.objects.filter(id__in=bookIds).all())
+    books = Book.objects.filter(id__in=bookIds).all()
 
     return render_to_response(template_name, {
         "user": user,

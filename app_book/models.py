@@ -18,12 +18,19 @@ class Book(models.Model):
     def __str__(self):
         return self.name + ", " + self.author + " (" + self.language + ", " + str(self.releaseDate) + ")"
 
+    def is_published(self):
+        return self.offer_set.count() > 0 and self.offer_set.first().active
+
 
 class Offer(models.Model):
     seller_user = models.ForeignKey(User)
     book = models.ForeignKey(Book)
     price = models.FloatField()
     shipping_price = models.FloatField()
+    active = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ("seller_user", "book")
 
     #TODO: resolve id to names
     def __str__(self):

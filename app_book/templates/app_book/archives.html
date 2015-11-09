@@ -20,11 +20,10 @@
                         <i class="material-icons">more_vert</i>
                     </a>
                     <ul id='book-{{ book.id }}-actions' class='dropdown-content'>
-                        {% if not book.isOnStoreWindow %}
-                        <li><a href="{% url 'app_book:publishBook' book.id %}">Veröffentlichen</a></li>
-                        {% endif %}
-                        {% if book.isOnStoreWindow %}
-                        <li><a href="{% url 'app_book:publishBook' book.id %}">Nicht veröffentlichen</a></li>
+                        {% if book.is_published %}
+                            <li><a href="{% url 'app_book:unpublishBook' book.id %}" data-method="put">Nicht veröffentlichen</a></li>
+                        {% else %}
+                            <li><a href="{% url 'app_book:publishBook' book.id %}">Veröffentlichen</a></li>
                         {% endif %}
                         <li><a href="{% url 'app_book:archivesEditPage' book.id %}">Bearbeiten</a></li>
                         <li><a href="{% url 'app_book:deleteBook' book.id %}" data-method="delete" data-confirm="true" title="Löschen">Löschen</a></li>
