@@ -12,6 +12,17 @@ from app_user.forms import RegistrationForm
 
 import watson
 
+# Custom Ownership Decorator
+def owns_book(func):
+    def check_and_call(request, *args, **kwargs):
+        id = kwargs["id"]
+        book = get_object_or_404(Book, id=id)
+        if not (book.user.id == request.user.id):
+            messages.add_message(request, messages.ERROR, 'Dies ist nicht Ihr Buch!')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return func(request, *args, **kwargs)
+    return check_and_call
+
 
 def showEditBook(request, book_id, offerEnabled):
     template_name = 'app_book/archives_edit.html'
@@ -88,6 +99,7 @@ def archivesPageView(request):
     }, RequestContext(request))
 
 
+@owns_book
 def archivesEditPageView(request, book_id):
     '''
     Diese Methode aktualisiert ein Buch
@@ -163,6 +175,7 @@ def archivesEditPageView(request, book_id):
     },  RequestContext(request))
 
 
+@owns_book
 def deleteBook(request, id):
     if request.method == 'DELETE':
         book = get_object_or_404(Book, id=id)
@@ -184,8 +197,8 @@ def searchBookResults(request):
     if request.method == 'GET':
         if not request.GET.get("search_string", ""):
             return HttpResponseRedirect(reverse('app_book:searchBook'), status=303)
-        print("search string: "+request.GET.get("search_string", ""))
-        search_results = watson.search(request.GET.get("search_string", ""))
+        search_string = request.GET.get("search_string", "")
+        search_results = watson.search(search_string, exclude=(Book.objects.filter(offer__lte = 0)
 
     return render_to_response(template_name, {
         "results": search_results,
@@ -205,6 +218,7 @@ def createBook(request):
     return showEditBook(request, None, False)
 
 
+@owns_book
 def publishBook(request, book_id):
     if request.method == 'POST':
         ret_val = handleEditBook(request, book_id)
@@ -218,6 +232,7 @@ def publishBook(request, book_id):
     return showEditBook(request, book_id, True)
 
 
+@owns_book
 def unpublishBook(request, id):
     if request.method == 'PUT':
         book = get_object_or_404(Book, id=id)
