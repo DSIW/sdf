@@ -8,12 +8,25 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.utils.decorators import method_decorator
 from .models import User, ConfirmEmail
 
 from .forms import RegistrationForm
 
 
 # Create your views here.
+
+# Custom Current User Decorator
+def current_user(func):
+    def check_and_call(request, *args, **kwargs):
+        id = kwargs["pk"]
+        if request.user.is_superuser:
+            return func(request, *args, **kwargs)
+        if not (id == str(request.user.pk)):
+            messages.add_message(request, messages.ERROR, 'Dies ist nicht Ihr Account!')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return func(request, *args, **kwargs)
+    return check_and_call
 
 def register_user(request):
     if request.method == 'POST':
@@ -35,6 +48,10 @@ class UserUpdate(UpdateView):
 
     def get_success_url(self):
         return reverse('app:startPage')
+
+    @method_decorator(current_user)
+    def dispatch(self, *args, **kwargs):
+        return super(UserUpdate, self).dispatch(*args, **kwargs)
 
 def confirm_email(request, uuid):
     confirmEmail = ConfirmEmail.objects.filter(uuid=uuid).first()
