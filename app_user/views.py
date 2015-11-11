@@ -19,10 +19,8 @@ from .forms import RegistrationForm
 # Custom Current User Decorator
 def current_user(func):
     def check_and_call(request, *args, **kwargs):
-        id = kwargs["pk"]
-        if request.user.is_superuser:
-            return func(request, *args, **kwargs)
-        if not (id == str(request.user.pk)):
+        id = kwargs.get("pk")
+        if id != str(request.user.pk) and not request.user.is_superuser:
             messages.add_message(request, messages.ERROR, 'Dies ist nicht Ihr Account!')
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         return func(request, *args, **kwargs)

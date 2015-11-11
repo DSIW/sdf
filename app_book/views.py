@@ -15,7 +15,9 @@ import watson
 # Custom Ownership Decorator
 def owns_book(func):
     def check_and_call(request, *args, **kwargs):
-        id = kwargs["id"]
+        id = kwargs.get("id")
+        if id == None:
+            return func(request, *args, **kwargs)
         book = get_object_or_404(Book, id=id)
         if not (book.user.id == request.user.id):
             messages.add_message(request, messages.ERROR, 'Dies ist nicht Ihr Buch!')
@@ -92,7 +94,7 @@ def archivesPageView(request):
     :return: allBooks: Alle Buecher
     '''
     template_name = 'app_book/archives.html'
-    allBooks = Book.objects.filter(request.user);
+    allBooks = Book.objects.filter(user = request.user);
 
     return render_to_response(template_name, {
         "allBooks": allBooks,
