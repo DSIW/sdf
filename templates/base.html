@@ -26,6 +26,7 @@
         <a id="logo-container" href="{% url "app:startPage" %}" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
         {% if user.is_authenticated %}
             <ul class="right hide-on-med-and-down">
+                <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
                 <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
                 <li><a href="{% url 'app_user:edit_profile' user.pk %}">Mein Profil</a></li>
                 <li><a href="{% url 'app_user:change_password' %}">Passwort ändern</a></li>
@@ -44,6 +45,7 @@
         <ul id="nav-mobile" class="side-nav">
             <li><a href="{% url 'app_book:searchBook' %}">Suche</a></li>
             {% if user.is_authenticated %}
+                <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
                 <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
                 <li><a href="{% url 'app_user:edit_profile' user.id %}">Mein Profil</a></li>
                 <li><a href="{% url 'app_user:change_password' %}">Passwort ändern</a></li>

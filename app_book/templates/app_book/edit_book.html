@@ -10,10 +10,10 @@
                 <span class="orange-text text-lighten-1">{{ book.name }}</span>
             </h1>
         </div>
-        <form role="form" method="post" action="">
+        <form method="post" action="">
             {% csrf_token %}
             <div class="row">
-                {% include 'app_book/_book_form.html' with form=form embedded=True %}
+                {% include 'app_book/_book_form.html' with form=book_form embedded=True %}
             </div>
 
             <div class="row">

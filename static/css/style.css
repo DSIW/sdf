@@ -87,6 +87,13 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   color: inherit;
 }
 
+.text-right {
+  text-align: right;
+}
+
+
+/* Components */
+
 .alert {
   position: absolute;
   left: 50%;
@@ -162,6 +169,8 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   background-color: #1976D2;
 }
 
+/* Twitter Bootstrap */
+
 .collapse {
   display: none;
 }
@@ -189,11 +198,17 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   text-transform: uppercase;
 }
 
+.input-field {
+  min-height: 51px;
+}
 .input-field label {
   left: 0;
   z-index: -1; /* react on click at input */
 }
 nav .input-field.search-field label {
+  z-index: 0;
+}
+.input-field input[type="checkbox"] + label {
   z-index: 0;
 }
 nav .input-field.search-field i {
@@ -250,4 +265,63 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
 
 .select-wrapper {
   padding-bottom: 1px; /* hack for following input-field */
+}
+
+
+/* Showcase */
+.showcase .card-book {
+  max-width: 294px;
+  min-height: 460px;
+  float: left;
+  margin: 0 20px 20px 0;
+}
+.showcase .card-open {
+  position: absolute;
+  right: 5px;
+  top: 320px;
+}
+.showcase .card-close {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
+.showcase .card-book .card-title {
+  line-height: 28px;
+  min-height: 60px;
+}
+
+.showcase .card-book .card-image {
+  height: 310px;
+}
+.showcase .card-book .card-reveal p {
+  border-bottom: 1px dashed #ddd;
+}
+.showcase .card-book .card-reveal p strong {
+  float: right;
+}
+.showcase .card-book .seller-rating {
+  margin-top: 2px;
+}
+.showcase .card-book .seller-rating-star {
+  font-size: 1em;
+  width: 12px;
+  color: #FCC32A;
+}
+
+
+/* Offer */
+.offer-state {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 100%;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.offer-state.active {
+  background: #4caf50;
+  box-shadow: 0px 0px 10px rgba(76, 175, 80, 0.65);
+}
+.offer-state.inactive {
+  background: #bdbdbd;
 }
