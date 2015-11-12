@@ -2,7 +2,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Book
+from .models import Book, Offer
 
 class BookForm(forms.ModelForm):
     '''
@@ -18,7 +18,7 @@ class BookForm(forms.ModelForm):
             ('SP', _("Spanisch")),
         )
         model = Book
-        exclude = ['Id', 'isOnStoreWindow']
+        exclude = ['Id', 'user']
         widgets = {
             'language': forms.Select(choices=LANGUAGES),
             'releaseDate': forms.DateInput(attrs={'class': 'datepicker'}),
@@ -32,3 +32,18 @@ class BookForm(forms.ModelForm):
             'isbn10': _('ISBN-10'),
             'isbn13': _('ISBN-13'),
         }
+
+class OfferForm(forms.ModelForm):
+    class Meta:
+        model = Offer
+        fields = ['active', 'price', 'shipping_price']
+        labels = {
+            'active': _('Verkaufen'),
+            'price': _('Buchpreis'),
+            'shipping_price': _('Versandpreis'),
+        }
+
+class PublishOfferForm(OfferForm):
+    class Meta(OfferForm.Meta):
+        exclude = ['active']
+

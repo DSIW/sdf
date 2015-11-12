@@ -142,6 +142,7 @@ def import_data():
     auth_user_admin.email = 'admin@admin.de'
     auth_user_admin.emailConfirm = True
     auth_user_admin.paypal = auth_user_admin.email
+    auth_user_admin.location = 'Berlin'
     auth_user_admin.is_staff = True
     auth_user_admin.is_active = True
     auth_user_admin.date_joined = dateutil.parser.parse("2015-11-08T14:22:49.437731+00:00")
@@ -157,6 +158,7 @@ def import_data():
     auth_user_1.email = 'max@mustermann.de'
     auth_user_1.emailConfirm = True
     auth_user_1.paypal = auth_user_1.email
+    auth_user_1.location = 'Berlin'
     auth_user_1.is_staff = False
     auth_user_1.is_active = True
     auth_user_1.date_joined = dateutil.parser.parse("2015-11-08T14:22:49.437731+00:00")
