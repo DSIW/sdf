@@ -4,7 +4,7 @@ from app_user.models import User
 
 
 class Book(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, default=None)
 
     name = models.CharField(max_length=200)
     author = models.CharField(max_length=200)

@@ -6,7 +6,7 @@ class User(AuthUser):
     # auth_user fields: username, first_name, last_name, email, password, is_staff, is_active, is_super
 
     emailConfirm = models.BooleanField(default=False)
-    location = models.CharField(max_length=255)
+    location = models.CharField(max_length=255, default='')
     paypal = models.CharField(max_length=50)
     user_ptr = models.OneToOneField(AuthUser)
 
