@@ -1249,6 +1249,7 @@ $(document).ready(function(){
 
       // Defaults
       var defaults = {
+        position: 'bottom',
         delay: 350
       };
 
@@ -1302,7 +1303,7 @@ $(document).ready(function(){
               // Tooltip positioning
               var originWidth = origin.outerWidth();
               var originHeight = origin.outerHeight();
-              var tooltipPosition =  origin.attr('data-position');
+              var tooltipPosition =  options['position'] || origin.attr('data-position');
               var tooltipHeight = newTooltip.outerHeight();
               var tooltipWidth = newTooltip.outerWidth();
               var tooltipVerticalMovement = '0px';

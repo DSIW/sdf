@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block body_classes %}books-edit{% endblock %}
+{% block body_classes %}archive{% endblock %}
 
 {% block content %}
     <div class="container">
@@ -10,8 +10,9 @@
                 <span class="orange-text text-lighten-1">{{ book.name }}</span>
             </h1>
         </div>
+
         <div class="row">
-            {% include 'app_book/_book_form.html' with form=form %}
+            {% include 'app_book/_offer_form.html' with form=offer_form %}
         </div>
     </div>
 {% endblock %}
