@@ -1,3 +1,4 @@
+from django.forms import ModelForm
 from django.shortcuts import render
 
 from django.views.generic.edit import UpdateView
@@ -16,9 +17,22 @@ from django.utils.translation import ugettext_lazy as _
 from .forms import RegistrationForm
 
 
-# Create your views here.
+class CustomRegistrationForm(RegistrationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'paypal']
+    def clean_username(self):
+        return self.cleaned_data['username'] or None
+
+class CustomUpdateForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'paypal']
+    def clean_username(self):
+        return self.cleaned_data['username'] or None
 
 # Custom Current User Decorator
+
 def current_user(func):
     def check_and_call(request, *args, **kwargs):
         id = kwargs.get("pk")
@@ -30,11 +44,10 @@ def current_user(func):
 
 def register_user(request):
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        form = CustomRegistrationForm(request.POST, )
         if form.is_valid():
             user = form.save()
             form.sendConfirmEmail(request, user)
-
             messages.add_message(request, messages.SUCCESS, 'Sie haben sich erfolgreich registriert.')
             return HttpResponseRedirect(reverse('app:startPage'))
     else:
@@ -43,7 +56,9 @@ def register_user(request):
 
 class UserUpdate(FormMessagesMixin, UpdateView):
     model = User
-    fields = ['username', 'first_name', 'last_name', 'email', 'paypal']
+    model._meta.get_field('username').error_messages = {'unique': 'Das gewählte Pseudonym ist bereits vergeben.',
+                                                        'invalid': 'Bitte ein gültiges Pseudonym eingeben. Dieses darf nur Buchstaben, Ziffern und @/./+/-/_ enthalten.'}
+    form_class = CustomUpdateForm
     form_invalid_message = _('Account konnte nicht aktualisiert werden.')
     form_valid_message = _('Account wurde erfolgreich aktualisiert.')
     template_name_suffix = '_update_form'

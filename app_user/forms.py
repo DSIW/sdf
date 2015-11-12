@@ -21,15 +21,17 @@ class RegistrationForm(UserCreationForm):
         super(RegistrationForm, self).__init__(*args, **kwargs)
 
         self.fields['username'].help_text = None
+        self.fields['username'].required = False
         self.fields['password2'].help_text = None
-        self.fields['email'].required = True
         self.fields['first_name'].required = True
         self.fields['last_name'].required = True
 
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('username','first_name', 'last_name', 'email','paypal', 'password1', 'password1')
+        fields = ('username', 'first_name', 'last_name', 'email','paypal', 'password1', 'password1')
+        def clean_username(self):
+            return self.cleaned_data['username'] or None
 
 
     def save(self, commit=True):
@@ -40,7 +42,7 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
 
-        return user;
+        return user
 
     def sendConfirmEmail(self, request, user):
         confirmId = get_random_string(length=32)
