@@ -9,6 +9,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from .models import User, ConfirmEmail
+from braces.views import FormMessagesMixin
+from django.utils.translation import ugettext_lazy as _
 
 from .forms import RegistrationForm
 
@@ -28,9 +30,11 @@ def register_user(request):
         form = RegistrationForm()
     return render_to_response('app_user/register.html', {'form': form}, RequestContext(request))
 
-class UserUpdate(UpdateView):
+class UserUpdate(FormMessagesMixin, UpdateView):
     model = User
     fields = ['username', 'first_name', 'last_name', 'email', 'paypal']
+    form_invalid_message = _('Account konnte nicht aktualisiert werden.')
+    form_valid_message = _('Account wurde erfolgreich aktualisiert.')
     template_name_suffix = '_update_form'
 
     def get_success_url(self):

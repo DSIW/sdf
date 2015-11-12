@@ -35,6 +35,7 @@ INSTALLED_APPS = (
     'watson',
     'django_extensions',
     'app',
+    'braces',
     'app_book',
     'app_user',
 )
