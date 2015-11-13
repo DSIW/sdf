@@ -187,7 +187,7 @@ def publishBook(request, id):
         if offer_form.is_valid():
             offer_form_obj = offer_form.save(commit=False)
             offer_form_obj.active = True
-            offer_form_obj.id = id
+            offer_form_obj.book_id = id
             offer_form_obj.seller_user_id = book.user_id
 
             try:
