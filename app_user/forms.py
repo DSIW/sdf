@@ -9,7 +9,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 from .models import User, ConfirmEmail
 from sdf import settings
-
+from app.widgets import CutsomFileInput
 
 class RegistrationForm(UserCreationForm):
     first_name = forms.TextInput()
@@ -17,6 +17,7 @@ class RegistrationForm(UserCreationForm):
 
     paypal = forms.EmailInput()
     email = forms.EmailInput()
+    profileImage = forms.FileField()
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
@@ -24,13 +25,16 @@ class RegistrationForm(UserCreationForm):
         self.fields['username'].help_text = None
         self.fields['username'].required = False
         self.fields['password2'].help_text = None
+        self.fields['email'].required = True
         self.fields['first_name'].required = True
         self.fields['last_name'].required = True
+        self.fields['profileImage'].required = False
+        self.fields['profileImage'].widget = CutsomFileInput()
 
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email','paypal', 'password1', 'password1')
+        fields = ['username', 'first_name', 'last_name', 'email', 'paypal', 'password1', 'password1', 'profileImage']
 
         def clean_username(self):
             return self.cleaned_data['username'] or None
@@ -40,6 +44,7 @@ class RegistrationForm(UserCreationForm):
         user = super(RegistrationForm, self).save(commit=False)
         user.email = self.cleaned_data['email']
         user.paypal = self.cleaned_data['paypal']
+        user.profileImage = self.cleaned_data['profileImage']
 
         if commit:
             user.save()
@@ -59,10 +64,16 @@ class RegistrationForm(UserCreationForm):
         confirmEmail.user = user
         confirmEmail.save()
 
-
 class CustomUpdateForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUpdateForm, self).__init__(*args, **kwargs)
+
+        self.fields['profileImage'].required = False
+        self.fields['profileImage'].widget = CutsomFileInput()
+
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'paypal']
+        fields = ['username', 'first_name', 'last_name', 'email', 'paypal', 'profileImage']
     def clean_username(self):
         return self.cleaned_data['username'] or None

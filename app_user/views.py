@@ -1,7 +1,8 @@
+from django.forms import ModelForm
+from django.shortcuts import render
 from django.views.generic.edit import UpdateView
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -14,6 +15,7 @@ from braces.views import FormMessagesMixin
 from smtplib import SMTPRecipientsRefused
 from .models import User, ConfirmEmail
 from .forms import CustomUpdateForm,RegistrationForm
+
 # Custom Current User Decorator
 
 def current_user(func):
@@ -28,8 +30,9 @@ def current_user(func):
 def register_user(request):
     if request.method == 'POST':
         try:
-            form = RegistrationForm(request.POST)
+            form = RegistrationForm(request.POST, request.FILES)
             if form.is_valid():
+                form.profileImage = request.FILES['profileImage']
                 user = form.save()
                 form.sendConfirmEmail(request, user)
 

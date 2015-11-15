@@ -2,7 +2,14 @@
 
 from django.db import models
 from django.contrib.auth.models  import User as AuthUser, BaseUserManager
-from django import forms
+import logging
+logger = logging.getLogger(__name__)
+
+def user_directory_path(instance, filename):
+    ext = filename.split('.')[-1]
+    logger.debug("this is a debug message!")
+
+    return 'profileImage/{0}/profileimage.{1}'.format(instance.id, ext)
 
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None):
@@ -37,6 +44,7 @@ class User(AuthUser):
     AuthUser._meta.get_field('username').verbose_name = "Pseudonym (optional)"
 
     emailConfirm = models.BooleanField(default=False)
+    profileImage = models.FileField(upload_to=user_directory_path, null=True)
     location = models.CharField(max_length=255, default='')
     paypal = models.CharField(max_length=50)
     user_ptr = models.OneToOneField(AuthUser)
