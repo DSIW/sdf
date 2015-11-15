@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views.generic.edit import UpdateView
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from smtplib import SMTPRecipientsRefused
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -50,6 +51,18 @@ def register_user(request):
             form.sendConfirmEmail(request, user)
             messages.add_message(request, messages.SUCCESS, 'Sie haben sich erfolgreich registriert.')
             return HttpResponseRedirect(reverse('app:startPage'))
+        try:
+            form = RegistrationForm(request.POST)
+            if form.is_valid():
+                user = form.save()
+                form.sendConfirmEmail(request, user)
+
+                messages.add_message(request, messages.SUCCESS, 'Sie haben sich erfolgreich registriert.')
+                return HttpResponseRedirect(reverse('app:startPage'))
+        except SMTPRecipientsRefused:
+            messages.add_message(request, messages.ERROR, 'Es konnte keine Validierungsemail zur eingegebenen E-Mail Adresse ' + user.email + ' verschickt werden')
+            render_to_response('app_user/register.html', {'form': form}, RequestContext(request))
+
     else:
         form = RegistrationForm()
     return render_to_response('app_user/register.html', {'form': form}, RequestContext(request))
