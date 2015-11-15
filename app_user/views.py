@@ -1,37 +1,19 @@
-from django.forms import ModelForm
-from django.shortcuts import render
-
 from django.views.generic.edit import UpdateView
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from smtplib import SMTPRecipientsRefused
+
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.utils.decorators import method_decorator
-from .models import User, ConfirmEmail
-from braces.views import FormMessagesMixin
 from django.utils.translation import ugettext_lazy as _
 
-from .forms import RegistrationForm
-
-
-class CustomRegistrationForm(RegistrationForm):
-    class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'paypal']
-    def clean_username(self):
-        return self.cleaned_data['username'] or None
-
-class CustomUpdateForm(ModelForm):
-    class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'paypal']
-    def clean_username(self):
-        return self.cleaned_data['username'] or None
-
+from braces.views import FormMessagesMixin
+from smtplib import SMTPRecipientsRefused
+from .models import User, ConfirmEmail
+from .forms import CustomUpdateForm,RegistrationForm
 # Custom Current User Decorator
 
 def current_user(func):
@@ -45,12 +27,6 @@ def current_user(func):
 
 def register_user(request):
     if request.method == 'POST':
-        form = CustomRegistrationForm(request.POST, )
-        if form.is_valid():
-            user = form.save()
-            form.sendConfirmEmail(request, user)
-            messages.add_message(request, messages.SUCCESS, 'Sie haben sich erfolgreich registriert.')
-            return HttpResponseRedirect(reverse('app:startPage'))
         try:
             form = RegistrationForm(request.POST)
             if form.is_valid():

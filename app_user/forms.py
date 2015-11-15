@@ -1,14 +1,15 @@
 # coding=utf-8
 from django import forms
-
 from django.http import HttpRequest
 from django.utils.crypto import get_random_string
-
-from .models import User, ConfirmEmail
+from django.core.urlresolvers import reverse
+from django.forms import ModelForm
 from django.core.mail import send_mail
 from django.contrib.auth.forms import UserCreationForm
+
+from .models import User, ConfirmEmail
 from sdf import settings
-from django.core.urlresolvers import reverse
+
 
 class RegistrationForm(UserCreationForm):
     first_name = forms.TextInput()
@@ -30,6 +31,7 @@ class RegistrationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email','paypal', 'password1', 'password1')
+
         def clean_username(self):
             return self.cleaned_data['username'] or None
 
@@ -56,3 +58,11 @@ class RegistrationForm(UserCreationForm):
         confirmEmail.uuid = confirmId
         confirmEmail.user = user
         confirmEmail.save()
+
+
+class CustomUpdateForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'paypal']
+    def clean_username(self):
+        return self.cleaned_data['username'] or None
