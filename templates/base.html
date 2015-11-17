@@ -89,11 +89,13 @@
             </div>
             <div class="col l3 s12">
                 <ul>
-                    <li><a class="white-text" href="#!">Impressum</a></li>
-                    <li><a class="white-text" href="#!">Datenschutz</a></li>
-                    <li><a class="white-text" href="#!">Affiliate</a></li>
-                    <li><a class="white-text" href="#!">Team</a></li>
-                    <li><a class="white-text" href="#!">Job</a></li>
+                    <li><a class="white-text" href="{% url 'app:imprint' %}">Impressum</a></li>
+                    <li><a class="white-text" href="{% url 'app:agb' %}">AGB</a></li>
+                    <li><a class="white-text" href="{% url 'app:privacy' %}">Datenschutz</a></li>
+                    <li><a class="white-text" href="{% url 'app:affiliate' %}">Affiliate</a></li>
+                    <li><a class="white-text" href="{% url 'app:team' %}">Team</a></li>
+                    <li><a class="white-text" href="{% url 'app:job' %}">Job</a></li>
+
                 </ul>
             </div>
         </div>
