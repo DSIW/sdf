@@ -32,7 +32,7 @@ def register_user(request):
         try:
             form = RegistrationForm(request.POST, request.FILES)
             if form.is_valid():
-                form.profileImage = request.FILES['profileImage']
+                form.profileImage = request.FILES.get('profileImage')
                 user = form.save()
                 form.sendConfirmEmail(request, user)
 
