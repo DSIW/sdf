@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^archive/', views.archivesPageView, name='archivesPage'),
     url(r'^books/(?P<id>[0-9]+)/edit', views.editBook, name='editBook'),
     url(r'^books/create', views.createBook, name='createBook'),
+    url(r'^books/newest', views.newestBooks, name='newestBooks'),
     url(r'^books/(?P<id>[0-9]+)/delete$', views.deleteBook, name='deleteBook'),
     url(r'^books/(?P<id>[0-9]+)/publish$', views.publishBook, name='publishBook'),
     url(r'^books/(?P<id>[0-9]+)/unpublish$', views.unpublishBook, name='unpublishBook'),

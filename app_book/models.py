@@ -23,6 +23,7 @@ class Book(models.Model):
 
 
 class Offer(models.Model):
+    updated = models.DateTimeField(auto_now=True)
     seller_user = models.ForeignKey(User)
     book = models.ForeignKey(Book)
     price = models.FloatField()

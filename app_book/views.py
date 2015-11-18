@@ -226,3 +226,12 @@ def searchBookResults(request):
         "results": search_results,
     },  RequestContext(request))
 
+def newestBooks(request):
+    template_name = 'app_book/newest_books.html'
+    
+    offers = Offer.objects.filter(active=True).order_by('-updated')
+
+    return render_to_response(template_name, {
+        "offers": offers,
+    }, RequestContext(request))
+
