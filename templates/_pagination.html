@@ -1,0 +1,21 @@
+<ul class="pagination">
+    {% if offers.has_previous %}
+        <li class="waves-effect"><a href="?page={{ offers.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+    {% else %}
+        <li class="waves-effect disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+    {% endif %}
+
+    {% for page in offers.paginator.page_range %}
+        {% if page == offers.number %}
+            <li class="active"><a href="?page={{ page }}">{{ page }}</a></li>
+        {% else %}
+            <li class="waves-effect"><a href="?page={{ page }}">{{ page }}</a></li>
+        {% endif %}
+    {% endfor %}
+
+    {% if offers.has_next %}
+        <li class="waves-effect"><a href="?page={{ offers.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+    {% else %}
+        <li class="waves-effect disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+    {% endif %}
+</ul>

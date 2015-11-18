@@ -1,9 +1,11 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.db import IntegrityError
+
 
 import watson
 import collections
@@ -229,7 +231,17 @@ def searchBookResults(request):
 def newestBooks(request):
     template_name = 'app_book/newest_books.html'
     
-    offers = Offer.objects.filter(active=True).order_by('-updated')
+    offer_list = Offer.objects.filter(active=True).order_by('-updated')
+    paginator = Paginator(offer_list, 3)
+
+    page = request.GET.get('page')
+
+    try:
+        offers = paginator.page(page)
+    except PageNotAnInteger:
+        offers = paginator.page(1)
+    except EmptyPage:
+        offers = paginator.page(paginator.num_pages)
 
     return render_to_response(template_name, {
         "offers": offers,

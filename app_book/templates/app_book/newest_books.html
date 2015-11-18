@@ -3,15 +3,19 @@
 {% block body_classes %}showcase{% endblock %}
 
 {% block content %}
+
     <div class="container">
         <h1>Neuste zum Verkauf angebotene Bücher</span></h1>
+        
+        {% include '_pagination.html' with items=offers %}
 
         {% for offer in offers %}
             {% include 'app_book/_book_card.html' with user=offer.seller_user book=offer.book offer=offer %}
         {% endfor %}
-
         {% if offers.count == 0 %}
             Es sind keine Bücher zum Verkauf angeboten.
         {% endif %}
+
     </div>
+
 {% endblock %}
