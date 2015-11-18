@@ -193,7 +193,7 @@ def publishBook(request, id):
             try:
                 offer_form_obj.save()
                 messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun zum Verkauf angeboten!')
-                return HttpResponseRedirect(reverse('app_book:showcase', kwargs={'user_id': book.user_id}), status=303)
+                return HttpResponseRedirect(reverse('app_book:archivesPage'))
             except ValueError as e:
                 messages.add_message(request, messages.ERROR, 'Das Buch konnte leider nicht zum Verkauf angeboten werden!')
 
@@ -213,7 +213,7 @@ def unpublishBook(request, id):
             offer.save()
         messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun nicht mehr zum Verkauf angeboten!')
         # use GET request for redirected location via HTTP status code 303 (see other).
-        return HttpResponseRedirect(reverse('app_book:showcase', kwargs={'user_id': book.user_id}), status=303)
+        return HttpResponseRedirect(reverse('app_book:archivesPage'))
     else:
         raise ("Use http method PUT for unpublishing a book.")
 
