@@ -1,7 +1,7 @@
 from django.forms.widgets import FileInput
 
 
-class CutsomFileInput(FileInput):
+class CustomFileInput(FileInput):
     input_type = 'file'
 
     def render(self, name=None, value=None, attrs=None, single_attrs=None):

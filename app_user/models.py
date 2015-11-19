@@ -42,6 +42,8 @@ class User(AuthUser):
 
     #TODO generalize renaming for internationalization
     AuthUser._meta.get_field('username').verbose_name = "Pseudonym (optional)"
+    AuthUser._meta.get_field('email').error_messages = {'unique': 'Diese E-Mail-Adresse ist bereits registriert.',
+                                                        'invalid': 'Bitte eine gültige E-Mail-Adresse angeben.'}
 
     emailConfirm = models.BooleanField(default=False)
     profileImage = models.FileField(upload_to=user_directory_path, null=True)
