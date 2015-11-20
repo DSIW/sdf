@@ -2,6 +2,7 @@
 
 from django.http import HttpRequest
 from django.utils.crypto import get_random_string
+from django.utils.html import format_html
 from django.views.generic.edit import UpdateView
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -25,23 +26,32 @@ from django.utils.translation import ugettext_lazy as _
 from braces.views import FormMessagesMixin
 from smtplib import SMTPRecipientsRefused
 from .models import User, ConfirmEmail
-from .forms import CustomUpdateForm,RegistrationForm
+from .forms import CustomUpdateForm, RegistrationForm
+
 
 # Custom Current User Decorator
+from sdf import settings
+
 
 def login_user(request):
     form = AuthenticationForm
     if request.method == "POST":
-        print("AAAAAAAAAAAAAAAA")
         email = request.POST['username']
         password = request.POST['password']
         user = authenticate(email=email, password=password)
         if user is not None:
             if user.is_active:
-                print("LOGGED IN")
-                login(request, user)
-                return HttpResponseRedirect(reverse('app:startPage'))
-                # Redirect to a success page.
+                if User.objects.get(pk=user.id).emailConfirm == 1:
+                    print("LOGGED IN")
+                    login(request, user)
+                    return HttpResponseRedirect(reverse('app:startPage'))
+                    # Redirect to a success page.
+                else:
+                    messages.add_message(request, messages.ERROR, format_html("Die E-Mail-Adresse wurde noch nicht bestätigt. <a href='{}'>Aktivierungslink erneut zusenden</a>", "asdf"))
+                    if settings.DEBUG:
+                        messages.add_message(request, messages.INFO, 'Die E-Mail-Adresse wurde noch nicht bestätigt. Debugmodus aktiv, Login ermöglicht.')
+                        login(request, user)
+                    return HttpResponseRedirect(reverse('app:startPage'))
             else:
                 # Return a 'disabled account' error message
                 messages.add_message(request, messages.ERROR, 'Das Benutzerkonto ist deaktiviert.')
@@ -62,7 +72,9 @@ def current_user(func):
             messages.add_message(request, messages.ERROR, 'Dies ist nicht Ihr Account!')
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         return func(request, *args, **kwargs)
+
     return check_and_call
+
 
 def register_user(request):
     if request.method == 'POST':
@@ -87,6 +99,7 @@ def register_user(request):
         form = RegistrationForm()
     return render_to_response('app_user/register.html', {'form': form}, RequestContext(request))
 
+
 class UserUpdate(FormMessagesMixin, UpdateView):
     model = User
     model._meta.get_field('username').error_messages = {'unique': 'Das gewählte Pseudonym ist bereits vergeben.',
@@ -103,6 +116,7 @@ class UserUpdate(FormMessagesMixin, UpdateView):
     def dispatch(self, *args, **kwargs):
         return super(UserUpdate, self).dispatch(*args, **kwargs)
 
+
 def confirm_email(request, uuid):
     confirmEmail = ConfirmEmail.objects.filter(uuid=uuid).first()
     if confirmEmail is not None:
@@ -112,7 +126,8 @@ def confirm_email(request, uuid):
         else:
             user.emailConfirm = True
             user.save()
-            messages.add_message(request, messages.SUCCESS, 'Ihre E-Mail Adresse ' + user.email + ' wurde erfolgreich bestätigt')
+            messages.add_message(request, messages.SUCCESS,
+                                 'Ihre E-Mail Adresse ' + user.email + ' wurde erfolgreich bestätigt')
     else:
         messages.add_message(request, messages.ERROR, 'Ihre E-Mail Adresse konnte nicht bestätigt werden')
     return HttpResponseRedirect(reverse('app:startPage'))
