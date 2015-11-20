@@ -63,6 +63,32 @@ def login_user(request):
         return render_to_response('registration/login.html', {'form': form}, RequestContext(request))
 
 
+def login_user(request):
+    form = AuthenticationForm
+    if request.method == "POST":
+        print("AAAAAAAAAAAAAAAA")
+        email = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(email=email, password=password)
+        if user is not None:
+            if user.is_active:
+                print("LOGGED IN")
+                login(request, user)
+                return HttpResponseRedirect(reverse('app:startPage'))
+                # Redirect to a success page.
+            else:
+                # Return a 'disabled account' error message
+                messages.add_message(request, messages.ERROR, 'Das Benutzerkonto ist deaktiviert.')
+                return HttpResponseRedirect(reverse('app:startPage'))
+        else:
+            # Return an 'invalid login' error message.
+            messages.add_message(request, messages.ERROR, 'Loginversuch fehlgeschlagen.')
+            return render_to_response('registration/login.html', {'form': form}, RequestContext(request))
+    else:
+        print("GET")
+        return render_to_response('registration/login.html', {'form': form}, RequestContext(request))
+
+
 def current_user(func):
     def check_and_call(request, *args, **kwargs):
         id = kwargs.get("pk")
