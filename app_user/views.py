@@ -32,7 +32,6 @@ from .forms import CustomUpdateForm, RegistrationForm
 # Custom Current User Decorator
 from sdf import settings
 
-
 def login_user(request):
     form = AuthenticationForm
     if request.method == "POST":
@@ -42,14 +41,13 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 if User.objects.get(pk=user.id).emailConfirm == 1:
-                    print("LOGGED IN")
                     login(request, user)
                     return HttpResponseRedirect(reverse('app:startPage'))
                     # Redirect to a success page.
                 else:
-                    messages.add_message(request, messages.ERROR, format_html("Die E-Mail-Adresse wurde noch nicht bestätigt. <a href='{}'>Aktivierungslink erneut zusenden</a>", "asdf"))
+                    messages.add_message(request, messages.ERROR, format_html("Die E-Mail-Adresse wurde noch nicht bestätigt. <a href='{}'>Aktivierungslink erneut zusenden</a>", reverse('app_user:resend_confirmation_mail', kwargs={'email': email})))
                     if settings.DEBUG:
-                        messages.add_message(request, messages.INFO, 'Die E-Mail-Adresse wurde noch nicht bestätigt. Debugmodus aktiv, Login ermöglicht.')
+                        messages.add_message(request, messages.INFO, format_html("Die E-Mail-Adresse wurde noch nicht bestätigt. Debugmodus aktiv, Login gestattet. <a href='{}'>Aktivierungslink erneut zusenden</a>", reverse('app_user:resend_confirmation_mail', kwargs={'email': email})))
                         login(request, user)
                     return HttpResponseRedirect(reverse('app:startPage'))
             else:
@@ -74,6 +72,32 @@ def current_user(func):
         return func(request, *args, **kwargs)
 
     return check_and_call
+
+
+def resend_confirmation_mail(request, email):
+    if request.method == 'GET':
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            user = None
+        if user == None:
+            messages.add_message(request, messages.ERROR, 'Diese E-Mail-Adresse ist nicht bekannt.')
+            return HttpResponseRedirect(reverse('app:startPage'))
+        if user.emailConfirm == 1:
+            messages.add_message(request, messages.INFO, 'Ihre E-Mail Adresse ' + user.email + ' ist bereits bestätigt')
+            return HttpResponseRedirect(reverse('app:startPage'))
+        if user.emailConfirm == 0:
+            messages.add_message(request, messages.INFO, 'Validierungsemail an '+ user.email +' verschickt.')
+            form = RegistrationForm()
+            mutable = request.POST._mutable
+            request.POST._mutable = True
+            request.POST['first_name'] = user.first_name
+            request.POST['last_name'] = user.last_name
+            request.POST['email'] = user.email
+            request.POST._mutable = mutable
+            form.sendConfirmEmail(request, user)
+            return HttpResponseRedirect(reverse('app:startPage'))
+
 
 
 def register_user(request):
