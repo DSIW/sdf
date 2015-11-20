@@ -32,50 +32,27 @@ from .forms import CustomUpdateForm, RegistrationForm
 # Custom Current User Decorator
 from sdf import settings
 
+
 def login_user(request):
     form = AuthenticationForm
     if request.method == "POST":
+
         email = request.POST['username']
         password = request.POST['password']
         user = authenticate(email=email, password=password)
         if user is not None:
             if user.is_active:
                 if User.objects.get(pk=user.id).emailConfirm == 1:
+                    print("LOGGED IN")
                     login(request, user)
                     return HttpResponseRedirect(reverse('app:startPage'))
                     # Redirect to a success page.
                 else:
-                    messages.add_message(request, messages.ERROR, format_html("Die E-Mail-Adresse wurde noch nicht bestätigt. <a href='{}'>Aktivierungslink erneut zusenden</a>", reverse('app_user:resend_confirmation_mail', kwargs={'email': email})))
+                    messages.add_message(request, messages.ERROR, format_html("Die E-Mail-Adresse wurde noch nicht bestätigt. <a href='{}'>Aktivierungslink erneut zusenden</a>", "asdf"))
                     if settings.DEBUG:
-                        messages.add_message(request, messages.INFO, format_html("Die E-Mail-Adresse wurde noch nicht bestätigt. Debugmodus aktiv, Login gestattet. <a href='{}'>Aktivierungslink erneut zusenden</a>", reverse('app_user:resend_confirmation_mail', kwargs={'email': email})))
+                        messages.add_message(request, messages.INFO, 'Die E-Mail-Adresse wurde noch nicht bestätigt. Debugmodus aktiv, Login ermöglicht.')
                         login(request, user)
                     return HttpResponseRedirect(reverse('app:startPage'))
-            else:
-                # Return a 'disabled account' error message
-                messages.add_message(request, messages.ERROR, 'Das Benutzerkonto ist deaktiviert.')
-                return HttpResponseRedirect(reverse('app:startPage'))
-        else:
-            # Return an 'invalid login' error message.
-            messages.add_message(request, messages.ERROR, 'Loginversuch fehlgeschlagen.')
-            return render_to_response('registration/login.html', {'form': form}, RequestContext(request))
-    else:
-        print("GET")
-        return render_to_response('registration/login.html', {'form': form}, RequestContext(request))
-
-
-def login_user(request):
-    form = AuthenticationForm
-    if request.method == "POST":
-        print("AAAAAAAAAAAAAAAA")
-        email = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(email=email, password=password)
-        if user is not None:
-            if user.is_active:
-                print("LOGGED IN")
-                login(request, user)
-                return HttpResponseRedirect(reverse('app:startPage'))
-                # Redirect to a success page.
             else:
                 # Return a 'disabled account' error message
                 messages.add_message(request, messages.ERROR, 'Das Benutzerkonto ist deaktiviert.')
