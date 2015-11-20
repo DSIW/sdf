@@ -11,7 +11,10 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.forms import SetPasswordForm
-from django.contrib.auth import update_session_auth_hash
+
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import update_session_auth_hash, authenticate, login
+from django.contrib.auth.views import login as loginview
 
 from django.core.mail import EmailMessage
 from .models import User, ConfirmEmail, PasswordReset
@@ -25,6 +28,32 @@ from .models import User, ConfirmEmail
 from .forms import CustomUpdateForm,RegistrationForm
 
 # Custom Current User Decorator
+
+def login_user(request):
+    form = AuthenticationForm
+    if request.method == "POST":
+        print("AAAAAAAAAAAAAAAA")
+        email = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(email=email, password=password)
+        if user is not None:
+            if user.is_active:
+                print("LOGGED IN")
+                login(request, user)
+                return HttpResponseRedirect(reverse('app:startPage'))
+                # Redirect to a success page.
+            else:
+                # Return a 'disabled account' error message
+                messages.add_message(request, messages.ERROR, 'Das Benutzerkonto ist deaktiviert.')
+                return HttpResponseRedirect(reverse('app:startPage'))
+        else:
+            # Return an 'invalid login' error message.
+            messages.add_message(request, messages.ERROR, 'Loginversuch fehlgeschlagen.')
+            return render_to_response('registration/login.html', {'form': form}, RequestContext(request))
+    else:
+        print("GET")
+        return render_to_response('registration/login.html', {'form': form}, RequestContext(request))
+
 
 def current_user(func):
     def check_and_call(request, *args, **kwargs):

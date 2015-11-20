@@ -42,7 +42,6 @@ class User(AuthUser):
     AuthUser._meta.get_field('username').blank = True
     AuthUser._meta.get_field('username').null = True
 
-    #TODO generalize renaming for internationalization
     AuthUser._meta.get_field('username').verbose_name = "Pseudonym (optional)"
     AuthUser._meta.get_field('email').error_messages = {'unique': 'Diese E-Mail-Adresse ist bereits registriert.',
                                                         'invalid': 'Bitte eine gültige E-Mail-Adresse angeben.'}

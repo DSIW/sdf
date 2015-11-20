@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
 from . import views
+from django.conf.urls import include, url
 
 urlpatterns = [
     # accounts
@@ -14,4 +15,5 @@ urlpatterns = [
     url(r'^accounts/password/(?P<uuid>[0-9a-zA-Z]+)/$',views.password_new, name='new_password'),
     url(r'^accounts/password/', views.changePassword, name='change_password'),
     url(r'^password_reset/$',views.password_reset, name='reset_password'),
+    url(r'^login/$', views.login_user, name='login'),
 ]
