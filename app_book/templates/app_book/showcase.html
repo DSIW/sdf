@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="container">
-        <h1>Schaufenster von <span class="orange-text text-lighten-1">{{ user.pseudonym_or_full_name }}</span></h1>
+        <h1>Schaufenster von <span class="orange-text text-lighten-1">{{ showcase_user.pseudonym_or_full_name }}</span></h1>
 
         {% for offer in offers %}
             {% include 'app_book/_book_card.html' with user=user book=offer.book offer=offer %}

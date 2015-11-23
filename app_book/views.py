@@ -140,7 +140,7 @@ def showcaseView(request, user_id):
     offers = Offer.objects.filter(seller_user_id=user_id, active=True).all()
 
     return render_to_response(template_name, {
-        "user": user,
+        "showcase_user": user,
         "offers": offers,
     }, RequestContext(request))
 
