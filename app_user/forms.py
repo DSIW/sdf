@@ -54,16 +54,10 @@ class RegistrationForm(UserCreationForm):
         return user
 
     def sendConfirmEmail(self, request, user):
-        link = 'http://' + HttpRequest.get_host(request) + reverse('app_user:confirm_email', kwargs={'uuid': confirmId})
-
-        try:
-            confirmEmail = ConfirmEmail.objects.get(user=user)
-        except ConfirmEmail.DoesNotExist:
+        confirmEmail = ConfirmEmail.objects.filter(user=user).first()
+        if confirmEmail is None:
             confirmId = get_random_string(length=32)
-            try:
-                user = User.objects.get(email=self.request.POST.get('email'))
-            except User.DoesNotExist:
-                user = None
+            user = User.objects.filter(email=request.POST.get('email')).first()
             confirmEmail = ConfirmEmail()
             confirmEmail.uuid = confirmId
             confirmEmail.user = user
@@ -72,7 +66,6 @@ class RegistrationForm(UserCreationForm):
         emailMessage = 'Hallo '+ request.POST.get('first_name') + ' '+request.POST.get('last_name') +', <br><br>vielen dank für die Registrierung in book².<br> Zur Bestätigung Ihrer E-Mail Adresse betätigen Sie bitte folgenden Link: <a href="' + link + '">Bestätigen</a><br>Sollten Sie den Link nicht nutzen könnten dann kopieren Sie bitte folgende URL in Ihren Browser:<br> ' + link + '<br><br>Wir wünschen Ihnen viel Spaß beim Shoppen<br>Ihr book² team'
         EmailThread('Registrierungsbestätigung book²', emailMessage, request).start()
 
-        confirmEmail = ConfirmEmail()
 
 class EmailThread(threading.Thread):
     def __init__(self, subject, emailMessage, request):

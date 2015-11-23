@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^privacy$', views.page_info, {"template_name":"app/page_info.html","title":"Datenschutz"}, name='privacy'),
     url(r'^affiliate$', views.page_info, {"template_name":"app/page_info.html","title":"Affiliate"}, name='affiliate'),
     url(r'^team$', views.page_info, {"template_name":"app/page_info.html","title":"Team"}, name='team'),
-    url(r'^job$', views.page_info, {"template_name":"app/page_info.html","title":"Job"}, name='job'),] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    url(r'^job$', views.page_info, {"template_name":"app/page_info.html","title":"Job"}, name='job'),
+]
 

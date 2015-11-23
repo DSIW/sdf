@@ -41,26 +41,23 @@ def login_user(request):
         user = authenticate(email=email, password=password)
         if user is not None:
             if user.is_active:
-                if User.objects.get(pk=user.id).emailConfirm == 1:
+                if User.objects.filter(pk=user.id).first().emailConfirm == 1:
                     login(request, user)
-                    return HttpResponseRedirect(reverse('app:startPage'))
                     # Redirect to a success page.
+                elif settings.DEBUG:
+                    messages.add_message(request, messages.INFO, format_html("Die E-Mail-Adresse wurde noch nicht bestätigt. Debugmodus aktiv, Login gestattet. <a href='{}'>Aktivierungslink erneut zusenden</a>", reverse('app_user:resend_confirmation_mail', kwargs={'email': email})))
+                    login(request, user)
                 else:
                     messages.add_message(request, messages.ERROR, format_html("Die E-Mail-Adresse wurde noch nicht bestätigt. <a href='{}'>Aktivierungslink erneut zusenden</a>", reverse('app_user:resend_confirmation_mail', kwargs={'email': email})))
-                    if settings.DEBUG:
-                        messages.add_message(request, messages.INFO, format_html("Die E-Mail-Adresse wurde noch nicht bestätigt. Debugmodus aktiv, Login gestattet. <a href='{}'>Aktivierungslink erneut zusenden</a>", reverse('app_user:resend_confirmation_mail', kwargs={'email': email})))
-                        login(request, user)
-                    return HttpResponseRedirect(reverse('app:startPage'))
             else:
                 # Return a 'disabled account' error message
                 messages.add_message(request, messages.ERROR, 'Das Benutzerkonto ist deaktiviert.')
-                return HttpResponseRedirect(reverse('app:startPage'))
+            return HttpResponseRedirect(reverse('app:startPage'))
         else:
             # Return an 'invalid login' error message.
             messages.add_message(request, messages.ERROR, 'Loginversuch fehlgeschlagen.')
             return render_to_response('registration/login.html', {'form': form}, RequestContext(request))
     else:
-        print("GET")
         return render_to_response('registration/login.html', {'form': form}, RequestContext(request))
 
 
@@ -77,10 +74,7 @@ def current_user(func):
 
 def resend_confirmation_mail(request, email):
     if request.method == 'GET':
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            user = None
+        user = User.objects.filter(email=email).first()
         if user == None:
             messages.add_message(request, messages.ERROR, 'Diese E-Mail-Adresse ist nicht bekannt.')
             return HttpResponseRedirect(reverse('app:startPage'))
