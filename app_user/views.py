@@ -112,7 +112,6 @@ def register_user(request):
                 result = form.sendConfirmEmail(request, user)
         except SMTPRecipientsRefused:
             result = False
-
         if result:
             messages.add_message(request, messages.SUCCESS, 'Sie haben sich erfolgreich registriert.')
             return HttpResponseRedirect(reverse('app:startPage'))
