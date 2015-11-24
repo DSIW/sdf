@@ -35,7 +35,7 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'paypal', 'password1', 'password1', 'profileImage']
+        fields = ['username', 'first_name', 'last_name', 'email', 'paypal', 'password1', 'password2', 'profileImage']
 
         def clean_username(self):
             return self.cleaned_data['username'] or None
