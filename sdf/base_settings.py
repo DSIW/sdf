@@ -35,6 +35,7 @@ INSTALLED_APPS = (
     'watson',
     'django_extensions',
     'app',
+    'braces',
     'app_book',
     'app_user',
 )
@@ -118,3 +119,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+# Media files (book-images, profil-images)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+

@@ -6,7 +6,7 @@
 
   <div class="container">
     {% if form.errors %}
-      <div class="z-depth-1 alert alert-error">Benutzername oder Passwort sind falsch!</div>
+      <div class="z-depth-1 alert alert-error">{{ form.username.label }} oder {{ form.password.label }} sind falsch!</div>
     {% endif %}
 
     <form method="post" action="{% url 'django.contrib.auth.views.login' %}?next={% if next %}{{next}}{% else %}/{% endif %}">

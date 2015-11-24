@@ -1,0 +1,44 @@
+{% load template_extras %}
+{% load staticfiles %}
+
+
+<div class="card card-book small">
+    <div class="card-image waves-effect waves-block waves-light">
+        <img class="activator" src="{% static "img/book-cover-example.png" %}">
+    </div>
+    <div class="card-content">
+        <i class="card-title activator grey-text text-darken-4 material-icons card-open">more_vert</i>
+        <p class="card-title activator grey-text text-darken-4 book-title">{{ book.name }}</p>
+        <p class="author">{{ book.author }}</p>
+        <p class="seller-rating left">
+            <i class="material-icons seller-rating-star">star</i>
+            <i class="material-icons seller-rating-star">star</i>
+            <i class="material-icons seller-rating-star">star</i>
+            <i class="material-icons seller-rating-star">star_half</i>
+            <i class="material-icons seller-rating-star">star_border</i>
+        </p>
+        <p class="card-title activator grey-text text-darken-4 price right">{{ offer.totalPrice|currency }}</p>
+    </div>
+    <div class="card-reveal">
+        <i class="card-title activator grey-text text-darken-4 material-icons card-close">close</i>
+        <span class="card-title grey-text text-darken-4">{{ book.name }}</span>
+        <p>Autor: <strong>{{ book.author }}</strong></p>
+        <p>Seitenanzahl: <strong>{{ book.pageNumber }}</strong></p>
+        <p>Verkäufer: <strong>{{ user.pseudonym_or_full_name }}</strong></p>
+        <p>Ort: <strong>{{ user.location }}</strong></p>
+        <p>Verkäuferbewertung:
+            <strong>
+                <span class="seller-rating">
+                  <i class="material-icons seller-rating-star">star</i>
+                  <i class="material-icons seller-rating-star">star</i>
+                  <i class="material-icons seller-rating-star">star</i>
+                  <i class="material-icons seller-rating-star">star_half</i>
+                  <i class="material-icons seller-rating-star">star_border</i>
+                </span>
+            </strong>
+        </p>
+        <div class="card-action">
+            <a href="#" class="right">Für {{ offer.totalPrice|currency }} kaufen</a>
+        </div>
+    </div>
+</div>

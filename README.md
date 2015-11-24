@@ -22,6 +22,7 @@
 ## Requirements
 
 * `decorator`: Required by `ipython`
+* `django-braces`: Mixins for views. E.g. FormMessagesMixin for Django's generic views
 * `django-extensions`: Enhanced commands: `./manage.py (show_urls|validate_templates|shell_plus|runserver_plus)`
 * `invoke`: Invoke commands
 * `ipython`: Interactive shell with history support. Run `./manage.py shell_plus`

@@ -6,7 +6,7 @@
     <div class="container">
       <h1>Account erstellen</h1>
 
-      <form action="{% url 'app_user:register' %}" method="post">{% csrf_token %}
+      <form action="{% url 'app_user:register' %}" enctype="multipart/form-data" method="post">{% csrf_token %}
           {% for field in form.visible_fields %}
           <div class="input-field {% if field.errors %}has-error{% endif %}">
               {{ field }}

@@ -9,6 +9,9 @@ urlpatterns = [
     # root
     url(r'^$', views.StartPageView.as_view(), name='startPage'),
 
+    # admin
+    url(r'^admin/', include(admin.site.urls)),
+
     # session
     url(r'^login$', auth_views.login, name='login'),
     url(r'^logout$', auth_views.logout, name='logout'),

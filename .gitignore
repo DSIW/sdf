@@ -87,6 +87,7 @@ db.sqlite3
 *.orig
 migrations
 !scripts
+media
 
 ## pyCharm ##
 .idea/
