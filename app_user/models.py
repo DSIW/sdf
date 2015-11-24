@@ -45,18 +45,19 @@ class User(AuthUser):
     AuthUser._meta.get_field('email').error_messages = {'unique': 'Diese E-Mail-Adresse ist bereits registriert.',
                                                         'invalid': 'Bitte eine gültige E-Mail-Adresse angeben.'}
 
-    emailConfirm = models.BooleanField(default=False)
+    emailConfirm = models.BooleanField(default=False,verbose_name='E-mail bestätigt')
     profileImage = models.FileField(upload_to=user_directory_path, null=True)
     location = models.CharField(max_length=255, default='')
     paypal = models.CharField(max_length=50)
     user_ptr = models.OneToOneField(AuthUser)
+    showcaseDisabled = models.BooleanField(default=False, verbose_name='Schaufenster gesperrt')
 
     objects = MyUserManager()
     AuthUser.USERNAME_FIELD = 'email'
     AuthUser.REQUIRED_FIELDS = ['']
 
     def __str__(self):
-        return self.user_ptr + ", " + self.paypal + ", " + self.location
+        return str(self.user_ptr) + ", " + self.paypal + ", " + self.location
 
     def pseudonym_or_full_name(self):
         if self.username and self.username != "":
