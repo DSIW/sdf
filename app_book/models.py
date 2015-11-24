@@ -37,3 +37,32 @@ class Offer(models.Model):
 
     def totalPrice(self):
         return self.price + self.shipping_price
+
+    def active_counteroffers(self):
+        return self.counteroffer_set.filter(offer=self, active=True).count()
+
+
+class Counteroffer(models.Model):
+    offer = models.ForeignKey(Offer)
+    creator = models.ForeignKey(User)
+    price = models.FloatField(default=0)
+    active = models.BooleanField(default=True)
+    accepted = models.BooleanField(default=False)
+
+    def accept(self):
+        if self.active:
+            self.accepted=True
+            self.active=False
+        else:
+            raise BaseException("Counteroffer is not active anymore")
+
+    def decline(self):
+        if self.active:
+            self.accepted=False
+            self.active=False
+        else:
+            raise BaseException("Counteroffer is not active anymore")
+
+    def __str__(self):
+        return "Counteroffer: <offer_PK: " + str(self.offer.primary_key) + ">, <user_PK: " + str(self.creator.primary_key) + ">, <price: " + self.price + ">"
+

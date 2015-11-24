@@ -26,6 +26,7 @@
         <p>Seitenanzahl: <strong>{{ book.pageNumber }}</strong></p>
         <p>Verkäufer: <strong>{{ user.pseudonym_or_full_name }}</strong></p>
         <p>Ort: <strong>{{ user.location }}</strong></p>
+        <p>Offene Preisvorschläge: <strong>{{ offer.active_counteroffers }}</strong></p>
         <p>Verkäuferbewertung:
             <strong>
                 <span class="seller-rating">
@@ -39,6 +40,7 @@
         </p>
         <div class="card-action">
             <a href="#" class="right">Für {{ offer.totalPrice|currency }} kaufen</a>
+            <a href="{% url 'app_book:new_counteroffer' offer.id %}" class="right">Anderen Preis vorschlagen</a>
         </div>
     </div>
 </div>

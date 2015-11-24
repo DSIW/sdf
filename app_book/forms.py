@@ -2,7 +2,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Book, Offer
+from .models import Book, Offer, Counteroffer
 
 class BookForm(forms.ModelForm):
     '''
@@ -47,3 +47,10 @@ class PublishOfferForm(OfferForm):
     class Meta(OfferForm.Meta):
         exclude = ['active']
 
+class CounterofferForm(forms.ModelForm):
+    class Meta:
+        model = Counteroffer
+        fields = ['price']
+        labels = {
+            'price': _('Preisvorschlag'),
+        }
