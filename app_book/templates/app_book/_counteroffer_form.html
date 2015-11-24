@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}counteroffer{% endblock %}
+
+{% block content %}
+  <div class="container">
+        <div class="row">
+            <h1>Preisvorschlag</h1>
+            <h2>
+                Für
+                <span class="orange-text text-lighten-1">{{ book.name }}</span>
+                von Anbieter
+                <span class="orange-text text-lighten-1">{{ offer.seller_user.pseudonym_or_full_name }}</span>
+            </h2>
+        </div>
+
+    <form action="{% url 'app_book:new_counteroffer' offer.id %}" method="post">{% csrf_token %}
+        {% for field in form.visible_fields %}
+        <div class="input-field {% if field.errors %}has-error{% endif %}">
+            {{ field }}
+            <label>{{ field.label }}</label>
+            {% if field.errors %}
+                <span class="help-block">
+                    {% for error in field.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                </span>
+            {% endif %}
+        </div>
+        {% endfor %}
+      <input type="submit" class="btn btn-success" value="Senden">
+    </form>
+  </div>
+{% endblock %}
+
+
+
+

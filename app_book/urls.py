@@ -17,4 +17,8 @@ urlpatterns = [
 
     # search
     url(r'^search/results', views.searchBookResults, name='searchBookResults'),
+
+    # offers
+    url(r'^offers/(?P<id>[0-9]+)/new_counteroffer', views.counteroffer, name='new_counteroffer'),
 ]
+

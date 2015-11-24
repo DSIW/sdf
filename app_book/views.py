@@ -11,8 +11,8 @@ import collections
 from app_user.models import User
 from app_user.forms import RegistrationForm
 
-from .models import Book, Offer
-from .forms import BookForm, OfferForm, PublishOfferForm
+from .models import Book, Offer, Counteroffer
+from .forms import BookForm, OfferForm, PublishOfferForm, CounterofferForm
 
 
 # Custom Ownership Decorator
@@ -212,6 +212,9 @@ def unpublishBook(request, id):
             offer.active = False
             offer.save()
         messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun nicht mehr zum Verkauf angeboten!')
+        # decline all active counteroffers:
+        Counteroffer.objects.filter(offer=offer, active=True).update(active=False, accepted=False)
+        # TODO: Send out Notifications to all Users who made counteroffers which got declined now
         # use GET request for redirected location via HTTP status code 303 (see other).
         return HttpResponseRedirect(reverse('app_book:archivesPage'))
     else:
@@ -226,3 +229,31 @@ def searchBookResults(request):
         "results": search_results,
     },  RequestContext(request))
 
+
+def counteroffer(request, id):
+    offer = get_object_or_404(Offer, id=id)
+    user = get_object_or_404(User, id=request.user._get_pk_val)
+    book = get_object_or_404(Book, id=offer.book._get_pk_val)
+    try:
+        counteroffer = Counteroffer.objects.get(offer=offer._get_pk_val, creator=user._get_pk_val, active=True)
+        messages.add_message(request, messages.INFO, 'Sie haben für dieses Buch bereits einen Preisvorschlag abgegeben, der noch aussteht')
+    except Counteroffer.DoesNotExist:
+        obj = Counteroffer(offer=offer, creator=user, price=offer.totalPrice(), active=True, accepted=False)
+        offer_form = CounterofferForm(instance=obj)
+        if request.method == 'GET':
+            return render_to_response('app_book/_counteroffer_form.html', {
+                "form": offer_form,
+                "offer": offer,
+                "book": book,
+            }, RequestContext(request))
+        elif request.method == 'POST':
+            obj.save()
+            messages.add_message(request, messages.SUCCESS, 'Der Preisvorschlag wurde abgegeben. Sie werden benachrichtigt, sobald der Verkäufer antwortet')
+            offer.counteroffer_set.add(obj);
+            offer.save()
+            # TODO: Send notification to seller (= persist Notification)
+        else:
+            raise ("Use http method POST for making a counteroffer")
+    # TODO: redirect to previos page (not to showcase)
+    # return HttpResponseRedirect(request.REQUEST.get('next', '')) ### WARN: This ends up in endless-loop
+    return showcaseView(request, offer.seller_user.id)
