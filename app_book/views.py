@@ -78,12 +78,13 @@ def handleEditBook(request, id):
     except ValueError as e:
         return StatusAndTwoForms(False, book_form, offer_form)
 
+    # handle offer
     if 'active' in request.POST and request.POST['active']:
         if not offer_form.is_valid():
             return StatusAndTwoForms(False, book_form, offer_form)
         offer_form_obj = offer_form.save(commit=False)
         # reseting id and seller_user_id in case this will be a new offer
-        offer_form_obj.id = book_form_obj.id
+        offer_form_obj.book_id = book_form_obj.id
         offer_form_obj.seller_user_id = book_form_obj.user_id
         try:
             offer_form_obj.save()
