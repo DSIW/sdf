@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% load template_extras %}
+{% load staticfiles %}
+
+{% block body_classes %}paypal-payment{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="line">
+            <span class="grey-text title-type">Buch</span><br />
+            <span class="orange-text text-lighten-1">{{ book.name }}</span>
+        </h1>
+
+        <div class="row">
+            <div class="col s4">
+                <img width="300px" src="{% static "img/book-cover-example.png" %}" class="book-cover" />
+            </div>
+            <div class="col s8">
+                <p>Status:
+                    {% if book.offer.is_in_active_payment_process %}
+                        <span class="sdf-badge">Im Bezahlungsprozess</span>
+                    {% elif book.is_published %}
+                        <span class="sdf-badge">Öffentlich</span>
+                    {% else %}
+                        <span class="sdf-badge">Privat</span>
+                    {% endif %}
+                </p>
+                <p>Autor: <strong>{{ book.author }}</strong></p>
+                <p>Seitenanzahl: <strong>{{ book.pageNumber }}</strong></p>
+                <p>Verkäufer: <strong>{{ book.user.pseudonym_or_full_name }}</strong></p>
+                <p>Ort: <strong>{{ book.user.location }}</strong></p>
+                <p>Verkäuferbewertung:
+                    <strong>
+                        <span class="seller-rating">
+                          <i class="material-icons seller-rating-star">star</i>
+                          <i class="material-icons seller-rating-star">star</i>
+                          <i class="material-icons seller-rating-star">star</i>
+                          <i class="material-icons seller-rating-star">star_half</i>
+                          <i class="material-icons seller-rating-star">star_border</i>
+                        </span>
+                    </strong>
+                </p>
+                <p>
+                    Beschreibung:<br />
+                    {{ book.description }}
+                </p>
+                <div class="right-align">
+                    <p>Preis: <strong>{{ book.price|currency }}</strong></p>
+                    <p>Versandkosten: <strong>{{ book.shipping_price|currency }}</strong></p>
+                    <p class="price-total"><strong>Gesamt: {{ book.total_price|currency }}</strong></p>
+                </div>
+
+                <div class="form-actions right-align">
+                    <img width="70px" style="float: left;" src="{% static "img/paypal.png" %}">
+                    {% if book.is_published %}
+                        <a href="{% url 'app_book:unpublishBook' book.id %}" data-method="put" data-confirm="true" data-confirm-custom="Wenn Sie das Angebot zurück ziehen, werden alle unbeantworteten Preisvorschläge abgelehnt. Sind Sie sicher, dass Sie fortfahren möchten?" data-confirm-ok="Nicht veröffentlichen" class="btn">Nicht veröffentlichen</a>
+                        {% if book.is_in_active_payment_process %}
+                            <a href="javascript:;" disabled="disabled" class="btn">Für {{ book.total_price|currency }} Kaufen</a>
+                            <a href="javascript:;" style="margin-top: 5px;" disabled="disabled" class="right">Anderen Preis vorschlagen</a>
+                        {% else %}
+                            <a href="{% url 'app_payment:start_paypal_payment' book.offer.id %}" data-method="post" class="btn">Für {{ book.total_price|currency }} Kaufen</a>
+                            <a href="{% url 'app_book:new_counteroffer' book.offer.id %}" style="margin-top: 5px;" class="right">Anderen Preis vorschlagen</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'app_book:publishBook' book.id %}" class="btn">Veröffentlichen</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

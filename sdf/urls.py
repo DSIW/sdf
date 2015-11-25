@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^', include('app.urls', namespace='app')),
     url(r'^', include('app_book.urls', namespace='app_book')),
     url(r'^', include('app_user.urls', namespace='app_user')),
+    url(r'^', include('app_payment.urls', namespace='app_payment')),
     url(r'^', include('app_notification.urls', namespace='app_notification')),
     url(r'^', include('django.contrib.auth.urls')),
 

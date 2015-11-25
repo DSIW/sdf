@@ -3,6 +3,8 @@
 from django.db import models
 
 from app_user.models import User
+from app_payment.models import Payment
+from paypal.standard.models import *
 
 
 class Book(models.Model):
@@ -23,6 +25,24 @@ class Book(models.Model):
     def is_published(self):
         return self.offer_set.count() > 0 and self.offer_set.first().active
 
+    def price(self):
+        if self.offer() is None:
+            return 0.0
+        return self.offer().price
+
+    def shipping_price(self):
+        if self.offer() is None:
+            return 0.0
+        return self.offer().shipping_price
+
+    def total_price(self):
+        if self.offer() is None:
+            return 0.0
+        return self.offer().totalPrice()
+
+    def offer(self):
+        return self.offer_set.first()
+
 
 class Offer(models.Model):
     seller_user = models.ForeignKey(User)
@@ -42,6 +62,9 @@ class Offer(models.Model):
 
     def active_counteroffers(self):
         return self.counteroffer_set.filter(offer=self, active=True).count()
+
+    def is_in_active_payment_process(self):
+        return Payment.objects.filter(book=self.book, payment_status__in=[ST_PP_ACTIVE, ST_PP_PENDING, ST_PP_VOIDED]).count() > 0
 
 
 class Counteroffer(models.Model):

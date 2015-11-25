@@ -121,6 +121,16 @@ def archivesPageView(request):
     }, RequestContext(request))
 
 
+def detailView(request, id):
+    template_name = 'app_book/detail.html'
+
+    book = get_object_or_404(Book, id=id)
+
+    return render_to_response(template_name, {
+        "book": book
+    },  RequestContext(request))
+
+
 @owns_book
 def editBook(request, id):
     if request.method == 'POST':

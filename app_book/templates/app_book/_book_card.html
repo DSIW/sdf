@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 
-<div class="card card-book small">
+<div class="card card-book small {% if book.offer.is_in_active_payment_process %}payment{% endif %}">
     <div class="card-image waves-effect waves-block waves-light">
         <img class="activator" src="{% static "img/book-cover-example.png" %}">
     </div>
@@ -39,8 +39,7 @@
             </strong>
         </p>
         <div class="card-action">
-            <a href="#" class="right">Für {{ offer.totalPrice|currency }} kaufen</a>
-            <a href="{% url 'app_book:new_counteroffer' offer.id %}" class="right">Anderen Preis vorschlagen</a>
+          <a href="{% url 'app_book:book-detail' book.id %}" class="right">Mehr</a>
         </div>
     </div>
 </div>
