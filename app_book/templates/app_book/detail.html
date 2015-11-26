@@ -55,7 +55,7 @@
                     <img width="70px" style="float: left;" src="{% static "img/paypal.png" %}">
                     {% if book.is_published %}
                         <a href="{% url 'app_book:unpublishBook' book.id %}" data-method="put" data-confirm="true" data-confirm-custom="Wenn Sie das Angebot zurück ziehen, werden alle unbeantworteten Preisvorschläge abgelehnt. Sind Sie sicher, dass Sie fortfahren möchten?" data-confirm-ok="Nicht veröffentlichen" class="btn">Nicht veröffentlichen</a>
-                        {% if book.is_in_active_payment_process %}
+                        {% if book.offer.is_in_active_payment_process %}
                             <a href="javascript:;" disabled="disabled" class="btn">Für {{ book.total_price|currency }} Kaufen</a>
                             <a href="javascript:;" style="margin-top: 5px;" disabled="disabled" class="right">Anderen Preis vorschlagen</a>
                         {% else %}
