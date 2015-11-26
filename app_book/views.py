@@ -17,6 +17,7 @@ from app_user.forms import RegistrationForm
 
 from .models import Book, Offer, Counteroffer
 from .forms import BookForm, OfferForm, PublishOfferForm, CounterofferForm
+from .services import unpublish_book
 
 
 # Custom Ownership Decorator
@@ -224,10 +225,7 @@ def publishBook(request, id):
 def unpublishBook(request, id):
     if request.method == 'PUT':
         book = get_object_or_404(Book, id=id)
-        offer = book.offer_set.first()
-        if offer is not None:
-            offer.active = False
-            offer.save()
+        unpublish_book(book)
         messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun nicht mehr zum Verkauf angeboten!')
         # decline all active counteroffers:
         counteroffers = Counteroffer.objects.filter(offer=offer, active=True)
@@ -273,7 +271,6 @@ def counteroffer(request, id):
             offer.save()
 
             seller = get_object_or_404(User, id=offer.seller_user.id)
-            # TODO: Send notification to seller (= persist Notification)
             Notification.counteroffer(obj,seller,user,book)
         else:
             raise ("Use http method POST for making a counteroffer")

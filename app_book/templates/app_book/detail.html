@@ -28,8 +28,8 @@
                 </p>
                 <p>Autor: <strong>{{ book.author }}</strong></p>
                 <p>Seitenanzahl: <strong>{{ book.pageNumber }}</strong></p>
-                <p>Verkäufer: <strong>{{ book.user.pseudonym_or_full_name }}</strong></p>
-                <p>Ort: <strong>{{ book.user.location }}</strong></p>
+                <p>Verkäufer: <strong><a href="{% url 'app_book:showcase' book.user.id %}">{{ book.user.pseudonym_or_full_name }}</a></strong></p>
+                <p>Verkaufsort: <strong><a href="https://www.google.de/maps?q={{ book.user.location }}" target="_new">{{ book.user.location }}</a></strong></p>
                 <p>Verkäuferbewertung:
                     <strong>
                         <span class="seller-rating">

@@ -14,6 +14,7 @@ import json
 from app_book.models import Book, Offer
 from app_user.models import User
 from .models import Payment
+from .services import complete_payment, abort_payment, update_payment_from_paypal_ipn
 
 def start_paypal_payment(request, id):
     template_name = 'app_payment/payment_start.html'
@@ -35,8 +36,8 @@ def start_paypal_payment(request, id):
         "invoice": payment.invoice,
         "currency_code": payment.currency_code,
         "notify_url": settings.ENDPOINT + reverse('app_payment:paypal-ipn'),
-        "return_url": settings.ENDPOINT + reverse('app_payment:paypal-payment-success'),
-        "cancel_return": settings.ENDPOINT + reverse('app_payment:paypal-payment-cancel'),
+        "return_url": settings.ENDPOINT + reverse('app_payment:payment-success', kwargs={'id': payment.id}),
+        "cancel_return": settings.ENDPOINT + reverse('app_payment:payment-cancel', kwargs={'id': payment.id}),
         "custom": payment.custom
     })
 
@@ -47,20 +48,16 @@ def start_paypal_payment(request, id):
     },  RequestContext(request))
 
 @csrf_exempt
-def paypal_complete(request):
-    payment_id = json.loads(request.POST['custom'])['payment_id']
-    payment = Payment.objects.filter(id=payment_id).first()
-    payment.complete()
-    payment.save()
+def paypal_complete(request, id):
+    payment = Payment.objects.filter(id=id).first()
+    complete_payment(payment)
     messages.add_message(request, messages.SUCCESS, 'Die Paypal-Transaktion wurde durchgeführt. Bitte prüfen Sie, ob das Geld bei Ihnen angekommen ist.')
     return render(request, "app_payment/payment_success.html")
 
 @csrf_exempt
-def paypal_abort(request):
-    payment_id = json.loads(request.POST['custom'])['payment_id']
-    payment = Payment.objects.filter(id=payment_id).first()
-    payment.abort()
-    payment.save()
+def paypal_abort(request, id):
+    payment = Payment.objects.filter(id=id).first()
+    abort_payment(payment)
     messages.add_message(request, messages.ERROR, 'Die Paypal-Transaktion wurde abgebrochen.')
     return render(request, "app_payment/payment_cancel.html")
 
@@ -72,8 +69,7 @@ def paypal_ipn(sender, **kwargs):
     print('New paypal status: '+sender.payment_status)
 
     payment.payment_status = sender.payment_status
-    payment.update_from_paypal_ipn(ipn_obj)
-    # TODO: Send notification to user
     payment.save()
+    update_payment_from_paypal_ipn(payment, ipn_obj)
 
 valid_ipn_received.connect(paypal_ipn)

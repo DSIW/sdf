@@ -6,6 +6,7 @@ from app_user.models import User
 from app_payment.models import Payment
 from paypal.standard.models import *
 
+ACTIVE_PAYMENT_STATUSES = [ST_PP_CREATED, ST_PP_ACTIVE, ST_PP_PENDING, ST_PP_VOIDED]
 
 class Book(models.Model):
     user = models.ForeignKey(User, default=None)
@@ -64,7 +65,7 @@ class Offer(models.Model):
         return self.counteroffer_set.filter(offer=self, active=True).count()
 
     def is_in_active_payment_process(self):
-        return Payment.objects.filter(book=self.book, payment_status__in=[ST_PP_ACTIVE, ST_PP_PENDING, ST_PP_VOIDED]).count() > 0
+        return Payment.objects.filter(book=self.book, payment_status__in=ACTIVE_PAYMENT_STATUSES).count() > 0
 
 
 class Counteroffer(models.Model):
