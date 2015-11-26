@@ -26,6 +26,9 @@ class BookTest(TestCase):
             'shipping_price': '13.37',
             'active': 'on',
         }
+        self.book_offer_data = self.book_data.copy()
+        self.book_offer_data.update(self.offer_data)
+
         self.client = Client()
 
         User.objects.create_user(user_username, user_password)
@@ -48,8 +51,7 @@ class BookTest(TestCase):
         self.assertEqual(len(book), 0)
         self.assertEqual(len(offer), 0)
 
-        data = {**self.book_data, **self.offer_data}
-        self.client.post(reverse('app_book:createBook'), data=data)
+        self.client.post(reverse('app_book:createBook'), data=self.book_offer_data)
 
         book = Book.objects.all()
         offer = Offer.objects.all()
@@ -62,8 +64,7 @@ class BookTest(TestCase):
         self.assertEqual(len(book), 0)
         self.assertEqual(len(offer), 0)
 
-        dataOrig = {**self.book_data, **self.offer_data}
-        data = dataOrig.copy()
+        data = self.book_offer_data.copy()
 
         for attrib in data.keys():
             # skip fields that can be blank
@@ -73,7 +74,7 @@ class BookTest(TestCase):
                 continue
 
             # restore data state
-            data = dataOrig.copy()
+            data = self.book_offer_data.copy()
             data[attrib] = ''
 
             self.client.post(reverse('app_book:createBook'), data=data)
@@ -90,8 +91,7 @@ class BookTest(TestCase):
         self.assertEqual(len(book), 0)
         self.assertEqual(len(offer), 0)
 
-        dataOrig = {**self.book_data, **self.offer_data}
-        data = dataOrig.copy()
+        data = self.book_offer_data.copy()
 
         for attrib in data.keys():
             # skip fields that can be blank
@@ -101,7 +101,7 @@ class BookTest(TestCase):
                 continue
 
             # restore data state
-            data = dataOrig.copy()
+            data = self.book_offer_data.copy()
             del data[attrib]
 
             self.client.post(reverse('app_book:createBook'), data=data)
@@ -118,7 +118,7 @@ class BookTest(TestCase):
         self.assertEqual(len(book), 0)
         self.assertEqual(len(offer), 0)
 
-        data = {**self.book_data, **self.offer_data}
+        data = self.book_offer_data.copy()
         data['active'] = 'off'
 
         self.client.post(reverse('app_book:createBook'), data=data)
@@ -134,7 +134,7 @@ class BookTest(TestCase):
         self.assertEqual(len(book), 0)
         self.assertEqual(len(offer), 0)
 
-        data = {**self.book_data, **self.offer_data}
+        data = self.book_offer_data.copy()
         data['active'] = 'on'
         data['price'] = 'bogusVal'
 
@@ -151,7 +151,7 @@ class BookTest(TestCase):
         self.assertEqual(len(book), 0)
         self.assertEqual(len(offer), 0)
 
-        data = {**self.book_data, **self.offer_data}
+        data = self.book_offer_data.copy()
         del data['name']
 
         self.client.post(reverse('app_book:createBook'), data=data)
@@ -167,7 +167,7 @@ class BookTest(TestCase):
         self.assertEqual(len(book), 0)
         self.assertEqual(len(offer), 0)
 
-        data = {**self.book_data, **self.offer_data}
+        data = self.book_offer_data.copy()
         self.client.post(reverse('app_book:createBook'), data=data)
 
         book = Book.objects.all()
@@ -175,7 +175,7 @@ class BookTest(TestCase):
         self.assertEqual(len(book), 1, book)
         self.assertEqual(len(offer), 1, offer)
 
-        data = {**self.book_data, **self.offer_data}
+        data = self.book_offer_data.copy()
         data['active'] = 'off'
         self.client.post(reverse('app_book:editBook', kwargs={'id': book.first().id}), data=data)
         offer = Offer.objects.all()
@@ -190,7 +190,7 @@ class BookTest(TestCase):
         self.assertEqual(len(book), 0)
         self.assertEqual(len(offer), 0)
 
-        data = {**self.book_data, **self.offer_data}
+        data = self.book_offer_data.copy()
         self.client.post(reverse('app_book:createBook'), data=data)
 
         book = Book.objects.all()
@@ -218,7 +218,7 @@ class BookTest(TestCase):
         self.assertEqual(len(book), 1, book)
         self.assertEqual(len(offer), 0, offer)
 
-        data = {**self.book_data, **self.offer_data}
+        data = data = self.book_offer_data.copy()
         self.client.post(reverse('app_book:publishBook', kwargs={'id': book.first().id}), data=data)
 
         book = Book.objects.all()
@@ -232,7 +232,7 @@ class BookTest(TestCase):
         self.assertEqual(len(book), 0)
         self.assertEqual(len(offer), 0)
 
-        data = {**self.book_data, **self.offer_data}
+        data = data = self.book_offer_data.copy()
         self.client.post(reverse('app_book:createBook'), data=data)
 
         book = Book.objects.all()
