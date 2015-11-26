@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.forms import ModelForm
 from django.shortcuts import render
 from django.views.generic.edit import UpdateView

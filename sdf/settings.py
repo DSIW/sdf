@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from sdf.base_settings import *
 
 # SECURITY WARNING: don't run with debug turned on in production!

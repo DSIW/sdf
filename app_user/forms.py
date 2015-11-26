@@ -1,4 +1,5 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
+
 import threading
 from django import forms
 from django.http import HttpRequest
