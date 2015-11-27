@@ -8,8 +8,8 @@ class CustomFileInput(FileInput):
 
     def render(self, name=None, value=None, attrs=None, single_attrs=None):
         self = ''
-        if value is not  None:
-            self +='<img width="500px" src="/media/' + value.__str__() + '" />'
+        if value is not None and bool(value) is not False:
+            self +='<a href="' + value.url + '"><img width="500px" src="' + value.url + '" /></a>'
         self += '''
             <div class="file-field input-field">
               <div class="btn">
