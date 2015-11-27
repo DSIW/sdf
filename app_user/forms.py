@@ -6,11 +6,10 @@ from django.http import HttpRequest
 from django.utils.crypto import get_random_string
 from django.core.urlresolvers import reverse
 from django.forms import ModelForm
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.contrib.auth.forms import UserCreationForm
 
 from .models import User, ConfirmEmail
-from sdf import settings
 from app.widgets import CustomFileInput
 
 class RegistrationForm(UserCreationForm):
@@ -57,26 +56,19 @@ class RegistrationForm(UserCreationForm):
     def sendConfirmEmail(self, request, user):
         confirmId = get_random_string(length=32)
         link = 'http://' + HttpRequest.get_host(request) + reverse('app_user:confirm_email', kwargs={'uuid': confirmId})
-        emailMessage = 'Sehr geehrte/er Frau / Herr '+ request.POST.get('last_name') + ', <br><br>vielen dank für die Registrierung in book².<br> Zur Bestätigung Ihrer E-Mail Adresse betätigen Sie bitte folgenden Link: <a href="' + link + '">Bestätigen</a><br>Sollten Sie den Link nicht nutzen könnten dann kopieren Sie bitte folgende URL in Ihren Browser:<br> ' + link + '<br><br>Wir wünschen Ihnen viel Spaß beim Shoppen<br>Ihr book² team'
 
+        emailMessage = 'Hallo '+ request.POST.get('first_name') + ' ' + request.POST.get('last_name') + ', <br><br>vielen dank für die Registrierung in book².<br> Zur Bestätigung Ihrer E-Mail Adresse betätigen Sie bitte folgenden Link: <a href="' + link + '">Bestätigen</a><br>Sollten Sie den Link nicht nutzen könnten dann kopieren Sie bitte folgende URL in Ihren Browser:<br> ' + link + '<br><br>Wir wünschen Ihnen viel Spaß beim Shoppen<br>Ihr book² team'
+        msg = EmailMessage('Registrierungsbestätigung book²', emailMessage, [], [request.POST.get('email')])
+        msg.content_subtype = "html"
+        result = msg.send()
 
-        EmailThread('Registrierungsbestätigung book²', emailMessage, request).start()
+        if result:
+           confirmEmail = ConfirmEmail()
+           confirmEmail.uuid = confirmId
+           confirmEmail.user = user
+           confirmEmail.save()
 
-        confirmEmail = ConfirmEmail()
-        confirmEmail.uuid = confirmId
-        confirmEmail.user = user
-        confirmEmail.save()
-
-class EmailThread(threading.Thread):
-    def __init__(self, subject, emailMessage, request):
-        self.subject = subject
-        self.emailMessage = emailMessage
-        self.request = request
-        threading.Thread.__init__(self)
-
-    def run (self):
-        send_mail(self.subject, self.emailMessage, settings.EMAIL_HOST_USER,
-                  [self.request.POST.get('email')], fail_silently=False, html_message=self.emailMessage)
+        return result
 
 class CustomUpdateForm(ModelForm):
 
@@ -89,5 +81,6 @@ class CustomUpdateForm(ModelForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'paypal', 'profileImage']
+
     def clean_username(self):
         return self.cleaned_data['username'] or None

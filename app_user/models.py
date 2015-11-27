@@ -71,3 +71,7 @@ class User(AuthUser):
 class ConfirmEmail(models.Model):
     uuid = models.CharField(max_length=50)
     user = models.OneToOneField(User)
+
+class PasswordReset(models.Model):
+    uuid = models.CharField(max_length=50)
+    user = models.OneToOneField(User)
