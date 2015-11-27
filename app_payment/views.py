@@ -24,8 +24,7 @@ def start_paypal_payment(request, id):
 
     payment = Payment()
     offer = Offer.objects.get(id=id)
-    buyer = request.user
-    payment.init_process(offer, buyer)
+    payment.init_process(offer, request.user)
     payment.save()
 
     form = PayPalPaymentsForm(initial = {
@@ -50,7 +49,7 @@ def start_paypal_payment(request, id):
 def paypal_complete(request, id):
     payment = Payment.objects.filter(id=id).first()
     complete_payment(payment)
-    messages.add_message(request, messages.SUCCESS, 'Die Paypal-Transaktion wurde durchgeführt. Bitte prüfen Sie, ob das Geld bei Ihnen angekommen ist.')
+    messages.add_message(request, messages.SUCCESS, 'Die Paypal-Transaktion wurde durchgeführt.')
     return render(request, "app_payment/payment_success.html")
 
 @csrf_exempt

@@ -29,7 +29,7 @@ class Payment(models.Model):
     def init_process(self, offer, user):
         self.book = offer.book
         self.seller_user = self.book.offer().seller_user
-        self.buyer_user_id = user.id
+        self.buyer_user = user
         self.quantity = 1
         self.business = self.seller_user.paypal
         self.payment_status = ST_PP_VOIDED

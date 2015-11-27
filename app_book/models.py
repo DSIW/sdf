@@ -44,11 +44,11 @@ class Book(models.Model):
     def offer(self):
         return self.offer_set.first()
 
-    def is_in_active_payment_process(self):
-        return Payment.objects.filter(book=self, payment_status__in=ACTIVE_PAYMENT_STATUSES).count() > 0
-
     def active_payment(self):
         return Payment.objects.filter(book=self, payment_status__in=ACTIVE_PAYMENT_STATUSES).first()
+
+    def is_in_active_payment_process(self):
+        return self.active_payment() is not None
 
 
 class Offer(models.Model):
