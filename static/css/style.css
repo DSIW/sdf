@@ -104,6 +104,11 @@ h1.line {
   padding-bottom: 30px;
 }
 
+a.disabled {
+  color: #9F9FA7;
+  cursor: default;
+}
+
 
 /* Components */
 
