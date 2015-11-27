@@ -73,13 +73,16 @@ For `Pillow` to work, you need to execute the following tasks:
 
 For `paypal` to work, you need to execute the following tasks:
 
-1. Signup at [Paypal Developer]()
-1. Set `PAYPAL_TEST = True` in your `sdf/local_settings.py`
-1. Set `PAYPAL_TEST = True` and `PAYPAL_RECEIVER_EMAIL = "...-facilitator@domain.de"` to your sandbox receiver account in your `local_settings.py`
+1. Signup at [Paypal Developer](https://developer.paypal.com)
+1. Add this content to `sdf/local_settings.py`:
+```
+PAYPAL_TEST = True
+PAYPAL_RECEIVER_EMAIL = "...-facilitator@example.com"
+ENDPOINT = "https://abc.ngrok.com"
+```
 1. `manage.py makemigrations`
 1. `manage.py migrate`
-1. Start [ngrok](https://ngrok.com) via "ngrok -proto=https -subdomain=sdf 3001"
-1. Set `ENDPOINT = "https://abc.ngrok.com"` in your `sdf/local_settings.py`
+1. Start [ngrok](https://ngrok.com) via "ngrok -proto=https -subdomain=abc 3001"
 
 ## Important Style Guide
 
