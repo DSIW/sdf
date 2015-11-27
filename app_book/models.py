@@ -4,6 +4,9 @@ from django.db import models
 
 from app_user.models import User
 
+def book_directory_path(instance, filename):
+    ext = filename.split('.')[-1]
+    return 'images/books/book_{0}.{1}'.format(instance.id, ext)
 
 class Book(models.Model):
     user = models.ForeignKey(User, default=None)
@@ -15,6 +18,7 @@ class Book(models.Model):
     pageNumber = models.IntegerField(default=0)
     isbn10 = models.CharField(max_length=100)
     isbn13 = models.CharField(max_length=100)
+    image = models.FileField(help_text='max. 42 megabytes', upload_to=book_directory_path, default='')
     description = models.TextField(default="", blank=True)
 
     def __str__(self):

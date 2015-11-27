@@ -8,6 +8,9 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.db import IntegrityError
 
+from .models import Book
+from .forms import BookForm
+
 import watson
 import collections
 
@@ -72,7 +75,7 @@ def handleEditBook(request, id):
         book = Book.objects.get(pk=id)
         offer = book.offer_set.first()
 
-    book_form = BookForm(request.POST, instance=book)
+    book_form = BookForm(request.POST, request.FILES, instance=book)
     offer_form = OfferForm(request.POST, instance=offer)
 
     # check validity of forms
