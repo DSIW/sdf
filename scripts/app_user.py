@@ -28,6 +28,8 @@
 import os, sys
 from django.db import transaction
 
+from sdf import local_settings
+
 class BasicImportHelper(object):
 
     def pre_import(self):
@@ -157,7 +159,7 @@ def import_data():
     auth_user_1.last_name = 'Mustermann'
     auth_user_1.email = 'max@mustermann.de'
     auth_user_1.emailConfirm = True
-    auth_user_1.paypal = 'max@mustermann.de'
+    auth_user_1.paypal = local_settings.SEED_MAX_PAYPAL or 'max@mustermann.de'
     auth_user_1.location = 'Berlin'
     auth_user_1.is_staff = False
     auth_user_1.is_active = True
@@ -173,7 +175,7 @@ def import_data():
     auth_user_2.last_name = 'Mustermann'
     auth_user_2.email = 'martin@mustermann.de'
     auth_user_2.emailConfirm = True
-    auth_user_2.paypal = 'martin@mustermann.de'
+    auth_user_2.paypal = local_settings.SEED_MARTIN_PAYPAL or 'martin@mustermann.de'
     auth_user_2.location = 'Hamburg'
     auth_user_2.is_staff = False
     auth_user_2.is_active = True
