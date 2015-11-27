@@ -2,14 +2,10 @@
 
 from django.db import models
 from django.contrib.auth.models  import User as AuthUser, BaseUserManager
-import logging
-logger = logging.getLogger(__name__)
 
 def user_directory_path(instance, filename):
     ext = filename.split('.')[-1]
-    logger.debug("this is a debug message!")
-
-    return 'profileImage/{0}/profileimage.{1}'.format(instance.id, ext)
+    return 'images/profiles/profile_{0}.{1}'.format(instance.id, ext)
 
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None):
