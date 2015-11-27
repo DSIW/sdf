@@ -66,10 +66,7 @@ def paypal_ipn(sender, **kwargs):
     ipn_obj = sender
     payment_id = json.loads(ipn_obj.custom)['payment_id']
     payment = Payment.objects.filter(id=payment_id).first()
-    print('New paypal status: '+sender.payment_status)
-
-    payment.payment_status = sender.payment_status
-    payment.save()
+    print('>>> New paypal status: '+sender.payment_status)
     update_payment_from_paypal_ipn(payment, ipn_obj)
 
 valid_ipn_received.connect(paypal_ipn)
