@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.forms import ModelForm
-from django.shortcuts import render
+from django.http import HttpRequest
+from django.utils.crypto import get_random_string
 from django.views.generic.edit import UpdateView
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -9,7 +9,13 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth import update_session_auth_hash
+
+from django.core.mail import EmailMessage
+from .models import User, ConfirmEmail, PasswordReset
+
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 
@@ -31,17 +37,21 @@ def current_user(func):
 
 def register_user(request):
     if request.method == 'POST':
+        result = False
         try:
             form = RegistrationForm(request.POST, request.FILES)
             if form.is_valid():
                 form.profileImage = request.FILES.get('profileImage')
                 user = form.save()
-                form.sendConfirmEmail(request, user)
-
-                messages.add_message(request, messages.SUCCESS, 'Sie haben sich erfolgreich registriert.')
-                return HttpResponseRedirect(reverse('app:startPage'))
+                result = form.sendConfirmEmail(request, user)
         except SMTPRecipientsRefused:
-            messages.add_message(request, messages.ERROR, 'Es konnte keine Validierungsemail zur eingegebenen E-Mail Adresse ' + user.email + ' verschickt werden')
+            result = False
+
+        if result:
+            messages.add_message(request, messages.SUCCESS, 'Sie haben sich erfolgreich registriert.')
+            return HttpResponseRedirect(reverse('app:startPage'))
+        else:
+            messages.add_message(request, messages.ERROR, 'Es konnte keine Validierungsemail zur eingegebenen E-Mail Adresse ' + request.POST.get('email') + ' verschickt werden')
             render_to_response('app_user/register.html', {'form': form}, RequestContext(request))
 
     else:
@@ -89,4 +99,77 @@ def changePassword(request):
             return HttpResponseRedirect(reverse('app:startPage'))
     else:
         form = PasswordChangeForm(user=request.user)
-    return render_to_response('app/change_password.html', {'form': form}, RequestContext(request))
+    action = reverse('app_user:change_password')
+    return render_to_response('app_user/password.html', {'form': form, 'action': action}, RequestContext(request))
+
+def sendPasswordResetEmail(request):
+    email = request.POST.get('email', '')
+    user=User.objects.filter(email=email).first()
+
+    result = False
+
+    if user is not None:
+        subject = "Password Zurücksetzen book²"
+
+        confirmId = get_random_string(length=32)
+        entry = PasswordReset.objects.filter(user=user).first()
+
+        # create entry if not exists
+        if entry is None:
+            entry = PasswordReset()
+
+        # add/edit entry
+        entry.uuid = confirmId
+        entry.user = user
+        entry.save()
+
+        link = 'http://' + HttpRequest.get_host(request) + reverse('app_user:new_password', kwargs={'uuid': confirmId})
+        message = 'Hallo '+ user.first_name + ' ' + user.last_name + ',<br><br> um Ihr Passwort zurückzusetzen, klicken Sie bitte auf den Link: <a href="' + link + '">Bestätigen</a><br>Sollten Sie den Link nicht nutzen könnten dann kopieren Sie bitte folgende URL in Ihren Browser:<br> ' + link + '<br><br>Ihr book² team'
+
+        msg = EmailMessage(subject, message, [], [email])
+        msg.content_subtype = "html"
+        result = msg.send()
+
+    return result
+
+# Diese Methode setzt das Password zurück, in dem eine EMail an den Benutzer geschickt wird.
+def password_reset(request):
+    if request.method == 'POST':
+        form = PasswordResetForm(data=request.POST)
+        if form.is_valid():
+            result = sendPasswordResetEmail(request)
+
+            if result:
+                messages.add_message(request, messages.SUCCESS, 'Es wurde eine Email versendet!')
+            else:
+                messages.add_message(request, messages.ERROR, 'Bitte überprüfen Sie, ob alle Felder korrekt sind. Zulässige Zeichen: a-z, 0-9, -, _ und @.')
+
+            return HttpResponseRedirect(reverse('app:startPage'))
+    else:
+        form = PasswordResetForm()
+    action = reverse('app_user:reset_password')
+    return render_to_response('app_user/password.html', {'form': form, 'action': action}, RequestContext(request))
+
+# Diese Methode setzt das Password eines Benutzers.
+def password_new(request, uuid):
+    entry = PasswordReset.objects.filter(uuid=uuid).first()
+
+    if entry is None:
+         messages.add_message(request, messages.ERROR, 'Ungültiger Vorgang!')
+         return HttpResponseRedirect(reverse('app:startPage'))
+
+    user=entry.user
+
+    if request.method == 'POST':
+        form = SetPasswordForm(user=user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            entry.delete()
+            update_session_auth_hash(request, user)
+            messages.add_message(request, messages.SUCCESS, 'Das Passwort wurde erfolgreich geändert')
+            return HttpResponseRedirect(reverse('app:startPage'))
+
+    else:
+        form = SetPasswordForm(user=user)
+    action = reverse('app_user:new_password', kwargs={'uuid': uuid})
+    return render_to_response('app_user/password.html', {'form': form, 'action': action}, RequestContext(request))
