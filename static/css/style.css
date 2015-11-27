@@ -12,6 +12,11 @@ main {
 }
 
 /* */
+
+a {
+  color: #26A69A;
+}
+
 nav ul a,
 nav .brand-logo {
   color: #444;
