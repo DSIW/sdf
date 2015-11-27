@@ -44,6 +44,12 @@ class Book(models.Model):
     def offer(self):
         return self.offer_set.first()
 
+    def is_in_active_payment_process(self):
+        return Payment.objects.filter(book=self, payment_status__in=ACTIVE_PAYMENT_STATUSES).count() > 0
+
+    def active_payment(self):
+        return Payment.objects.filter(book=self, payment_status__in=ACTIVE_PAYMENT_STATUSES).first()
+
 
 class Offer(models.Model):
     seller_user = models.ForeignKey(User)
@@ -63,9 +69,6 @@ class Offer(models.Model):
 
     def active_counteroffers(self):
         return self.counteroffer_set.filter(offer=self, active=True).count()
-
-    def is_in_active_payment_process(self):
-        return Payment.objects.filter(book=self.book, payment_status__in=ACTIVE_PAYMENT_STATUSES).count() > 0
 
 
 class Counteroffer(models.Model):

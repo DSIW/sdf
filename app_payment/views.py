@@ -22,10 +22,9 @@ def start_paypal_payment(request, id):
     if request.method != 'POST':
         raise BaseException('Use POST request for starting payments.')
 
-    offer = Offer.objects.filter(id=id).first()
-    buyer = request.user
-
     payment = Payment()
+    offer = Offer.objects.get(id=id)
+    buyer = request.user
     payment.init_process(offer, buyer)
     payment.save()
 

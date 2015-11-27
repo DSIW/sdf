@@ -18,6 +18,9 @@ def complete_payment(payment):
     book = payment.book
     book.user = payment.buyer_user
     book.save()
+    offer = book.offer()
+    offer.seller_user = payment.buyer_user
+    offer.save()
 
     # remove book from showcase
     unpublish_book(book)

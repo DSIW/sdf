@@ -18,7 +18,7 @@
             </div>
             <div class="col s8">
                 <p>Status:
-                    {% if book.offer.is_in_active_payment_process %}
+                    {% if book.is_in_active_payment_process %}
                         <span class="sdf-badge">Im Bezahlungsprozess</span>
                     {% elif book.is_published %}
                         <span class="sdf-badge">Öffentlich</span>
@@ -28,7 +28,10 @@
                 </p>
                 <p>Autor: <strong>{{ book.author }}</strong></p>
                 <p>Seitenanzahl: <strong>{{ book.pageNumber }}</strong></p>
-                <p>Verkäufer: <strong><a href="{% url 'app_book:showcase' book.user.id %}">{{ book.user.pseudonym_or_full_name }}</a></strong></p>
+                <p>Verkäufer: <strong><a href="{% url 'app_book:showcase' book.offer.seller_user.id %}">{{ book.offer.seller_user.pseudonym_or_full_name }}</a> | Paypal: {{ book.user.paypal }}</strong></p>
+                {% if request.user.id == book.active_payment.buyer_user.id %}
+                    <p>Käufer: <strong>{{ book.active_payment.buyer_user.pseudonym_or_full_name }} | Paypal: {{ book.active_payment.buyer_user.paypal }}</strong></p>
+                {% endif %}
                 <p>Verkaufsort: <strong><a href="https://www.google.de/maps?q={{ book.user.location }}" target="_new">{{ book.user.location }}</a></strong></p>
                 <p>Verkäuferbewertung:
                     <strong>
@@ -53,17 +56,19 @@
 
                 <div class="form-actions right-align">
                     <img width="70px" style="float: left;" src="{% static "img/paypal.png" %}">
-                    {% if book.is_published %}
-                        <a href="{% url 'app_book:unpublishBook' book.id %}" data-method="put" data-confirm="true" data-confirm-custom="Wenn Sie das Angebot zurück ziehen, werden alle unbeantworteten Preisvorschläge abgelehnt. Sind Sie sicher, dass Sie fortfahren möchten?" data-confirm-ok="Nicht veröffentlichen" class="btn">Nicht veröffentlichen</a>
-                        {% if book.offer.is_in_active_payment_process or book.user.id == request.user.id %}
-                            <a href="javascript:;" class="btn disabled">Im Bezahlprozess...</a>
-                            <a href="javascript:;" style="margin-top: 5px;" class="right disabled">Anderen Preis vorschlagen</a>
-                        {% else %}
-                            <a href="{% url 'app_payment:start_paypal_payment' book.offer.id %}" data-method="post" class="btn">Für {{ book.total_price|currency }} Kaufen</a>
-                            <a href="{% url 'app_book:new_counteroffer' book.offer.id %}" style="margin-top: 5px;" class="right">Anderen Preis vorschlagen</a>
-                        {% endif %}
-                    {% else %}
+                    {% if not book.is_published %}
                         <a href="{% url 'app_book:publishBook' book.id %}" class="btn">Veröffentlichen</a>
+                    {% elif book.user.id == request.user.id %}
+                        {% if book.is_in_active_payment_process %}
+                            <a href="javascript:;" data-method="put" class="btn disabled">Nicht veröffentlichen</a>
+                        {% else %}
+                            <a href="{% url 'app_book:unpublishBook' book.id %}" data-method="put" data-confirm="true" data-confirm-custom="Wenn Sie das Angebot zurück ziehen, werden alle unbeantworteten Preisvorschläge abgelehnt. Sind Sie sicher, dass Sie fortfahren möchten?" data-confirm-ok="Nicht veröffentlichen" class="btn">Nicht veröffentlichen</a>
+                        {% endif %}
+                    {% elif book.is_in_active_payment_process %}
+                        <a href="javascript:;" class="btn disabled">Im Bezahlprozess...</a>
+                    {% else %}
+                        <a href="{% url 'app_payment:start_paypal_payment' book.offer.id %}" data-method="post" class="btn">Für {{ book.total_price|currency }} Kaufen</a><br />
+                        <a href="{% url 'app_book:new_counteroffer' book.offer.id %}" style="margin-top: 5px;" class="right">Anderen Preis vorschlagen</a>
                     {% endif %}
                 </div>
             </div>
