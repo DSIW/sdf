@@ -1,5 +1,8 @@
 /* Global styles */
 
+/* Show scroller every time */
+html {overflow-y: scroll;}
+
 /* Sticky footer */
 body {
   display: flex;
