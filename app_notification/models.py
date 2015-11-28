@@ -31,8 +31,8 @@ class Notification(models.Model):
 
     @staticmethod
     def fastbuy(buyer, seller, book):
-        subject = 'Buch ' + book.name + ' wurde gekauft'
-        msg = 'Das von Ihnen zum Verkauf gestellte Buch: "' + book.name + '" wurde verkauft. Der Benutzer ' + buyer.full_name() + ' hat das Buch gekauft'
+        subject = 'Verkauf von "' + book.name + '"'
+        msg = 'Der Benutzer ' + buyer.full_name() + ' hat Ihr Buch '+book.name+' gekauft.'
 
         notification = Notification(
             subject=subject,
