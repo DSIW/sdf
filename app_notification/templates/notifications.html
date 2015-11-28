@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block body_classes %}archive{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h4>
+            Ihre Notifications
+        </h4>
+
+        <div id="accordion">
+            <ul class="collapsible" data-collapsible="accordion">
+                {% for notification in notifications %}
+                    <li>
+                        <div class="collapsible-header">
+                            <strong>{{ notification.received_date }}: {{ notification.subject }}</strong></div>
+                        <div class="collapsible-body"><p>{{ notification.message }}</p>
+
+                            <!-- Wird nur angezeigt wenn ein Preisvorschlag gemacht wurde -->
+                            {% if notification.notification_type == "COUNTEROFFER" and notification.counter_offer.active == True %}
+                                <div class="row text-right">
+                                    <div class="col s3">
+                                        <a href="{% url 'app_book:accept_counteroffer' notification.counter_offer.id %}"
+                                           class="btn waves-effect waves-light">Annehmen</a>
+                                    </div>
+                                    <div class="col s3">
+                                        <a href="{% url 'app_book:decline_counteroffer' notification.counter_offer.id %}"
+                                           class="btn waves-effect waves-light">Ablehnen</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <!-- Wird nur angezeigt wenn ein Preisvorschlag angenommen wurde -->
+                            {% if notification.notification_type == "COUNTEROFFER_ACCEPT" %}
+                                <div class="row text-right">
+                                    <div class="col s3">
+                                        <a href="#" class="btn waves-effect waves-light">Bezahlen</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.collapsible').collapsible({
+                accordion: true // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+            });
+        });
+    </script>
+{% endblock %}

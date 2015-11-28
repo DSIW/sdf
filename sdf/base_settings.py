@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'braces',
     'app_book',
     'app_user',
+    'app_notification',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -126,4 +127,3 @@ STATICFILES_DIRS = (
 # Media files (book-images, profil-images)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-

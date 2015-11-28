@@ -55,6 +55,7 @@ class Counteroffer(models.Model):
         if self.active:
             self.accepted=True
             self.active=False
+            self.save()
         else:
             raise BaseException("Counteroffer is not active anymore")
 
@@ -62,6 +63,7 @@ class Counteroffer(models.Model):
         if self.active:
             self.accepted=False
             self.active=False
+            self.save()
         else:
             raise BaseException("Counteroffer is not active anymore")
 
