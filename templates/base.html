@@ -36,7 +36,7 @@
                 <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
                 <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
                 <li><a href="{% url 'app_notification:notificationsPage' %}"><i class="material-icons tooltipped" data-tooltip="Nachrichten">notifications</i></a></li>
-                <li><a class="dropdown-button" href="javascript:;" data-constrainwidth="false" data-activates="nav-dropdown-profile">{{ request.user.pseudonym_or_full_name }}<i class="material-icons right">arrow_drop_down</i></a></li>
+                <li><a class="dropdown-button" href="javascript:;" data-constrainwidth="false" data-activates="nav-dropdown-profile">{{ request.current_user.pseudonym_or_full_name }}<i class="material-icons right">arrow_drop_down</i></a></li>
             </ul>
             {% endif %}
             <div class="right">
