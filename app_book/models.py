@@ -26,18 +26,21 @@ class Book(models.Model):
     def is_published(self):
         return self.offer_set.count() > 0 and self.offer_set.first().active
 
+    def is_private(self):
+        return self.offer() is None
+
     def price(self):
-        if self.offer() is None:
+        if self.is_private():
             return 0.0
         return self.offer().price
 
     def shipping_price(self):
-        if self.offer() is None:
+        if self.is_private():
             return 0.0
         return self.offer().shipping_price
 
     def total_price(self):
-        if self.offer() is None:
+        if self.is_private():
             return 0.0
         return self.offer().totalPrice()
 

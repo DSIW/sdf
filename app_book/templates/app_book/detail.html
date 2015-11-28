@@ -28,7 +28,11 @@
                 </p>
                 <p>Autor: <strong>{{ book.author }}</strong></p>
                 <p>Seitenanzahl: <strong>{{ book.pageNumber }}</strong></p>
-                <p>Verkäufer: <strong><a href="{% url 'app_book:showcase' book.offer.seller_user.id %}">{{ book.offer.seller_user.pseudonym_or_full_name }}</a> | Paypal: {{ book.user.paypal }}</strong></p>
+                {% if book.is_published %}
+                    <p>Verkäufer: <strong><a href="{% url 'app_book:showcase' book.offer.seller_user.id %}">{{ book.offer.seller_user.pseudonym_or_full_name }}</a> | Paypal: {{ book.offer.seller_user.paypal }}</strong></p>
+                {% else %}
+                    <p>Besitzer: <strong><a href="{% url 'app_book:showcase' book.user.id %}">{{ book.user.pseudonym_or_full_name }}</a></strong></p>
+                {% endif %}
                 {% if request.user.id == book.active_payment.buyer_user.id %}
                     <p>Käufer: <strong>{{ book.active_payment.buyer_user.pseudonym_or_full_name }} | Paypal: {{ book.active_payment.buyer_user.paypal }}</strong></p>
                 {% endif %}
