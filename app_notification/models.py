@@ -81,7 +81,7 @@ class Notification(models.Model):
     def counteroffer_accept(counteroffer, buyer, book):
         # Preisvorschlag akzeptiert
         subject = 'Preisvorschlag für das Buch ' + book.name + ' wurde akzeptiert.'
-        msg = 'Der von Ihnen vorgeschlagene Preis für das Buch: "' + book.name + '" in  Höhe von ' + str(counteroffer.price) + ' wurde von dem Verkäufer akzeptiert.'
+        msg = 'Der von Ihnen vorgeschlagene Preis für das Buch: "' + book.name + '" in  Höhe von ' + template_extras.currency(counteroffer.price) + ' wurde von dem Verkäufer akzeptiert.'
 
         notification = Notification(
             subject=subject,
