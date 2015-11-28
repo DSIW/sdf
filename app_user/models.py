@@ -2,10 +2,13 @@
 
 from django.db import models
 from django.contrib.auth.models  import User as AuthUser, BaseUserManager
+from sdf.base_settings import *
 
 def user_directory_path(instance, filename):
     ext = filename.split('.')[-1]
-    return 'images/profiles/profile_{0}.{1}'.format(instance.id, ext)
+    upload_dir_path = 'images/profiles/profile_{0}.{1}'.format(instance.id, ext)
+    os.remove(os.path.join(MEDIA_ROOT, upload_dir_path)) if os.path.exists(os.path.join(MEDIA_ROOT, upload_dir_path)) else None
+    return upload_dir_path
 
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None):
@@ -42,7 +45,7 @@ class User(AuthUser):
                                                         'invalid': 'Bitte eine gültige E-Mail-Adresse angeben.'}
 
     emailConfirm = models.BooleanField(default=False,verbose_name='E-mail bestätigt')
-    profileImage = models.FileField(upload_to=user_directory_path, null=True)
+    profileImage = models.ImageField(upload_to=user_directory_path, null=True)
     location = models.CharField(max_length=255, default='')
     paypal = models.CharField(max_length=50)
     user_ptr = models.OneToOneField(AuthUser)
