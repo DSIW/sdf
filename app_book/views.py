@@ -256,8 +256,8 @@ def counteroffer(request, id):
         counteroffer = Counteroffer.objects.get(offer=offer.id, creator=user.id, active=True)
         messages.add_message(request, messages.INFO, 'Sie haben für dieses Buch bereits einen Preisvorschlag abgegeben, der noch aussteht')
     except Counteroffer.DoesNotExist:
-        obj = Counteroffer(offer=offer, creator=user, price=offer.totalPrice(), active=True, accepted=False)
-        offer_form = CounterofferForm(instance=obj)
+        counter_offer = Counteroffer(offer=offer, creator=user, price=offer.totalPrice(), active=True, accepted=False)
+        offer_form = CounterofferForm(instance=counter_offer)
         if request.method == 'GET':
             return render_to_response('app_book/_counteroffer_form.html', {
                 "form": offer_form,
@@ -265,15 +265,15 @@ def counteroffer(request, id):
                 "book": book,
             }, RequestContext(request))
         elif request.method == 'POST':
-            obj.save()
+            counter_offer.price = request.POST['price']
+            counter_offer.save()
             messages.add_message(request, messages.SUCCESS, 'Der Preisvorschlag wurde abgegeben. Sie werden benachrichtigt, sobald der Verkäufer antwortet')
-            offer.counteroffer_set.add(obj);
+            offer.counteroffer_set.add(counter_offer);
             offer.save()
 
             seller = get_object_or_404(User, id=offer.seller_user.id)
-            Notification.counteroffer(obj,seller,user,book)
-        else:
-            raise ("Use http method POST for making a counteroffer")
+            Notification.counteroffer(counter_offer,seller,user,book)
+
     # TODO: redirect to previos page (not to showcase)
     # return HttpResponseRedirect(request.REQUEST.get('next', '')) ### WARN: This ends up in endless-loop
     return showcaseView(request, offer.seller_user.id)
