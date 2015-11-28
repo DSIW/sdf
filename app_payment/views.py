@@ -22,12 +22,13 @@ from .services import complete_payment, abort_payment, update_payment_from_paypa
 def start_paypal_payment(request, id):
     template_name = 'app_payment/payment_start.html'
 
+    offer = Offer.objects.get(id=id)
+
     if request.method != 'POST':
-        raise BaseException('Use POST request for starting payments.')
+        return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': offer.book.id}))
 
     payment = Payment()
-    offer = Offer.objects.get(id=id)
-    payment.init_process(offer, request.user)
+    payment.init_process(offer, request.current_user)
     payment.save()
 
     form = PayPalPaymentsForm(initial = {
