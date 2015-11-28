@@ -12,6 +12,11 @@ main {
 }
 
 /* */
+
+a {
+  color: #26A69A;
+}
+
 nav ul a,
 nav .brand-logo {
   color: #444;
@@ -61,8 +66,8 @@ p {
 nav {
   margin-bottom: 30px;
 }
-body.page-start nav {
-  margin-bottom: 0px;
+body.page-start main {
+  padding-top: 0;
 }
 
 
@@ -99,7 +104,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   left: 50%;
   top: 75px;
   transform: translateX(-50%);
-  z-index: 1000;
+  z-index: 50;
   background-color: white;
   font-weight: 300;
   font-size: 1.2em;
@@ -180,6 +185,16 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 }
 
 /* MaterialCSS fixes */
+
+.nav-fixed {
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+}
+.nav-fixed + main {
+  margin-top: 64px;
+  padding-top: 20px;
+}
 
 .collection h4 .secondary-content {
   font-size: 0.5em;

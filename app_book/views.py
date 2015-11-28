@@ -15,6 +15,7 @@ import watson
 import collections
 
 from app_user.models import User
+from app_notification.models import Notification
 from app_user.forms import RegistrationForm
 
 from .models import Book, Offer, Counteroffer
@@ -222,9 +223,12 @@ def unpublishBook(request, id):
             offer.save()
         messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun nicht mehr zum Verkauf angeboten!')
         # decline all active counteroffers:
-        Counteroffer.objects.filter(offer=offer, active=True).update(active=False, accepted=False)
-        # TODO: Send out Notifications to all Users who made counteroffers which got declined now
+        counteroffers = Counteroffer.objects.filter(offer=offer, active=True)
+        for co in counteroffers:
+            Notification.counteroffer_decline(co, co.creator, book)
         # use GET request for redirected location via HTTP status code 303 (see other).
+
+        counteroffers.update(active=False, accepted=False)
         return HttpResponseRedirect(reverse('app_book:archivesPage'))
     else:
         raise ("Use http method PUT for unpublishing a book.")
@@ -241,10 +245,10 @@ def searchBookResults(request):
 
 def counteroffer(request, id):
     offer = get_object_or_404(Offer, id=id)
-    user = get_object_or_404(User, id=request.user._get_pk_val)
-    book = get_object_or_404(Book, id=offer.book._get_pk_val)
+    user = get_object_or_404(User, id=request.user.id)
+    book = get_object_or_404(Book, id=offer.book.id)
     try:
-        counteroffer = Counteroffer.objects.get(offer=offer._get_pk_val, creator=user._get_pk_val, active=True)
+        counteroffer = Counteroffer.objects.get(offer=offer.id, creator=user.id, active=True)
         messages.add_message(request, messages.INFO, 'Sie haben für dieses Buch bereits einen Preisvorschlag abgegeben, der noch aussteht')
     except Counteroffer.DoesNotExist:
         obj = Counteroffer(offer=offer, creator=user, price=offer.totalPrice(), active=True, accepted=False)
@@ -260,9 +264,39 @@ def counteroffer(request, id):
             messages.add_message(request, messages.SUCCESS, 'Der Preisvorschlag wurde abgegeben. Sie werden benachrichtigt, sobald der Verkäufer antwortet')
             offer.counteroffer_set.add(obj);
             offer.save()
+
+            seller = get_object_or_404(User, id=offer.seller_user.id)
             # TODO: Send notification to seller (= persist Notification)
+            Notification.counteroffer(obj,seller,user,book)
         else:
             raise ("Use http method POST for making a counteroffer")
     # TODO: redirect to previos page (not to showcase)
     # return HttpResponseRedirect(request.REQUEST.get('next', '')) ### WARN: This ends up in endless-loop
     return showcaseView(request, offer.seller_user.id)
+
+def accept_counteroffer(request, id):
+    counteroffer = get_object_or_404(Counteroffer, id=id)
+    buyer = get_object_or_404(User, id=counteroffer.creator.id)
+    offer = get_object_or_404(Offer, id=counteroffer.offer.id)
+    book = get_object_or_404(Book, id=offer.book.id)
+
+    #Akzeptiere
+    Notification.counteroffer_accept(counteroffer,buyer,book)
+    counteroffer.accept()
+    messages.add_message(request, messages.SUCCESS, 'Der Preisvorschlag wurde erfolgreich angenommen. Der Interessent wird benachrichtigt')
+
+    return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
+
+def decline_counteroffer(request, id):
+    counteroffer = get_object_or_404(Counteroffer, id=id)
+    buyer = get_object_or_404(User, id=counteroffer.creator.id)
+    offer = get_object_or_404(Offer, id=counteroffer.offer.id)
+    book = get_object_or_404(Book, id=offer.book.id)
+
+    #Akzeptiere nicht
+    Notification.counteroffer_decline(counteroffer,buyer,book)
+    counteroffer.decline()
+    messages.add_message(request, messages.SUCCESS, 'Der Preisvorschlag wurde erfolgreich abgelehnt. Der Interessent wird benachrichtigt')
+
+    return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
+

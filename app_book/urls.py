@@ -21,5 +21,7 @@ urlpatterns = [
 
     # offers
     url(r'^offers/(?P<id>[0-9]+)/new_counteroffer', views.counteroffer, name='new_counteroffer'),
+    url(r'^counteroffers/(?P<id>[0-9]+)/accept', views.accept_counteroffer, name='accept_counteroffer'),
+    url(r'^counteroffers/(?P<id>[0-9]+)/decline', views.decline_counteroffer, name='decline_counteroffer'),
 ]
 
