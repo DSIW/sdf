@@ -8,6 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 from paypal.standard.ipn.signals import valid_ipn_received
 from paypal.standard.forms import PayPalPaymentsForm
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 import json
 
 
@@ -16,6 +18,7 @@ from app_user.models import User
 from .models import Payment
 from .services import complete_payment, abort_payment, update_payment_from_paypal_ipn
 
+@login_required
 def start_paypal_payment(request, id):
     template_name = 'app_payment/payment_start.html'
 
@@ -46,6 +49,7 @@ def start_paypal_payment(request, id):
     },  RequestContext(request))
 
 @csrf_exempt
+@login_required
 def paypal_complete(request, id):
     payment = Payment.objects.filter(id=id).first()
     complete_payment(payment)
@@ -53,6 +57,7 @@ def paypal_complete(request, id):
     return render(request, "app_payment/payment_success.html")
 
 @csrf_exempt
+@login_required
 def paypal_abort(request, id):
     payment = Payment.objects.filter(id=id).first()
     abort_payment(payment)
