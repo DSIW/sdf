@@ -52,11 +52,13 @@
                     Beschreibung:<br />
                     {{ book.description }}
                 </p>
-                <div class="right-align">
-                    <p>Preis: <strong>{{ book.price|currency }}</strong></p>
-                    <p>Versandkosten: <strong>{{ book.shipping_price|currency }}</strong></p>
-                    <p class="price-total"><strong>Gesamt: {{ book.total_price|currency }}</strong></p>
-                </div>
+                {% if book.is_published %}
+                    <div class="right-align">
+                        <p>Preis: <strong>{{ book.price|currency }}</strong></p>
+                        <p>Versandkosten: <strong>{{ book.shipping_price|currency }}</strong></p>
+                        <p class="price-total"><strong>Gesamt: {{ book.total_price|currency }}</strong></p>
+                    </div>
+                {% endif %}
 
                 <div class="form-actions right-align">
                     <img width="70px" style="float: left;" src="{% static "img/paypal.png" %}">
