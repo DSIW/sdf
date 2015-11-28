@@ -1,4 +1,5 @@
 from app_book.models import Book
+from app_notification.models import Notification
 from .models import Payment
 from app_book.services import unpublish_book
 from paypal.standard.models import *
@@ -19,16 +20,13 @@ def complete_payment(payment):
     # remove book from showcase
     unpublish_book(book)
 
-    # TODO notify seller
-    # TODO notify buyer
+    # notify seller
+    Notification.fastbuy(payment.buyer_user, payment.seller_user, payment.book)
 
 def abort_payment(payment):
     # remove book payment status
     payment.payment_status = ST_PP_CANCELLED
     payment.save()
-
-    # TODO notify seller
-    # TODO notify buyer
 
 def update_payment_from_paypal_ipn(payment, paypal_ipn):
     payment.payment_status = paypal_ipn.payment_status
