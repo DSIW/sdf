@@ -48,10 +48,12 @@
                         </span>
                     </strong>
                 </p>
-                <p>
-                    Beschreibung:<br />
-                    {{ book.description }}
-                </p>
+                {% if book.description %}
+                    <p>
+                        Beschreibung:<br />
+                        {{ book.description }}
+                    </p>
+                {% endif %}
                 {% if book.is_published %}
                     <div class="right-align">
                         <p>Preis: <strong>{{ book.price|currency }}</strong></p>
