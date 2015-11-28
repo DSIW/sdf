@@ -8,6 +8,7 @@ ipython-genutils==0.1.0
 path.py==8.1.2
 pexpect==4.0.1
 pickleshare==0.5
+Pillow==3.0.0
 ptyprocess==0.5
 python-dateutil==2.4.2
 simplegeneric==0.8.1

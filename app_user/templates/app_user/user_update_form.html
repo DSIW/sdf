@@ -6,8 +6,8 @@
   <div class="container">
     <h1>Account bearbeiten</h1>
 
-    <form action="{% url 'app_user:edit_profile' user.id %}" method="post">{% csrf_token %}
-        <input type="hidden" name="_method" value="put" />
+    <form action="{% url 'app_user:edit_profile' user.id %}" enctype="multipart/form-data" method="POST">{% csrf_token %}
+        
         {% for field in form.visible_fields %}
         <div class="input-field {% if field.errors %}has-error{% endif %}">
             {{ field }}
