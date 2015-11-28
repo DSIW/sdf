@@ -64,7 +64,8 @@
 
                 <div class="form-actions right-align">
                     <img width="70px" style="float: left;" src="{% static "img/paypal.png" %}">
-                    {% if not book.is_published %}
+                    {% if book.is_private %}
+                        <a href="{% url 'app_book:editBook' book.id %}" class="btn">Bearbeiten</a>
                         <a href="{% url 'app_book:publishBook' book.id %}" class="btn">Veröffentlichen</a>
                     {% elif book.user.id == request.user.id %}
                         {% if book.is_in_active_payment_process %}

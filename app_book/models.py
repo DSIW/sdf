@@ -27,7 +27,7 @@ class Book(models.Model):
         return self.offer_set.count() > 0 and self.offer_set.first().active
 
     def is_private(self):
-        return self.offer() is None
+        return not self.is_published()
 
     def price(self):
         if self.is_private():
