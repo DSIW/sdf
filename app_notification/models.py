@@ -24,7 +24,7 @@ class Notification(models.Model):
     message = models.TextField(max_length=1500)
     subject = models.CharField(max_length=200)
     received_date = models.DateTimeField('received_date')
-    counter_offer = models.OneToOneField(Counteroffer, default=None, null=True, blank=True)
+    counter_offer = models.ForeignKey(Counteroffer, default=None, null=True, blank=True)
     notification_type = models.CharField(max_length=200,
                                          choices=NOTIFICATION_TYPE,
                                          default=FASTBUY)
@@ -71,7 +71,8 @@ class Notification(models.Model):
             message=msg,
             received_date=datetime.now(),
             notification_type=Notification.COUNTEROFFER_DECLINE,
-            receiver_user=buyer
+            receiver_user=buyer,
+            counter_offer=counteroffer
         )
 
         notification.save()
@@ -87,7 +88,8 @@ class Notification(models.Model):
             message=msg,
             received_date=datetime.now(),
             notification_type=Notification.COUNTEROFFER_ACCEPT,
-            receiver_user=buyer
+            receiver_user=buyer,
+            counter_offer=counteroffer
         )
 
         notification.save()
