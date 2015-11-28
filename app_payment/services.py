@@ -3,12 +3,6 @@ from .models import Payment
 from app_book.services import unpublish_book
 from paypal.standard.models import *
 
-def init_payment(payment):
-    # add book payment status
-    # hide book via is_in_payment_process
-    # show book for buyer and seller
-    pass
-
 def complete_payment(payment):
     # remove book payment status
     payment.payment_status = ST_PP_COMPLETED

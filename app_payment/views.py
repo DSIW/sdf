@@ -13,7 +13,7 @@ from django.http import HttpResponseRedirect
 import json
 
 
-from app_book.models import Book, Offer
+from app_book.models import Book, Offer, Counteroffer
 from app_user.models import User
 from .models import Payment
 from .services import complete_payment, abort_payment, update_payment_from_paypal_ipn
@@ -29,6 +29,38 @@ def start_paypal_payment(request, id):
 
     payment = Payment()
     payment.init_process(offer, request.current_user)
+    payment.save()
+
+    form = PayPalPaymentsForm(initial = {
+        "business": payment.business,
+        "amount": payment.amount,
+        "item_name": payment.item_name,
+        "invoice": payment.invoice,
+        "currency_code": payment.currency_code,
+        "notify_url": settings.ENDPOINT + reverse('app_payment:paypal-ipn'),
+        "return_url": settings.ENDPOINT + reverse('app_payment:payment-success', kwargs={'id': payment.id}),
+        "cancel_return": settings.ENDPOINT + reverse('app_payment:payment-cancel', kwargs={'id': payment.id}),
+        "custom": payment.custom
+    })
+
+    messages.add_message(request, messages.SUCCESS, 'Das Buch ist nun im Bezahlprozess. Sie werden in Kürze zu Paypal weitergeleitet...')
+
+    return render_to_response(template_name, {
+        "payment_form": form,
+    },  RequestContext(request))
+
+@login_required
+def start_paypal_payment_by_counter_offer(request, id):
+    template_name = 'app_payment/payment_start.html'
+
+    counter_offer = Counteroffer.objects.get(id=id)
+
+    if request.method != 'POST':
+        return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': counter_offer.offer.book.id}))
+
+    payment = Payment()
+    payment.init_process(counter_offer.offer, request.current_user)
+    payment.amount = counter_offer.price
     payment.save()
 
     form = PayPalPaymentsForm(initial = {

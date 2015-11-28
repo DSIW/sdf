@@ -35,7 +35,7 @@
                                 {% if notification.notification_type == "COUNTEROFFER_ACCEPT" %}
                                     <div class="row text-right">
                                         <div class="col s3">
-                                        <a href="{% url 'app_payment:start_paypal_payment' notification.counter_offer.id %}" data-method="post" class="btn waves-effect waves-light">Bezahlen</a>
+                                        <a href="{% url 'app_payment:start_paypal_payment_by_counter_offer' notification.counter_offer.id %}" data-method="post" class="btn waves-effect waves-light">Bezahlen</a>
                                         </div>
                                     </div>
                                 {% endif %}
