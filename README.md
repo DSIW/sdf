@@ -56,6 +56,15 @@ If you already have a populated database, you also need to build the indices:
 
 1. `manage.py buildwatson`
 
+
+## Getting Pillow to work
+
+Pillow is needed for image processing.
+For `Pillow` to work, you need to execute the following tasks:
+
+1. install `python-image` via package manager (e.g. `apt-get install python-image`)
+1. `pip3 install -r requirements.txt`
+
 ## Important Style Guide
 
 ### Python
