@@ -3,11 +3,14 @@
 from django.db import models
 from django.contrib.auth.models  import User as AuthUser, BaseUserManager
 from sdf.base_settings import *
+import glob
 
 def user_directory_path(instance, filename):
     ext = filename.split('.')[-1]
     upload_dir_path = 'images/profiles/profile_{0}.{1}'.format(instance.id, ext)
-    os.remove(os.path.join(MEDIA_ROOT, upload_dir_path)) if os.path.exists(os.path.join(MEDIA_ROOT, upload_dir_path)) else None
+    profile_images = glob.glob(os.path.join(MEDIA_ROOT, 'images/profiles/profile_{0}.*'.format(instance.id)))
+    for image in profile_images:
+        os.remove(image)
     return upload_dir_path
 
 class MyUserManager(BaseUserManager):
