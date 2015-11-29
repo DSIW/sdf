@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 
 from django.http import HttpRequest
 from django.utils.crypto import get_random_string

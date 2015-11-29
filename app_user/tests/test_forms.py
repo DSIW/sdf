@@ -1,3 +1,4 @@
+﻿# -*- coding: utf-8 -*-
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import call_command
 from django.test import TestCase, RequestFactory
@@ -29,7 +30,7 @@ class FormTests(TestCase):
 
     def test_registerAlreadyTakenNickname(self):
         data = self.form_data.copy()
-        data['username'] = 'test'
+        data['username'] = 'testuser_fixture'
         form = RegistrationForm(data=data)
         self.assertFalse(form.is_valid())
 
@@ -48,3 +49,8 @@ class FormTests(TestCase):
         data['password1'] = 'test1'
         form = RegistrationForm(data=data)
         self.assertFalse(form.is_valid())
+    def test_registerWithEmptyUsername(self):
+        data = self.form_data.copy()
+        data['username'] = None
+        form = RegistrationForm(data=data)
+        self.assertTrue(form.is_valid())
