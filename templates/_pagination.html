@@ -1,20 +1,20 @@
 <ul class="pagination">
-    {% if offers.has_previous %}
-        <li class="waves-effect"><a href="?page={{ offers.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+    {% if items.has_previous %}
+        <li class="waves-effect"><a href="?page={{ items.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
     {% else %}
         <li class="waves-effect disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
     {% endif %}
 
-    {% for page in offers.paginator.page_range %}
-        {% if page == offers.number %}
+    {% for page in items.paginator.page_range %}
+        {% if page == items.number %}
             <li class="active"><a href="?page={{ page }}">{{ page }}</a></li>
         {% else %}
             <li class="waves-effect"><a href="?page={{ page }}">{{ page }}</a></li>
         {% endif %}
     {% endfor %}
 
-    {% if offers.has_next %}
-        <li class="waves-effect"><a href="?page={{ offers.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+    {% if items.has_next %}
+        <li class="waves-effect"><a href="?page={{ items.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
     {% else %}
         <li class="waves-effect disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
     {% endif %}
