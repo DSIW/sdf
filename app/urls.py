@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
     # session
-    url(r'^login$', auth_views.login, name='login'),
+
     url(r'^logout$', auth_views.logout, name='logout'),
     url(r'^imprint$', views.page_info, {"template_name":"app/page_info.html","title":"Impressum"}, name='imprint'),
     url(r'^agb$', views.page_info, {"template_name":"app/page_info.html","title":"AGB"}, name='agb'),
@@ -23,3 +23,4 @@ urlpatterns = [
     url(r'^team$', views.page_info, {"template_name":"app/page_info.html","title":"Team"}, name='team'),
     url(r'^job$', views.page_info, {"template_name":"app/page_info.html","title":"Job"}, name='job'),
 ]
+

@@ -6,11 +6,13 @@ from django.http import HttpRequest
 from django.utils.crypto import get_random_string
 from django.core.urlresolvers import reverse
 from django.forms import ModelForm
-from django.core.mail import EmailMessage
+from django.core.mail import send_mail
 from django.contrib.auth.forms import UserCreationForm
 
 from .models import User, ConfirmEmail
 from app.widgets import CustomFileInput
+from sdf import settings
+
 
 class RegistrationForm(UserCreationForm):
     first_name = forms.TextInput()
@@ -54,21 +56,29 @@ class RegistrationForm(UserCreationForm):
         return user
 
     def sendConfirmEmail(self, request, user):
-        confirmId = get_random_string(length=32)
-        link = 'http://' + HttpRequest.get_host(request) + reverse('app_user:confirm_email', kwargs={'uuid': confirmId})
+        confirmEmail = ConfirmEmail.objects.filter(user=user).first()
+        if confirmEmail is None:
+            confirmId = get_random_string(length=32)
+            user = User.objects.filter(email=request.POST.get('email')).first()
+            confirmEmail = ConfirmEmail()
+            confirmEmail.uuid = confirmId
+            confirmEmail.user = user
+            confirmEmail.save()
+        link = 'http://' + HttpRequest.get_host(request) + reverse('app_user:confirm_email', kwargs={'uuid': confirmEmail.uuid})
+        emailMessage = 'Hallo '+ request.POST.get('first_name') + ' '+request.POST.get('last_name') +', <br><br>vielen dank für die Registrierung in book².<br> Zur Bestätigung Ihrer E-Mail Adresse betätigen Sie bitte folgenden Link: <a href="' + link + '">Bestätigen</a><br>Sollten Sie den Link nicht nutzen könnten dann kopieren Sie bitte folgende URL in Ihren Browser:<br> ' + link + '<br><br>Wir wünschen Ihnen viel Spaß beim Shoppen<br>Ihr book² team'
+        EmailThread('Registrierungsbestätigung book²', emailMessage, request).start()
 
-        emailMessage = 'Hallo '+ request.POST.get('first_name') + ' ' + request.POST.get('last_name') + ', <br><br>vielen dank für die Registrierung in book².<br> Zur Bestätigung Ihrer E-Mail Adresse betätigen Sie bitte folgenden Link: <a href="' + link + '">Bestätigen</a><br>Sollten Sie den Link nicht nutzen könnten dann kopieren Sie bitte folgende URL in Ihren Browser:<br> ' + link + '<br><br>Wir wünschen Ihnen viel Spaß beim Shoppen<br>Ihr book² team'
-        msg = EmailMessage('Registrierungsbestätigung book²', emailMessage, [], [request.POST.get('email')])
-        msg.content_subtype = "html"
-        result = msg.send()
 
-        if result:
-           confirmEmail = ConfirmEmail()
-           confirmEmail.uuid = confirmId
-           confirmEmail.user = user
-           confirmEmail.save()
+class EmailThread(threading.Thread):
+    def __init__(self, subject, emailMessage, request):
+        self.subject = subject
+        self.emailMessage = emailMessage
+        self.request = request
+        threading.Thread.__init__(self)
 
-        return result
+    def run (self):
+        send_mail(self.subject, self.emailMessage, settings.EMAIL_HOST_USER,
+                  [self.request.POST.get('email')], fail_silently=True, html_message=self.emailMessage)
 
 class CustomUpdateForm(ModelForm):
 

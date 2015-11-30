@@ -2,6 +2,7 @@
 
 from django.http import HttpRequest
 from django.utils.crypto import get_random_string
+from django.utils.html import format_html
 from django.views.generic.edit import UpdateView
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -11,7 +12,10 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.forms import SetPasswordForm
-from django.contrib.auth import update_session_auth_hash
+
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import update_session_auth_hash, authenticate, login
+from django.contrib.auth.views import login as loginview
 
 from django.core.mail import EmailMessage
 from .models import User, ConfirmEmail, PasswordReset
@@ -22,9 +26,40 @@ from django.utils.translation import ugettext_lazy as _
 from braces.views import FormMessagesMixin
 from smtplib import SMTPRecipientsRefused
 from .models import User, ConfirmEmail
-from .forms import CustomUpdateForm,RegistrationForm
+from .forms import CustomUpdateForm, RegistrationForm
+
 
 # Custom Current User Decorator
+from sdf import settings
+
+def login_user(request):
+    form = AuthenticationForm
+    if request.method == "POST":
+
+        email = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(email=email, password=password)
+        if user is not None:
+            if user.is_active:
+                if User.objects.filter(pk=user.id).first().emailConfirm == 1:
+                    login(request, user)
+                    # Redirect to a success page.
+                elif settings.DEBUG:
+                    messages.add_message(request, messages.INFO, format_html("Die E-Mail-Adresse wurde noch nicht bestätigt. Debugmodus aktiv, Login gestattet. <a href='{}'>Aktivierungslink erneut zusenden</a>", reverse('app_user:resend_confirmation_mail', kwargs={'email': email})))
+                    login(request, user)
+                else:
+                    messages.add_message(request, messages.ERROR, format_html("Die E-Mail-Adresse wurde noch nicht bestätigt. <a href='{}'>Aktivierungslink erneut zusenden</a>", reverse('app_user:resend_confirmation_mail', kwargs={'email': email})))
+            else:
+                # Return a 'disabled account' error message
+                messages.add_message(request, messages.ERROR, 'Das Benutzerkonto ist deaktiviert.')
+            return HttpResponseRedirect(reverse('app:startPage'))
+        else:
+            # Return an 'invalid login' error message.
+            messages.add_message(request, messages.ERROR, 'Loginversuch fehlgeschlagen.')
+            return render_to_response('registration/login.html', {'form': form}, RequestContext(request))
+    else:
+        return render_to_response('registration/login.html', {'form': form}, RequestContext(request))
+
 
 def current_user(func):
     def check_and_call(request, *args, **kwargs):
@@ -33,30 +68,46 @@ def current_user(func):
             messages.add_message(request, messages.ERROR, 'Dies ist nicht Ihr Account!')
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         return func(request, *args, **kwargs)
+
     return check_and_call
+
+
+def resend_confirmation_mail(request, email):
+    if request.method == 'GET':
+        user = User.objects.filter(email=email).first()
+        if user == None:
+            messages.add_message(request, messages.ERROR, 'Diese E-Mail-Adresse ist nicht bekannt.')
+            return HttpResponseRedirect(reverse('app:startPage'))
+        if user.emailConfirm == 1:
+            messages.add_message(request, messages.INFO, 'Ihre E-Mail Adresse ' + user.email + ' ist bereits bestätigt')
+            return HttpResponseRedirect(reverse('app:startPage'))
+        if user.emailConfirm == 0:
+            messages.add_message(request, messages.INFO, 'Validierungsemail an '+ user.email +' verschickt.')
+            form = RegistrationForm()
+            mutable = request.POST._mutable
+            request.POST._mutable = True
+            request.POST['first_name'] = user.first_name
+            request.POST['last_name'] = user.last_name
+            request.POST['email'] = user.email
+            request.POST._mutable = mutable
+            form.sendConfirmEmail(request, user)
+            return HttpResponseRedirect(reverse('app:startPage'))
+
+
 
 def register_user(request):
     if request.method == 'POST':
-        result = False
-        try:
-            form = RegistrationForm(request.POST, request.FILES)
-            if form.is_valid():
-                form.profileImage = request.FILES.get('profileImage')
-                user = form.save()
-                result = form.sendConfirmEmail(request, user)
-        except SMTPRecipientsRefused:
-            result = False
-
-        if result:
+        form = RegistrationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.profileImage = request.FILES.get('profileImage')
+            user = form.save()
+            form.sendConfirmEmail(request, user)
             messages.add_message(request, messages.SUCCESS, 'Sie haben sich erfolgreich registriert.')
             return HttpResponseRedirect(reverse('app:startPage'))
-        else:
-            messages.add_message(request, messages.ERROR, 'Es konnte keine Validierungsemail zur eingegebenen E-Mail Adresse ' + request.POST.get('email') + ' verschickt werden')
-            render_to_response('app_user/register.html', {'form': form}, RequestContext(request))
-
     else:
         form = RegistrationForm()
     return render_to_response('app_user/register.html', {'form': form}, RequestContext(request))
+
 
 class UserUpdate(FormMessagesMixin, UpdateView):
     model = User
@@ -74,6 +125,7 @@ class UserUpdate(FormMessagesMixin, UpdateView):
     def dispatch(self, *args, **kwargs):
         return super(UserUpdate, self).dispatch(*args, **kwargs)
 
+
 def confirm_email(request, uuid):
     confirmEmail = ConfirmEmail.objects.filter(uuid=uuid).first()
     if confirmEmail is not None:
@@ -83,7 +135,8 @@ def confirm_email(request, uuid):
         else:
             user.emailConfirm = True
             user.save()
-            messages.add_message(request, messages.SUCCESS, 'Ihre E-Mail Adresse ' + user.email + ' wurde erfolgreich bestätigt')
+            messages.add_message(request, messages.SUCCESS,
+                                 'Ihre E-Mail Adresse ' + user.email + ' wurde erfolgreich bestätigt')
     else:
         messages.add_message(request, messages.ERROR, 'Ihre E-Mail Adresse konnte nicht bestätigt werden')
     return HttpResponseRedirect(reverse('app:startPage'))
