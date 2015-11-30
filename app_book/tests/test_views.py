@@ -9,7 +9,7 @@ from app_user.models import *
 
 class BookTest(TestCase):
     def setUp(self):
-        user_username = 'test@test.test'
+        user_username = 'test@fixture_mail.com'
         user_password = 'supersavepassword'
 
         self.book_data = {
