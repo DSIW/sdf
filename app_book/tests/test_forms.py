@@ -7,17 +7,16 @@ from app_book.forms import BookForm, OfferForm
 
 class BookFormTests(TestCase):
     def setUp(self):
-        with open('fixtures/image1.jpg', 'rb') as img:
-            self.form_data = {
-                'name': 'BookName',
-                'author': 'authorName',
-                'language': 'Language',
-                'releaseDate': '19.11.2016',
-                'pageNumber': '13',
-                'isbn10': '1-78528-753-2',
-                'isbn13': '978-1-78528-753-4',
-                'description': 'description',
-            }
+        self.form_data = {
+            'name': 'BookName',
+            'author': 'authorName',
+            'language': 'Language',
+            'releaseDate': '19.11.2016',
+            'pageNumber': '13',
+            'isbn10': '1-78528-753-2',
+            'isbn13': '978-1-78528-753-4',
+            'description': 'description',
+        }
 
     def test_correctData(self):
         with open('fixtures/image1.jpg', 'rb') as img:

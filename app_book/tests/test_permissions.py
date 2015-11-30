@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
 from django.test import TestCase, RequestFactory
 from django.test import Client
@@ -57,6 +58,9 @@ class BookTest(TestCase):
 
         self.login_user()
         data = self.book_data.copy()
+        with open('fixtures/image1.jpg', 'rb') as img:
+            image = SimpleUploadedFile(img.name, img.read(), content_type='image/jpeg')
+        data['image'] = image
         self.client.post(reverse('app_book:createBook'), data=data)
 
         book = Book.objects.all()
@@ -72,6 +76,9 @@ class BookTest(TestCase):
 
         self.login_user()
         data = self.book_offer_data.copy()
+        with open('fixtures/image1.jpg', 'rb') as img:
+            image = SimpleUploadedFile(img.name, img.read(), content_type='image/jpeg')
+        data['image'] = image
         self.client.post(reverse('app_book:createBook'), data=data)
 
         book = Book.objects.all()

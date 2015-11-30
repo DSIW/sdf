@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from django.test import TestCase, RequestFactory
 from django.test import Client
@@ -11,17 +12,19 @@ class BookTest(TestCase):
     def setUp(self):
         user_username = 'test@fixture_mail.com'
         user_password = 'supersavepassword'
-
-        self.book_data = {
-            'name': 'BookName',
-            'author': 'authorName',
-            'language': 'Language',
-            'releaseDate': '19.11.2016',
-            'pageNumber': '13',
-            'isbn10': '1-78528-753-2',
-            'isbn13': '978-1-78528-753-4',
-            'description': 'description',
-        }
+        with open('fixtures/image1.jpg', 'rb') as img:
+            image = SimpleUploadedFile(img.name, img.read(), content_type='image/jpeg')
+            self.book_data = {
+                'name': 'BookName',
+                'author': 'authorName',
+                'language': 'Language',
+                'releaseDate': '19.11.2016',
+                'pageNumber': '13',
+                'isbn10': '1-78528-753-2',
+                'isbn13': '978-1-78528-753-4',
+                'description': 'description',
+                'image': image,
+            }
         self.offer_data = {
             'price': '3.50',
             'shipping_price': '13.37',
@@ -40,7 +43,6 @@ class BookTest(TestCase):
     def test_create_book(self):
         book = Book.objects.all()
         self.assertEqual(len(book), 0)
-
         self.client.post(reverse('app_book:createBook'), data=self.book_data)
 
         book = Book.objects.all()
@@ -183,7 +185,7 @@ class BookTest(TestCase):
 
         self.assertEqual(len(book), 1, book)
         self.assertEqual(len(offer), 1, offer)
-        self.assertEqual(offer[0].active, False, offer)
+        self.assertFalse(offer[0].active, offer)
 
     def test_delete_book(self):
         book = Book.objects.all()
