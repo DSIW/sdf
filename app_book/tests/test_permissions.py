@@ -170,7 +170,8 @@ class BookTest(TestCase):
         self.assertEqual(offer[0].active, False)
 
         url = '/search/results?search_string='
-        name = self.book_data['name']
+        name = self.book_data['name'][:-2]
+        self.login_other_user()
         response = self.client.get(url+name)
 
-        self.assertNotContains(response, self.book_data['author'])
+        self.assertNotContains(response, self.book_data['name'])
