@@ -8,7 +8,7 @@ from . import views
 
 urlpatterns = [
     # root
-    turl(r'^$', views.StartPageView.as_view(), name='startPage'),
+    url(r'^$', views.StartPageView.as_view(), name='startPage'),
 
     # admin
     url(r'^admin/', include(admin.site.urls)),
