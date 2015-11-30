@@ -176,10 +176,16 @@ class BookTest(TestCase):
         book = Book.objects.all()
         offer = Offer.objects.all()
         self.assertEqual(len(book), 1, book)
+        self.assertGreater(book[0].image.size, 0)
         self.assertEqual(len(offer), 1, offer)
 
         data = self.book_offer_data.copy()
+
+        with open('fixtures/image1.jpg', 'rb') as img:
+            image = SimpleUploadedFile(img.name, img.read(), content_type='image/jpeg')
+            data['image'] = image
         data['active'] = 'off'
+
         self.client.post(reverse('app_book:editBook', kwargs={'id': book.first().id}), data=data)
         offer = Offer.objects.all()
 
