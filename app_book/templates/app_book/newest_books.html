@@ -5,16 +5,23 @@
 {% block content %}
 
     <div class="container">
-        <h1>Neuste zum Verkauf angebotene Bücher</span></h1>
-        
-        {% include '_pagination.html' with items=offers %}
+        <h1>Neuste Bücher</h1>
 
-        {% for offer in offers %}
-            {% include 'app_book/_book_card.html' with user=offer.seller_user book=offer.book offer=offer %}
-        {% endfor %}
-        {% if offers.count == 0 %}
-            Es sind keine Bücher zum Verkauf angeboten.
-        {% endif %}
+        <div class = "row">
+            <div class="col s12">
+                {% for offer in offers %}
+                    {% include 'app_book/_book_card.html' with user=offer.seller_user book=offer.book offer=offer %}
+                {% endfor %}
+                {% if offers.count == 0 %}
+                    Es werde momentan keine Bücher zum Verkauf angeboten.
+                {% endif %}
+            </div>
+
+            <div class="col">
+                {% include '_pagination.html' with items=offers %}
+            </div>
+        </div>
+
 
     </div>
 
