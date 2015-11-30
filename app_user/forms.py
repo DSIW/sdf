@@ -6,11 +6,13 @@ from django.http import HttpRequest
 from django.utils.crypto import get_random_string
 from django.core.urlresolvers import reverse
 from django.forms import ModelForm
-from django.core.mail import EmailMessage
+from django.core.mail import send_mail
 from django.contrib.auth.forms import UserCreationForm
 
 from .models import User, ConfirmEmail
 from app.widgets import CustomFileInput
+from sdf import settings
+
 
 class RegistrationForm(UserCreationForm):
     first_name = forms.TextInput()

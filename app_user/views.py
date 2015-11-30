@@ -97,22 +97,13 @@ def resend_confirmation_mail(request, email):
 
 def register_user(request):
     if request.method == 'POST':
-        result = False
-        try:
-            form = RegistrationForm(request.POST, request.FILES)
-            if form.is_valid():
-                form.profileImage = request.FILES.get('profileImage')
-                user = form.save()
-                result = form.sendConfirmEmail(request, user)
-        except SMTPRecipientsRefused:
-            result = False
-        if result:
+        form = RegistrationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.profileImage = request.FILES.get('profileImage')
+            user = form.save()
+            form.sendConfirmEmail(request, user)
             messages.add_message(request, messages.SUCCESS, 'Sie haben sich erfolgreich registriert.')
             return HttpResponseRedirect(reverse('app:startPage'))
-        else:
-            messages.add_message(request, messages.ERROR, 'Es konnte keine Validierungsemail zur eingegebenen E-Mail Adresse ' + request.POST.get('email') + ' verschickt werden')
-            render_to_response('app_user/register.html', {'form': form}, RequestContext(request))
-
     else:
         form = RegistrationForm()
     return render_to_response('app_user/register.html', {'form': form}, RequestContext(request))
