@@ -3,10 +3,16 @@
 from django.db import models
 
 from app_user.models import User
+from sdf.base_settings import *
+import glob
 
 def book_directory_path(instance, filename):
     ext = filename.split('.')[-1]
-    return 'images/books/book_{0}.{1}'.format(instance.id, ext)
+    upload_dir_path = 'images/books/book_{0}.{1}'.format(instance.id, ext)
+    book_images = glob.glob(os.path.join(MEDIA_ROOT, 'images/books/book_{0}.*'.format(instance.id)))
+    for image in book_images:
+        os.remove(image)
+    return upload_dir_path
 
 class Book(models.Model):
     user = models.ForeignKey(User, default=None)
