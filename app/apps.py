@@ -13,5 +13,5 @@ class ShbAppConfig(AppConfig):
         from app_user.models import User
 
         disabledShowcases = User.objects.filter(showcaseDisabled=True).values_list('user_ptr')
-        bookIds = Offer.objects.exclude(seller_user_id__in=disabledShowcases).values_list('book', flat=True)
+        bookIds = Offer.objects.exclude(seller_user_id__in=disabledShowcases).exclude(active = False).values_list('book', flat=True)
         watson.register(Book.objects.filter(id__in=bookIds))
