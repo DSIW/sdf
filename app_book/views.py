@@ -1,23 +1,25 @@
 # -*- coding: utf-8 -*-
 
-from django.db import transaction
-from django.contrib import messages
+import collections
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
+from django.contrib import messages
+from django.db import transaction
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.db import IntegrityError
-
-import watson
-import collections
 
 from app_user.models import User
 from app_notification.models import Notification
-from app_user.forms import RegistrationForm
 
 from .models import Book, Offer, Counteroffer
 from .forms import BookForm, OfferForm, PublishOfferForm, CounterofferForm
 from .services import unpublish_book
+
+StatusAndTwoForms = collections.namedtuple("StatusAndTwoForms", ["status", "form_one", "form_two"], verbose=False,
+                                           rename=False)
 
 
 # Custom Ownership Decorator
@@ -33,10 +35,11 @@ def owns_book(func):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
         return func(request, *args, **kwargs)
+
     return check_and_call
 
 
-StatusAndTwoForms = collections.namedtuple("StatusAndTwoForms", ["status", "form_one", "form_two"], verbose=False, rename=False)
+
 
 @owns_book
 def showEditBook(request, id, offer_enabled):
@@ -115,7 +118,7 @@ def archivesPageView(request):
     :return: allBooks: Alle Buecher
     '''
     template_name = 'app_book/archives.html'
-    allBooks = Book.objects.filter(user = request.user);
+    allBooks = Book.objects.filter(user=request.user);
 
     return render_to_response(template_name, {
         "allBooks": allBooks,
@@ -228,6 +231,7 @@ def unpublishBook(request, id):
         unpublish_book(book)
         messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun nicht mehr zum Verkauf angeboten!')
         # decline all active counteroffers:
+        offer = book.offer_set.first()
         counteroffers = Counteroffer.objects.filter(offer=offer, active=True)
         for co in counteroffers:
             Notification.counteroffer_decline(co, co.creator, book)
@@ -245,7 +249,7 @@ def searchBookResults(request):
 
     return render_to_response(template_name, {
         "results": search_results,
-    },  RequestContext(request))
+    }, RequestContext(request))
 
 
 def counteroffer(request, id):
