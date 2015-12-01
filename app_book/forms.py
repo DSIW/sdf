@@ -5,6 +5,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from .models import Book, Offer, Counteroffer
 
+from app.widgets import CustomFileInput
+
 class BookForm(forms.ModelForm):
     '''
     Klasse zum erstellen der Buch Form
@@ -23,6 +25,7 @@ class BookForm(forms.ModelForm):
         widgets = {
             'language': forms.Select(choices=LANGUAGES),
             'releaseDate': forms.DateInput(attrs={'class': 'datepicker'}),
+            'image': CustomFileInput(),
         }
         labels = {
             'name': _('Buchname'),
@@ -32,6 +35,7 @@ class BookForm(forms.ModelForm):
             'pageNumber': _('Seitenanzahl'),
             'isbn10': _('ISBN-10'),
             'isbn13': _('ISBN-13'),
+            'image': _('Bild'),
         }
 
 class OfferForm(forms.ModelForm):

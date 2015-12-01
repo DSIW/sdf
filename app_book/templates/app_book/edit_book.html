@@ -10,7 +10,7 @@
                 <span class="orange-text text-lighten-1">{{ book.name }}</span>
             </h1>
         </div>
-        <form method="post" action="">
+        <form method="post" action="" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
                 {% include 'app_book/_book_form.html' with form=book_form embedded=True %}

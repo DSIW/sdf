@@ -3,8 +3,6 @@
 from django.forms.widgets import FileInput
 
 
-
-
 class CustomFileInput(FileInput):
     input_type = 'file'
 
