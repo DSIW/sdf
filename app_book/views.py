@@ -245,5 +245,7 @@ def newestBooks(request):
 
     return render_to_response(template_name, {
         "offers": offers,
+        "sorting": sorting,
+        "request": request,
     }, RequestContext(request))
 
