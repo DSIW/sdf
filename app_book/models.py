@@ -6,6 +6,7 @@ from app_user.models import User
 class Book(models.Model):
     user = models.ForeignKey(User, default=None)
 
+    created = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=200)
     author = models.CharField(max_length=200)
     language = models.CharField(max_length=100)
