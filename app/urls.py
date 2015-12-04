@@ -16,6 +16,8 @@ urlpatterns = [
     # session
 
     url(r'^logout$', auth_views.logout, name='logout'),
+
+    # static
     url(r'^imprint$', views.page_info, {"template_name":"app/page_info.html","title":"Impressum"}, name='imprint'),
     url(r'^agb$', views.page_info, {"template_name":"app/page_info.html","title":"AGB"}, name='agb'),
     url(r'^privacy$', views.page_info, {"template_name":"app/page_info.html","title":"Datenschutz"}, name='privacy'),

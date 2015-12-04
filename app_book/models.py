@@ -3,7 +3,16 @@
 from django.db import models
 
 from app_user.models import User
+from sdf.base_settings import *
+import glob
 
+def book_directory_path(instance, filename):
+    ext = filename.split('.')[-1]
+    upload_dir_path = 'images/books/book_{0}.{1}'.format(instance.id, ext)
+    book_images = glob.glob(os.path.join(MEDIA_ROOT, 'images/books/book_{0}.*'.format(instance.id)))
+    for image in book_images:
+        os.remove(image)
+    return upload_dir_path
 
 class Book(models.Model):
     user = models.ForeignKey(User, default=None)
@@ -16,6 +25,7 @@ class Book(models.Model):
     pageNumber = models.IntegerField(default=0)
     isbn10 = models.CharField(max_length=100)
     isbn13 = models.CharField(max_length=100)
+    image = models.FileField(help_text='max. 42 megabytes', upload_to=book_directory_path, default='')
     description = models.TextField(default="", blank=True)
 
     def __str__(self):

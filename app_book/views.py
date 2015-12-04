@@ -8,15 +8,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.db import IntegrityError
-
-
+from .models import Book
+from .forms import BookForm
 import watson
 import collections
-
 from app_user.models import User
 from app_notification.models import Notification
 from app_user.forms import RegistrationForm
-
 from .models import Book, Offer, Counteroffer
 from .forms import BookForm, OfferForm, PublishOfferForm, CounterofferForm
 
@@ -34,10 +32,13 @@ def owns_book(func):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
         return func(request, *args, **kwargs)
+
     return check_and_call
 
 
-StatusAndTwoForms = collections.namedtuple("StatusAndTwoForms", ["status", "form_one", "form_two"], verbose=False, rename=False)
+StatusAndTwoForms = collections.namedtuple("StatusAndTwoForms", ["status", "form_one", "form_two"], verbose=False,
+                                           rename=False)
+
 
 @owns_book
 def showEditBook(request, id, offer_enabled):
@@ -74,7 +75,7 @@ def handleEditBook(request, id):
         book = Book.objects.get(pk=id)
         offer = book.offer_set.first()
 
-    book_form = BookForm(request.POST, instance=book)
+    book_form = BookForm(request.POST, request.FILES, instance=book)
     offer_form = OfferForm(request.POST, instance=offer)
 
     # check validity of forms
@@ -116,7 +117,7 @@ def archivesPageView(request):
     :return: allBooks: Alle Buecher
     '''
     template_name = 'app_book/archives.html'
-    allBooks = Book.objects.filter(user = request.user);
+    allBooks = Book.objects.filter(user=request.user);
 
     return render_to_response(template_name, {
         "allBooks": allBooks,
@@ -204,7 +205,8 @@ def publishBook(request, id):
                 messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun zum Verkauf angeboten!')
                 return HttpResponseRedirect(reverse('app_book:archivesPage'))
             except ValueError as e:
-                messages.add_message(request, messages.ERROR, 'Das Buch konnte leider nicht zum Verkauf angeboten werden!')
+                messages.add_message(request, messages.ERROR,
+                                     'Das Buch konnte leider nicht zum Verkauf angeboten werden!')
 
     return render_to_response('app_book/publish_book.html', {
         "offer_form": offer_form,
@@ -239,7 +241,7 @@ def searchBookResults(request):
 
     return render_to_response(template_name, {
         "results": search_results,
-    },  RequestContext(request))
+    }, RequestContext(request))
 
 
 def counteroffer(request, id):
@@ -248,7 +250,8 @@ def counteroffer(request, id):
     book = get_object_or_404(Book, id=offer.book.id)
     try:
         counteroffer = Counteroffer.objects.get(offer=offer.id, creator=user.id, active=True)
-        messages.add_message(request, messages.INFO, 'Sie haben für dieses Buch bereits einen Preisvorschlag abgegeben, der noch aussteht')
+        messages.add_message(request, messages.INFO,
+                             'Sie haben für dieses Buch bereits einen Preisvorschlag abgegeben, der noch aussteht')
     except Counteroffer.DoesNotExist:
         obj = Counteroffer(offer=offer, creator=user, price=offer.totalPrice(), active=True, accepted=False)
         offer_form = CounterofferForm(instance=obj)
@@ -260,18 +263,20 @@ def counteroffer(request, id):
             }, RequestContext(request))
         elif request.method == 'POST':
             obj.save()
-            messages.add_message(request, messages.SUCCESS, 'Der Preisvorschlag wurde abgegeben. Sie werden benachrichtigt, sobald der Verkäufer antwortet')
+            messages.add_message(request, messages.SUCCESS,
+                                 'Der Preisvorschlag wurde abgegeben. Sie werden benachrichtigt, sobald der Verkäufer antwortet')
             offer.counteroffer_set.add(obj);
             offer.save()
 
             seller = get_object_or_404(User, id=offer.seller_user.id)
             # TODO: Send notification to seller (= persist Notification)
-            Notification.counteroffer(obj,seller,user,book)
+            Notification.counteroffer(obj, seller, user, book)
         else:
             raise ("Use http method POST for making a counteroffer")
     # TODO: redirect to previos page (not to showcase)
     # return HttpResponseRedirect(request.REQUEST.get('next', '')) ### WARN: This ends up in endless-loop
     return showcaseView(request, offer.seller_user.id)
+
 
 def accept_counteroffer(request, id):
     counteroffer = get_object_or_404(Counteroffer, id=id)
@@ -279,12 +284,20 @@ def accept_counteroffer(request, id):
     offer = get_object_or_404(Offer, id=counteroffer.offer.id)
     book = get_object_or_404(Book, id=offer.book.id)
 
-    #Akzeptiere
-    Notification.counteroffer_accept(counteroffer,buyer,book)
+    # Akzeptiere
+    Notification.counteroffer_accept(counteroffer, buyer, book)
     counteroffer.accept()
-    messages.add_message(request, messages.SUCCESS, 'Der Preisvorschlag wurde erfolgreich angenommen. Der Interessent wird benachrichtigt')
+    messages.add_message(request, messages.SUCCESS,
+                         'Der Preisvorschlag wurde erfolgreich angenommen. Der Interessent wird benachrichtigt')
+
+    # Andere offenen Angebote ablehnen
+    counteroffers = Counteroffer.objects.filter(offer=offer, active=True)
+    for co in counteroffers:
+        Notification.counteroffer_decline(co, co.creator, book)
+    counteroffers.update(active=False, accepted=False)
 
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
+
 
 def decline_counteroffer(request, id):
     counteroffer = get_object_or_404(Counteroffer, id=id)
@@ -292,10 +305,11 @@ def decline_counteroffer(request, id):
     offer = get_object_or_404(Offer, id=counteroffer.offer.id)
     book = get_object_or_404(Book, id=offer.book.id)
 
-    #Akzeptiere nicht
-    Notification.counteroffer_decline(counteroffer,buyer,book)
+    # Akzeptiere nicht
+    Notification.counteroffer_decline(counteroffer, buyer, book)
     counteroffer.decline()
-    messages.add_message(request, messages.SUCCESS, 'Der Preisvorschlag wurde erfolgreich abgelehnt. Der Interessent wird benachrichtigt')
+    messages.add_message(request, messages.SUCCESS,
+                         'Der Preisvorschlag wurde erfolgreich abgelehnt. Der Interessent wird benachrichtigt')
 
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
 
@@ -338,5 +352,4 @@ def books(request):
         "order_comp": order_by + '-' + order_dir,
         "request": request,
     }, RequestContext(request))
-
 
