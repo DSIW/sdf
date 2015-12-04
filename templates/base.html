@@ -33,6 +33,7 @@
                 <li><a href="{% url 'logout' %}?next=/">Logout</a></li>
             </ul>
             <ul class="right hide-on-med-and-down">
+                <li><a href="{% url 'app_book:books' %}">Bücher</a></li>
                 <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
                 <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
                 <li><a href="{% url 'app_notification:notificationsPage' %}"><i class="material-icons tooltipped" data-tooltip="Nachrichten">notifications</i></a></li>
@@ -50,6 +51,7 @@
 
             <ul id="nav-mobile" class="side-nav">
                 {% if user.is_authenticated %}
+                <li><a href="{% url 'app_book:books' %}">Bücher</a></li>
                 <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
                 <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
                 <li><a href="{% url 'app_user:edit_profile' user.id %}">Mein Profil</a></li>

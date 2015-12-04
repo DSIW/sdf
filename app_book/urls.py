@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^books/(?P<id>[0-9]+)/delete$', views.deleteBook, name='deleteBook'),
     url(r'^books/(?P<id>[0-9]+)/publish$', views.publishBook, name='publishBook'),
     url(r'^books/(?P<id>[0-9]+)/unpublish$', views.unpublishBook, name='unpublishBook'),
+    url(r'^books', views.books, name='books'),
 
     # search
     url(r'^search/results', views.searchBookResults, name='searchBookResults'),

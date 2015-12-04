@@ -3,10 +3,12 @@
 from django.db import transaction
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.db import IntegrityError
+
 
 import watson
 import collections
@@ -296,4 +298,45 @@ def decline_counteroffer(request, id):
     messages.add_message(request, messages.SUCCESS, 'Der Preisvorschlag wurde erfolgreich abgelehnt. Der Interessent wird benachrichtigt')
 
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
+
+def books(request):
+    template_name = 'app_book/books.html'
+
+    order_dir = request.GET.get('order_dir', '')
+    order_by = request.GET.get('order_by', '')
+    page = request.GET.get('page')
+
+    if order_dir == 'desc':
+        direction = '-'
+    elif order_dir == 'asc':
+        direction = ''
+    else:
+        direction = ''
+
+    if order_by == 'date':
+        offer_list = Offer.objects.filter(active=True).order_by(direction + 'book__created')
+    elif order_by == 'title':
+        offer_list = Offer.objects.filter(active=True).order_by(direction + 'book__name')
+    elif order_by == 'author':
+        offer_list = Offer.objects.filter(active=True).order_by(direction + 'book__author')
+    else:
+        offer_list = Offer.objects.filter(active=True).order_by(direction + 'book__created')
+
+    paginator = Paginator(offer_list, 3)
+
+    try:
+        offers = paginator.page(page)
+    except PageNotAnInteger:
+        offers = paginator.page(1)
+    except EmptyPage:
+        offers = paginator.page(paginator.num_pages)
+
+    return render_to_response(template_name, {
+        "offers": offers,
+        "order_by": order_by,
+        "order_dir": order_dir,
+        "order_comp": order_by + '-' + order_dir,
+        "request": request,
+    }, RequestContext(request))
+
 

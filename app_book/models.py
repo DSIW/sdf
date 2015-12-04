@@ -8,6 +8,7 @@ from app_user.models import User
 class Book(models.Model):
     user = models.ForeignKey(User, default=None)
 
+    created = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=200)
     author = models.CharField(max_length=200)
     language = models.CharField(max_length=100)
@@ -25,6 +26,7 @@ class Book(models.Model):
 
 
 class Offer(models.Model):
+    updated = models.DateTimeField(auto_now=True)
     seller_user = models.ForeignKey(User)
     book = models.ForeignKey(Book)
     price = models.FloatField()
