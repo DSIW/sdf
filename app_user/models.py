@@ -1,15 +1,17 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 
 from django.db import models
 from django.contrib.auth.models  import User as AuthUser, BaseUserManager
-import logging
-logger = logging.getLogger(__name__)
+from sdf.base_settings import *
+import glob
 
 def user_directory_path(instance, filename):
     ext = filename.split('.')[-1]
-    logger.debug("this is a debug message!")
-
-    return 'profileImage/{0}/profileimage.{1}'.format(instance.id, ext)
+    upload_dir_path = 'images/profiles/profile_{0}.{1}'.format(instance.id, ext)
+    profile_images = glob.glob(os.path.join(MEDIA_ROOT, 'images/profiles/profile_{0}.*'.format(instance.id)))
+    for image in profile_images:
+        os.remove(image)
+    return upload_dir_path
 
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None):
@@ -40,21 +42,23 @@ class User(AuthUser):
     AuthUser._meta.get_field('username').blank = True
     AuthUser._meta.get_field('username').null = True
 
-    #TODO generalize renaming for internationalization
     AuthUser._meta.get_field('username').verbose_name = "Pseudonym (optional)"
+    AuthUser._meta.get_field('email').error_messages = {'unique': 'Diese E-Mail-Adresse ist bereits registriert.',
+                                                        'invalid': 'Bitte eine gültige E-Mail-Adresse angeben.'}
 
-    emailConfirm = models.BooleanField(default=False)
-    profileImage = models.FileField(upload_to=user_directory_path, null=True)
+    emailConfirm = models.BooleanField(default=False,verbose_name='E-mail bestätigt')
+    profileImage = models.ImageField(upload_to=user_directory_path, null=True)
     location = models.CharField(max_length=255, default='')
     paypal = models.CharField(max_length=50)
     user_ptr = models.OneToOneField(AuthUser)
+    showcaseDisabled = models.BooleanField(default=False, verbose_name='Schaufenster gesperrt')
 
     objects = MyUserManager()
     AuthUser.USERNAME_FIELD = 'email'
     AuthUser.REQUIRED_FIELDS = ['']
 
     def __str__(self):
-        return self.user_ptr + ", " + self.paypal + ", " + self.location
+        return str(self.user_ptr) + ", " + self.paypal + ", " + self.location
 
     def pseudonym_or_full_name(self):
         if self.username and self.username != "":
@@ -66,5 +70,9 @@ class User(AuthUser):
         return ' '.join([self.first_name, self.last_name])
 
 class ConfirmEmail(models.Model):
+    uuid = models.CharField(max_length=50)
+    user = models.OneToOneField(User)
+
+class PasswordReset(models.Model):
     uuid = models.CharField(max_length=50)
     user = models.OneToOneField(User)

@@ -1,4 +1,5 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
+
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
@@ -18,4 +19,10 @@ urlpatterns = [
 
     # search
     url(r'^search/results', views.searchBookResults, name='searchBookResults'),
+
+    # offers
+    url(r'^offers/(?P<id>[0-9]+)/new_counteroffer', views.counteroffer, name='new_counteroffer'),
+    url(r'^counteroffers/(?P<id>[0-9]+)/accept', views.accept_counteroffer, name='accept_counteroffer'),
+    url(r'^counteroffers/(?P<id>[0-9]+)/decline', views.decline_counteroffer, name='decline_counteroffer'),
 ]
+

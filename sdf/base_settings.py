@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Django settings for sdf project.
 
@@ -38,6 +40,7 @@ INSTALLED_APPS = (
     'braces',
     'app_book',
     'app_user',
+    'app_notification',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -47,6 +50,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'app.middleware.current_user_middleware.CurrentUserMiddleware', # after SessionAuthenticationMiddleware
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -124,4 +128,3 @@ STATICFILES_DIRS = (
 # Media files (book-images, profil-images)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-

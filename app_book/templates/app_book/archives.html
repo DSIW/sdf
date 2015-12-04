@@ -22,7 +22,7 @@
                     </a>
                     <ul id='book-{{ book.id }}-actions' class='dropdown-content'>
                         {% if book.is_published %}
-                            <li><a href="{% url 'app_book:unpublishBook' book.id %}" data-method="put">Nicht veröffentlichen</a></li>
+                            <li><a href="{% url 'app_book:unpublishBook' book.id %}" data-method="put" data-confirm="true" data-confirm-custom="Wenn Sie das Angebot zurück ziehen, werden alle unbeantworteten Preisvorschläge abgelehnt. Sind Sie sicher, dass Sie fortfahren möchten?" data-confirm-ok="Nicht veröffentlichen">Nicht veröffentlichen</a></li>
                         {% else %}
                             <li><a href="{% url 'app_book:publishBook' book.id %}">Veröffentlichen</a></li>
                         {% endif %}

@@ -1,13 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}Account aktualisieren{% endblock %}
+{% block title %}counteroffer{% endblock %}
 
 {% block content %}
   <div class="container">
-    <h1>Account bearbeiten</h1>
+        <div class="row">
+            <h1>Preisvorschlag</h1>
+            <h2>
+                Für
+                <span class="orange-text text-lighten-1">{{ book.name }}</span>
+                von Anbieter
+                <span class="orange-text text-lighten-1">{{ offer.seller_user.pseudonym_or_full_name }}</span>
+            </h2>
+        </div>
 
-    <form action="{% url 'app_user:edit_profile' user.id %}" enctype="multipart/form-data" method="POST">{% csrf_token %}
-        
+    <form action="{% url 'app_book:new_counteroffer' offer.id %}" method="post">{% csrf_token %}
         {% for field in form.visible_fields %}
         <div class="input-field {% if field.errors %}has-error{% endif %}">
             {{ field }}
@@ -21,7 +28,11 @@
             {% endif %}
         </div>
         {% endfor %}
-      <input type="submit" class="btn btn-success" value="Account aktualisieren">
+      <input type="submit" class="btn btn-success" value="Senden">
     </form>
   </div>
 {% endblock %}
+
+
+
+

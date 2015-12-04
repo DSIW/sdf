@@ -1,12 +1,16 @@
+# -*- coding: utf-8 -*-
+
 from django.forms.widgets import FileInput
 
 
-class CutsomFileInput(FileInput):
+
+
+class CustomFileInput(FileInput):
     input_type = 'file'
 
     def render(self, name=None, value=None, attrs=None, single_attrs=None):
         self = ''
-        if value is not  None:
+        if value:
             self +='<img width="500px" src="/media/' + value.__str__() + '" />'
         self += '''
             <div class="file-field input-field">
