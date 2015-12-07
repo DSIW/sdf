@@ -236,7 +236,7 @@ def unpublishBook(request, id):
 
 def searchBookResults(request):
     template_name = 'app_book/search_result.html'
-    search_results = watson.search(request.GET.get("search_string", ""))
+    search_results = watson.search.search(request.GET.get("search_string", ""))
 
     return render_to_response(template_name, {
         "results": search_results,
