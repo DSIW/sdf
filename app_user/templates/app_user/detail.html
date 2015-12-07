@@ -31,6 +31,7 @@
                 </p>
                 <p>Ort: <strong><a href="https://www.google.de/maps?q={{ user.location }}" target="_new">{{ user.location }}</a></strong></p>
                 <p>Öffentliche Bücher: <strong>{{ user.books_count }}</strong></p>
+
                 <ul class="links border-separated">
                     {% if user.id == request.user.id %}
                         <li><a href="{% url 'app_user:edit_profile' user.pk %}" class="btn">Bearbeiten</a></li>

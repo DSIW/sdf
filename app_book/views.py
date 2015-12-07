@@ -14,6 +14,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.db import IntegrityError
+from django.utils.html import escape
 from .models import Book
 from .forms import BookForm
 
@@ -401,12 +402,28 @@ def showcasesOverView(request):
     template_name = 'app_book/showcaseOverview.html'
 
     filteredUsers = []
+    sellerNameFilteredUsers = []
     filteredUsers.extend(filter_users_with_offered_books(User.objects.all()))
 
     page = request.GET.get('page')
     order_by = request.GET.get('order_by', 'date')
     order_dir = request.GET.get('order_dir', 'asc')
     order_dir_is_desc = order_dir == 'desc'
+
+    if seller:
+        print("seller not empty")
+        #print(filteredUsers)
+        for user in filteredUsers:
+            if user.username is not None:
+                for user in watson.search(seller, (User,), (User.first_name, User.last_name)):
+                    print(user.object)
+                print("username not none")
+            else:
+                for user in watson.search(seller, (User,), ):
+                    print(user.object)
+                print("username none")
+    else:
+        print("seller empty")
 
     for user in filteredUsers:
         user.books_count = len(user.offer_set.all())

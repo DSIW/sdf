@@ -2,6 +2,7 @@
 
 from django import template
 from django.contrib.humanize.templatetags.humanize import intcomma
+from django.utils.html import escape
 
 register = template.Library()
 
@@ -16,7 +17,7 @@ def currency(amount):
 def url_replace(request, field, value):
     request_args = request.GET.copy()
     request_args[field] = value
-    return request_args.urlencode()
+    return escape(request_args.urlencode())
 
 
 @register.simple_tag
@@ -25,7 +26,12 @@ def url_replace_sort(request, field_by, value_by, field_dir, value_dir):
     request_args[field_by] = value_by
     request_args[field_dir] = value_dir
     request_args['page'] = 1
-    return request_args.urlencode()
+    return escape(request_args.urlencode())
+
+@register.simple_tag
+def field_value(request, field):
+    request_args = request.GET.copy()
+    return escape(request_args[field])
 
 
 @register.simple_tag

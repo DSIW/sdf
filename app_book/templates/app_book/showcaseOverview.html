@@ -55,11 +55,21 @@
                             <li class="{% active order_comp 'name-desc' %}" ><a href="?{% url_replace_sort request 'order_by' 'name' 'order_dir' 'desc' %}" class="white-text">&#8595</a></li>
                         </ul>
                     </li>
+                    <li>
+                        <form role="form" method="get" action="?">
+                            {% for field in request.GET %}
+                                {% if field != 'seller' %}
+                            <input type="hidden" name="{{ field }}" value="{% field_value request field %}"/>
+                                {% endif %}
+                            {% endfor %}
+                            <div class="input-field search-field">
+                                <label for="search"><i class="material-icons">search</i></label>
+                                <input placeholder="Verkäufer" name="seller" type="search" id="search-field" class="field" maxlength="" value="{{ request.GET.seller }}">
+                            </div>
+                        </form>
+                    </li>
 
-<<<<<<< HEAD
                 {% endwith %}
-=======
->>>>>>> Squash branch feature/B27-SchaufensterView
                 </ul>
             </div>
         </nav>
@@ -72,11 +82,7 @@
                 {% endfor %}
             </div>
 
-<<<<<<< HEAD
-            <div class="col s12 center">
-=======
             <div class="col">
->>>>>>> Squash branch feature/B27-SchaufensterView
                 {% include 'app/_pagination.html' with items=users request=request%}
             </div>
         </div>
