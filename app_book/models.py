@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from app_user.models import User
 from sdf.base_settings import *
+from app_payment.models import Payment
+from paypal.standard.models import *
 import glob
+
+ACTIVE_PAYMENT_STATUSES = [ST_PP_CREATED, ST_PP_ACTIVE, ST_PP_PENDING, ST_PP_VOIDED]
 
 def book_directory_path(instance, filename):
     ext = filename.split('.')[-1]
@@ -25,7 +29,7 @@ class Book(models.Model):
     pageNumber = models.IntegerField(default=0)
     isbn10 = models.CharField(max_length=100)
     isbn13 = models.CharField(max_length=100)
-    image = models.FileField(help_text='max. 42 megabytes', upload_to=book_directory_path, default='')
+    image = models.FileField(help_text='max. 42 megabytes', upload_to=book_directory_path, null=False, default='images/books/book-cover-default.jpg')
     description = models.TextField(default="", blank=True)
 
     def __str__(self):
@@ -33,6 +37,33 @@ class Book(models.Model):
 
     def is_published(self):
         return self.offer_set.count() > 0 and self.offer_set.first().active
+
+    def is_private(self):
+        return not self.is_published()
+
+    def price(self):
+        if self.is_private():
+            return 0.0
+        return self.offer().price
+
+    def shipping_price(self):
+        if self.is_private():
+            return 0.0
+        return self.offer().shipping_price
+
+    def total_price(self):
+        if self.is_private():
+            return 0.0
+        return self.offer().totalPrice()
+
+    def offer(self):
+        return self.offer_set.first()
+
+    def active_payment(self):
+        return Payment.objects.filter(book=self, payment_status__in=ACTIVE_PAYMENT_STATUSES).first()
+
+    def is_in_active_payment_process(self):
+        return self.active_payment() is not None
 
 
 class Offer(models.Model):
