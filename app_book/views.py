@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from django.db import transaction
-from django.contrib import messages
+import collections
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
+from django.contrib import messages
+from django.db import transaction
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -13,9 +17,13 @@ import watson
 import collections
 from app_user.models import User
 from app_notification.models import Notification
-from app_user.forms import RegistrationForm
+
 from .models import Book, Offer, Counteroffer
 from .forms import BookForm, OfferForm, PublishOfferForm, CounterofferForm
+from .services import unpublish_book
+
+StatusAndTwoForms = collections.namedtuple("StatusAndTwoForms", ["status", "form_one", "form_two"], verbose=False,
+                                           rename=False)
 
 
 # Custom Ownership Decorator
@@ -26,8 +34,8 @@ def owns_book(func):
             return func(request, *args, **kwargs)
 
         book = get_object_or_404(Book, id=id)
-        if not (book.user.id == request.user.id):
-            messages.add_message(request, messages.ERROR, 'Dies ist nicht Ihr Buch!')
+        if book.is_private() and not (book.user.id == request.user.id):
+            messages.add_message(request, messages.ERROR, 'Sie haben keine Berechtigung das Buch anzusehen!')
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
         return func(request, *args, **kwargs)
@@ -35,8 +43,6 @@ def owns_book(func):
     return check_and_call
 
 
-StatusAndTwoForms = collections.namedtuple("StatusAndTwoForms", ["status", "form_one", "form_two"], verbose=False,
-                                           rename=False)
 
 
 @owns_book
@@ -121,6 +127,17 @@ def archivesPageView(request):
     return render_to_response(template_name, {
         "allBooks": allBooks,
     }, RequestContext(request))
+
+
+@owns_book
+def detailView(request, id):
+    template_name = 'app_book/detail.html'
+
+    book = get_object_or_404(Book, id=id)
+
+    return render_to_response(template_name, {
+        "book": book
+    },  RequestContext(request))
 
 
 @owns_book
@@ -217,12 +234,10 @@ def publishBook(request, id):
 def unpublishBook(request, id):
     if request.method == 'PUT':
         book = get_object_or_404(Book, id=id)
-        offer = book.offer_set.first()
-        if offer is not None:
-            offer.active = False
-            offer.save()
+        unpublish_book(book)
         messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun nicht mehr zum Verkauf angeboten!')
         # decline all active counteroffers:
+        offer = book.offer_set.first()
         counteroffers = Counteroffer.objects.filter(offer=offer, active=True)
         for co in counteroffers:
             Notification.counteroffer_decline(co, co.creator, book)
@@ -252,8 +267,8 @@ def counteroffer(request, id):
         messages.add_message(request, messages.INFO,
                              'Sie haben für dieses Buch bereits einen Preisvorschlag abgegeben, der noch aussteht')
     except Counteroffer.DoesNotExist:
-        obj = Counteroffer(offer=offer, creator=user, price=offer.totalPrice(), active=True, accepted=False)
-        offer_form = CounterofferForm(instance=obj)
+        counter_offer = Counteroffer(offer=offer, creator=user, price=offer.totalPrice(), active=True, accepted=False)
+        offer_form = CounterofferForm(instance=counter_offer)
         if request.method == 'GET':
             return render_to_response('app_book/_counteroffer_form.html', {
                 "form": offer_form,
@@ -261,17 +276,15 @@ def counteroffer(request, id):
                 "book": book,
             }, RequestContext(request))
         elif request.method == 'POST':
-            obj.save()
-            messages.add_message(request, messages.SUCCESS,
-                                 'Der Preisvorschlag wurde abgegeben. Sie werden benachrichtigt, sobald der Verkäufer antwortet')
-            offer.counteroffer_set.add(obj);
+            counter_offer.price = request.POST['price']
+            counter_offer.save()
+            messages.add_message(request, messages.SUCCESS, 'Der Preisvorschlag wurde abgegeben. Sie werden benachrichtigt, sobald der Verkäufer antwortet')
+            offer.counteroffer_set.add(counter_offer);
             offer.save()
 
             seller = get_object_or_404(User, id=offer.seller_user.id)
-            # TODO: Send notification to seller (= persist Notification)
-            Notification.counteroffer(obj, seller, user, book)
-        else:
-            raise ("Use http method POST for making a counteroffer")
+            Notification.counteroffer(counter_offer, seller, user, book)
+
     # TODO: redirect to previos page (not to showcase)
     # return HttpResponseRedirect(request.REQUEST.get('next', '')) ### WARN: This ends up in endless-loop
     return showcaseView(request, offer.seller_user.id)
