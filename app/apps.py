@@ -14,5 +14,4 @@ class ShbAppConfig(AppConfig):
 
         disabledShowcases = User.objects.filter(showcaseDisabled=True).values_list('user_ptr')
         bookIds = Offer.objects.exclude(seller_user_id__in=disabledShowcases).exclude(active = False).values_list('book', flat=True)
-        #watson.register(Book.objects.filter(id__in=bookIds)) #register existiert nicht!
-        watson.search.register(Book.objects.filter(id__in=bookIds))
+        watson.register(Book.objects.filter(id__in=bookIds))
