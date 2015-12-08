@@ -7,6 +7,8 @@ from .models import Book, Offer, Counteroffer
 
 from app.widgets import CustomFileInput
 
+from app.templatetags.template_extras import currency
+
 class BookForm(forms.ModelForm):
     '''
     Klasse zum erstellen der Buch Form
@@ -59,3 +61,13 @@ class CounterofferForm(forms.ModelForm):
         labels = {
             'price': _('Preisvorschlag'),
         }
+
+    def clean(self):
+        cleaned_data = super(CounterofferForm, self).clean()
+        price_myself = cleaned_data.get("price")
+        offer_price = self.instance.offer.totalPrice()
+        if price_myself > offer_price:
+            msg = 'Der von Ihnen vorgeschlagene Preis ist höher als der Sofortkauf-Preis von ' + currency(offer_price)
+            self.add_error('price', msg)
+
+

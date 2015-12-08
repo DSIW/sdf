@@ -136,7 +136,7 @@ def import_data():
     from app_book.models import User
 
     app_book_1 = Book()
-    app_book_1.user = User.objects.filter(username='max').first()
+    app_book_1.user = User.objects.filter(username='mustermann').first()
     app_book_1.name = 'Lightweight Django'
     app_book_1.author = 'Julia Elman, Mark Lavin'
     app_book_1.language = 'EN'
@@ -148,7 +148,7 @@ def import_data():
     app_book_1 = importer.save_or_locate(app_book_1)
 
     app_book_2 = Book()
-    app_book_2.user = User.objects.filter(username='max').first()
+    app_book_2.user = User.objects.filter(username='mustermann').first()
     app_book_2.name = 'Hands-on Django: Going Beyond the Polls'
     app_book_2.author = 'Brandon Lorenz'
     app_book_2.language = 'EN'
@@ -160,7 +160,7 @@ def import_data():
     app_book_2 = importer.save_or_locate(app_book_2)
 
     app_book_3 = Book()
-    app_book_3.user = User.objects.filter(username='martin').first()
+    app_book_3.user = User.objects.filter(username='mustermann').first()
     app_book_3.name = 'Test-Driven Development with Python'
     app_book_3.author = 'Harry J.W. Percival'
     app_book_3.language = 'EN'

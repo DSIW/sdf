@@ -37,13 +37,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'watson',
-    'paypal.standard.ipn',
     'django_extensions',
     'app',
     'braces',
     'app_book',
     'app_user',
-    'app_payment',
     'app_notification',
 )
 
@@ -132,23 +130,3 @@ STATICFILES_DIRS = (
 # Media files (book-images, profil-images)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
-# Secret Key Generator
-if not hasattr(globals(), 'SECRET_KEY'):
-    SECRET_FILE = os.path.join(BASE_DIR, 'secret.txt')
-    try:
-        SECRET_KEY = open(SECRET_FILE).read().strip()
-    except IOError:
-        try:
-            from random import choice
-            SECRET_KEY = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
-            secret = open(SECRET_FILE, 'w')
-            secret.write(SECRET_KEY)
-            secret.close()
-        except IOError:
-            raise Exception('Please create a %s file with random characters to generate your secret key!' % SECRET_FILE)
-
-#Paypal
-PAYPAL_TEST = True
-PAYPAL_RECEIVER_EMAIL = "ottmann.jens@googlemail.com"
-ENDPOINT = "https://ws15sdf-b.f4.htw-berlin.de:8080/paypal/ipn-api/"

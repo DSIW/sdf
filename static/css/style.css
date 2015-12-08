@@ -99,16 +99,6 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   text-align: right;
 }
 
-h1.line {
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 30px;
-}
-
-a.disabled {
-  color: #9F9FA7;
-  cursor: default;
-}
-
 
 /* Components */
 
@@ -185,14 +175,6 @@ a.disabled {
 }
 .alert-info i.alert-icon {
   background-color: #1976D2;
-}
-
-.sdf-badge {
-  padding: 4px;
-  font-size: 0.8rem;
-  color: #fff;
-  background-color: #26a69a;
-  border-radius: 2px;
 }
 
 /* Twitter Bootstrap */
@@ -335,15 +317,13 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
 .showcase .card-book .card-reveal p strong {
   float: right;
 }
-.showcase .card-book.payment img {
-  -webkit-filter: grayscale(100%);
-  -moz-filter: grayscale(100%);
-  -ms-filter: grayscale(100%);
-  -o-filter: grayscale(100%);
-  filter: grayscale(100%);
+.showcase .card-book .seller-rating {
+  margin-top: 2px;
 }
-.showcase .card-book.payment {
-  opacity: 0.4;
+.showcase .card-book .seller-rating-star {
+  font-size: 1em;
+  width: 12px;
+  color: #FCC32A;
 }
 
 
@@ -362,26 +342,4 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
 }
 .offer-state.inactive {
   background: #bdbdbd;
-}
-
-
-/* Book */
-.seller-rating {
-  margin-top: 2px;
-}
-.seller-rating-star {
-  font-size: 1em;
-  width: 12px;
-  color: #FCC32A;
-}
-img.book-cover {
-  border: 1px solid #CCC;
-  padding: 3px;
-  border-radius: 3px;
-  box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
-}
-.form-actions {
-  border-top: 1px solid #ccc;
-  margin-top: 30px;
-  padding-top: 20px;
 }
