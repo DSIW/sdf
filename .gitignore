@@ -83,6 +83,7 @@ pip-selfcheck.json
 
 ### Custom ###
 
+secret.txt
 db.sqlite3
 *.orig
 migrations
