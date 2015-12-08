@@ -8,6 +8,7 @@
 1. Add virtualenvwrapper to your zsh plugins if your're using oh-my-zsh and restart your terminal
 1. `cd sdf`
 1. Create a new environment named `django_sdf` via `mkvirtualenv django_sdf`
+1. Execute `workon django_sdf`
 1. Install required packages via `pip install -r requirements.txt`
 1. Reset your DB via `./reset_db.sh`. This will migrate your DB and some seed data will be imported.
 1. Open the app via `http://localhost:3001`
