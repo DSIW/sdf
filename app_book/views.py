@@ -275,19 +275,28 @@ def counteroffer(request, id):
                 "offer": offer,
                 "book": book,
             }, RequestContext(request))
-        elif request.method == 'POST':
-            counter_offer.price = request.POST['price']
-            counter_offer.save()
-            messages.add_message(request, messages.SUCCESS, 'Der Preisvorschlag wurde abgegeben. Sie werden benachrichtigt, sobald der Verkäufer antwortet')
-            offer.counteroffer_set.add(counter_offer);
-            offer.save()
+        if request.method == 'POST':
+            offer_form = CounterofferForm(request.POST, instance=counter_offer)
+            if offer_form.is_valid():
+                counter_offer = offer_form.save(commit=False)
+                counter_offer.save()
+                messages.add_message(request, messages.SUCCESS,
+                        'Der Preisvorschlag wurde abgegeben. Sie werden benachrichtigt, sobald der Verkäufer antwortet')
+                offer.counteroffer_set.add(counter_offer);
+                offer.save()
 
-            seller = get_object_or_404(User, id=offer.seller_user.id)
-            Notification.counteroffer(counter_offer, seller, user, book)
+                seller = get_object_or_404(User, id=offer.seller_user.id)
+                Notification.counter_offer(counter_offer, seller, user, book)
+            else:
+                return render_to_response('app_book/_counteroffer_form.html', {
+                    "form": offer_form,
+                    "offer": offer,
+                    "book": book,
+                }, RequestContext(request))
+        else:
+            raise ("Use http method POST for making a counteroffer")
 
-    # TODO: redirect to previos page (not to showcase)
-    # return HttpResponseRedirect(request.REQUEST.get('next', '')) ### WARN: This ends up in endless-loop
-    return showcaseView(request, offer.seller_user.id)
+    return HttpResponseRedirect(reverse('app_book:book-detail', kwargs = {'id': book.id}))
 
 
 def accept_counteroffer(request, id):
