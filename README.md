@@ -10,7 +10,6 @@
 1. Create a new environment named `django_sdf` via `mkvirtualenv django_sdf`
 1. Install required packages via `pip install -r requirements.txt`
 1. Reset your DB via `./reset_db.sh`. This will migrate your DB and some seed data will be imported.
-1. Run server in development mode on port 3001 via `python manage.py runserver 3001`
 1. Open the app via `http://localhost:3001`
 
 ## Setup nginx (optional)
@@ -25,7 +24,6 @@
 * `decorator`: Required by `ipython`
 * `django-braces`: Mixins for views. E.g. FormMessagesMixin for Django's generic views
 * `django-extensions`: Enhanced commands: `./manage.py (show_urls|validate_templates|shell_plus|runserver_plus)`
-* `django-paypal`: [Paypal](https://developer.paypal.com) integration
 * `invoke`: Invoke commands
 * `ipython`: Interactive shell with history support. Run `./manage.py shell_plus`
 * `ipython-genutils`: Required by `ipython`
@@ -33,7 +31,6 @@
 * `pexpect`: Required by `ipython`
 * `pickleshare`: Required by `ipython`
 * `ptyprocess`: Required by `ipython`
-* `requests`: Required by `django-paypal`
 * `python-dateutil`: Required by `./reset_db.sh`
 * `simplegeneric`: Required by `ipython`
 * `six`: Required by `django-extensions`
@@ -67,22 +64,6 @@ For `Pillow` to work, you need to execute the following tasks:
 
 1. install `python-image` via package manager (e.g. `apt-get install python-image`)
 1. `pip3 install -r requirements.txt`
-
-
-## Getting PayPal to work
-
-For `paypal` to work, you need to execute the following tasks:
-
-1. Signup at [Paypal Developer](https://developer.paypal.com)
-1. Add this content to `sdf/local_settings.py`:
-```
-PAYPAL_TEST = True
-PAYPAL_RECEIVER_EMAIL = "...-facilitator@example.com"
-ENDPOINT = "https://abc.ngrok.com"
-```
-1. `manage.py makemigrations`
-1. `manage.py migrate`
-1. Start [ngrok](https://ngrok.com) via `ngrok -proto=https -subdomain=abc 3001`
 
 ## Important Style Guide
 

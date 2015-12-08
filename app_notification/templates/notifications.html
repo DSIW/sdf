@@ -1,51 +1,47 @@
 {% extends 'base.html' %}
 
-{% block body_classes %}notifications{% endblock %}
+{% block body_classes %}archive{% endblock %}
 
 {% block content %}
     <div class="container">
         <h4>
-            Ihre Nachrichten
+            Ihre Notifications
         </h4>
 
         <div id="accordion">
-            {% if notifications.count > 0 %}
-                <ul class="collapsible" data-collapsible="accordion">
-                    {% for notification in notifications %}
-                        <li>
-                            <div class="collapsible-header">
-                                <strong>{{ notification.received_date }}: {{ notification.subject }}</strong></div>
-                            <div class="collapsible-body"><p>{{ notification.message }}</p>
+            <ul class="collapsible" data-collapsible="accordion">
+                {% for notification in notifications %}
+                    <li>
+                        <div class="collapsible-header">
+                            <strong>{{ notification.received_date }}: {{ notification.subject }}</strong></div>
+                        <div class="collapsible-body"><p>{{ notification.message }}</p>
 
-                                <!-- Wird nur angezeigt wenn ein Preisvorschlag gemacht wurde -->
-                                {% if notification.notification_type == "COUNTEROFFER" and notification.counter_offer.active == True %}
-                                    <div class="row text-right">
-                                        <div class="col s3">
-                                            <a href="{% url 'app_book:accept_counteroffer' notification.counter_offer.id %}"
-                                            class="btn waves-effect waves-light">Annehmen</a>
-                                        </div>
-                                        <div class="col s3">
-                                            <a href="{% url 'app_book:decline_counteroffer' notification.counter_offer.id %}"
-                                            class="btn waves-effect waves-light">Ablehnen</a>
-                                        </div>
+                            <!-- Wird nur angezeigt wenn ein Preisvorschlag gemacht wurde -->
+                            {% if notification.notification_type == "COUNTEROFFER" and notification.counter_offer.active == True %}
+                                <div class="row text-right">
+                                    <div class="col s3">
+                                        <a href="{% url 'app_book:accept_counteroffer' notification.counter_offer.id %}"
+                                           class="btn waves-effect waves-light">Annehmen</a>
                                     </div>
-                                {% endif %}
+                                    <div class="col s3">
+                                        <a href="{% url 'app_book:decline_counteroffer' notification.counter_offer.id %}"
+                                           class="btn waves-effect waves-light">Ablehnen</a>
+                                    </div>
+                                </div>
+                            {% endif %}
 
-                                <!-- Wird nur angezeigt wenn ein Preisvorschlag angenommen wurde -->
-                                {% if notification.notification_type == "COUNTEROFFER_ACCEPT" %}
-                                    <div class="row text-right">
-                                        <div class="col s3">
-                                        <a href="{% url 'app_payment:start_paypal_payment_by_counter_offer' notification.counter_offer.id %}" data-method="post" class="btn waves-effect waves-light">Bezahlen</a>
-                                        </div>
+                            <!-- Wird nur angezeigt wenn ein Preisvorschlag angenommen wurde -->
+                            {% if notification.notification_type == "COUNTEROFFER_ACCEPT" %}
+                                <div class="row text-right">
+                                    <div class="col s3">
+                                        <a href="#" class="btn waves-effect waves-light">Bezahlen</a>
                                     </div>
-                                {% endif %}
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                Es sind keine Nachrichten vorhanden!
-            {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 
