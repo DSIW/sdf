@@ -86,7 +86,7 @@ class Offer(models.Model):
         return self.counteroffer_set.filter(offer=self, active=True).count()
 
     def highest_counteroffer_price(self):
-        return Counteroffer.objects.filter(offer=self, active=True).order_by('-price').first().price
+        return Counteroffer.objects.filter(offer=self, active=True).order_by('price').last().price
 
 
 class Counteroffer(models.Model):

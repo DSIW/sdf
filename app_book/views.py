@@ -286,7 +286,7 @@ def counteroffer(request, id):
                 offer.save()
 
                 seller = get_object_or_404(User, id=offer.seller_user.id)
-                Notification.counter_offer(counter_offer, seller, user, book)
+                Notification.counteroffer(counter_offer, seller, user, book)
             else:
                 return render_to_response('app_book/_counteroffer_form.html', {
                     "form": offer_form,
