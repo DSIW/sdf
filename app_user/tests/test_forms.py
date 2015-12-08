@@ -3,13 +3,14 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import call_command
 from django.test import TestCase, RequestFactory
 from app_user.forms import RegistrationForm
+from app_user.models import User
 
 
 class FormTests(TestCase):
 
     def setUp(self):
-        # Load fixtures
-        call_command('loaddata', 'fixtures/testuser', verbosity=0)
+        #pwd = test
+        User.objects.create(first_name="Bernd", last_name="Lauert", username="testuser_fix", password="pbkdf2_sha256$20000$d8Zk6o89XrYZ$O9WiWbzttZu4TGpZn2ZZf5UJ5cwhJq2c/ZtrRbUWQ/0=")
         self.form_data = {
             'username': 'testuser',
             'first_name': 'Bernd',
@@ -30,7 +31,7 @@ class FormTests(TestCase):
 
     def test_registerAlreadyTakenNickname(self):
         data = self.form_data.copy()
-        data['username'] = 'testuser_fixture'
+        data['username'] = 'testuser_fix'
         form = RegistrationForm(data=data)
         self.assertFalse(form.is_valid())
 

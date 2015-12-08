@@ -11,8 +11,9 @@ from django.test.utils import setup_test_environment
 class ViewTests(TestCase):
 
     def setUp(self):
-        # Load fixtures
-        call_command('loaddata', 'fixtures/testuser', verbosity=0)
+        #pwd = test
+        user = User.objects.create(first_name="Bernd", last_name="Lauert", username="testuser_fix", password="pbkdf2_sha256$20000$d8Zk6o89XrYZ$O9WiWbzttZu4TGpZn2ZZf5UJ5cwhJq2c/ZtrRbUWQ/0=")
+        ConfirmEmail.objects.create(uuid="mfYtKJSl6Y0cPNr8Wa5f0mdY130KseKw", user=user)
         self.user_data = {
             'username': 'testuser',
             'first_name': 'Bernd',
