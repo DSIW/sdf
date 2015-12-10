@@ -12,11 +12,6 @@ import glob
 
 ACTIVE_PAYMENT_STATUSES = [ST_PP_CREATED, ST_PP_ACTIVE, ST_PP_PENDING, ST_PP_VOIDED]
 
-def create_with_pk(self):
-    instance = self.create()
-    instance.save()
-    return instance
-
 def book_directory_path(instance, filename):
     if instance.id is None:
         id_max = Book.objects.all().aggregate(Max('id'))['id__max']
