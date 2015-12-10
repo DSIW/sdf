@@ -8,3 +8,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'sdf.context_processors.debug',
 )
 ALLOWED_HOSTS = ['127.0.0.1','localhost']
+
+# Import local settings
+try:
+    from sdf.local_settings import *
+except ImportError:
+    import sys
+    sys.stderr.write('Attention: sdf/local_settings.py not set\n')

@@ -6,8 +6,6 @@ from datetime import datetime
 
 from app.templatetags import template_extras
 
-# Create your models here.
-
 class Notification(models.Model):
     FASTBUY = 'FASTBUY'  # Empfdaenger bekommt Notification => Subject: Buch X wurde gekauft | Nachricht: Person X hat NBuch Y gekauft
     COUNTEROFFER = 'COUNTEROFFER'  # Verkaeufer bekommt Nachricht => Subject: Person Y hat fuer Buch X ein Angebot gemacht | Nachricht: Person Y hat fuer Buch X ein Angebot gemacht so und soviel Euro => Annehmen | Ablehnen -> CounterOffer Id
@@ -24,15 +22,15 @@ class Notification(models.Model):
     message = models.TextField(max_length=1500)
     subject = models.CharField(max_length=200)
     received_date = models.DateTimeField('received_date')
-    counter_offer = models.OneToOneField(Counteroffer, default=None, null=True, blank=True)
+    counter_offer = models.ForeignKey(Counteroffer, default=None, null=True, blank=True)
     notification_type = models.CharField(max_length=200,
                                          choices=NOTIFICATION_TYPE,
                                          default=FASTBUY)
 
     @staticmethod
     def fastbuy(buyer, seller, book):
-        subject = 'Buch ' + book.name + ' wurde gekauft'
-        msg = 'Das von Ihnen zum Verkauf gestellte Buch: "' + book.name + '" wurde verkauft. Der Benutzer ' + buyer.full_name() + ' hat das Buch gekauft'
+        subject = 'Verkauf von "' + book.name + '"'
+        msg = 'Der Benutzer ' + buyer.full_name() + ' hat Ihr Buch '+book.name+' gekauft.'
 
         notification = Notification(
             subject=subject,
@@ -71,7 +69,8 @@ class Notification(models.Model):
             message=msg,
             received_date=datetime.now(),
             notification_type=Notification.COUNTEROFFER_DECLINE,
-            receiver_user=buyer
+            receiver_user=buyer,
+            counter_offer=counteroffer
         )
 
         notification.save()
@@ -80,14 +79,15 @@ class Notification(models.Model):
     def counteroffer_accept(counteroffer, buyer, book):
         # Preisvorschlag akzeptiert
         subject = 'Preisvorschlag für das Buch ' + book.name + ' wurde akzeptiert.'
-        msg = 'Der von Ihnen vorgeschlagene Preis für das Buch: "' + book.name + '" in  Höhe von ' + str(counteroffer.price) + ' wurde von dem Verkäufer akzeptiert.'
+        msg = 'Der von Ihnen vorgeschlagene Preis für das Buch: "' + book.name + '" in  Höhe von ' + template_extras.currency(counteroffer.price) + ' wurde von dem Verkäufer akzeptiert.'
 
         notification = Notification(
             subject=subject,
             message=msg,
             received_date=datetime.now(),
             notification_type=Notification.COUNTEROFFER_ACCEPT,
-            receiver_user=buyer
+            receiver_user=buyer,
+            counter_offer=counteroffer
         )
 
         notification.save()

@@ -86,6 +86,7 @@ pip-selfcheck.json
 secret.txt
 db.sqlite3
 *.orig
+secret.txt
 migrations
 !scripts
 media
