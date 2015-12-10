@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.db.models import Max
 from django.contrib.auth.models  import User as AuthUser, BaseUserManager
 from sdf.base_settings import *
 import glob
 
 def user_directory_path(instance, filename):
+    if instance.id is None:
+        id_max = MyUserManager.objects.all().aggregate(Max('id'))['id__max']
+        id_next = id_max + 1 if id_max else 1
+        instance.id = id_next
     ext = filename.split('.')[-1]
     upload_dir_path = 'images/profiles/profile_{0}.{1}'.format(instance.id, ext)
     profile_images = glob.glob(os.path.join(MEDIA_ROOT, 'images/profiles/profile_{0}.*'.format(instance.id)))

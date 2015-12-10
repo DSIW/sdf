@@ -2,6 +2,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import Max
 
 from app_user.models import User
 from sdf.base_settings import *
@@ -11,7 +12,16 @@ import glob
 
 ACTIVE_PAYMENT_STATUSES = [ST_PP_CREATED, ST_PP_ACTIVE, ST_PP_PENDING, ST_PP_VOIDED]
 
+def create_with_pk(self):
+    instance = self.create()
+    instance.save()
+    return instance
+
 def book_directory_path(instance, filename):
+    if instance.id is None:
+        id_max = Book.objects.all().aggregate(Max('id'))['id__max']
+        id_next = id_max + 1 if id_max else 1
+        instance.id = id_next
     ext = filename.split('.')[-1]
     upload_dir_path = 'images/books/book_{0}.{1}'.format(instance.id, ext)
     book_images = glob.glob(os.path.join(MEDIA_ROOT, 'images/books/book_{0}.*'.format(instance.id)))
