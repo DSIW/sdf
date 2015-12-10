@@ -29,7 +29,7 @@ class Book(models.Model):
     pageNumber = models.IntegerField(default=0)
     isbn10 = models.CharField(max_length=100)
     isbn13 = models.CharField(max_length=100)
-    image = models.FileField(help_text='max. 42 megabytes', upload_to=book_directory_path, null=False, default='images/books/book-cover-default.jpg')
+    image = models.FileField(help_text='max. 42 megabytes', upload_to=book_directory_path, null=False, default='images/books/book-cover-default.jpg', blank=True)
     description = models.TextField(default="", blank=True)
 
     def __str__(self):
