@@ -151,4 +151,4 @@ if not hasattr(globals(), 'SECRET_KEY'):
 #Paypal
 PAYPAL_TEST = True
 PAYPAL_RECEIVER_EMAIL = "ottmann.jens@googlemail.com"
-ENDPOINT = "https://ws15sdf-b.f4.htw-berlin.de:8080/paypal/ipn-api/"
+ENDPOINT = "https://ws15sdf-b.f4.htw-berlin.de/paypal/ipn-api/"

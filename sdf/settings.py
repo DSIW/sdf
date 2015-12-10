@@ -14,4 +14,7 @@ try:
     from sdf.local_settings import *
 except ImportError:
     import sys
-    sys.stderr.write('Attention: sdf/local_settings.py not set\n')
+    sys.stderr.write('Attention: sdf/local_settings.py not set. Use default local settings...\n')
+    PAYPAL_RECEIVER_EMAIL = "test-facilitator@example.com"
+    SEED_MAX_PAYPAL = "test-facilitator@example.com"
+    SEED_MARTIN_PAYPAL = "test-buyer@example.com"
