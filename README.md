@@ -80,6 +80,8 @@ For `paypal` to work, you need to execute the following tasks:
 PAYPAL_TEST = True
 PAYPAL_RECEIVER_EMAIL = "...-facilitator@example.com"
 ENDPOINT = "https://abc.ngrok.com"
+SEED_MAX_PAYPAL = "...-facilitator@example.com"
+SEED_MARTIN_PAYPAL = "...-buyer@example.com"
 ```
 1. `manage.py makemigrations`
 1. `manage.py migrate`
