@@ -6,6 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.db import transaction
+from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
@@ -27,25 +28,34 @@ StatusAndTwoForms = collections.namedtuple("StatusAndTwoForms", ["status", "form
 
 
 # Custom Ownership Decorator
-def owns_book(func):
+def can_show_book(func):
     def check_and_call(request, *args, **kwargs):
         id = kwargs.get("id")
         if id == None:
             return func(request, *args, **kwargs)
-
         book = get_object_or_404(Book, id=id)
         if book.is_private() and not (book.user.id == request.user.id):
             messages.add_message(request, messages.ERROR, 'Sie haben keine Berechtigung das Buch anzusehen!')
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
         return func(request, *args, **kwargs)
+    return check_and_call
 
+def can_change_book(func):
+    def check_and_call(request, *args, **kwargs):
+        id = kwargs.get("id")
+        if id == None:
+            return func(request, *args, **kwargs)
+        book = get_object_or_404(Book, id=id)
+        if not (book.user.id == request.user.id):
+            messages.add_message(request, messages.ERROR, 'Sie haben keine Berechtigung das Buch anzusehen!')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return func(request, *args, **kwargs)
     return check_and_call
 
 
 
 
-@owns_book
+@can_change_book
 def showEditBook(request, id, offer_enabled):
     offer = None
     book_form = BookForm()
@@ -65,7 +75,8 @@ def showEditBook(request, id, offer_enabled):
     return StatusAndTwoForms(True, book_form, offer_form)
 
 
-@owns_book
+@can_change_book
+@login_required
 @transaction.atomic
 def handleEditBook(request, id):
     if request.method != 'POST':
@@ -115,6 +126,7 @@ def handleEditBook(request, id):
         return StatusAndTwoForms(False, book_form, offer_form)
 
 
+@login_required
 def archivesPageView(request):
     '''
     Diese Methode zeigt alle vorhandenen Buecher an
@@ -129,7 +141,7 @@ def archivesPageView(request):
     }, RequestContext(request))
 
 
-@owns_book
+@can_show_book
 def detailView(request, id):
     template_name = 'app_book/detail.html'
 
@@ -140,7 +152,7 @@ def detailView(request, id):
     },  RequestContext(request))
 
 
-@owns_book
+@can_change_book
 def editBook(request, id):
     if request.method == 'POST':
         ret_val = handleEditBook(request, id)
@@ -171,7 +183,7 @@ def showcaseView(request, user_id):
     }, RequestContext(request))
 
 
-@owns_book
+@can_change_book
 def deleteBook(request, id):
     if request.method == 'DELETE':
         book = get_object_or_404(Book, id=id)
@@ -201,7 +213,7 @@ def createBook(request):
     }, RequestContext(request))
 
 
-@owns_book
+@can_change_book
 def publishBook(request, id):
     book = get_object_or_404(Book, id=id)
     offer = book.offer_set.first()
@@ -230,7 +242,7 @@ def publishBook(request, id):
     }, RequestContext(request))
 
 
-@owns_book
+@can_change_book
 def unpublishBook(request, id):
     if request.method == 'PUT':
         book = get_object_or_404(Book, id=id)
