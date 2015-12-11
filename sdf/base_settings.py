@@ -23,10 +23,6 @@ FIXTURE_DIRS = (os.path.join(PROJECT_ROOT, 'fixtures'),)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'pnetpl9^b1=ir(t!_6vf%d#p3y8%)_7n7y=p(@%zi20))a7*4)'
-
-
 # Application definition
 
 INSTALLED_APPS = (
