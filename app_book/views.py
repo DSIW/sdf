@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import operator
+from functools import reduce
 
 import collections
 
@@ -10,6 +12,7 @@ from django.db import transaction
 from django.contrib.auth.decorators import login_required
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -403,7 +406,9 @@ def filter_users_by_name_or_nick(users=None, nickname=None, first_name=None, rea
             for user in User.objects.filter(user_ptr__username__contains=nickname):
                 yield user
         else:
-            for user in User.objects.filter(user_ptr__first_name__contains=real_name):
+            words = real_name.split()
+
+            for user in User.objects.filter(reduce(operator.and_, (Q(first_name__contains=x) | Q(last_name__contains=x) for x in words))):
                 yield user
 
 
@@ -423,23 +428,13 @@ def showcasesOverView(request):
     seller = escape(request.GET.get('seller', ''))
 
     if seller:
-        print("seller not empty")
         for user in filteredUsers:
             if user.username is not None:
                 sellerNameFilteredUsers.extend(filter_users_by_name_or_nick(nickname=seller))
-                print("username not none")
             else:
                 sellerNameFilteredUsers.extend(filter_users_by_name_or_nick(real_name=seller))
-                print("username none")
-        print(filteredUsers)
-        print(sellerNameFilteredUsers)
         filteredUsers = set(filteredUsers).intersection(sellerNameFilteredUsers)
         filteredUsers = list(filteredUsers)
-        print(filteredUsers)
-
-
-    else:
-        print("seller empty")
 
     for user in filteredUsers:
         user.books_count = len(user.offer_set.all())

@@ -9,7 +9,7 @@
     <div class="container">
         <h1>Alle Schaufenster</h1>
 
-        {% if users|length > 0 %}
+
         <nav class="teal lighten-1">
             <div class="nav-wrapper">
 
@@ -73,7 +73,7 @@
                 </ul>
             </div>
         </nav>
-
+        {% if users|length > 0 %}
         <div class = "row">
 
             <div class="col s12">
@@ -86,9 +86,13 @@
                 {% include 'app/_pagination.html' with items=users request=request%}
             </div>
         </div>
+    {% else %}
+        {% if request.GET.seller %}
+        Es wurden keine zur Suche passenden Schaufenster gefunden.
         {% else %}
-            Es werde momentan in keinen Schaufenstern Bücher zum Verkauf angeboten.
+        Es werde momentan in keinen Schaufenstern Bücher zum Verkauf angeboten.
         {% endif %}
+    {% endif %}
 
     </div>
 
