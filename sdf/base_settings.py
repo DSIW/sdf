@@ -85,6 +85,8 @@ EMAIL_HOST_USER = 'sdf-phb@gmx.de'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 
+ADMINS = [('Max', 'studium@mluz.de'), ('Jens', 'ottmann.jens@googlemail.com')]
+
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
