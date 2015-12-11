@@ -24,5 +24,8 @@ urlpatterns = [
     url(r'^affiliate$', views.page_info, {"template_name":"app/page_info.html","title":"Affiliate"}, name='affiliate'),
     url(r'^team$', views.page_info, {"template_name":"app/page_info.html","title":"Team"}, name='team'),
     url(r'^job$', views.page_info, {"template_name":"app/page_info.html","title":"Job"}, name='job'),
+
+    # for testing
+    url(r'^raise$', views.raise_exception),
 ]
 

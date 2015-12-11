@@ -13,3 +13,6 @@ class StartPageView(TemplateView):
 
 def page_info(request, template_name, title):
     return render_to_response(template_name, {"title":title}, RequestContext(request))
+
+def raise_exception(request):
+    raise Exception("Exception for testing via GET /raise")
