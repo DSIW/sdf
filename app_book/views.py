@@ -397,6 +397,17 @@ def filter_users_with_offered_books(users):
         if not user.showcaseDisabled and len(user.offer_set.filter(active=True)) > 0:
             yield user
 
+def filter_users_by_name_or_nick(users=None, nickname=None, first_name=None, real_name=None):
+    #for user in users:
+        if nickname:
+            for user in User.objects.filter(user_ptr__username__contains=nickname):
+                yield user
+        else:
+            for user in User.objects.filter(user_ptr__first_name__contains=real_name):
+                yield user
+
+
+
 
 def showcasesOverView(request):
     template_name = 'app_book/showcaseOverview.html'
@@ -405,23 +416,28 @@ def showcasesOverView(request):
     sellerNameFilteredUsers = []
     filteredUsers.extend(filter_users_with_offered_books(User.objects.all()))
 
-    page = request.GET.get('page')
-    order_by = request.GET.get('order_by', 'date')
-    order_dir = request.GET.get('order_dir', 'asc')
+    page = escape(request.GET.get('page'))
+    order_by = escape(request.GET.get('order_by', 'date'))
+    order_dir = escape(request.GET.get('order_dir', 'asc'))
     order_dir_is_desc = order_dir == 'desc'
+    seller = escape(request.GET.get('seller', ''))
 
     if seller:
         print("seller not empty")
-        #print(filteredUsers)
         for user in filteredUsers:
             if user.username is not None:
-                for user in watson.search(seller, (User,), (User.first_name, User.last_name)):
-                    print(user.object)
+                sellerNameFilteredUsers.extend(filter_users_by_name_or_nick(nickname=seller))
                 print("username not none")
             else:
-                for user in watson.search(seller, (User,), ):
-                    print(user.object)
+                sellerNameFilteredUsers.extend(filter_users_by_name_or_nick(real_name=seller))
                 print("username none")
+        print(filteredUsers)
+        print(sellerNameFilteredUsers)
+        filteredUsers = set(filteredUsers).intersection(sellerNameFilteredUsers)
+        filteredUsers = list(filteredUsers)
+        print(filteredUsers)
+
+
     else:
         print("seller empty")
 
