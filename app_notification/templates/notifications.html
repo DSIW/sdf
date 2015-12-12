@@ -31,6 +31,16 @@
                                     </div>
                                 {% endif %}
 
+                                <!-- Wird nur angezeigt wenn ein Preisvorschlag Angenommen wurde -->
+                                {% if notification.counter_offer.accepted == True  and notification.notification_type != "BOOK_SEND" and notification.notification_type != "COUNTEROFFER_ACCEPT" %}
+                                    <div class="row text-right">
+                                        <div class="col s3">
+                                            <a href="{% url 'app_notification:notificationsSendBookPage' notification.id %}"
+                                               class="btn waves-effect waves-light">Versand</a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
                                 <!-- Wird nur angezeigt wenn ein Preisvorschlag angenommen wurde -->
                                 {% if notification.notification_type == "COUNTEROFFER_ACCEPT" %}
                                     <div class="row text-right">
