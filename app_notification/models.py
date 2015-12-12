@@ -1,8 +1,11 @@
 # coding=utf-8
 from django.db import models
 from app_user.models import User
-from app_book.models import Counteroffer
+from app_book.models import Book, Offer, Counteroffer
 from datetime import datetime
+from django.shortcuts import get_object_or_404
+
+from app.templatetags import template_extras
 
 from app.templatetags import template_extras
 
@@ -11,11 +14,13 @@ class Notification(models.Model):
     COUNTEROFFER = 'COUNTEROFFER'  # Verkaeufer bekommt Nachricht => Subject: Person Y hat fuer Buch X ein Angebot gemacht | Nachricht: Person Y hat fuer Buch X ein Angebot gemacht so und soviel Euro => Annehmen | Ablehnen -> CounterOffer Id
     COUNTEROFFER_ACCEPT = 'COUNTEROFFER_ACCEPT'  # Kaeufer bekommt Nachricht: Subject: Preisvorscvhlag fuer Buch X wurde akzeptiert | Nachricht: Fuer das Buch X wurde Preisvorschlag akzeptiert
     COUNTEROFFER_DECLINE = 'COUNTEROFFER_DECLINE'  # Kaeufer bekommt Nachricht: Subject: Preisvorscvhlag fuer Buch X wurde nicht akzeptiert | Nachricht: Fuer das Buch X wurde Preisvorschlag nicht akzeptiert
+    BOOK_SEND = 'BOOK_SEND' # Buch versendet
     NOTIFICATION_TYPE = (
         (FASTBUY, 'Sofortkauf'),
         (COUNTEROFFER, 'Preisvorschlag'),
         (COUNTEROFFER_ACCEPT, 'Preisvorschlag akzeptiert'),
         (COUNTEROFFER_DECLINE, 'Preisvorschlag abgelehnt'),
+        (BOOK_SEND, 'Buch verschickt'),
     )
 
     receiver_user = models.ForeignKey(User, default=None)
@@ -91,6 +96,35 @@ class Notification(models.Model):
         )
 
         notification.save()
+
+    def __str__(self):
+        return self.subject + ", " + self.message
+
+
+    @staticmethod
+    def send_book(notification_id):
+        notification = get_object_or_404(Notification, id=notification_id)
+        notification.notification_type = Notification.BOOK_SEND
+        notification.save()
+
+        counteroffer = get_object_or_404(Counteroffer, id=notification.counter_offer.id)
+        buyer = get_object_or_404(User, id=counteroffer.creator.id)
+        offer = get_object_or_404(Offer, id=counteroffer.offer.id)
+        book = get_object_or_404(Book, id=offer.book.id)
+
+        # Buchversand bestaetigt
+        subject = 'Das Buch ' + book.name + ' wurde verschickt.'
+        msg = 'Der Verkäufer hat bestätigt das er das Buch: "' + book.name + '" zu Ihnen versendet hat.'
+
+        new_notification = Notification(
+            subject=subject,
+            message=msg,
+            received_date=datetime.now(),
+            notification_type=Notification.BOOK_SEND,
+            receiver_user=buyer
+        )
+
+        new_notification.save()
 
     def __str__(self):
         return self.subject + ", " + self.message

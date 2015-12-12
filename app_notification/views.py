@@ -1,6 +1,9 @@
 # coding=utf-8
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.contrib import messages
 # Create your views here.
 
 from .models import Notification
@@ -17,3 +20,15 @@ def notificationPageView(request):
     return render_to_response(template_name, {
         "notifications": notifications,
     }, RequestContext(request))
+
+def notificationSendBookPageView(request, id):
+    '''
+    Diese Methode versendet eine Notification das das Buch versendet wurde
+    :param request: Der Request der erzeugt wurde
+    :id Id der der notification
+    '''
+    Notification.send_book(id);
+
+    messages.add_message(request, messages.SUCCESS,
+                         'Versandstatus wurde erfolgreich geändert. Der Käufer wird benachrichtigt')
+    return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
