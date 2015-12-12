@@ -401,13 +401,11 @@ def filter_users_with_offered_books(users):
             yield user
 
 def filter_users_by_name_or_nick(users=None, nickname=None, first_name=None, real_name=None):
-    #for user in users:
         if nickname:
             for user in User.objects.filter(user_ptr__username__contains=nickname):
                 yield user
         else:
             words = real_name.split()
-
             for user in User.objects.filter(reduce(operator.and_, (Q(first_name__contains=x) | Q(last_name__contains=x) for x in words))):
                 yield user
 
