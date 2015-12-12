@@ -8,7 +8,9 @@ from django.http import JsonResponse
 from datetime import datetime
 
 from .models import Notification
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def notificationPageView(request):
     '''
     Diese Methode zeigt alle vorhandenen Notifications an
@@ -24,6 +26,7 @@ def notificationPageView(request):
 
 
 # Call via AJAX
+@login_required
 def read_notification(request, id):
     notification = get_object_or_404(Notification, id=id)
     if request.method == 'POST':
@@ -33,6 +36,7 @@ def read_notification(request, id):
     return JsonResponse({'error': True})
 
 
+@login_required
 def notificationSendBookPageView(request, id):
     '''
     Diese Methode versendet eine Notification das das Buch versendet wurde

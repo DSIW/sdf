@@ -154,7 +154,7 @@ def detailView(request, id):
         "book": book
     },  RequestContext(request))
 
-
+@login_required
 @can_change_book
 def editBook(request, id):
     if request.method == 'POST':
@@ -188,7 +188,7 @@ def showcaseView(request, user_id):
         "offers": offers,
     }, RequestContext(request))
 
-
+@login_required
 @can_change_book
 def deleteBook(request, id):
     if request.method == 'DELETE':
@@ -200,7 +200,7 @@ def deleteBook(request, id):
     else:
         raise BaseException("Use http method DELETE for deleting a book.")
 
-
+@login_required
 def createBook(request):
     if request.method == 'POST':
         ret_val = handleEditBook(request, None)
@@ -218,7 +218,7 @@ def createBook(request):
         "offer_form": ret_val.form_two,
     }, RequestContext(request))
 
-
+@login_required
 @can_change_book
 def publishBook(request, id):
     book = get_object_or_404(Book, id=id)
@@ -247,7 +247,7 @@ def publishBook(request, id):
         "book": book,
     }, RequestContext(request))
 
-
+@login_required
 @can_change_book
 def unpublishBook(request, id):
     if request.method == 'PUT':
@@ -275,7 +275,7 @@ def searchBookResults(request):
         "results": search_results,
     }, RequestContext(request))
 
-
+@login_required
 def counteroffer(request, id):
     offer = get_object_or_404(Offer, id=id)
     user = get_object_or_404(User, id=request.user.id)
@@ -316,7 +316,7 @@ def counteroffer(request, id):
 
     return HttpResponseRedirect(reverse('app_book:book-detail', kwargs = {'id': book.id}))
 
-
+@login_required
 def accept_counteroffer(request, id):
     counteroffer = get_object_or_404(Counteroffer, id=id)
     buyer = get_object_or_404(User, id=counteroffer.creator.id)
@@ -337,7 +337,7 @@ def accept_counteroffer(request, id):
 
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
 
-
+@login_required
 def decline_counteroffer(request, id):
     counteroffer = get_object_or_404(Counteroffer, id=id)
     buyer = get_object_or_404(User, id=counteroffer.creator.id)

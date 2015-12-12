@@ -15,6 +15,7 @@ from django.contrib.auth.forms import SetPasswordForm
 
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import update_session_auth_hash, authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import login as loginview
 from django.contrib.auth.decorators import login_required
 
@@ -123,6 +124,7 @@ class UserUpdate(FormMessagesMixin, UpdateView):
     def get_success_url(self):
         return reverse('app:startPage')
 
+    @method_decorator(login_required)
     @method_decorator(current_user)
     def dispatch(self, *args, **kwargs):
         return super(UserUpdate, self).dispatch(*args, **kwargs)
@@ -143,7 +145,7 @@ def confirm_email(request, uuid):
         messages.add_message(request, messages.ERROR, 'Ihre E-Mail Adresse konnte nicht bestätigt werden')
     return HttpResponseRedirect(reverse('app:startPage'))
 
-
+@login_required
 def changePassword(request):
     if request.method == 'POST':
         form = PasswordChangeForm(user=request.user, data=request.POST)
