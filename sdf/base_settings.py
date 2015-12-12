@@ -90,6 +90,9 @@ LOGGING = {
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
         },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        }
     },
     'handlers': {
         'console': {
@@ -117,11 +120,13 @@ LOGGING = {
         'django.request': {
             'handlers': ['file-debug'],
             'level': 'DEBUG',
+            'filters': ['require_debug_false'],
             'propagate': False,
         },
         'django.request': {
             'handlers': ['mail_admins', 'file-error'],
             'level': 'ERROR',
+            'filters': ['require_debug_false'],
             'propagate': False,
         }
     }
