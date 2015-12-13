@@ -21,6 +21,15 @@
 
 <body class="{% block body_classes %}{% endblock %}">
 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/de_DE/sdk.js#xfbml=1&version=v2.5";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 <div class="nav-fixed">
     <nav class="white" role="navigation">
         <div class="nav-wrapper container">
@@ -93,7 +102,7 @@
                     wäre es ein Vollzeitjob. Jegliche Art der Hilfe ist willkommen, um das Projekt weiterzubringen.</p>
             </div>
             <div class="col l3 s12">
-                <p></p>
+                <p><div class="fb-like" data-href="//{{ request.get_host }}{% url "app:startPage" %}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div></p>
             </div>
             <div class="col l3 s12">
                 <ul>

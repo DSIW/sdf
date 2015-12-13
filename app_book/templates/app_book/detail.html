@@ -48,6 +48,7 @@
                         {{ book.description }}
                     </p>
                 {% endif %}
+                <p><div class="fb-like" data-href="//{{ request.get_host }}{{ request.path }}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div></p>
                 {% if book.is_published %}
                     <div class="right-align">
                         <p>Preis: <strong>{{ book.price|currency }}</strong></p>
