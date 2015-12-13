@@ -7,8 +7,6 @@ from django.shortcuts import get_object_or_404
 
 from app.templatetags import template_extras
 
-from app.templatetags import template_extras
-
 class Notification(models.Model):
     FASTBUY = 'FASTBUY'  # Empfdaenger bekommt Notification => Subject: Buch X wurde gekauft | Nachricht: Person X hat NBuch Y gekauft
     COUNTEROFFER = 'COUNTEROFFER'  # Verkaeufer bekommt Nachricht => Subject: Person Y hat fuer Buch X ein Angebot gemacht | Nachricht: Person Y hat fuer Buch X ein Angebot gemacht so und soviel Euro => Annehmen | Ablehnen -> CounterOffer Id
@@ -28,6 +26,7 @@ class Notification(models.Model):
     subject = models.CharField(max_length=200)
     received_date = models.DateTimeField('received_date')
     counter_offer = models.ForeignKey(Counteroffer, default=None, null=True, blank=True)
+    read_at = models.DateTimeField(null=True, blank=True)
     notification_type = models.CharField(max_length=200,
                                          choices=NOTIFICATION_TYPE,
                                          default=FASTBUY)

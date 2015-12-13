@@ -4,7 +4,8 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-# Create your views here.
+from django.http import JsonResponse
+from datetime import datetime
 
 from .models import Notification
 
@@ -20,6 +21,17 @@ def notificationPageView(request):
     return render_to_response(template_name, {
         "notifications": notifications,
     }, RequestContext(request))
+
+
+# Call via AJAX
+def read_notification(request, id):
+    notification = get_object_or_404(Notification, id=id)
+    if request.method == 'POST':
+        notification.read_at = datetime.now()
+        notification.save()
+        return JsonResponse({'read_at': notification.read_at})
+    return JsonResponse({'error': True})
+
 
 def notificationSendBookPageView(request, id):
     '''

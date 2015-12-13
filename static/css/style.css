@@ -385,3 +385,27 @@ img.book-cover {
   margin-top: 30px;
   padding-top: 20px;
 }
+
+
+/* Notifications */
+.notifications li {
+  position: relative;
+}
+.notifications li .date {
+  font-size: 0.8em;
+  color: gray;
+  margin-right: 20px;
+}
+.notifications li .subject {
+  font-weight: normal;
+}
+.notifications li.new .subject {
+  font-weight: bold;
+}
+.notifications li .badge {
+  text-shadow: 0px 0px 5px rgba(254, 168, 43, 0.42);
+  visibility: hidden;
+}
+.notifications li.new .badge {
+  visibility: visible;
+}
