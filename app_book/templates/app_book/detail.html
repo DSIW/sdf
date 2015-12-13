@@ -39,13 +39,7 @@
                 <p>Verkaufsort: <strong><a href="https://www.google.de/maps?q={{ book.user.location }}" target="_new">{{ book.user.location }}</a></strong></p>
                 <p>Verkäuferbewertung:
                     <strong>
-                        <span class="seller-rating">
-                          <i class="material-icons seller-rating-star">star</i>
-                          <i class="material-icons seller-rating-star">star</i>
-                          <i class="material-icons seller-rating-star">star</i>
-                          <i class="material-icons seller-rating-star">star_half</i>
-                          <i class="material-icons seller-rating-star">star_border</i>
-                        </span>
+                        {% include 'app_user/_user_rating.html' with user=book.user user_rating=seller_rating  %}
                     </strong>
                 </p>
                 {% if book.description %}

@@ -44,6 +44,14 @@
                                     </div>
                                 {% endif %}
 
+                                {% if notification.notification_type == "REQUEST_RATING" and notification.payment_id != None %}
+                                    <div class="row text-right">
+                                        <div class="col s3">
+                                            <a href="{% url 'app_payment:rate-seller' notification.payment_id %}" class="btn waves-effect waves-light">Bewerten</a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
                                 <!-- Wird nur angezeigt wenn ein Preisvorschlag angenommen wurde -->
                                 {% if notification.notification_type == "COUNTEROFFER_ACCEPT" %}
                                     <div class="row text-right">

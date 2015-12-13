@@ -10,13 +10,7 @@
         <i class="card-title activator grey-text text-darken-4 material-icons card-open">more_vert</i>
         <p class="card-title activator grey-text text-darken-4 book-title">{{ book.name }}</p>
         <p class="author">{{ book.author }}</p>
-        <p class="seller-rating left">
-            <i class="material-icons seller-rating-star">star</i>
-            <i class="material-icons seller-rating-star">star</i>
-            <i class="material-icons seller-rating-star">star</i>
-            <i class="material-icons seller-rating-star">star_half</i>
-            <i class="material-icons seller-rating-star">star_border</i>
-        </p>
+        {% include 'app_user/_user_rating.html' with user=user user_rating=user_rating  %}
         <p class="card-title activator grey-text text-darken-4 price right">{{ offer.totalPrice|currency }}</p>
     </div>
     <div class="card-reveal">
@@ -33,13 +27,7 @@
         {% endif %}
         <p>Verkäuferbewertung:
             <strong>
-                <span class="seller-rating">
-                  <i class="material-icons seller-rating-star">star</i>
-                  <i class="material-icons seller-rating-star">star</i>
-                  <i class="material-icons seller-rating-star">star</i>
-                  <i class="material-icons seller-rating-star">star_half</i>
-                  <i class="material-icons seller-rating-star">star_border</i>
-                </span>
+                {% include 'app_user/_user_rating.html' with user=user user_rating=user_rating  %}
             </strong>
         </p>
         <div class="card-action">

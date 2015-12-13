@@ -6,5 +6,6 @@ urlpatterns = [
     url(r'^counteroffers/(?P<id>[0-9]+)/start_payment/$', views.start_paypal_payment_by_counter_offer, name='start_paypal_payment_by_counter_offer'),
     url(r'^payments/(?P<id>[0-9]+)/success/$', views.paypal_complete, name='payment-success'),
     url(r'^payments/(?P<id>[0-9]+)/cancel/$', views.paypal_abort, name='payment-cancel'),
+    url(r'^payments/(?P<id>[0-9]+)/rate/$', views.rate_seller, name='rate-seller'),
     url(r'^paypal/ipn-api/', include('paypal.standard.ipn.urls')),
 ]

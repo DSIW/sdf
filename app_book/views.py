@@ -16,7 +16,9 @@ from .models import Book
 from .forms import BookForm
 import watson
 import collections
+
 from app_user.models import User
+from app_payment.models import SellerRating
 from app_notification.models import Notification
 
 from .models import Book, Offer, Counteroffer
@@ -148,6 +150,7 @@ def detailView(request, id):
     book = get_object_or_404(Book, id=id)
 
     return render_to_response(template_name, {
+        "seller_rating": SellerRating.calculate_stars_for_user(book.user_id),
         "book": book
     },  RequestContext(request))
 
@@ -175,9 +178,12 @@ def showcaseView(request, user_id):
     template_name = 'app_book/showcase.html'
 
     user = get_object_or_404(User, id=user_id)
+    user_rating = SellerRating.calculate_stars_for_user(user_id)
+
     offers = Offer.objects.filter(seller_user_id=user_id, active=True).all()
 
     return render_to_response(template_name, {
+        "user_rating":user_rating,
         "showcase_user": user,
         "offers": offers,
     }, RequestContext(request))

@@ -345,6 +345,11 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
 .showcase .card-book.payment {
   opacity: 0.4;
 }
+form .seller-rating-star {
+  cursor: pointer;
+  font-size: 1.5em;
+  width: 22px;
+}
 
 
 /* Offer */
@@ -373,6 +378,12 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
   font-size: 1em;
   width: 12px;
   color: #FCC32A;
+}
+.seller-rating-count {
+  font-size: 0.8em;
+  top: -3px;
+  margin-left: 3px;
+  position: relative;
 }
 img.book-cover {
   border: 1px solid #CCC;
@@ -408,4 +419,21 @@ img.book-cover {
 }
 .notifications li.new .badge {
   visibility: visible;
+}
+
+
+/* Ratings */
+.rating-card {
+  margin-bottom: 20px;
+}
+.rating-card .seller-rating {
+  padding-right: 5px;
+  border-right: 1px solid #ccc;
+  margin-right: 5px;
+}
+.rating-text {
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 30px;
+  font-style: italic;
 }

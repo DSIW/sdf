@@ -2,6 +2,7 @@
 from django.db import models
 from app_user.models import User
 from app_book.models import Book, Offer, Counteroffer
+from app_payment.models import Payment
 from datetime import datetime
 from django.shortcuts import get_object_or_404
 
@@ -13,12 +14,14 @@ class Notification(models.Model):
     COUNTEROFFER_ACCEPT = 'COUNTEROFFER_ACCEPT'  # Kaeufer bekommt Nachricht: Subject: Preisvorscvhlag fuer Buch X wurde akzeptiert | Nachricht: Fuer das Buch X wurde Preisvorschlag akzeptiert
     COUNTEROFFER_DECLINE = 'COUNTEROFFER_DECLINE'  # Kaeufer bekommt Nachricht: Subject: Preisvorscvhlag fuer Buch X wurde nicht akzeptiert | Nachricht: Fuer das Buch X wurde Preisvorschlag nicht akzeptiert
     BOOK_SEND = 'BOOK_SEND' # Buch versendet
+    REQUEST_RATING = 'REQUEST_RATING' # Den Verkäufer nach Erhalt des Buches bewerten.
     NOTIFICATION_TYPE = (
         (FASTBUY, 'Sofortkauf'),
         (COUNTEROFFER, 'Preisvorschlag'),
         (COUNTEROFFER_ACCEPT, 'Preisvorschlag akzeptiert'),
         (COUNTEROFFER_DECLINE, 'Preisvorschlag abgelehnt'),
         (BOOK_SEND, 'Buch verschickt'),
+        (REQUEST_RATING, 'Verkäufer bewerten'),
     )
 
     receiver_user = models.ForeignKey(User, default=None)
@@ -26,6 +29,7 @@ class Notification(models.Model):
     subject = models.CharField(max_length=200)
     received_date = models.DateTimeField('received_date')
     counter_offer = models.ForeignKey(Counteroffer, default=None, null=True, blank=True)
+    payment = models.ForeignKey(Payment, default=None, null=True, blank=True)
     read_at = models.DateTimeField(null=True, blank=True)
     notification_type = models.CharField(max_length=200,
                                          choices=NOTIFICATION_TYPE,
@@ -127,3 +131,17 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.subject + ", " + self.message
+
+    @staticmethod
+    def request_rating(payment):
+        seller_name = payment.seller_user.pseudonym_or_full_name()
+        subject = 'Bewerten Sie '+seller_name+'!'
+        msg = 'Sie haben ein Buch von '+seller_name+' gekauft. Der Verkäufer würde sich über eine Bewertung freuen!'
+        new_notification = Notification(
+            subject=subject,
+            message=msg,
+            received_date=datetime.now(),
+            notification_type=Notification.REQUEST_RATING,
+            payment=payment,
+            receiver_user=payment.buyer_user)
+        new_notification.save()
