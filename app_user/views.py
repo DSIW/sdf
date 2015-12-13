@@ -16,6 +16,7 @@ from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import update_session_auth_hash, authenticate, login
 from django.contrib.auth.views import login as loginview
+from django.contrib.auth.decorators import login_required
 
 from django.core.mail import EmailMessage
 from .models import User, ConfirmEmail, PasswordReset
@@ -26,7 +27,8 @@ from django.utils.translation import ugettext_lazy as _
 from braces.views import FormMessagesMixin
 from smtplib import SMTPRecipientsRefused
 from .models import User, ConfirmEmail
-from .forms import CustomUpdateForm, RegistrationForm
+from .forms import CustomUpdateForm,RegistrationForm
+from app_payment.models import SellerRating
 
 
 # Custom Current User Decorator
@@ -226,3 +228,9 @@ def password_new(request, uuid):
         form = SetPasswordForm(user=user)
     action = reverse('app_user:new_password', kwargs={'uuid': uuid})
     return render_to_response('app_user/password.html', {'form': form, 'action': action}, RequestContext(request))
+
+@login_required
+def user_ratings(request, id):
+    user = User.objects.filter(pk=id).first()
+    ratings = SellerRating.objects.filter(rated_user_id=id)
+    return render_to_response('app_user/user_ratings.html',{'rated_user':user,'ratings':ratings},RequestContext(request))

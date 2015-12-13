@@ -1,0 +1,13 @@
+{% load template_extras %}
+
+<span class="seller-rating">
+    {% for i in user_rating.full_stars|range %}
+        <i class="material-icons seller-rating-star">star</i>
+    {% endfor %}
+    {% if user_rating.has_halfstar %}
+        <i class="material-icons seller-rating-star">star_half</i>
+    {% endif %}
+    {% for i in user_rating.empty_stars|range %}
+        <i class="material-icons seller-rating-star">star_border</i>
+    {% endfor %}
+</span>

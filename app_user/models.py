@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Max
 from django.contrib.auth.models  import User as AuthUser, BaseUserManager
 from sdf.base_settings import *
+from datetime import datetime
 import glob
 
 def user_directory_path(instance, filename):
