@@ -28,6 +28,8 @@
                 </p>
                 <p>Autor: <strong>{{ book.author }}</strong></p>
                 <p>Seitenanzahl: <strong>{{ book.pageNumber }}</strong></p>
+                <p>ISBN-13: <strong>{{ book.isbn13 }}</strong></p>
+                <p>ISBN-10: <strong>{{ book.isbn10 }}</strong></p>
                 {% if request.user.id == book.active_payment.buyer_user.id or request.user.id == book.active_payment.seller_user.id %}
                     <p>Käufer: <strong>{{ book.active_payment.buyer_user.pseudonym_or_full_name }} | Paypal: {{ book.active_payment.buyer_user.paypal }}</strong></p>
                 {% endif %}
