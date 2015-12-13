@@ -9,12 +9,14 @@ from django.contrib import messages
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.db import IntegrityError
 from .models import Book
 from .forms import BookForm
+
 import watson
 import collections
 

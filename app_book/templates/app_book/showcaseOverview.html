@@ -22,6 +22,22 @@
                             <li class="{% active order_comp 'date-desc'%}" ><a href="?{% url_replace_sort request 'order_by' 'date' 'order_dir' 'desc' %}" class="white-text">&#8595</a></li>
                         </ul>
                     </li>
+<<<<<<< HEAD
+=======
+        <h1>Schaufenster Übersicht</h1>
+
+        {% if users|length > 0 %}
+        <nav class="teal lighten-1">
+            <div class="nav-wrapper">
+
+                <ul id="nav_ul_sort" class="right">
+                    <li>Aktualisierungsdatum:
+                        <ul class="right">
+                            <li class="{% active order_comp 'date-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'date' 'order_dir' 'asc' %}" class="white-text">&#8593</a></li>
+                            <li class="{% active order_comp 'date-desc'%}" ><a href="?{% url_replace_sort request 'order_by' 'date' 'order_dir' 'desc' %}" class="white-text">&#8595</a></li>
+                        </ul>
+                    </li>
+>>>>>>> Squash branch feature/B27-SchaufensterView
 
                     <!-- TODO User rating asc  -->
 
@@ -40,7 +56,10 @@
                         </ul>
                     </li>
 
+<<<<<<< HEAD
                 {% endwith %}
+=======
+>>>>>>> Squash branch feature/B27-SchaufensterView
                 </ul>
             </div>
         </nav>
@@ -53,7 +72,11 @@
                 {% endfor %}
             </div>
 
+<<<<<<< HEAD
             <div class="col s12 center">
+=======
+            <div class="col">
+>>>>>>> Squash branch feature/B27-SchaufensterView
                 {% include 'app/_pagination.html' with items=users request=request%}
             </div>
         </div>

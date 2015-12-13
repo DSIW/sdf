@@ -20,6 +20,29 @@
 
         <p>
             <a class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="vor {{ user.updated|timesince }}">Aktualisierung: {{ user.updated|date:"d.m.y" }}</a>
+<<<<<<< HEAD
+=======
+        <img class="activator" src="{{ MEDIA_URL }}{{ user.profileImage }}">
+    </div>
+    <div class="card-content">
+        <p class="card-title grey-text text-darken-4">
+            <a href="{% url 'app_book:showcase' user.id %}" >{{ user.pseudonym_or_full_name }}</a>
+        </p>
+        <p class="right">Bücher: {{ user.books_count }}</p>
+        <p class="seller-rating left">
+            <!-- TODO fix stars -->
+            <i class="material-icons seller-rating-star">star</i>
+            <i class="material-icons seller-rating-star">star</i>
+            <i class="material-icons seller-rating-star">star</i>
+            <i class="material-icons seller-rating-star">star_half</i>
+            <i class="material-icons seller-rating-star">star_border</i>
+>>>>>>> add basic functions
+        </p>
+        <br class="clearfix">
+
+        <p>
+            <a class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="vor {{ user.updated|timesince }}">Aktualisierung: {{ user.updated|date:"d.m.y" }}</a>
+>>>>>>> Squash branch feature/B27-SchaufensterView
         </p>
     </div>
 </div>
