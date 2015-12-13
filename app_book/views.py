@@ -4,6 +4,7 @@ import collections
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
@@ -150,7 +151,6 @@ def detailView(request, id):
     book = get_object_or_404(Book, id=id)
 
     return render_to_response(template_name, {
-        "seller_rating": SellerRating.calculate_stars_for_user(book.user_id),
         "book": book
     },  RequestContext(request))
 
@@ -178,12 +178,9 @@ def showcaseView(request, user_id):
     template_name = 'app_book/showcase.html'
 
     user = get_object_or_404(User, id=user_id)
-    user_rating = SellerRating.calculate_stars_for_user(user_id)
-
     offers = Offer.objects.filter(seller_user_id=user_id, active=True).all()
 
     return render_to_response(template_name, {
-        "user_rating":user_rating,
         "showcase_user": user,
         "offers": offers,
     }, RequestContext(request))
@@ -351,3 +348,91 @@ def decline_counteroffer(request, id):
                          'Der Preisvorschlag wurde erfolgreich abgelehnt. Der Interessent wird benachrichtigt')
 
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
+
+
+def books(request):
+    template_name = 'app_book/books.html'
+
+    filtered_offers = []
+    filtered_offers.extend(Offer.objects.filter(active=True))
+
+    page = request.GET.get('page')
+    order_by = request.GET.get('order_by', 'date')
+    order_dir = request.GET.get('order_dir', 'asc')
+    order_dir_is_desc = order_dir == 'desc'
+
+    if order_by == 'date':
+        filtered_offers.sort(key=lambda offer: offer.book.created, reverse=order_dir_is_desc)
+    elif order_by == 'title':
+        filtered_offers.sort(key=lambda offer: offer.book.name.lower(), reverse=order_dir_is_desc)
+    elif order_by == 'author':
+        filtered_offers.sort(key=lambda offer: offer.book.author.lower(), reverse=order_dir_is_desc)
+    elif order_by == 'price':
+        filtered_offers.sort(key=lambda offer: (offer.price + offer.shipping_price), reverse=order_dir_is_desc)
+    else:
+        filtered_offers.sort(key=lambda offer: offer.updated, reverse=order_dir_is_desc)
+
+    paginator = Paginator(filtered_offers, 3)
+
+    try:
+        offers = paginator.page(page)
+    except PageNotAnInteger:
+        offers = paginator.page(1)
+    except EmptyPage:
+        offers = paginator.page(paginator.num_pages)
+
+    return render_to_response(template_name, {
+        "offers": offers,
+        "order_by": order_by,
+        "order_dir": order_dir,
+        "request": request,
+    }, RequestContext(request))
+
+
+def filter_users_with_offered_books(users):
+    for user in users:
+        if not user.showcaseDisabled and len(user.offer_set.filter(active=True)) > 0:
+            yield user
+
+
+def showcasesOverView(request):
+    template_name = 'app_book/showcaseOverview.html'
+
+    filteredUsers = []
+    filteredUsers.extend(filter_users_with_offered_books(User.objects.all()))
+
+    page = request.GET.get('page')
+    order_by = request.GET.get('order_by', 'date')
+    order_dir = request.GET.get('order_dir', 'asc')
+    order_dir_is_desc = order_dir == 'desc'
+
+    for user in filteredUsers:
+        user.books_count = len(user.offer_set.all())
+        user.updated = (max(user.offer_set.all(), key=lambda offer: offer.updated)).updated
+
+    if order_by == 'count':
+        filteredUsers.sort(key=lambda user: user.books_count, reverse=order_dir_is_desc)
+    elif order_by == 'name':
+        filteredUsers.sort(key=lambda user: user.pseudonym_or_full_name().lower(), reverse=order_dir_is_desc)
+    # TODO: user-rating
+    # elif order_by == 'rating':
+    #    filteredUsers.sort(key=lambda user: UserRating.calculate_stars_for_user(user.id), reverse=direction)
+    else:
+        # most recent update
+        filteredUsers.sort(key=lambda user: user.updated, reverse=order_dir_is_desc)
+
+    paginator = Paginator(filteredUsers, 3)
+
+    try:
+        users = paginator.page(page)
+    except PageNotAnInteger:
+        users = paginator.page(1)
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)
+
+    return render_to_response(template_name, {
+        "users": users,
+        "order_by": order_by,
+        "order_dir": order_dir,
+        "request": request,
+    }, RequestContext(request))
