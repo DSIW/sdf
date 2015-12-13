@@ -23,7 +23,7 @@ def user_directory_path(instance, filename):
     return upload_dir_path
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, email, password=None, username=None):
         if not email:
             raise ValueError('Users must have an email address')
 
@@ -32,6 +32,7 @@ class MyUserManager(BaseUserManager):
         )
 
         user.set_password(password)
+        user.username = username
         user.save(using=self._db)
         return user
 

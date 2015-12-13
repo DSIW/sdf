@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import operator
+from functools import reduce
 
 import collections
 
@@ -9,12 +11,16 @@ from django.contrib import messages
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.db import IntegrityError
+from django.utils.html import escape
 from .models import Book
 from .forms import BookForm
+
 import watson
 import collections
 
@@ -394,17 +400,39 @@ def filter_users_with_offered_books(users):
         if not user.showcaseDisabled and len(user.offer_set.filter(active=True)) > 0:
             yield user
 
+def filter_users_by_name_or_nick(users=None, nickname=None, first_name=None, real_name=None):
+        if nickname:
+            for user in User.objects.filter(user_ptr__username__contains=nickname):
+                yield user
+        else:
+            words = real_name.split()
+            for user in User.objects.filter(reduce(operator.and_, (Q(first_name__contains=x) | Q(last_name__contains=x) for x in words))):
+                yield user
+
+
+
 
 def showcasesOverView(request):
     template_name = 'app_book/showcaseOverview.html'
 
     filteredUsers = []
+    sellerNameFilteredUsers = []
     filteredUsers.extend(filter_users_with_offered_books(User.objects.all()))
 
-    page = request.GET.get('page')
-    order_by = request.GET.get('order_by', 'date')
-    order_dir = request.GET.get('order_dir', 'asc')
+    page = escape(request.GET.get('page'))
+    order_by = escape(request.GET.get('order_by', 'date'))
+    order_dir = escape(request.GET.get('order_dir', 'asc'))
     order_dir_is_desc = order_dir == 'desc'
+    seller = escape(request.GET.get('seller', ''))
+
+    if seller:
+        for user in filteredUsers:
+            if user.username is not None:
+                sellerNameFilteredUsers.extend(filter_users_by_name_or_nick(nickname=seller))
+            else:
+                sellerNameFilteredUsers.extend(filter_users_by_name_or_nick(real_name=seller))
+        filteredUsers = set(filteredUsers).intersection(sellerNameFilteredUsers)
+        filteredUsers = list(filteredUsers)
 
     for user in filteredUsers:
         user.books_count = len(user.offer_set.all())

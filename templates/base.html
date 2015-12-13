@@ -43,7 +43,7 @@
             </ul>
             {% endif %}
             <ul class="right hide-on-med-and-down">
-                <li><a href="{% url 'app_book:showcases' %}">Schaufenster</a></li>
+                <li><a href="{% url 'app_book:showcases' %}">Alle Schaufenster</a></li>
                 <li><a href="{% url 'app_book:books' %}">Bücher</a></li>
                 {% if user.is_authenticated %}
                   <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
@@ -62,7 +62,7 @@
             </div>
 
             <ul id="nav-mobile" class="side-nav">
-                <li><a href="{% url 'app_book:showcases' %}">Schaufenster</a></li>
+                <li><a href="{% url 'app_book:showcases' %}">Alle Schaufenster</a></li>
                 <li><a href="{% url 'app_book:books' %}">Bücher</a></li>
                 <hr>
                 {% if user.is_authenticated %}

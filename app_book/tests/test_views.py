@@ -10,8 +10,11 @@ from app_user.models import *
 
 class BookTest(TestCase):
     def setUp(self):
-        user_username = 'test@fixture_mail.com'
-        user_password = 'supersavepassword'
+        self.user_username = 'test@fixture_mail.com'
+        self.user_password = 'supersavepassword'
+        self.first_name = 'firstName'
+        self.last_name = 'lastName'
+        self.username = 'hockeyspieler8'
         with open('fixtures/image1.jpg', 'rb') as img:
             image = SimpleUploadedFile(img.name, img.read(), content_type='image/jpeg')
             self.book_data = {
@@ -35,10 +38,41 @@ class BookTest(TestCase):
 
         self.client = Client()
 
-        User.objects.create_user(user_username, user_password)
-        status = self.client.login(username=user_username, password=user_password)
+        user = User.objects.create_user(self.user_username, self.user_password)
+        user.first_name = self.first_name
+        user.last_name = self.last_name
+        user.save()
+
+        status = self.client.login(username=self.user_username, password=self.user_password)
         if status is False:
             raise Exception("Login error")
+
+    def test_seller_search_by_nickname(self):
+        users = User.objects.filter(email=self.user_username)
+        self.assertEqual(len(users), 1)
+        user = users[0]
+        self.assertIsNone(user.username)
+        user.username = self.username
+        user.save()
+        self.test_create_book_with_Offer()
+
+        response = self.client.get(reverse('app_book:showcases'), data={'seller': self.username})
+        #self.assertEqual(len(response.context['users']), 1)
+        self.assertEqual(len(response.context['users'].object_list), 1)
+
+    def test_seller_search_by_real_name(self):
+        users = User.objects.filter(username=self.username)
+        self.assertEqual(len(users), 0)
+        self.assertEqual(len(User.objects.filter(first_name=self.first_name)), 1)
+        self.assertEqual(len(User.objects.filter(last_name=self.last_name)), 1)
+
+        self.test_create_book_with_Offer()
+        response = self.client.get(reverse('app_book:showcases'), data={'seller': self.first_name})
+        self.assertEqual(len(response.context['users'].object_list), 1)
+        response = self.client.get(reverse('app_book:showcases'), data={'seller': self.last_name})
+        self.assertEqual(len(response.context['users'].object_list), 1)
+
+
 
     def test_create_book(self):
         book = Book.objects.all()

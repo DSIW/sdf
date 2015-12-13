@@ -9,7 +9,6 @@
     <div class="container">
         <h1>Alle Schaufenster</h1>
 
-        {% if users|length > 0 %}
         <nav class="teal lighten-1">
             <div class="nav-wrapper">
 
@@ -18,8 +17,8 @@
 
                     <li>Aktualisierungsdatum:
                         <ul class="right">
-                            <li class="{% active order_comp 'date-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'date' 'order_dir' 'asc' %}" class="white-text">&#8593</a></li>
-                            <li class="{% active order_comp 'date-desc'%}" ><a href="?{% url_replace_sort request 'order_by' 'date' 'order_dir' 'desc' %}" class="white-text">&#8595</a></li>
+                            <li class="{% active order_comp 'date-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'date' 'order_dir' 'asc' %}" class="white-text">&#8593;</a></li>
+                            <li class="{% active order_comp 'date-desc'%}" ><a href="?{% url_replace_sort request 'order_by' 'date' 'order_dir' 'desc' %}" class="white-text">&#8595;</a></li>
                         </ul>
                     </li>
 
@@ -28,22 +27,36 @@
                     <!-- TODO User rating desc -->
                     <li>Anzahl:
                         <ul class="right">
-                            <li class="{% active order_comp 'count-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'count' 'order_dir' 'asc' %}" class="white-text">&#8593</a></li>
-                            <li class="{% active order_comp 'count-desc' %}" ><a href="?{% url_replace_sort request 'order_by' 'count' 'order_dir' 'desc' %}" class="white-text">&#8595</a></li>
+                            <li class="{% active order_comp 'count-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'count' 'order_dir' 'asc' %}" class="white-text">&#8593;</a></li>
+                            <li class="{% active order_comp 'count-desc' %}" ><a href="?{% url_replace_sort request 'order_by' 'count' 'order_dir' 'desc' %}" class="white-text">&#8595;</a></li>
                         </ul>
                     </li>
 
                     <li>Name:
                         <ul class="right">
-                            <li class="{% active order_comp 'name-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'name' 'order_dir' 'asc' %}" class="white-text">&#8593</a></li>
-                            <li class="{% active order_comp 'name-desc' %}" ><a href="?{% url_replace_sort request 'order_by' 'name' 'order_dir' 'desc' %}" class="white-text">&#8595</a></li>
+                            <li class="{% active order_comp 'name-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'name' 'order_dir' 'asc' %}" class="white-text">&#8593;</a></li>
+                            <li class="{% active order_comp 'name-desc' %}" ><a href="?{% url_replace_sort request 'order_by' 'name' 'order_dir' 'desc' %}" class="white-text">&#8595;</a></li>
                         </ul>
+                    </li>
+                    <li>
+                        <form role="form" method="get" action="?">
+                            {% for field in request.GET %}
+                                {% if field != 'seller' %}
+                            <input type="hidden" name="{{ field }}" value="{% field_value request field %}"/>
+                                {% endif %}
+                            {% endfor %}
+                            <div class="input-field search-field">
+                                <label for="search"><i class="material-icons">search</i></label>
+                                <input placeholder="Verkäufer" name="seller" type="search" id="search-field" class="field" maxlength="" value="{{ request.GET.seller }}">
+                            </div>
+                        </form>
                     </li>
 
                 {% endwith %}
                 </ul>
             </div>
         </nav>
+        {% if users|length > 0 %}
 
         <div class = "row">
 
@@ -58,7 +71,11 @@
             </div>
         </div>
         {% else %}
-            Es werde momentan in keinen Schaufenstern Bücher zum Verkauf angeboten.
+                    {% if request.GET.seller %}
+                    Es wurden keine zur Suche passenden Schaufenster gefunden.
+                    {% else %}
+                    Es werde momentan in keinen Schaufenstern Bücher zum Verkauf angeboten.
+        {% endif %}
         {% endif %}
 
     </div>
