@@ -1,0 +1,25 @@
+{% load template_extras %}
+{% load staticfiles %}
+
+
+<div class="card card-book small">
+    <div class="card-image waves-effect waves-block waves-light">
+        <a href="{% url 'app_book:showcase' user.id %}" >
+            <img class="activator" src="{{ MEDIA_URL }}{{ user.profileImage }}">
+        </a>
+    </div>
+    <div class="card-content">
+        <p class="card-title grey-text text-darken-4">
+            <a href="{% url 'app_book:showcase' user.id %}" >{{ user.pseudonym_or_full_name }}</a>
+        </p>
+        <p class="right">Bücher: {{ user.books_count }}</p>
+        <p class="seller-rating left">
+            {% include 'app_user/_user_rating.html' with user=user %}
+        </p>
+        <br class="clearfix">
+
+        <p>
+            <a class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="vor {{ user.updated|timesince }}">Aktualisierung: {{ user.updated|date:"d.m.y" }}</a>
+        </p>
+    </div>
+</div>

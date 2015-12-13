@@ -129,6 +129,12 @@ class UserUpdate(FormMessagesMixin, UpdateView):
     def dispatch(self, *args, **kwargs):
         return super(UserUpdate, self).dispatch(*args, **kwargs)
 
+def user_details(request, pk):
+    template_name = 'app_user/detail.html'
+    user = User.objects.filter(id=pk).first()
+    user.books_count = len(user.offer_set.all())
+
+    return render_to_response(template_name, {'user': user}, RequestContext(request))
 
 def confirm_email(request, uuid):
     confirmEmail = ConfirmEmail.objects.filter(uuid=uuid).first()

@@ -35,19 +35,23 @@
         <div class="nav-wrapper container">
             <a id="logo-container" href="{% url "app:startPage" %}" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
             {% if user.is_authenticated %}
-            <ul id="nav-dropdown-profile" class="dropdown-content">
-                <li><a href="{% url 'app_user:edit_profile' user.pk %}">Mein Profil</a></li>
+              <ul id="nav-dropdown-profile" class="dropdown-content">
+                <li><a href="{% url 'app_user:user-details' user.pk %}">Mein Profil</a></li>
                 <li><a href="{% url 'app_user:change_password' %}">Passwort ändern</a></li>
                 <li class="divider"></li>
                 <li><a href="{% url 'logout' %}?next=/">Logout</a></li>
             </ul>
-            <ul class="right hide-on-med-and-down">
-                <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
-                <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
-                <li><a href="{% url 'app_notification:notificationsPage' %}"><i class="material-icons tooltipped" data-tooltip="Nachrichten">notifications</i></a></li>
-                <li><a class="dropdown-button" href="javascript:;" data-constrainwidth="false" data-activates="nav-dropdown-profile">{{ request.current_user.pseudonym_or_full_name }}<i class="material-icons right">arrow_drop_down</i></a></li>
-            </ul>
             {% endif %}
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{% url 'app_book:showcases' %}">Schaufenster</a></li>
+                <li><a href="{% url 'app_book:books' %}">Bücher</a></li>
+                {% if user.is_authenticated %}
+                  <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
+                  <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
+                  <li><a href="{% url 'app_notification:notificationsPage' %}"><i class="material-icons tooltipped" data-tooltip="Nachrichten">notifications</i></a></li>
+                  <li><a class="dropdown-button" href="javascript:;" data-constrainwidth="false" data-activates="nav-dropdown-profile">{{ request.current_user.pseudonym_or_full_name }}<i class="material-icons right">arrow_drop_down</i></a></li>
+                {% endif %}
+            </ul>
             <div class="right">
                 <form role="form" method="get" action="{% url 'app_book:searchBookResults' %}">
                     <div class="input-field search-field">
@@ -58,14 +62,17 @@
             </div>
 
             <ul id="nav-mobile" class="side-nav">
+                <li><a href="{% url 'app_book:showcases' %}">Schaufenster</a></li>
+                <li><a href="{% url 'app_book:books' %}">Bücher</a></li>
+                <hr>
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
-                <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
-                <li><a href="{% url 'app_user:edit_profile' user.id %}">Mein Profil</a></li>
-                <li><a href="{% url 'app_user:change_password' %}">Passwort ändern</a></li>
-                <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
+                  <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
+                  <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
+                  <li><a href="{% url 'app_user:edit_profile' user.id %}">Mein Profil</a></li>
+                  <li><a href="{% url 'app_user:change_password' %}">Passwort ändern</a></li>
+                  <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
+                {% endif %}
             </ul>
-            {% endif %}
             <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
         </div>
     </nav>

@@ -8,15 +8,14 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 from django.forms import ModelForm
 
-from app_user.models import User
 from paypal.standard.models import *
 from paypal.standard.ipn.models import PayPalIPN
 
 # Create your models here.
 class Payment(models.Model):
     book = models.ForeignKey('app_book.Book') # don't import Book for circular import
-    seller_user = models.ForeignKey(User, related_name='seller_user')
-    buyer_user = models.ForeignKey(User, related_name='buyer_user')
+    seller_user = models.ForeignKey('app_user.User', related_name='seller_user')
+    buyer_user = models.ForeignKey('app_user.User', related_name='buyer_user')
     last_ipn = models.ForeignKey(PayPalIPN, null=True)
 
     item_name = models.CharField(max_length=255)
@@ -49,8 +48,8 @@ class Payment(models.Model):
 
 class SellerRating(models.Model):
      payment = models.ForeignKey(Payment,related_name='rated_payment')
-     rating_user = models.ForeignKey(User,related_name='rating_buyer')
-     rated_user = models.ForeignKey(User,related_name='rated_seller')
+     rating_user = models.ForeignKey('app_user.User',related_name='rating_buyer')
+     rated_user = models.ForeignKey('app_user.User',related_name='rated_seller')
      rating = models.PositiveIntegerField(validators=[MinValueValidator(0),MaxValueValidator(10)])
      textrating = models.CharField(max_length=200)
      updatedAt  = models.DateField('updated_at')

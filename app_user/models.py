@@ -8,6 +8,8 @@ from sdf.base_settings import *
 from datetime import datetime
 import glob
 
+from app_payment.models import SellerRating
+
 def user_directory_path(instance, filename):
     if instance.id is None:
         id_max = MyUserManager.objects.all().aggregate(Max('id'))['id__max']
@@ -75,6 +77,9 @@ class User(AuthUser):
 
     def full_name(self):
         return ' '.join([self.first_name, self.last_name])
+
+    def rating(self):
+        return SellerRating.calculate_stars_for_user(self.id)
 
 class ConfirmEmail(models.Model):
     uuid = models.CharField(max_length=50)

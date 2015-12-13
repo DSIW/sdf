@@ -32,14 +32,14 @@
                     <p>Käufer: <strong>{{ book.active_payment.buyer_user.pseudonym_or_full_name }} | Paypal: {{ book.active_payment.buyer_user.paypal }}</strong></p>
                 {% endif %}
                 {% if book.is_published %}
-                    <p>Verkäufer: <strong><a href="{% url 'app_book:showcase' book.offer.seller_user.id %}">{{ book.offer.seller_user.pseudonym_or_full_name }}</a> | Paypal: {{ book.offer.seller_user.paypal }}</strong></p>
+                    <p>Verkäufer: <strong><a href="{% url 'app_user:user-details' book.offer.seller_user.id %}">{{ book.offer.seller_user.pseudonym_or_full_name }}</a> | Paypal: {{ book.offer.seller_user.paypal }}</strong></p>
                 {% else %}
-                    <p>Besitzer: <strong><a href="{% url 'app_book:showcase' book.user.id %}">{{ book.user.pseudonym_or_full_name }}</a></strong></p>
+                    <p>Besitzer: <strong><a href="{% url 'app_user:user-details' book.user.id %}">{{ book.user.pseudonym_or_full_name }}</a></strong></p>
                 {% endif %}
                 <p>Verkaufsort: <strong><a href="https://www.google.de/maps?q={{ book.user.location }}" target="_new">{{ book.user.location }}</a></strong></p>
                 <p>Verkäuferbewertung:
                     <strong>
-                        {% include 'app_user/_user_rating.html' with user=book.user user_rating=seller_rating  %}
+                        {% include 'app_user/_user_rating.html' with user=book.user %}
                     </strong>
                 </p>
                 {% if book.description %}

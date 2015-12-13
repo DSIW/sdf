@@ -16,6 +16,8 @@ urlpatterns = [
     url(r'^books/(?P<id>[0-9]+)/publish$', views.publishBook, name='publishBook'),
     url(r'^books/(?P<id>[0-9]+)/unpublish$', views.unpublishBook, name='unpublishBook'),
     url(r'^books/(?P<id>[0-9]+)/', views.detailView, name='book-detail'),
+    url(r'^books', views.books, name='books'),
+    url(r'^showcases', views.showcasesOverView, name='showcases'),
 
     # search
     url(r'^search/results', views.searchBookResults, name='searchBookResults'),
