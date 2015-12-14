@@ -1,6 +1,6 @@
 {% load template_extras %}
 
-<span class="seller-rating">
+<span data-tooltip="Bewertung: {{user_rating.rating}}" class="seller-rating tooltipped">
     {% for i in user_rating.full_stars|range %}
         <i class="material-icons seller-rating-star">star</i>
     {% endfor %}
