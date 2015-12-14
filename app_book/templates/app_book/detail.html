@@ -30,8 +30,10 @@
                 <p>Seitenanzahl: <strong>{{ book.pageNumber }}</strong></p>
                 <p>ISBN-13: <strong>{{ book.isbn13 }}</strong></p>
                 <p>ISBN-10: <strong>{{ book.isbn10 }}</strong></p>
-                {% if request.user.id == book.active_payment.buyer_user.id or request.user.id == book.active_payment.seller_user.id %}
-                    <p>Käufer: <strong>{{ book.active_payment.buyer_user.pseudonym_or_full_name }} | Paypal: {{ book.active_payment.buyer_user.paypal }}</strong></p>
+                {% if request.user.authenticated %}
+                    {% if request.user.id == book.active_payment.buyer_user.id or request.user.id == book.active_payment.seller_user.id %}
+                        <p>Käufer: <strong>{{ book.active_payment.buyer_user.pseudonym_or_full_name }} | Paypal: {{ book.active_payment.buyer_user.paypal }}</strong></p>
+                    {% endif %}
                 {% endif %}
                 {% if book.is_published %}
                     <p>Verkäufer: <strong><a href="{% url 'app_user:user-details' book.offer.seller_user.id %}">{{ book.offer.seller_user.pseudonym_or_full_name }}</a> | Paypal: {{ book.offer.seller_user.paypal }}</strong></p>
