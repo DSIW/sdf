@@ -99,7 +99,7 @@ class Offer(models.Model):
 class Counteroffer(models.Model):
     offer = models.ForeignKey(Offer)
     creator = models.ForeignKey(User)
-    price = models.FloatField(default=0.0, validators=[MinValueValidator(0.01)] )
+    price = models.FloatField(default=0.0, validators=[MinValueValidator(0.01)])
     active = models.BooleanField(default=True)
     accepted = models.BooleanField(default=False)
 

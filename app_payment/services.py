@@ -1,7 +1,9 @@
+from django.core.exceptions import ObjectDoesNotExist
+
 from app_book.models import Book
 from app_notification.models import Notification
 from .models import Payment
-from app_book.services import unpublish_book
+from app_book.services import unpublish_book, decline_all_counteroffers_for_offer
 from paypal.standard.models import *
 from django.db import transaction
 
@@ -55,5 +57,10 @@ def update_payment_from_paypal_ipn(payment, paypal_ipn):
     if payment.payment_status == ST_PP_COMPLETED:
         complete_payment(payment)
     elif payment.payment_status == ST_PP_CANCELLED:
-        cancel_payment(payment)
+         abort_payment(payment)
+    payment.save()
+
+def start_payment(payment, offer, buyer):
+    payment.init_process(offer, buyer)
+    decline_all_counteroffers_for_offer(offer)
     payment.save()

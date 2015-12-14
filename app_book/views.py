@@ -18,6 +18,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.db import IntegrityError
 from django.utils.html import escape
+
+from app_payment.services import start_payment
 from .models import Book
 from .forms import BookForm
 
@@ -25,12 +27,12 @@ import watson
 import collections
 
 from app_user.models import User
-from app_payment.models import SellerRating
+from app_payment.models import SellerRating, Payment
 from app_notification.models import Notification
 
 from .models import Book, Offer, Counteroffer
 from .forms import BookForm, OfferForm, PublishOfferForm, CounterofferForm
-from .services import unpublish_book
+from .services import unpublish_book, decline_all_counteroffers_for_offer
 
 StatusAndTwoForms = collections.namedtuple("StatusAndTwoForms", ["status", "form_one", "form_two"], verbose=False,
                                            rename=False)
@@ -332,11 +334,12 @@ def accept_counteroffer(request, id):
     messages.add_message(request, messages.SUCCESS,
                          'Der Preisvorschlag wurde erfolgreich angenommen. Der Interessent wird benachrichtigt')
 
+    # Erstelle Paypalpayment, sodass für das Buch keine Vorschläge mehr abgegeben werden können
+    payment = Payment()
+    start_payment(payment, offer, buyer)
+
     # Andere offenen Angebote ablehnen
-    counteroffers = Counteroffer.objects.filter(offer=offer, active=True)
-    for co in counteroffers:
-        Notification.counteroffer_decline(co, co.creator, book)
-    counteroffers.update(active=False, accepted=False)
+    decline_all_counteroffers_for_offer(offer)
 
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
 

@@ -3,7 +3,6 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from paypal.standard.ipn.signals import valid_ipn_received
 from paypal.standard.forms import PayPalPaymentsForm
@@ -18,7 +17,8 @@ from app_user.models import User
 from app_notification.models import Notification
 from .forms import RateSellerForm
 from .models import Payment,SellerRating
-from .services import complete_payment, abort_payment, update_payment_from_paypal_ipn
+from .services import complete_payment, abort_payment, update_payment_from_paypal_ipn, start_payment
+
 
 @login_required
 def start_paypal_payment(request, id):
@@ -29,9 +29,10 @@ def start_paypal_payment(request, id):
     if request.method != 'POST':
         return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': offer.book.id}))
 
-    payment = Payment()
-    payment.init_process(offer, request.current_user)
-    payment.save()
+    payment =  offer.book.active_payment
+    if payment is None:
+        payment = Payment()
+        start_payment(payment, offer, request.current_user)
 
     form = PayPalPaymentsForm(initial = {
         "business": payment.business,
