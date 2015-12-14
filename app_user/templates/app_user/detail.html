@@ -29,15 +29,7 @@
                     {% endif %}
                 </p>
                 <p>Bewertung:
-                    <strong>
-                        <span class="seller-rating">
-                          <i class="material-icons seller-rating-star">star</i>
-                          <i class="material-icons seller-rating-star">star</i>
-                          <i class="material-icons seller-rating-star">star</i>
-                          <i class="material-icons seller-rating-star">star_half</i>
-                          <i class="material-icons seller-rating-star">star_border</i>
-                        </span>
-                    </strong>
+                    {% include 'app_user/_user_rating.html' with user=user %}
                 </p>
                 <p>Ort: <strong><a href="https://www.google.de/maps?q={{ user.location }}" target="_new">{{ user.location }}</a></strong></p>
                 <p>Öffentliche Bücher: <strong>{{ user.books_count }}</strong></p>
