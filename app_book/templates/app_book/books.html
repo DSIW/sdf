@@ -40,6 +40,15 @@
                             <li class="{% active order_comp 'price-desc' %}" ><a href="?{% url_replace_sort request 'order_by' 'price' 'order_dir' 'desc' %}" class="white-text">&#8595</a></li>
                         </ul>
                     </li>
+                    <li>
+                        <form role="form" method="get" action="{% url 'app_book:searchBookResults' %}">
+                            <div class="input-field search-field">
+                                <label for="search"><i class="material-icons">search</i></label>
+                                <input name="search_string" type="search" id="search-field" placeholder="Bücher" class="field" required maxlength="" value="{{ request.GET.search_string }}">
+                            </div>
+                        </form>
+                    </li>
+
 
                 {% endwith %}
                 </ul>
