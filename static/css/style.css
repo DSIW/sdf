@@ -217,6 +217,9 @@ a.disabled {
   width: 100%;
   z-index: 100;
 }
+#sidenav-overlay {
+  z-index: 99;
+}
 .nav-fixed + main {
   margin-top: 64px;
   padding-top: 20px;
