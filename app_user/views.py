@@ -129,6 +129,7 @@ class UserUpdate(FormMessagesMixin, UpdateView):
     def dispatch(self, *args, **kwargs):
         return super(UserUpdate, self).dispatch(*args, **kwargs)
 
+@login_required
 def user_details(request, pk):
     template_name = 'app_user/detail.html'
     user = User.objects.filter(id=pk).first()
