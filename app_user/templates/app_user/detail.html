@@ -17,7 +17,13 @@
                 <img src="{% static "img/blank-user-profile.png" %}" class="user-profile" />
             </div>
             <div class="col s8">
-                <p>Name: <strong>{{ user.full_name }}</strong></p>
+                <p>
+                    {% if user.username|length > 0 %}
+                        Pseudonym: <strong>{{ user.username }}</strong>
+                    {% else %}
+                        Name: <strong>{{ user.full_name }}</strong>
+                    {% endif %}
+                </p>
                 <p>Bewertung:
                     <strong>
                         <span class="seller-rating">
