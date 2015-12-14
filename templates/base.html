@@ -46,10 +46,20 @@
                 <li><a href="{% url 'app_book:showcases' %}">Alle Schaufenster</a></li>
                 <li><a href="{% url 'app_book:books' %}">Bücher</a></li>
                 {% if user.is_authenticated %}
-                  <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
-                  <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
-                  <li><a href="{% url 'app_notification:notificationsPage' %}"><i class="material-icons tooltipped" data-tooltip="Nachrichten">notifications</i></a></li>
-                  <li><a class="dropdown-button" href="javascript:;" data-constrainwidth="false" data-activates="nav-dropdown-profile">{{ request.current_user.pseudonym_or_full_name }}<i class="material-icons right">arrow_drop_down</i></a></li>
+                    <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
+                    <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
+                    <li>
+                        <a href="{% url 'app_notification:notificationsPage' %}">
+                            <i class="material-icons tooltipped" data-tooltip="Nachrichten">
+                                {% if unread_notification_exist %}
+                                    notifications_active
+                                {% else %}
+                                    notifications
+                                {% endif %}
+                            </i>
+                        </a>
+                    </li>
+                    <li><a class="dropdown-button" href="javascript:;" data-constrainwidth="false" data-activates="nav-dropdown-profile">{{ request.current_user.pseudonym_or_full_name }}<i class="material-icons right">arrow_drop_down</i></a></li>
                 {% endif %}
             </ul>
 
