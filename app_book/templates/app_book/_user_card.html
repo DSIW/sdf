@@ -8,7 +8,7 @@
             {% if user.has_profile_image %}
                 <img class="activator" src="{{ MEDIA_URL }}{{ user.profileImage }}">
             {% else %}
-                <img src="{% static "img/blank-showcase.png" %}" class="user-profile" />
+                <img src="{% static "img/blank-showcase.png" %}" />
             {% endif %}
         </a>
     </div>
