@@ -35,7 +35,7 @@
                                 {% endif %}
 
                                 <!-- Wird nur angezeigt wenn ein Preisvorschlag Angenommen wurde -->
-                                {% if (notification.counter_offer.accepted == True  and notification.notification_type != "BOOK_SEND" and notification.notification_type != "COUNTEROFFER_ACCEPT") or  notification.notification_type == "FASTBUY" %}
+                                {% if notification.counter_offer.accepted == True  and notification.notification_type != "BOOK_SEND" and notification.notification_type != "COUNTEROFFER_ACCEPT" or  notification.notification_type == "FASTBUY" %}
                                     <div class="row text-right">
                                         <div class="col s3">
                                             <a href="{% url 'app_notification:notificationsSendBookPage' notification.id %}"
