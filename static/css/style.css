@@ -25,6 +25,11 @@ nav .brand-logo {
   color: #444;
 }
 
+#notification-indicator.ring {
+  color: #FFA726;
+  animation: ring 8s 1s ease-in-out;
+}
+
 p {
   line-height: 2rem;
 }
@@ -479,4 +484,22 @@ img.book-cover {
   font-size: 24px;
   line-height: 30px;
   font-style: italic;
+}
+
+
+@keyframes ring {
+  0% { transform: rotate(0); }
+  1% { transform: rotate(30deg); }
+  3% { transform: rotate(-30deg); }
+  5% { transform: rotate(30deg); }
+  7% { transform: rotate(-30deg); }
+  9% { transform: rotate(30deg); }
+  11% { transform: rotate(-30deg); }
+  13% { transform: rotate(30deg); }
+  15% { transform: rotate(-30deg); }
+  17% { transform: rotate(30deg); }
+  19% { transform: rotate(0deg); }
+
+  43% { transform: rotate(0); }
+  100% { transform: rotate(0); }
 }

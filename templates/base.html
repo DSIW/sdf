@@ -50,7 +50,7 @@
                     <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
                     <li>
                         <a href="{% url 'app_notification:notificationsPage' %}">
-                            <i class="material-icons tooltipped" data-tooltip="Nachrichten">
+                            <i id="notification-indicator" class="material-icons tooltipped {% if unread_notification_exist %}ring{% endif %}" data-tooltip="Nachrichten">
                                 {% if unread_notification_exist %}
                                     notifications_active
                                 {% else %}
