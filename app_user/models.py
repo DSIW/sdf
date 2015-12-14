@@ -70,6 +70,9 @@ class User(AuthUser):
     def __str__(self):
         return str(self.user_ptr) + ", " + self.paypal + ", " + self.location
 
+    def has_profile_image(self):
+        return bool(self.profileImage)
+
     def pseudonym_or_full_name(self):
         if self.username and self.username != "":
             return self.username
