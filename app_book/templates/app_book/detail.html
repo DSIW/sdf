@@ -13,10 +13,10 @@
         </h1>
 
         <div class="row">
-            <div class="col s4">
+            <div class="col l4 s12">
                 <img width="300px" src="{{ MEDIA_URL }}{{ book.image }}" class="book-cover" />
             </div>
-            <div class="col s8">
+            <div class="col l8 s12">
                 <p>Status:
                     {% if book.is_in_active_payment_process %}
                         <span class="sdf-badge">Im Bezahlprozess</span>
