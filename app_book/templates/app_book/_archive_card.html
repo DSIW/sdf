@@ -7,7 +7,7 @@
     </div>
     <div class="card-content">
         <p class="card-title grey-text text-darken-4 book-title">
-            <i class="offer-state {% if book.is_published %}active{% else %}inactive{% endif %} tooltipped" data-tooltip="Status: {% if book.is_published %}Öffentlich{% else %}Nicht öffentlich{% endif %}"></i>g
+            <i class="offer-state {% if book.is_published %}active{% else %}inactive{% endif %} tooltipped" data-tooltip="Status: {% if book.is_published %}Öffentlich{% else %}Nicht öffentlich{% endif %}"></i>
             <a href="{% url 'app_book:book-detail' book.id %}">{{ book.name }}</a>
         </p>
         <div class="card-action">
