@@ -68,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'django.core.context_processors.request',
                 'django.contrib.messages.context_processors.messages',
                 'django.core.context_processors.media',
             ],
@@ -90,6 +91,9 @@ LOGGING = {
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
         },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        }
     },
     'handlers': {
         'console': {
@@ -117,11 +121,13 @@ LOGGING = {
         'django.request': {
             'handlers': ['file-debug'],
             'level': 'DEBUG',
+            'filters': ['require_debug_false'],
             'propagate': False,
         },
         'django.request': {
             'handlers': ['mail_admins', 'file-error'],
             'level': 'ERROR',
+            'filters': ['require_debug_false'],
             'propagate': False,
         }
     }
@@ -129,6 +135,7 @@ LOGGING = {
 
 WSGI_APPLICATION = 'sdf.wsgi.application'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'mail.gmx.net'
 EMAIL_PORT = '587'

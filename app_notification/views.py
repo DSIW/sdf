@@ -4,10 +4,13 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-# Create your views here.
+from django.http import JsonResponse
+from datetime import datetime
 
 from .models import Notification
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def notificationPageView(request):
     '''
     Diese Methode zeigt alle vorhandenen Notifications an
@@ -21,6 +24,19 @@ def notificationPageView(request):
         "notifications": notifications,
     }, RequestContext(request))
 
+
+# Call via AJAX
+@login_required
+def read_notification(request, id):
+    notification = get_object_or_404(Notification, id=id)
+    if request.method == 'POST':
+        notification.read_at = datetime.now()
+        notification.save()
+        return JsonResponse({'read_at': notification.read_at})
+    return JsonResponse({'error': True})
+
+
+@login_required
 def notificationSendBookPageView(request, id):
     '''
     Diese Methode versendet eine Notification das das Buch versendet wurde

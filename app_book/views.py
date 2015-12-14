@@ -1,22 +1,31 @@
 # -*- coding: utf-8 -*-
+import operator
+from functools import reduce
 
 import collections
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.db import IntegrityError
+from django.utils.html import escape
 from .models import Book
 from .forms import BookForm
+
 import watson
 import collections
+
 from app_user.models import User
+from app_payment.models import SellerRating
 from app_notification.models import Notification
 
 from .models import Book, Offer, Counteroffer
@@ -151,7 +160,7 @@ def detailView(request, id):
         "book": book
     },  RequestContext(request))
 
-
+@login_required
 @can_change_book
 def editBook(request, id):
     if request.method == 'POST':
@@ -182,7 +191,7 @@ def showcaseView(request, user_id):
         "offers": offers,
     }, RequestContext(request))
 
-
+@login_required
 @can_change_book
 def deleteBook(request, id):
     if request.method == 'DELETE':
@@ -194,7 +203,7 @@ def deleteBook(request, id):
     else:
         raise BaseException("Use http method DELETE for deleting a book.")
 
-
+@login_required
 def createBook(request):
     if request.method == 'POST':
         ret_val = handleEditBook(request, None)
@@ -212,7 +221,7 @@ def createBook(request):
         "offer_form": ret_val.form_two,
     }, RequestContext(request))
 
-
+@login_required
 @can_change_book
 def publishBook(request, id):
     book = get_object_or_404(Book, id=id)
@@ -241,7 +250,7 @@ def publishBook(request, id):
         "book": book,
     }, RequestContext(request))
 
-
+@login_required
 @can_change_book
 def unpublishBook(request, id):
     if request.method == 'PUT':
@@ -269,7 +278,7 @@ def searchBookResults(request):
         "results": search_results,
     }, RequestContext(request))
 
-
+@login_required
 def counteroffer(request, id):
     offer = get_object_or_404(Offer, id=id)
     user = get_object_or_404(User, id=request.user.id)
@@ -310,7 +319,7 @@ def counteroffer(request, id):
 
     return HttpResponseRedirect(reverse('app_book:book-detail', kwargs = {'id': book.id}))
 
-
+@login_required
 def accept_counteroffer(request, id):
     counteroffer = get_object_or_404(Counteroffer, id=id)
     buyer = get_object_or_404(User, id=counteroffer.creator.id)
@@ -331,7 +340,7 @@ def accept_counteroffer(request, id):
 
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
 
-
+@login_required
 def decline_counteroffer(request, id):
     counteroffer = get_object_or_404(Counteroffer, id=id)
     buyer = get_object_or_404(User, id=counteroffer.creator.id)
@@ -345,3 +354,113 @@ def decline_counteroffer(request, id):
                          'Der Preisvorschlag wurde erfolgreich abgelehnt. Der Interessent wird benachrichtigt')
 
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
+
+
+def books(request):
+    template_name = 'app_book/books.html'
+
+    filtered_offers = []
+    filtered_offers.extend(Offer.objects.filter(active=True))
+
+    page = request.GET.get('page')
+    order_by = request.GET.get('order_by', 'date')
+    order_dir = request.GET.get('order_dir', 'asc')
+    order_dir_is_desc = order_dir == 'desc'
+
+    if order_by == 'date':
+        filtered_offers.sort(key=lambda offer: offer.book.created, reverse=order_dir_is_desc)
+    elif order_by == 'title':
+        filtered_offers.sort(key=lambda offer: offer.book.name.lower(), reverse=order_dir_is_desc)
+    elif order_by == 'author':
+        filtered_offers.sort(key=lambda offer: offer.book.author.lower(), reverse=order_dir_is_desc)
+    elif order_by == 'price':
+        filtered_offers.sort(key=lambda offer: (offer.price + offer.shipping_price), reverse=order_dir_is_desc)
+    else:
+        filtered_offers.sort(key=lambda offer: offer.updated, reverse=order_dir_is_desc)
+
+    paginator = Paginator(filtered_offers, 3)
+
+    try:
+        offers = paginator.page(page)
+    except PageNotAnInteger:
+        offers = paginator.page(1)
+    except EmptyPage:
+        offers = paginator.page(paginator.num_pages)
+
+    return render_to_response(template_name, {
+        "offers": offers,
+        "order_by": order_by,
+        "order_dir": order_dir,
+        "request": request,
+    }, RequestContext(request))
+
+
+def filter_users_with_offered_books(users):
+    for user in users:
+        if not user.showcaseDisabled and len(user.offer_set.filter(active=True)) > 0:
+            yield user
+
+def filter_users_by_name_or_nick(users=None, nickname=None, first_name=None, real_name=None):
+        if nickname:
+            for user in User.objects.filter(user_ptr__username__contains=nickname):
+                yield user
+        else:
+            words = real_name.split()
+            for user in User.objects.filter(reduce(operator.and_, (Q(first_name__contains=x) | Q(last_name__contains=x) for x in words))):
+                yield user
+
+
+
+
+def showcasesOverView(request):
+    template_name = 'app_book/showcaseOverview.html'
+
+    filteredUsers = []
+    sellerNameFilteredUsers = []
+    filteredUsers.extend(filter_users_with_offered_books(User.objects.all()))
+
+    page = escape(request.GET.get('page'))
+    order_by = escape(request.GET.get('order_by', 'date'))
+    order_dir = escape(request.GET.get('order_dir', 'asc'))
+    order_dir_is_desc = order_dir == 'desc'
+    seller = escape(request.GET.get('seller', ''))
+
+    if seller:
+        for user in filteredUsers:
+            if user.username is not None:
+                sellerNameFilteredUsers.extend(filter_users_by_name_or_nick(nickname=seller))
+            else:
+                sellerNameFilteredUsers.extend(filter_users_by_name_or_nick(real_name=seller))
+        filteredUsers = set(filteredUsers).intersection(sellerNameFilteredUsers)
+        filteredUsers = list(filteredUsers)
+
+    for user in filteredUsers:
+        user.books_count = len(user.offer_set.all())
+        user.updated = (max(user.offer_set.all(), key=lambda offer: offer.updated)).updated
+
+    if order_by == 'count':
+        filteredUsers.sort(key=lambda user: user.books_count, reverse=order_dir_is_desc)
+    elif order_by == 'name':
+        filteredUsers.sort(key=lambda user: user.pseudonym_or_full_name().lower(), reverse=order_dir_is_desc)
+    # TODO: user-rating
+    # elif order_by == 'rating':
+    #    filteredUsers.sort(key=lambda user: UserRating.calculate_stars_for_user(user.id), reverse=direction)
+    else:
+        # most recent update
+        filteredUsers.sort(key=lambda user: user.updated, reverse=order_dir_is_desc)
+
+    paginator = Paginator(filteredUsers, 3)
+
+    try:
+        users = paginator.page(page)
+    except PageNotAnInteger:
+        users = paginator.page(1)
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)
+
+    return render_to_response(template_name, {
+        "users": users,
+        "order_by": order_by,
+        "order_dir": order_dir,
+        "request": request,
+    }, RequestContext(request))

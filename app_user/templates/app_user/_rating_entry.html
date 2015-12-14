@@ -1,0 +1,11 @@
+<div class="card rating-card">
+    <div class="card-content">
+        <p>
+            {% include 'app_user/_rating_stars.html' with user_rating=user_rating  %}
+            {{user_rating.rating_user.pseudonym_or_full_name }}
+        </p>
+        <p class="grey-text rating-text">
+            {{user_rating.textrating}}
+        </p>
+    </div>
+</div>

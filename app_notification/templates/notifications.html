@@ -10,11 +10,14 @@
 
         <div id="accordion">
             {% if notifications.count > 0 %}
-                <ul class="collapsible" data-collapsible="accordion">
+                <ul class="notifications collapsible" data-collapsible="accordion">
                     {% for notification in notifications %}
-                        <li>
+                        <li data-record-id="{{ notification.id }}" class="{% if notification.read_at == None %}new{% endif %}">
                             <div class="collapsible-header">
-                                <strong>{{ notification.received_date }}: {{ notification.subject }}</strong></div>
+                                <span class="date">{{ notification.received_date }}</span>
+                                <span class="subject">{{ notification.subject }}</span>
+                                <span class="badge orange-text text-lighten-1">neu</span>
+                            </div>
                             <div class="collapsible-body"><p>{{ notification.message }}</p>
 
                                 <!-- Wird nur angezeigt wenn ein Preisvorschlag gemacht wurde -->
@@ -41,6 +44,14 @@
                                     </div>
                                 {% endif %}
 
+                                {% if notification.notification_type == "REQUEST_RATING" and notification.payment_id != None %}
+                                    <div class="row text-right">
+                                        <div class="col s3">
+                                            <a href="{% url 'app_payment:rate-seller' notification.payment_id %}" class="btn waves-effect waves-light">Bewerten</a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
                                 <!-- Wird nur angezeigt wenn ein Preisvorschlag angenommen wurde -->
                                 {% if notification.notification_type == "COUNTEROFFER_ACCEPT" %}
                                     <div class="row text-right">
@@ -63,6 +74,20 @@
         $(document).ready(function () {
             $('.collapsible').collapsible({
                 accordion: true // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+            });
+
+            $('ul.notifications li.new').on('click', function(event) {
+                $element = $(this);
+                if (!$element.hasClass('new')) { return; }
+
+                var id = $element.data('record-id');
+                $.ajax({
+                    method: 'post',
+                    url: '/notifications/'+id+'/read/',
+                    success: function(data, textStatus, jqXHR) {
+                        $element.removeClass('new');
+                    }
+                });
             });
         });
     </script>

@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Max
 from django.contrib.auth.models  import User as AuthUser, BaseUserManager
 from sdf.base_settings import *
+from datetime import datetime
 import glob
+
+from app_payment.models import SellerRating
 
 def user_directory_path(instance, filename):
     if instance.id is None:
@@ -19,7 +23,7 @@ def user_directory_path(instance, filename):
     return upload_dir_path
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, email, password=None, username=None):
         if not email:
             raise ValueError('Users must have an email address')
 
@@ -28,6 +32,7 @@ class MyUserManager(BaseUserManager):
         )
 
         user.set_password(password)
+        user.username = username
         user.save(using=self._db)
         return user
 
@@ -65,6 +70,9 @@ class User(AuthUser):
     def __str__(self):
         return str(self.user_ptr) + ", " + self.paypal + ", " + self.location
 
+    def has_profile_image(self):
+        return bool(self.profileImage)
+
     def pseudonym_or_full_name(self):
         if self.username and self.username != "":
             return self.username
@@ -73,6 +81,9 @@ class User(AuthUser):
 
     def full_name(self):
         return ' '.join([self.first_name, self.last_name])
+
+    def rating(self):
+        return SellerRating.calculate_stars_for_user(self.id)
 
 class ConfirmEmail(models.Model):
     uuid = models.CharField(max_length=50)

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% load template_extras %}
+
+{% block body_classes %}showcase{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Alle Bücher</h1>
+
+        {% if offers|length > 0 %}
+        <nav class="teal lighten-1">
+            <div class="nav-wrapper">
+
+                <ul id="nav_ul_sort" class="right">
+                {% with order_comp=order_by|add:"-"|add:order_dir %}
+
+                    <li>Erstellungsdatum:
+                        <ul class="right">
+                            <li class="{% active order_comp 'date-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'date' 'order_dir' 'asc' %}" class="white-text">&#8593</a></li>
+                            <li class="{% active order_comp 'date-desc'%}" ><a href="?{% url_replace_sort request 'order_by' 'date' 'order_dir' 'desc' %}" class="white-text">&#8595</a></li>
+                        </ul>
+                    </li>
+                    <li>Titel:
+                        <ul class="right">
+                            <li class="{% active order_comp 'title-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'title' 'order_dir' 'asc' %}" class="white-text">&#8593</a></li>
+                            <li class="{% active order_comp 'title-desc' %}" ><a href="?{% url_replace_sort request 'order_by' 'title' 'order_dir' 'desc' %}" class="white-text">&#8595</a></li>
+                        </ul>
+                    </li>
+                    <li>Autor:
+                        <ul class="right">
+                            <li class="{% active order_comp 'author-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'author' 'order_dir' 'asc' %}" class="white-text">&#8593</a></li>
+                            <li class="{% active order_comp 'author-desc' %}" ><a href="?{% url_replace_sort request 'order_by' 'author' 'order_dir' 'desc' %}" class="white-text">&#8595</a></li>
+                        </ul>
+                    </li>
+                    <li>Preis:
+                        <ul class="right">
+                            <li class="{% active order_comp 'price-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'price' 'order_dir' 'asc' %}" class="white-text">&#8593</a></li>
+                            <li class="{% active order_comp 'price-desc' %}" ><a href="?{% url_replace_sort request 'order_by' 'price' 'order_dir' 'desc' %}" class="white-text">&#8595</a></li>
+                        </ul>
+                    </li>
+
+                {% endwith %}
+                </ul>
+            </div>
+        </nav>
+
+        <div class = "row">
+
+            <div class="col s12">
+                {% for offer in offers %}
+                    {% include 'app_book/_book_card.html' with user=offer.seller_user book=offer.book offer=offer %}
+                {% endfor %}
+            </div>
+
+            <div class="col s12 center">
+                {% include 'app/_pagination.html' with items=offers request=request%}
+            </div>
+        </div>
+        {% else %}
+            Es werde momentan keine Bücher zum Verkauf angeboten.
+        {% endif %}
+
+    </div>
+
+{% endblock %}

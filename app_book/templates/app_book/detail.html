@@ -28,24 +28,22 @@
                 </p>
                 <p>Autor: <strong>{{ book.author }}</strong></p>
                 <p>Seitenanzahl: <strong>{{ book.pageNumber }}</strong></p>
-                {% if request.user.id == book.active_payment.buyer_user.id or request.user.id == book.active_payment.seller_user.id %}
-                    <p>Käufer: <strong>{{ book.active_payment.buyer_user.pseudonym_or_full_name }} | Paypal: {{ book.active_payment.buyer_user.paypal }}</strong></p>
+                <p>ISBN-13: <strong>{{ book.isbn13 }}</strong></p>
+                <p>ISBN-10: <strong>{{ book.isbn10 }}</strong></p>
+                {% if request.user.authenticated %}
+                    {% if request.user.id == book.active_payment.buyer_user.id or request.user.id == book.active_payment.seller_user.id %}
+                        <p>Käufer: <strong>{{ book.active_payment.buyer_user.pseudonym_or_full_name }} | Paypal: {{ book.active_payment.buyer_user.paypal }}</strong></p>
+                    {% endif %}
                 {% endif %}
                 {% if book.is_published %}
-                    <p>Verkäufer: <strong><a href="{% url 'app_book:showcase' book.offer.seller_user.id %}">{{ book.offer.seller_user.pseudonym_or_full_name }}</a> | Paypal: {{ book.offer.seller_user.paypal }}</strong></p>
+                    <p>Verkäufer: <strong><a href="{% url 'app_user:user-details' book.offer.seller_user.id %}">{{ book.offer.seller_user.pseudonym_or_full_name }}</a> | Paypal: {{ book.offer.seller_user.paypal }}</strong></p>
                 {% else %}
-                    <p>Besitzer: <strong><a href="{% url 'app_book:showcase' book.user.id %}">{{ book.user.pseudonym_or_full_name }}</a></strong></p>
+                    <p>Besitzer: <strong><a href="{% url 'app_user:user-details' book.user.id %}">{{ book.user.pseudonym_or_full_name }}</a></strong></p>
                 {% endif %}
                 <p>Verkaufsort: <strong><a href="https://www.google.de/maps?q={{ book.user.location }}" target="_new">{{ book.user.location }}</a></strong></p>
                 <p>Verkäuferbewertung:
                     <strong>
-                        <span class="seller-rating">
-                          <i class="material-icons seller-rating-star">star</i>
-                          <i class="material-icons seller-rating-star">star</i>
-                          <i class="material-icons seller-rating-star">star</i>
-                          <i class="material-icons seller-rating-star">star_half</i>
-                          <i class="material-icons seller-rating-star">star_border</i>
-                        </span>
+                        {% include 'app_user/_user_rating.html' with user=book.user %}
                     </strong>
                 </p>
                 {% if book.description %}
@@ -54,6 +52,7 @@
                         {{ book.description }}
                     </p>
                 {% endif %}
+                <p><div class="fb-like" data-href="//{{ request.get_host }}{{ request.path }}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div></p>
                 {% if book.is_published %}
                     <div class="right-align">
                         <p>Preis: <strong>{{ book.price|currency }}</strong></p>

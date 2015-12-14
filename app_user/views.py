@@ -15,7 +15,9 @@ from django.contrib.auth.forms import SetPasswordForm
 
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import update_session_auth_hash, authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import login as loginview
+from django.contrib.auth.decorators import login_required
 
 from django.core.mail import EmailMessage
 from .models import User, ConfirmEmail, PasswordReset
@@ -26,7 +28,8 @@ from django.utils.translation import ugettext_lazy as _
 from braces.views import FormMessagesMixin
 from smtplib import SMTPRecipientsRefused
 from .models import User, ConfirmEmail
-from .forms import CustomUpdateForm, RegistrationForm
+from .forms import CustomUpdateForm,RegistrationForm
+from app_payment.models import SellerRating
 
 
 # Custom Current User Decorator
@@ -121,10 +124,18 @@ class UserUpdate(FormMessagesMixin, UpdateView):
     def get_success_url(self):
         return reverse('app:startPage')
 
+    @method_decorator(login_required)
     @method_decorator(current_user)
     def dispatch(self, *args, **kwargs):
         return super(UserUpdate, self).dispatch(*args, **kwargs)
 
+@login_required
+def user_details(request, pk):
+    template_name = 'app_user/detail.html'
+    user = User.objects.filter(id=pk).first()
+    user.books_count = len(user.offer_set.all())
+
+    return render_to_response(template_name, {'user': user}, RequestContext(request))
 
 def confirm_email(request, uuid):
     confirmEmail = ConfirmEmail.objects.filter(uuid=uuid).first()
@@ -141,7 +152,7 @@ def confirm_email(request, uuid):
         messages.add_message(request, messages.ERROR, 'Ihre E-Mail Adresse konnte nicht bestätigt werden')
     return HttpResponseRedirect(reverse('app:startPage'))
 
-
+@login_required
 def changePassword(request):
     if request.method == 'POST':
         form = PasswordChangeForm(user=request.user, data=request.POST)
@@ -226,3 +237,9 @@ def password_new(request, uuid):
         form = SetPasswordForm(user=user)
     action = reverse('app_user:new_password', kwargs={'uuid': uuid})
     return render_to_response('app_user/password.html', {'form': form, 'action': action}, RequestContext(request))
+
+@login_required
+def user_ratings(request, id):
+    user = User.objects.filter(pk=id).first()
+    ratings = SellerRating.objects.filter(rated_user_id=id)
+    return render_to_response('app_user/user_ratings.html',{'rated_user':user,'ratings':ratings},RequestContext(request))

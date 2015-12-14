@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load template_extras %}
+{% load staticfiles %}
+
+{% block body_classes %}user-detail{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="line">
+            <span class="grey-text title-type">Nutzer</span><br />
+            <span class="orange-text text-lighten-1">{{ user.pseudonym_or_full_name }}</span>
+        </h1>
+
+        <div class="row">
+            <div class="col s4">
+                {% if user.has_profile_image %}
+                    <img src="{{ MEDIA_URL }}{{ user.profileImage }}" class="user-profile" >
+                {% else %}
+                    <img src="{% static "img/blank-user-profile.png" %}" class="user-profile" />
+                {% endif %}
+            </div>
+            <div class="col s8">
+                <p>
+                    {% if user.username|length > 0 %}
+                        Pseudonym: <strong>{{ user.username }}</strong>
+                    {% else %}
+                        Name: <strong>{{ user.full_name }}</strong>
+                    {% endif %}
+                </p>
+                <p>Bewertung:
+                    <strong>
+                        <span class="seller-rating">
+                          <i class="material-icons seller-rating-star">star</i>
+                          <i class="material-icons seller-rating-star">star</i>
+                          <i class="material-icons seller-rating-star">star</i>
+                          <i class="material-icons seller-rating-star">star_half</i>
+                          <i class="material-icons seller-rating-star">star_border</i>
+                        </span>
+                    </strong>
+                </p>
+                <p>Ort: <strong><a href="https://www.google.de/maps?q={{ user.location }}" target="_new">{{ user.location }}</a></strong></p>
+                <p>Öffentliche Bücher: <strong>{{ user.books_count }}</strong></p>
+
+                <ul class="links border-separated">
+                    {% if user.id == request.user.id %}
+                        <li><a href="{% url 'app_user:edit_profile' user.pk %}" class="btn">Bearbeiten</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'app_book:showcase' user.id %}">Zum Schaufenster</a></li>
+                    <li><a href="{% url 'app_user:user_ratings' user.id %}">Bewertungen</a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

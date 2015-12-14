@@ -1,0 +1,4 @@
+{% include 'app_user/_rating_stars.html' with user_rating=user.rating  %}
+<a href="{% url 'app_user:user_ratings' id=user.id %}" class="seller-rating-count">
+    ({{user.rating.rating_count}})
+</a>

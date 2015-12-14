@@ -275,6 +275,31 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
   color: #444;
 }
 
+
+#nav_ul_sort {
+  /* nav margin-bottom is ignored if this ul starts to float */
+  margin-bottom: 30px;
+  /* if this ul starts to the bgColor is needed to prevent transparent bg and overflowed elements */
+  background-color: #26a69a;
+  /* needs to be 100% width for better float breaks of child ul elems */
+  width: 100%;
+
+  border: 0px solid #009688;
+  border-right-width: 1px;
+  border-left-width: 1px;
+
+  /* hide overflowing borders */
+  overflow: hidden;
+}
+
+#nav_ul_sort > li {
+  border: 0.5px solid #009688;
+  border-right-width:0;
+  padding-left: 15px;
+  float:right;
+}
+
+
 .btn-flat {
   color: #26a69a;
 }
@@ -306,7 +331,7 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
 
 /* Showcase */
 .showcase .card-book {
-  max-width: 294px;
+  width: 294px;
   min-height: 460px;
   float: left;
   margin: 0 20px 20px 0;
@@ -323,7 +348,7 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
 }
 .showcase .card-book .card-title {
   line-height: 28px;
-  min-height: 60px;
+  margin-bottom: 15px;
 }
 
 .showcase .card-book .card-image {
@@ -335,6 +360,9 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
 .showcase .card-book .card-reveal p strong {
   float: right;
 }
+.showcase .card-book .seller-rating {
+  margin-top: 2px;
+}
 .showcase .card-book.payment img {
   -webkit-filter: grayscale(100%);
   -moz-filter: grayscale(100%);
@@ -344,6 +372,11 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
 }
 .showcase .card-book.payment {
   opacity: 0.4;
+}
+form .seller-rating-star {
+  cursor: pointer;
+  font-size: 1.5em;
+  width: 22px;
 }
 
 
@@ -365,6 +398,33 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
 }
 
 
+/* User */
+img.user-profile {
+  border: 1px solid #CCC;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  padding: 7px;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+}
+
+.links {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #ccc;
+}
+
+ul.border-separated li {
+  float: left;
+  margin-right: 10px;
+  padding-right: 10px;
+  border-right: 1px solid #ccc;
+}
+ul.border-separated li:last-child {
+  border-right: none;
+}
+
+
 /* Book */
 .seller-rating {
   margin-top: 2px;
@@ -373,6 +433,12 @@ nav .input-field input[type=search]:focus + label i, .input-field input[type=sea
   font-size: 1em;
   width: 12px;
   color: #FCC32A;
+}
+.seller-rating-count {
+  font-size: 0.8em;
+  top: -3px;
+  margin-left: 3px;
+  position: relative;
 }
 img.book-cover {
   border: 1px solid #CCC;
@@ -384,4 +450,45 @@ img.book-cover {
   border-top: 1px solid #ccc;
   margin-top: 30px;
   padding-top: 20px;
+}
+
+
+/* Notifications */
+.notifications li {
+  position: relative;
+}
+.notifications li .date {
+  font-size: 0.8em;
+  color: gray;
+  margin-right: 20px;
+}
+.notifications li .subject {
+  font-weight: normal;
+}
+.notifications li.new .subject {
+  font-weight: bold;
+}
+.notifications li .badge {
+  text-shadow: 0px 0px 5px rgba(254, 168, 43, 0.42);
+  visibility: hidden;
+}
+.notifications li.new .badge {
+  visibility: visible;
+}
+
+
+/* Ratings */
+.rating-card {
+  margin-bottom: 20px;
+}
+.rating-card .seller-rating {
+  padding-right: 5px;
+  border-right: 1px solid #ccc;
+  margin-right: 5px;
+}
+.rating-text {
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 30px;
+  font-style: italic;
 }
