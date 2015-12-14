@@ -364,7 +364,7 @@ def books(request):
 
     page = request.GET.get('page')
     order_by = request.GET.get('order_by', 'date')
-    order_dir = request.GET.get('order_dir', 'asc')
+    order_dir = request.GET.get('order_dir', 'desc')
     order_dir_is_desc = order_dir == 'desc'
 
     if order_by == 'date':
@@ -421,7 +421,7 @@ def showcasesOverView(request):
 
     page = escape(request.GET.get('page'))
     order_by = escape(request.GET.get('order_by', 'date'))
-    order_dir = escape(request.GET.get('order_dir', 'asc'))
+    order_dir = escape(request.GET.get('order_dir', 'desc'))
     order_dir_is_desc = order_dir == 'desc'
     seller = escape(request.GET.get('seller', ''))
 
