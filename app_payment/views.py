@@ -16,7 +16,7 @@ from app_book.models import Book, Offer, Counteroffer
 from app_user.models import User
 from app_notification.models import Notification
 from .forms import RateSellerForm
-from .models import Payment,SellerRating
+from .models import Payment, SellerRating
 from .services import complete_payment, abort_payment, update_payment_from_paypal_ipn, start_payment
 
 
@@ -29,7 +29,7 @@ def start_paypal_payment(request, id):
     if request.method != 'POST':
         return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': offer.book.id}))
 
-    payment =  offer.book.active_payment
+    payment = offer.book.active_payment()
     if payment is None:
         payment = Payment()
         start_payment(payment, offer, request.current_user)
