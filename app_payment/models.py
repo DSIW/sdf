@@ -50,6 +50,15 @@ class Payment(models.Model):
             self.created_at = datetime.now()
         return super(Payment, self).save(*args, **kwargs)
 
+    def is_active(self):
+        return self.payment_status in [ST_PP_CREATED, ST_PP_ACTIVE, ST_PP_PENDING, ST_PP_VOIDED]
+
+    def is_cancelled(self):
+        return self.payment_status == ST_PP_CANCELLED
+
+    def is_completed(self):
+        return self.payment_status == ST_PP_COMPLETED
+
     def __str__(self):
         return self.buyer_user.full_name() + " buyes " + self.book.name + " from " + self.seller_user.full_name()
 

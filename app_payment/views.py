@@ -62,7 +62,7 @@ def start_paypal_payment_by_counter_offer(request, id):
         return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': counter_offer.offer.book.id}))
 
     payment = Payment()
-    payment.init_process(counter_offer.offer, request.current_user)
+    success = start_payment(payment, counter_offer.offer, request.current_user)
     payment.amount = counter_offer.price
     payment.save()
 
@@ -78,7 +78,10 @@ def start_paypal_payment_by_counter_offer(request, id):
         "custom": payment.custom
     })
 
-    messages.add_message(request, messages.SUCCESS, 'Das Buch ist nun im Bezahlprozess. Sie werden in Kürze zu Paypal weitergeleitet...')
+    if success:
+        messages.add_message(request, messages.SUCCESS, 'Das Buch ist nun im Bezahlprozess. Sie werden in Kürze zu Paypal weitergeleitet...')
+    else:
+        messages.add_message(request, messages.ERROR, 'Das Buch ist nicht im Bezahlprozess.')
 
     return render_to_response(template_name, {
         "payment_form": form,
@@ -88,18 +91,23 @@ def start_paypal_payment_by_counter_offer(request, id):
 @login_required
 def paypal_complete(request, id):
     payment = Payment.objects.filter(id=id).first()
-    Notification.request_rating(payment)
-    complete_payment(payment)
-    messages.add_message(request, messages.SUCCESS, 'Die Paypal-Transaktion wurde durchgeführt.')
-    return render(request, "app_payment/payment_success.html")
+    success = complete_payment(payment)
+    if success:
+        messages.add_message(request, messages.SUCCESS, 'Die Bezahlung wurde durchgeführt.')
+    else:
+        messages.add_message(request, messages.ERROR, 'Die Bezahlung wurde nicht durchgeführt.')
+    return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': payment.book_id}))
 
 @csrf_exempt
 @login_required
 def paypal_abort(request, id):
     payment = Payment.objects.filter(id=id).first()
-    abort_payment(payment)
-    messages.add_message(request, messages.ERROR, 'Die Paypal-Transaktion wurde abgebrochen.')
-    return render(request, "app_payment/payment_cancel.html")
+    success = abort_payment(payment)
+    if success:
+        messages.add_message(request, messages.SUCCESS, 'Die Bezahlung wurde abgebrochen.')
+    else:
+        messages.add_message(request, messages.ERROR, 'Die Bezahlung wurde nicht abgebrochen.')
+    return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': payment.book_id}))
 
 # Get new status info from paypal
 def paypal_ipn(sender, **kwargs):

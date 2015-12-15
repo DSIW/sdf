@@ -33,24 +33,28 @@ def change_ownership(book_id, to_user_id):
     return True
 
 def complete_payment(payment):
-    # remove book payment status
-    payment.payment_status = ST_PP_COMPLETED
-    payment.save()
+    if payment.is_active() and not payment.is_completed():
+        # remove book payment status
+        payment.payment_status = ST_PP_COMPLETED
+        payment.save()
 
-    # move book to buyer
-    book = payment.book
-    change_ownership(book.id, payment.buyer_user.id)
+        # move book to buyer
+        book = payment.book
+        change_ownership(book.id, payment.buyer_user.id)
 
-    # notify seller
-    Notification.fastbuy(payment.buyer_user, payment.seller_user, payment.book)
-
+        Notification.fastbuy(payment.buyer_user, payment.seller_user, payment.book)
+        Notification.request_rating(payment)
+        return True
+    return False
 
 def abort_payment(payment, notification = False):
-    payment.payment_status = ST_PP_CANCELLED
-    payment.save()
-    if notification:
-        Notification.abort_unpaid_payment(payment)
-
+    if payment.is_active() and not payment.is_cancelled():
+        payment.payment_status = ST_PP_CANCELLED
+        payment.save()
+        if notification:
+            Notification.abort_unpaid_payment(payment)
+        return True
+    return False
 
 def update_payment_from_paypal_ipn(payment, paypal_ipn):
     payment.payment_status = paypal_ipn.payment_status
@@ -58,10 +62,12 @@ def update_payment_from_paypal_ipn(payment, paypal_ipn):
     if payment.payment_status == ST_PP_COMPLETED:
         complete_payment(payment)
     elif payment.payment_status == ST_PP_CANCELLED:
-         abort_payment(payment)
-    payment.save()
+        abort_payment(payment)
 
 def start_payment(payment, offer, buyer):
-    payment.init_process(offer, buyer)
-    decline_all_counteroffers_for_offer(offer)
-    payment.save()
+    if payment.id is None:
+        payment.init_process(offer, buyer)
+        decline_all_counteroffers_for_offer(offer)
+        payment.save()
+        return True
+    return False
