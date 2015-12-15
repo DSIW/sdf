@@ -19,9 +19,6 @@ urlpatterns = [
     url(r'^books', views.books, name='books'),
     url(r'^showcases', views.showcasesOverView, name='showcases'),
 
-    # search
-    url(r'^search/results', views.searchBookResults, name='searchBookResults'),
-
     # offers
     url(r'^offers/(?P<id>[0-9]+)/new_counteroffer', views.counteroffer, name='new_counteroffer'),
     url(r'^counteroffers/(?P<id>[0-9]+)/accept', views.accept_counteroffer, name='accept_counteroffer'),

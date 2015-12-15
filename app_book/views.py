@@ -271,15 +271,6 @@ def unpublishBook(request, id):
     else:
         raise ("Use http method PUT for unpublishing a book.")
 
-
-def searchBookResults(request):
-    template_name = 'app_book/search_result.html'
-    search_results = watson.search(request.GET.get("search_string", ""))
-
-    return render_to_response(template_name, {
-        "results": search_results,
-    }, RequestContext(request))
-
 @login_required
 def counteroffer(request, id):
     offer = get_object_or_404(Offer, id=id)
