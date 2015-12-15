@@ -85,6 +85,9 @@ class CustomUpdateForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(CustomUpdateForm, self).__init__(*args, **kwargs)
 
+        username = self.instance.username
+        if username is not None and len(username) > 0:
+            self.fields['username'].widget.attrs['disabled'] = True
         self.fields['profileImage'].required = False
         self.fields['profileImage'].widget = CustomFileInput()
 
@@ -93,4 +96,8 @@ class CustomUpdateForm(ModelForm):
         fields = ['username', 'first_name', 'last_name', 'email', 'paypal', 'profileImage']
 
     def clean_username(self):
-        return self.cleaned_data['username'] or None
+        username = self.instance.username
+        if username is None or len(username) == 0:
+            return self.cleaned_data['username'] or None
+        else:
+            return self.instance.username
