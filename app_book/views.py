@@ -409,8 +409,14 @@ def filter_users_by_name_or_nick(users=None, nickname=None, first_name=None, rea
                 yield user
         else:
             words = real_name.split()
-            for user in User.objects.filter(reduce(operator.and_, (Q(first_name__contains=x) | Q(last_name__contains=x) for x in words))):
-                yield user
+            if len(words) == 2:
+                for user in User.objects.filter(Q(first_name__contains=words[0]) & Q(last_name__contains=words[1])
+                                                | Q(first_name__contains=words[1]) & Q(last_name__contains=words[0])):
+                    yield user
+
+            else:
+                for user in User.objects.filter(reduce(operator.and_, (Q(first_name__contains=x) | Q(last_name__contains=x) for x in words))):
+                    yield user
 
 
 
