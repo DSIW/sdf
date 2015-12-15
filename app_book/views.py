@@ -440,7 +440,8 @@ def showcasesOverView(request):
                 sellerNameFilteredUsers.extend(filter_users_by_name_or_nick(user=user, nickname=seller))
             else:
                 sellerNameFilteredUsers.extend(filter_users_by_name_or_nick(user=user, real_name=seller))
-        filteredUsers = sellerNameFilteredUsers
+        filteredUsers = set(sellerNameFilteredUsers)
+        filteredUsers = list(filteredUsers)
 
     for user in filteredUsers:
         user.books_count = len(user.offer_set.all())
