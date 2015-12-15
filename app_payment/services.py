@@ -45,10 +45,11 @@ def complete_payment(payment):
     Notification.fastbuy(payment.buyer_user, payment.seller_user, payment.book)
 
 
-def abort_payment(payment):
-    # remove book payment status
+def abort_payment(payment, notification = False):
     payment.payment_status = ST_PP_CANCELLED
     payment.save()
+    if notification:
+        Notification.abort_unpaid_payment(payment)
 
 
 def update_payment_from_paypal_ipn(payment, paypal_ipn):

@@ -86,6 +86,11 @@ SEED_MARTIN_PAYPAL = "...-buyer@example.com"
 1. `manage.py makemigrations`
 1. `manage.py migrate`
 1. Start [ngrok](https://ngrok.com) via `ngrok -proto=https -subdomain=abc 3001`
+1. Set cronjob via `crontab -e` and add this line:
+```
+*/10 * * * * python3 /path/to/sdf/manage.py abort_old_payments
+```
+
 
 ## Important Style Guide
 

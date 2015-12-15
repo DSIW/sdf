@@ -10,6 +10,7 @@ from app.templatetags import template_extras
 
 class Notification(models.Model):
     FASTBUY = 'FASTBUY'  # Empfdaenger bekommt Notification => Subject: Buch X wurde gekauft | Nachricht: Person X hat NBuch Y gekauft
+    ABORT_PAYMENT = 'ABORT_PAYMENT'
     COUNTEROFFER = 'COUNTEROFFER'  # Verkaeufer bekommt Nachricht => Subject: Person Y hat fuer Buch X ein Angebot gemacht | Nachricht: Person Y hat fuer Buch X ein Angebot gemacht so und soviel Euro => Annehmen | Ablehnen -> CounterOffer Id
     COUNTEROFFER_ACCEPT = 'COUNTEROFFER_ACCEPT'  # Kaeufer bekommt Nachricht: Subject: Preisvorscvhlag fuer Buch X wurde akzeptiert | Nachricht: Fuer das Buch X wurde Preisvorschlag akzeptiert
     COUNTEROFFER_DECLINE = 'COUNTEROFFER_DECLINE'  # Kaeufer bekommt Nachricht: Subject: Preisvorscvhlag fuer Buch X wurde nicht akzeptiert | Nachricht: Fuer das Buch X wurde Preisvorschlag nicht akzeptiert
@@ -17,6 +18,7 @@ class Notification(models.Model):
     REQUEST_RATING = 'REQUEST_RATING' # Den Verkäufer nach Erhalt des Buches bewerten.
     NOTIFICATION_TYPE = (
         (FASTBUY, 'Sofortkauf'),
+        (ABORT_PAYMENT, 'Zahlungsabbruch'),
         (COUNTEROFFER, 'Preisvorschlag'),
         (COUNTEROFFER_ACCEPT, 'Preisvorschlag akzeptiert'),
         (COUNTEROFFER_DECLINE, 'Preisvorschlag abgelehnt'),
@@ -46,6 +48,22 @@ class Notification(models.Model):
             received_date=datetime.now(),
             notification_type=Notification.FASTBUY,
             receiver_user=seller
+        )
+
+        notification.save()
+
+    @staticmethod
+    def abort_unpaid_payment(payment):
+        book = payment.book
+        subject = 'Kauf von "' + book.name + '" wurde abgebrochen'
+        msg = 'Das System hat Ihren Kauf von Buch '+book.name+' abgebrochen, da Sie mehr als 30 Minuten keine Zahlung getätigt haben.'
+
+        notification = Notification(
+            subject=subject,
+            message=msg,
+            received_date=datetime.now(),
+            notification_type=Notification.ABORT_PAYMENT,
+            receiver_user=payment.buyer_user
         )
 
         notification.save()

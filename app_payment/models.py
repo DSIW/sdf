@@ -27,6 +27,7 @@ class Payment(models.Model):
     business = models.CharField(max_length=255)
     payment_status = models.CharField(max_length=255)
     custom = models.CharField(max_length=255)
+    created_at = models.DateTimeField()
 
     def init_process(self, offer, user):
         self.book = offer.book
@@ -42,6 +43,12 @@ class Payment(models.Model):
 
         self.save() # get id for custom JSON
         self.custom = json.dumps({'payment_id': self.id})
+
+    def save(self, *args, **kwargs):
+        ''' On save, update created_at '''
+        if not self.id:
+            self.created_at = datetime.now()
+        return super(Payment, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.buyer_user.full_name() + " buyes " + self.book.name + " from " + self.seller_user.full_name()
