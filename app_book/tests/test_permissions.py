@@ -176,7 +176,7 @@ class BookTest(TestCase):
         self.assertEqual(len(offer), 1)
         self.assertEqual(offer[0].active, False)
 
-        url = '/search/results?search_string='
+        url = '/books?search_string='
         name = self.book_data['name'][:-2]
         self.login_other_user()
         response = self.client.get(url+name)
