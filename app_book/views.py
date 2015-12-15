@@ -271,15 +271,6 @@ def unpublishBook(request, id):
     else:
         raise ("Use http method PUT for unpublishing a book.")
 
-
-def searchBookResults(request):
-    template_name = 'app_book/search_result.html'
-    search_results = watson.search(request.GET.get("search_string", ""))
-
-    return render_to_response(template_name, {
-        "results": search_results,
-    }, RequestContext(request))
-
 @login_required
 def counteroffer(request, id):
     offer = get_object_or_404(Offer, id=id)
@@ -358,12 +349,21 @@ def decline_counteroffer(request, id):
 
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
 
+def filter_books(search_string):
+    filtered_books = watson.search(search_string,models=(Book,))
+    for book in filtered_books:
+        yield book.object.offer_set.first()
 
 def books(request):
     template_name = 'app_book/books.html'
-
     filtered_offers = []
-    filtered_offers.extend(Offer.objects.filter(active=True))
+
+    search_string = escape(request.GET.get('search_string', ''))
+
+    if search_string:
+        filtered_offers.extend(filter_books(search_string))
+    else:
+        filtered_offers.extend(Offer.objects.filter(active=True))
 
     page = request.GET.get('page')
     order_by = request.GET.get('order_by', 'date')
