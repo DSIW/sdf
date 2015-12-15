@@ -37,7 +37,6 @@ from .services import unpublish_book, decline_all_counteroffers_for_offer
 StatusAndTwoForms = collections.namedtuple("StatusAndTwoForms", ["status", "form_one", "form_two"], verbose=False,
                                            rename=False)
 
-
 # Custom Ownership Decorator
 def can_show_book(func):
     def check_and_call(request, *args, **kwargs):
@@ -403,23 +402,24 @@ def filter_users_with_offered_books(users):
         if not user.showcaseDisabled and len(user.offer_set.filter(active=True)) > 0:
             yield user
 
-def filter_users_by_name_or_nick(users=None, nickname=None, first_name=None, real_name=None):
+def filter_users_by_name_or_nick(user, nickname=None, real_name=None):
         if nickname:
-            for user in User.objects.filter(user_ptr__username__contains=nickname):
+            if user.username is not None and nickname.lower() in user.username.lower():
                 yield user
         else:
-            words = real_name.split()
+            words = [x.lower() for x in real_name.split()]
             if len(words) == 2:
-                for user in User.objects.filter(Q(first_name__contains=words[0]) & Q(last_name__contains=words[1])
-                                                | Q(first_name__contains=words[1]) & Q(last_name__contains=words[0])):
+                if words[0].lower() in user.first_name.lower() and words[1] in user.last_name.lower():
+                    yield user
+                if words[1].lower() in user.first_name.lower() and words[0] in user.last_name.lower():
                     yield user
 
             else:
-                for user in User.objects.filter(reduce(operator.and_, (Q(first_name__contains=x) | Q(last_name__contains=x) for x in words))):
-                    yield user
-
-
-
+                for word in words:
+                    if word in user.first_name.lower():
+                        yield user
+                    if word in user.last_name.lower():
+                        yield user
 
 def showcasesOverView(request):
     template_name = 'app_book/showcaseOverview.html'
@@ -437,11 +437,10 @@ def showcasesOverView(request):
     if seller:
         for user in filteredUsers:
             if user.username is not None:
-                sellerNameFilteredUsers.extend(filter_users_by_name_or_nick(nickname=seller))
+                sellerNameFilteredUsers.extend(filter_users_by_name_or_nick(user=user, nickname=seller))
             else:
-                sellerNameFilteredUsers.extend(filter_users_by_name_or_nick(real_name=seller))
-        filteredUsers = set(filteredUsers).intersection(sellerNameFilteredUsers)
-        filteredUsers = list(filteredUsers)
+                sellerNameFilteredUsers.extend(filter_users_by_name_or_nick(user=user, real_name=seller))
+        filteredUsers = sellerNameFilteredUsers
 
     for user in filteredUsers:
         user.books_count = len(user.offer_set.all())
