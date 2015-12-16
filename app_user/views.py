@@ -114,8 +114,6 @@ def register_user(request):
 
 class UserUpdate(FormMessagesMixin, UpdateView):
     model = User
-    model._meta.get_field('username').error_messages = {'unique': 'Das gewählte Pseudonym ist bereits vergeben.',
-                                                        'invalid': 'Bitte ein gültiges Pseudonym eingeben. Dieses darf nur Buchstaben, Ziffern und @/./+/-/_ enthalten.'}
     form_class = CustomUpdateForm
     form_invalid_message = _('Account konnte nicht aktualisiert werden.')
     form_valid_message = _('Account wurde erfolgreich aktualisiert.')
