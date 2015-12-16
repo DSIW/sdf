@@ -31,7 +31,17 @@ class FormTests(TestCase):
 
     def test_registerAlreadyTakenNickname(self):
         data = self.form_data.copy()
+        with open('fixtures/image1.jpg', 'rb') as img:
+            data['file'] = SimpleUploadedFile(img.name, img.read())
         data['username'] = 'testuser_fix'
+        form = RegistrationForm(data=data)
+        self.assertFalse(form.is_valid())
+
+    def test_registerWithPseudonymAsRegisteredRealName(self):
+        data = self.form_data.copy()
+        with open('fixtures/image1.jpg', 'rb') as img:
+            data['file'] = SimpleUploadedFile(img.name, img.read())
+        data['username'] = 'Bernd Lullert'
         form = RegistrationForm(data=data)
         self.assertFalse(form.is_valid())
 

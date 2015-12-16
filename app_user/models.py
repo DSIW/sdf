@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Max
@@ -9,6 +9,13 @@ from datetime import datetime
 import glob
 
 from app_payment.models import SellerRating
+
+def validate_not_real_name(value):
+    for user in User.objects.all():
+        if user.full_name().lower() == value.lower():
+            raise ValidationError('%s entspricht einem bereits registrierten Klarnamen.' % value, code='name_collision')
+        if user.username is not None and user.username.lower() == value.lower():
+            raise ValidationError('Pseudonym bereits vergeben.', code='unique')
 
 def user_directory_path(instance, filename):
     if instance.id is None:
@@ -46,13 +53,17 @@ class MyUserManager(BaseUserManager):
 
 class User(AuthUser):
     # auth_user fields: username, first_name, last_name, email, password, is_staff, is_active, is_super
-    AuthUser._meta.get_field('email')._unique = True
     AuthUser._meta.get_field('username')._blank = True
     AuthUser._meta.get_field('username')._null = True
     AuthUser._meta.get_field('username').blank = True
     AuthUser._meta.get_field('username').null = True
-
+    AuthUser._meta.get_field('username').validators.append(validate_not_real_name)
+    AuthUser._meta.get_field('username').error_messages = {'unique': 'Das gewählte Pseudonym ist bereits vergeben.',
+                                                        'invalid': 'Bitte ein gültiges Pseudonym eingeben. Dieses darf nur Buchstaben, Ziffern und @/./+/-/_ enthalten.',
+                                                        'name_collision': 'Das Pseudonym entspricht einem bereits registrierten Klarnamen.'}
     AuthUser._meta.get_field('username').verbose_name = "Pseudonym (optional)"
+
+    AuthUser._meta.get_field('email')._unique = True
     AuthUser._meta.get_field('email').error_messages = {'unique': 'Diese E-Mail-Adresse ist bereits registriert.',
                                                         'invalid': 'Bitte eine gültige E-Mail-Adresse angeben.'}
 
