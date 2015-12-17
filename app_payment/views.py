@@ -87,6 +87,31 @@ def start_paypal_payment_by_counter_offer(request, id):
         "payment_form": form,
     },  RequestContext(request))
 
+
+@login_required
+def paypal_redirection(request, id):
+    template_name = 'app_payment/payment_start.html'
+
+    payment = Payment.objects.get(id=id)
+
+    form = PayPalPaymentsForm(initial = {
+        "business": payment.business,
+        "amount": payment.amount,
+        "item_name": payment.item_name,
+        "invoice": payment.invoice,
+        "currency_code": payment.currency_code,
+        "notify_url": settings.ENDPOINT + reverse('app_payment:paypal-ipn'),
+        "return_url": settings.ENDPOINT + reverse('app_payment:payment-success', kwargs={'id': payment.id}),
+        "cancel_return": settings.ENDPOINT + reverse('app_payment:payment-cancel', kwargs={'id': payment.id}),
+        "custom": payment.custom
+    })
+
+    messages.add_message(request, messages.SUCCESS, 'Sie werden in Kürze zu Paypal weitergeleitet...')
+
+    return render_to_response(template_name, {
+        "payment_form": form,
+    },  RequestContext(request))
+
 @csrf_exempt
 @login_required
 def paypal_complete(request, id):
