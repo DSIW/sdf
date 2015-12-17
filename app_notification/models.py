@@ -26,7 +26,8 @@ class Notification(models.Model):
         (REQUEST_RATING, 'Verkäufer bewerten'),
     )
 
-    receiver_user = models.ForeignKey(User, default=None)
+    sender_user = models.ForeignKey(User, related_name='sender_user', default=None)
+    receiver_user = models.ForeignKey(User, related_name='receiver_user', default=None)
     message = models.TextField(max_length=1500)
     subject = models.CharField(max_length=200)
     received_date = models.DateTimeField('received_date')
@@ -43,11 +44,13 @@ class Notification(models.Model):
         msg = 'Der Benutzer ' + buyer.full_name() + ' hat Ihr Buch '+book.name+' gekauft.'
 
         notification = Notification(
+            sender_user = buyer,
             subject=subject,
             message=msg,
             received_date=datetime.now(),
             notification_type=Notification.FASTBUY,
-            receiver_user=seller
+            receiver_user=seller,
+            offer=book.offer
         )
 
         notification.save()
@@ -59,6 +62,7 @@ class Notification(models.Model):
         msg = 'Das System hat Ihren Kauf von Buch '+book.name+' abgebrochen, da Sie mehr als 30 Minuten keine Zahlung getätigt haben.'
 
         notification = Notification(
+            sender_user = payment.seller_user,
             subject=subject,
             message=msg,
             received_date=datetime.now(),
@@ -74,6 +78,7 @@ class Notification(models.Model):
         msg = 'Der Benutzer ' + buyer.full_name() + ' möchte das Buch "'+book.name+'" für '+template_extras.currency(counteroffer.price)+' kaufen.'
 
         notification = Notification(
+            sender_user = buyer,
             subject=subject,
             message=msg,
             received_date=datetime.now(),
@@ -91,6 +96,7 @@ class Notification(models.Model):
         msg = 'Der von Ihnen vorgeschlagene Preis für das Buch "' + book.name + '" in  Höhe von ' + template_extras.currency(counteroffer.price) + ' wurde von dem Verkäufer nicht akzeptiert.'
 
         notification = Notification(
+            sender_user = counteroffer.offer.seller_user,
             subject=subject,
             message=msg,
             received_date=datetime.now(),
@@ -102,18 +108,20 @@ class Notification(models.Model):
         notification.save()
 
     @staticmethod
-    def counteroffer_accept(counteroffer, buyer, book):
+    def counteroffer_accept(counteroffer, buyer, book, payment):
         # Preisvorschlag akzeptiert
         subject = 'Preisvorschlag für das Buch ' + book.name + ' wurde akzeptiert.'
         msg = 'Der von Ihnen vorgeschlagene Preis für das Buch: "' + book.name + '" in  Höhe von ' + template_extras.currency(counteroffer.price) + ' wurde von dem Verkäufer akzeptiert.'
 
         notification = Notification(
+            sender_user = counteroffer.offer.seller_user,
             subject=subject,
             message=msg,
             received_date=datetime.now(),
             notification_type=Notification.COUNTEROFFER_ACCEPT,
             receiver_user=buyer,
-            counter_offer=counteroffer
+            counter_offer=counteroffer,
+            payment=payment
         )
 
         notification.save()
@@ -138,6 +146,7 @@ class Notification(models.Model):
         msg = 'Der Verkäufer hat bestätigt das er das Buch: "' + book.name + '" zu Ihnen versendet hat.'
 
         new_notification = Notification(
+            sender_user = offer.seller_user,
             subject=subject,
             message=msg,
             received_date=datetime.now(),
@@ -156,6 +165,7 @@ class Notification(models.Model):
         subject = 'Bewerten Sie '+seller_name+'!'
         msg = 'Sie haben ein Buch von '+seller_name+' gekauft. Der Verkäufer würde sich über eine Bewertung freuen!'
         new_notification = Notification(
+            sender_user = payment.seller_user,
             subject=subject,
             message=msg,
             received_date=datetime.now(),

@@ -24,7 +24,8 @@ def change_ownership(book_id, to_user_id):
     try:
         with transaction.atomic():
             if offer:
-                offer.delete()
+                offer.active = False
+                offer.save()
             book.save()
     except ValueError as e:
         return False

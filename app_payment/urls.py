@@ -3,7 +3,6 @@ from . import views
 
 urlpatterns = [
     url(r'^offers/(?P<id>[0-9]+)/start_payment/$', views.start_paypal_payment, name='start_paypal_payment'),
-    url(r'^counteroffers/(?P<id>[0-9]+)/start_payment/$', views.start_paypal_payment_by_counter_offer, name='start_paypal_payment_by_counter_offer'),
     url(r'^payments/(?P<id>[0-9]+)/redirection/$', views.paypal_redirection, name='paypal_redirection'),
     url(r'^payments/(?P<id>[0-9]+)/success/$', views.paypal_complete, name='payment-success'),
     url(r'^payments/(?P<id>[0-9]+)/cancel/$', views.paypal_abort, name='payment-cancel'),

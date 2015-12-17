@@ -20,6 +20,22 @@ from .models import Payment, SellerRating
 from .services import complete_payment, abort_payment, update_payment_from_paypal_ipn, start_payment
 
 
+def build_payment_form(payment):
+    if payment is None:
+        return None
+
+    return PayPalPaymentsForm(initial = {
+        "business": payment.business,
+        "amount": payment.amount,
+        "item_name": payment.item_name,
+        "invoice": payment.invoice,
+        "currency_code": payment.currency_code,
+        "notify_url": settings.ENDPOINT + reverse('app_payment:paypal-ipn'),
+        "return_url": settings.ENDPOINT + reverse('app_payment:payment-success', kwargs={'id': payment.id}),
+        "cancel_return": settings.ENDPOINT + reverse('app_payment:payment-cancel', kwargs={'id': payment.id}),
+        "custom": payment.custom
+    })
+
 @login_required
 def start_paypal_payment(request, id):
     template_name = 'app_payment/payment_start.html'
@@ -32,51 +48,7 @@ def start_paypal_payment(request, id):
     payment = offer.book.active_payment()
     if payment is None:
         payment = Payment()
-        start_payment(payment, offer, request.current_user)
-
-    form = PayPalPaymentsForm(initial = {
-        "business": payment.business,
-        "amount": payment.amount,
-        "item_name": payment.item_name,
-        "invoice": payment.invoice,
-        "currency_code": payment.currency_code,
-        "notify_url": settings.ENDPOINT + reverse('app_payment:paypal-ipn'),
-        "return_url": settings.ENDPOINT + reverse('app_payment:payment-success', kwargs={'id': payment.id}),
-        "cancel_return": settings.ENDPOINT + reverse('app_payment:payment-cancel', kwargs={'id': payment.id}),
-        "custom": payment.custom
-    })
-
-    messages.add_message(request, messages.SUCCESS, 'Das Buch ist nun im Bezahlprozess. Sie werden in Kürze zu Paypal weitergeleitet...')
-
-    return render_to_response(template_name, {
-        "payment_form": form,
-    },  RequestContext(request))
-
-@login_required
-def start_paypal_payment_by_counter_offer(request, id):
-    template_name = 'app_payment/payment_start.html'
-
-    counter_offer = Counteroffer.objects.get(id=id)
-
-    if request.method != 'POST':
-        return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': counter_offer.offer.book.id}))
-
-    payment = Payment()
-    success = start_payment(payment, counter_offer.offer, request.current_user)
-    payment.amount = counter_offer.price
-    payment.save()
-
-    form = PayPalPaymentsForm(initial = {
-        "business": payment.business,
-        "amount": payment.amount,
-        "item_name": payment.item_name,
-        "invoice": payment.invoice,
-        "currency_code": payment.currency_code,
-        "notify_url": settings.ENDPOINT + reverse('app_payment:paypal-ipn'),
-        "return_url": settings.ENDPOINT + reverse('app_payment:payment-success', kwargs={'id': payment.id}),
-        "cancel_return": settings.ENDPOINT + reverse('app_payment:payment-cancel', kwargs={'id': payment.id}),
-        "custom": payment.custom
-    })
+    success = start_payment(payment, offer, request.current_user)
 
     if success:
         messages.add_message(request, messages.SUCCESS, 'Das Buch ist nun im Bezahlprozess. Sie werden in Kürze zu Paypal weitergeleitet...')
@@ -84,7 +56,7 @@ def start_paypal_payment_by_counter_offer(request, id):
         messages.add_message(request, messages.ERROR, 'Das Buch ist nicht im Bezahlprozess.')
 
     return render_to_response(template_name, {
-        "payment_form": form,
+        "payment_form": build_payment_form(payment),
     },  RequestContext(request))
 
 
@@ -94,22 +66,10 @@ def paypal_redirection(request, id):
 
     payment = Payment.objects.get(id=id)
 
-    form = PayPalPaymentsForm(initial = {
-        "business": payment.business,
-        "amount": payment.amount,
-        "item_name": payment.item_name,
-        "invoice": payment.invoice,
-        "currency_code": payment.currency_code,
-        "notify_url": settings.ENDPOINT + reverse('app_payment:paypal-ipn'),
-        "return_url": settings.ENDPOINT + reverse('app_payment:payment-success', kwargs={'id': payment.id}),
-        "cancel_return": settings.ENDPOINT + reverse('app_payment:payment-cancel', kwargs={'id': payment.id}),
-        "custom": payment.custom
-    })
-
     messages.add_message(request, messages.SUCCESS, 'Sie werden in Kürze zu Paypal weitergeleitet...')
 
     return render_to_response(template_name, {
-        "payment_form": form,
+        "payment_form": build_payment_form(payment),
     },  RequestContext(request))
 
 @csrf_exempt

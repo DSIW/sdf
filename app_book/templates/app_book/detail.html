@@ -74,6 +74,7 @@
                         {% endif %}
                     {% elif book.is_in_active_payment_process %}
                         {% if book.active_payment.buyer_user.id == request.user.id %}
+                            {% include 'app_payment/_paypal_button.html' with payment_form=payment_form hidden=False %}
                             <a href="{% url 'app_payment:payment-cancel' book.active_payment.id %}" class="btn">Bezahlprozess abbrechen</a>
                         {% else %}
                             <a href="javascript:;" class="btn disabled">Im Bezahlprozess...</a>

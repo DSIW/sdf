@@ -5,10 +5,7 @@
         <h1>Das Buch befindet sich im Bezahlprozess.</h1>
         <p>Weiterleitung in 2 Sekunden...</p>
 
-        <form action="{{ payment_form.get_endpoint }}" method="post" data-auto-submit="true" style="display: none;">
-            {{ payment_form.as_p }}
-            <input type="submit" value="Kaufen" class="btn" />
-        </form>
+        {% include 'app_payment/_paypal_button.html' with payment_form=payment_form hidden=True %}
     </div>
 
     <script type="text/javascript" charset="utf-8">

@@ -32,7 +32,8 @@ from app_notification.models import Notification
 
 from .models import Book, Offer, Counteroffer
 from .forms import BookForm, OfferForm, PublishOfferForm, CounterofferForm
-from .services import unpublish_book, decline_all_counteroffers_for_offer
+from .services import unpublish_book
+from app_payment.views import build_payment_form
 
 StatusAndTwoForms = collections.namedtuple("StatusAndTwoForms", ["status", "form_one", "form_two"], verbose=False,
                                            rename=False)
@@ -156,9 +157,11 @@ def detailView(request, id):
     template_name = 'app_book/detail.html'
 
     book = get_object_or_404(Book, id=id)
+    payment = book.active_payment()
 
     return render_to_response(template_name, {
-        "book": book
+        "book": book,
+        "payment_form": build_payment_form(payment)
     },  RequestContext(request))
 
 @login_required
@@ -318,18 +321,18 @@ def accept_counteroffer(request, id):
     offer = get_object_or_404(Offer, id=counteroffer.offer.id)
     book = get_object_or_404(Book, id=offer.book.id)
 
-    # Akzeptiere
-    Notification.counteroffer_accept(counteroffer, buyer, book)
     counteroffer.accept()
-    messages.add_message(request, messages.SUCCESS,
-                         'Der Preisvorschlag wurde erfolgreich angenommen. Der Interessent wird benachrichtigt')
 
     # Erstelle Paypalpayment, sodass für das Buch keine Vorschläge mehr abgegeben werden können
-    payment = Payment()
-    start_payment(payment, offer, buyer)
-
-    # Andere offenen Angebote ablehnen
-    decline_all_counteroffers_for_offer(offer)
+    payment = book.active_payment()
+    if payment is None:
+        payment = Payment()
+    success = start_payment(payment, offer, buyer)
+    if success:
+        payment.amount = counteroffer.price
+        payment.save()
+        Notification.counteroffer_accept(counteroffer, buyer, book, payment)
+        messages.add_message(request, messages.SUCCESS, 'Der Preisvorschlag wurde erfolgreich angenommen. Der Interessent wird benachrichtigt')
 
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
 

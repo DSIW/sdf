@@ -35,11 +35,11 @@
                                 {% endif %}
 
                                 <!-- Wird nur angezeigt wenn ein Preisvorschlag Angenommen wurde -->
-                                {% if notification.counter_offer.accepted == True  and notification.notification_type != "BOOK_SEND" and notification.notification_type != "COUNTEROFFER_ACCEPT" or  notification.notification_type == "FASTBUY" %}
+                                {% if notification.counter_offer.accepted and notification.notification_type != "BOOK_SEND" and notification.notification_type == "COUNTEROFFER_ACCEPT" and notification.sender_user_id == request.current_user.id or notification.notification_type == "FASTBUY" %}
                                     <div class="row text-right">
                                         <div class="col s3">
                                             <a href="{% url 'app_notification:notificationsSendBookPage' notification.id %}"
-                                               class="btn waves-effect waves-light">Versand</a>
+                                               class="btn waves-effect waves-light">Versenden</a>
                                         </div>
                                     </div>
                                 {% endif %}
@@ -56,7 +56,7 @@
                                 {% if notification.notification_type == "COUNTEROFFER_ACCEPT" %}
                                     <div class="row text-right">
                                         <div class="col s3">
-                                        <a href="{% url 'app_payment:paypal_redirection' notification.counter_offer.offer.book.active_payment.id %}" data-method="post" class="btn waves-effect waves-light">Bezahlen</a>
+                                        <a href="{% url 'app_payment:paypal_redirection' notification.payment_id %}" data-method="post" class="btn waves-effect waves-light">Bezahlen</a>
                                         </div>
                                     </div>
                                 {% endif %}

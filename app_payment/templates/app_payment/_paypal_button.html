@@ -1,0 +1,4 @@
+<form action="{{ payment_form.get_endpoint }}" method="post" data-auto-submit="true" style="display: {% if hidden %}none{% else %}inline-block{% endif %};">
+    {{ payment_form.as_p }}
+    <input type="submit" value="Zu Paypal" class="btn" />
+</form>
