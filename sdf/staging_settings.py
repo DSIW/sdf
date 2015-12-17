@@ -10,4 +10,4 @@ ALLOWED_HOSTS = [
 ]
 
 # Paypal
-ENDPOINT = "https://ws15sdf-b.f4.htw-berlin.de:8080/paypal/ipn-api/"
+ENDPOINT = "https://ws15sdf-b.f4.htw-berlin.de:8080"
