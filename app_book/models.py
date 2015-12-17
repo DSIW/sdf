@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator
 from django.db import models
 from django.db.models import Max
 
@@ -32,7 +33,7 @@ class Book(models.Model):
     author = models.CharField(max_length=200)
     language = models.CharField(max_length=100)
     releaseDate = models.DateField('release_date')
-    pageNumber = models.IntegerField(default=0)
+    pageNumber = models.IntegerField(default=0, validators=[MinValueValidator(0),MaxValueValidator(9999)])
     isbn10 = models.CharField(max_length=100)
     isbn13 = models.CharField(max_length=100)
     image = models.FileField(help_text='max. 42 megabytes', upload_to=book_directory_path, null=False, default='images/books/book-cover-default.jpg', blank=True)
