@@ -88,6 +88,8 @@ class CustomUpdateForm(ModelForm):
         username = self.instance.username
         if username is not None and len(username) > 0:
             self.fields['username'].widget.attrs['disabled'] = True
+            if self._errors and self._errors['username']:
+                del self._errors['username']
         self.fields['profileImage'].required = False
         self.fields['profileImage'].widget = CustomFileInput()
 
