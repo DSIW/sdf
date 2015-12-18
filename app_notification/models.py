@@ -49,8 +49,7 @@ class Notification(models.Model):
             message=msg,
             received_date=datetime.now(),
             notification_type=Notification.FASTBUY,
-            receiver_user=seller,
-            offer=book.offer
+            receiver_user=seller
         )
 
         notification.save()
