@@ -185,7 +185,7 @@ def sendPasswordResetEmail(request):
         entry.user = user
         entry.save()
 
-        link = 'http://' + HttpRequest.get_host(request) + reverse('app_user:new_password', kwargs={'uuid': confirmId})
+        link = 'https://' + HttpRequest.get_host(request) + reverse('app_user:new_password', kwargs={'uuid': confirmId})
         message = 'Hallo '+ user.first_name + ' ' + user.last_name + ',<br><br> um Ihr Passwort zurückzusetzen, klicken Sie bitte auf den Link: <a href="' + link + '">Bestätigen</a><br>Sollten Sie den Link nicht nutzen könnten dann kopieren Sie bitte folgende URL in Ihren Browser:<br> ' + link + '<br><br>Ihr book² team'
 
         msg = EmailMessage(subject, message, [], [email])
