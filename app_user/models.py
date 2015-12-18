@@ -98,7 +98,12 @@ class User(AuthUser):
 
     def image_url_or_blank(self):
         if self.has_profile_image():
-            return MEDIA_URL + user.profileImage
+            return MEDIA_URL + str(self.profileImage)
+        return STATIC_URL + "img/blank-user-profile.png"
+
+    def image_url_or_blank_for_showcase(self):
+        if self.has_profile_image():
+            return MEDIA_URL + str(self.profileImage)
         return STATIC_URL + "img/blank-showcase.png"
 
 class ConfirmEmail(models.Model):

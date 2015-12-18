@@ -364,6 +364,16 @@ nav .input-field.search-field input[type=search] {
   margin-top: 0;
 }
 
+nav .profile-img {
+  line-height: 64px;
+  vertical-align: middle;
+  width: 32px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  background-color: #FFF;
+  padding: 2px;
+}
+
 
 /* Login */
 .login-hint {
