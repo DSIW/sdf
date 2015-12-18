@@ -5,26 +5,42 @@
 {% block content %}
 
   <div class="container">
-    {% if form.errors %}
-      <div class="z-depth-1 alert alert-error">{{ form.username.label }} oder {{ form.password.label }} sind falsch!</div>
-    {% endif %}
+      <h3>Login</h3>
 
-    <form method="post" action="{% url 'django.contrib.auth.views.login' %}?next={% if next %}{{next}}{% else %}/{% endif %}">
-      {% csrf_token %}
-      <div class="input-field">
-        {{ form.username.label_tag }}
-        {{ form.username }}
+      <div class="row">
+          <div class="col m8 s12">
+              {% if form.errors %}
+              <div class="z-depth-1 alert alert-error">{{ form.username.label }} oder {{ form.password.label }} sind falsch!</div>
+              {% endif %}
+
+              <form method="post" action="{% url 'django.contrib.auth.views.login' %}?next={% if next %}{{next}}{% else %}/archive/{% endif %}">
+                  {% csrf_token %}
+                  <div class="input-field">
+                      {{ form.username.label_tag }}
+                      {{ form.username }}
+                  </div>
+                  <div class="input-field">
+                      {{ form.password.label_tag }}
+                      {{ form.password }}
+                  </div>
+
+                  <input type="submit" value="login" class="btn" />
+
+                  {# Assumes you setup the password_reset view in your URLconf #}
+                  <p><a href="{% url 'password_reset' %}">Passwort vergessen?</a></p>
+              </form>
+          </div>
+
+          <div class="col m4 s12">
+              <div class="login-hint">
+                  <strong>Login-Hinweis:</strong>
+                  <ul>
+                      <li class="code">max@mustermann.de:123456</li>
+                      <li class="code">martin@mustermann.de:123456</li>
+                  </ul>
+              </div>
+          </div>
       </div>
-      <div class="input-field">
-        {{ form.password.label_tag }}
-        {{ form.password }}
-      </div>
-
-      <input type="submit" value="login" class="btn" />
-    </form>
-
-    {# Assumes you setup the password_reset view in your URLconf #}
-    <p><a href="{% url 'password_reset' %}">Passwort vergessen?</a></p>
   </div>
 
 {% endblock %}

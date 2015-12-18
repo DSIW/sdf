@@ -65,7 +65,10 @@
                     {% endfor %}
                 </ul>
             {% else %}
-                Es sind keine Nachrichten vorhanden!
+                <div class="empty">
+                    <i class="material-icons">notifications_off</i>
+                    <p>Es sind keine Nachrichten vorhanden!</p>
+                </div>
             {% endif %}
         </div>
     </div>

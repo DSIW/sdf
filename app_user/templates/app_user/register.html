@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="container">
-      <h1>Account erstellen</h1>
+      <h3>Account erstellen</h3>
 
       <form action="{% url 'app_user:register' %}" enctype="multipart/form-data" method="post">{% csrf_token %}
           {% for field in form.visible_fields %}

@@ -20,6 +20,11 @@ a {
   color: #26A69A;
 }
 
+hr {
+  border: none;
+  border-bottom: 1px solid #ccc;
+}
+
 nav ul a,
 nav .brand-logo {
   color: #444;
@@ -30,8 +35,16 @@ nav .brand-logo {
   animation: ring 8s 1s ease-in-out;
 }
 
+.code {
+  font-family: monospace;
+}
+
 p {
   line-height: 2rem;
+}
+
+form .input-field img {
+  max-height: 200px;
 }
 
 .button-collapse {
@@ -39,14 +52,11 @@ p {
 }
 
 .parallax-container {
-  min-height: 380px;
-  line-height: 0;
-  height: auto;
-  color: rgba(255,255,255,.9);
+  height: 200px;
 }
-  .parallax-container .section {
-    width: 100%;
-  }
+.parallax-container .section {
+  width: 100%;
+}
 
 @media only screen and (max-width : 992px) {
   .parallax-container .section {
@@ -236,8 +246,8 @@ a.disabled {
   overflow: visible; /* show dropdown menu */
 }
 
-.dropdown-content li > a
-, .dropdown-content li > span {
+.dropdown-content li > a,
+.dropdown-content li > span {
   font-size: 1rem;
   text-transform: uppercase;
 }
@@ -271,7 +281,6 @@ nav .input-field.search-field input[type=search] {
   width: 179px;
 }
 
-
 #nav_ul_sort {
   /* nav margin-bottom is ignored if this ul starts to float */
   margin-bottom: 30px;
@@ -280,7 +289,7 @@ nav .input-field.search-field input[type=search] {
   /* needs to be 100% width for better float breaks of child ul elems */
   width: 100%;
 
-  border: 0px solid #009688;
+  border: 0 solid #009688;
   border-right-width: 1px;
   border-left-width: 1px;
 
@@ -289,15 +298,30 @@ nav .input-field.search-field input[type=search] {
 }
 
 #nav_ul_sort > li {
-  border: 0.5px solid #009688;
+  border: 1px solid #009688;
   border-right-width:0;
   padding-left: 15px;
   float:right;
 }
 
 
+.text-shadow {
+    text-shadow: 0px 1px 2px rgba(0,0,0,0.8);
+}
+
+
 .btn-flat {
   color: #26a69a;
+}
+.btn-danger {
+  background-color: #D62F2F;
+}
+.btn-danger:hover {
+  background-color: #E84F4F;
+}
+.btn-flat.btn-danger {
+  background-color: transparent;
+  color: #D62F2F;
 }
 
 .input-field.has-error label {
@@ -324,6 +348,111 @@ nav .input-field.search-field input[type=search] {
   padding-bottom: 1px; /* hack for following input-field */
 }
 
+.empty {
+  margin: 60px 0;
+}
+.empty i {
+  color: #ccc;
+  font-size: 15em;
+  text-align: center;
+  width: 100%;
+}
+.empty p {
+  text-align: center;
+  color: #ccc;
+  font-size: 1.5em;
+  margin-top: 0;
+}
+
+
+/* Login */
+.login-hint {
+  border-radius: 3px;
+  margin-top: 1em;
+  margin-bottom: 2em;
+  display: inline-block;
+  padding: 20px;
+  border: 1px solid #CCC;
+  background-color: #F1F1F1;
+}
+.login-hint ul {
+  margin: 10px 0px;
+}
+.login-hint li {
+  list-style-type: disc;
+  margin-left: 18px;
+}
+
+
+/* highlights-box */
+.highlights-box-row {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: stretch;
+  align-content: stretch;
+}
+.highlights-box-cell {
+  position: relative;
+  width: 11vw;
+  height: 15vw;
+  min-width: 115px;
+  min-height: 145px;
+
+  box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
+  margin: 1vw;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center center;
+  color: white;
+  text-align: center;
+}
+.highlights-box-target a {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+.highlights-box-hover-info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  min-height: 20%;
+  transition: background-color 0.5s, opacity 0.5s, border 0.5s;
+  line-height: 33px;
+  vertical-align: bottom;
+  padding: 3px 5px;
+  font-weight: 300;
+}
+.highlights-box-hover-info.bottom {
+  height: 20%;
+  bottom: 0;
+}
+.highlights-box-hover-info.top {
+  text-align: left;
+  text-overflow: ellipsis;
+  top: 0;
+}
+.highlights-box-hover-info .price {
+  font-size: 1.3em;
+}
+.highlights-box-hover-info i {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+.highlights-box-hover-info i.material-icons {
+  font-size: 1.3em;
+  position: relative;
+  top: 4px;
+}
+.highlights-box-cell:hover .highlights-box-hover-info {
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 1;
+}
 
 /* Showcase */
 .showcase .card-book {
@@ -346,7 +475,6 @@ nav .input-field.search-field input[type=search] {
   line-height: 28px;
   margin-bottom: 15px;
 }
-
 .showcase .card-book .card-image {
   height: 310px;
 }
@@ -376,11 +504,15 @@ form .seller-rating-star {
 }
 
 
+
 /* Offer */
 .offer-state {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
+  display: block;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 8px;
+  height: 8px;
   border-radius: 100%;
   vertical-align: middle;
   margin-right: 5px;
@@ -420,6 +552,105 @@ ul.border-separated li:last-child {
   border-right: none;
 }
 
+.page-start .empty {
+  color: #808080;
+  font-size: 1.5em;
+  font-weight: 300;
+  font-style: italic;
+  border-radius: 3px;
+  padding: 10px;
+  text-align: center;
+  width: 880px;
+}
+.page-start .nav {
+  height: 0px;
+}
+.page-start nav.transparent {
+  background-color: none;
+  box-shadow: none;
+}
+.page-start main {
+  height: 100vh;
+}
+.page-start .main-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  height: 100vh;
+  width: 100%;
+  background: url(/static/img/book5.jpg) no-repeat center bottom;
+  background-size: 100vw;
+}
+.page-start nav {
+  margin-top: 20px;
+}
+.page-start nav ul li:hover {
+  background-color: transparent;
+}
+.page-start nav ul li:active {
+  background-color: transparent;
+}
+.page-start nav a.btn-flat {
+  color: white;
+  background-color: none;
+  border: 1px solid white;
+  border-radius: 3px;
+  transition: 0.4s all;
+  margin-left: 10px;
+  font-size: 0.9em;
+  padding: 0;
+  width: 130px;
+  text-align: center;
+}
+.page-start nav a.btn-flat:hover {
+  background-color: #26A69A;
+  border: 1px solid #26A69A;
+  border-radius: 3px;
+}
+
+.page-start .start-arrow {
+  position: absolute;
+  font-size: 50px;
+  bottom: 20px;
+  color: #D0D0D0;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  animation: rub 1.5s ease-in-out infinite;
+}
+.page-start .citations {
+  width: 100%;
+  color: white;
+  text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.6);
+  font-family: 'Pacifico', cursive;
+  font-size: 2.4em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20%);
+}
+.page-start .citations p {
+  line-height: 3.5rem;
+  padding: 0 2em;
+}
+.page-start .nav a.button-collapse {
+  color: white;
+}
+.page-start a.brand-logo {
+  color: #212121;
+}
+.page-start .brand-logo i {
+  color: #212121;
+  margin-top: 10px;
+}
+
+@keyframes rub {
+  0% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-10px); }
+  100% { transform: translate(-50%) translateY(0px); }
+}
 
 /* Book */
 .seller-rating {
@@ -446,6 +677,19 @@ img.book-cover {
   border-top: 1px solid #ccc;
   margin-top: 30px;
   padding-top: 20px;
+}
+
+.book-details .seller-details {
+  padding: 10px 15px;
+  background-color: #FBFBFB;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+.book-details .seller-details p:first-child {
+  margin-top: 0;
+}
+.book-details .seller-details p:last-child {
+  margin-bottom: 0;
 }
 
 

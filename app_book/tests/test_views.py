@@ -175,7 +175,7 @@ class BookTest(TestCase):
         data['active'] = 'on'
         data['price'] = 'bogusVal'
 
-        self.client.post(reverse('app_book:createBook'), data=data)
+        response = self.client.post(reverse('app_book:createBook'), data=data)
 
         book = Book.objects.all()
         offer = Offer.objects.all()
@@ -283,7 +283,7 @@ class BookTest(TestCase):
         self.assertEqual(len(book), 1, book)
         self.assertEqual(len(offer), 1, offer)
 
-        self.client.put(reverse('app_book:unpublishBook', kwargs={'id': book.first().id}), data=data)
+        response = self.client.put(reverse('app_book:unpublishBook', kwargs={'id': book.first().id}), data=data)
 
         book = Book.objects.all()
         offer = Offer.objects.all()

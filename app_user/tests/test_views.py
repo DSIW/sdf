@@ -55,7 +55,7 @@ class ViewTests(TestCase):
 
         response = self.client.post(reverse('app_user:confirm_email', kwargs={'uuid': confirmMail.uuid}), data=data)
 
-        self.assertRedirects(response, reverse('app:startPage'))
+        self.assertRedirects(response, reverse('app_user:login'))
         #25 = SUCCESS
         self.assertNotEqual(re.match(".*,0,25,", response.cookies['messages'].value), None)
         user.refresh_from_db()
@@ -66,7 +66,7 @@ class ViewTests(TestCase):
         data = {'email': 'dummy'}
         response = self.client.post(reverse('app_user:confirm_email', kwargs={'uuid': 'wrong'}), data=data)
 
-        self.assertRedirects(response, reverse('app:startPage'))
+        self.assertRedirects(response, reverse('app_user:login'))
         #40 = ERROR
         self.assertNotEqual(re.match(".*,0,40,", response.cookies['messages'].value), None)
         self.assertEqual(response.status_code, 302)

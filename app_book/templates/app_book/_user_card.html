@@ -5,11 +5,7 @@
 <div class="card card-book small">
     <div class="card-image waves-effect waves-block waves-light">
         <a href="{% url 'app_book:showcase' user.id %}" >
-            {% if user.has_profile_image %}
-                <img class="activator" src="{{ MEDIA_URL }}{{ user.profileImage }}">
-            {% else %}
-                <img src="{% static "img/blank-showcase.png" %}" />
-            {% endif %}
+            <img class="activator" src="{{ user.image_url_or_blank }}">
         </a>
     </div>
     <div class="card-content">

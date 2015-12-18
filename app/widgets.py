@@ -9,7 +9,7 @@ class CustomFileInput(FileInput):
     def render(self, name=None, value=None, attrs=None, single_attrs=None):
         self = ''
         if value:
-            self +='<img width="500px" src="/media/' + value.__str__() + '" />'
+            self +='<img src="/media/' + value.__str__() + '" />'
         self += '''
             <div class="file-field input-field">
               <div class="btn">

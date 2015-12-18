@@ -7,7 +7,7 @@
 {% block content %}
 
     <div class="container">
-        <h1>Alle Schaufenster</h1>
+        <h3>Alle Schaufenster</h3>
 
         <nav class="teal lighten-1">
             <div class="nav-wrapper">
@@ -56,26 +56,31 @@
                 </ul>
             </div>
         </nav>
+
         {% if users|length > 0 %}
+            <div class = "row">
+                <div class="col s12">
+                    {% for user in users %}
+                        {% include 'app_book/_user_card.html' with user=user %}
+                    {% endfor %}
+                </div>
 
-        <div class = "row">
-
-            <div class="col s12">
-                {% for user in users %}
-                    {% include 'app_book/_user_card.html' with user=user %}
-                {% endfor %}
+                <div class="col s12 center">
+                    {% include 'app/_pagination.html' with items=users request=request%}
+                </div>
             </div>
-
-            <div class="col s12 center">
-                {% include 'app/_pagination.html' with items=users request=request%}
-            </div>
-        </div>
         {% else %}
-                    {% if request.GET.seller %}
-                    Es wurden keine zur Suche passenden Schaufenster gefunden.
-                    {% else %}
-                    Es werde momentan in keinen Schaufenstern Bücher zum Verkauf angeboten.
-        {% endif %}
+            {% if request.GET.seller %}
+                <div class="empty">
+                    <i class="material-icons">search</i>
+                    <p>Es wurden keine passenden Schaufenster gefunden.</p>
+                </div>
+            {% else %}
+                <div class="empty">
+                    <i class="material-icons">clear</i>
+                    <p>Es werden momentan in keinen Schaufenstern Bücher zum Verkauf angeboten.</p>
+                </div>
+            {% endif %}
         {% endif %}
 
     </div>

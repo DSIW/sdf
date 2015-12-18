@@ -4,7 +4,7 @@
 
 {% block content %}
   <div class="container">
-    <h1>Account bearbeiten</h1>
+    <h3>Account bearbeiten</h3>
 
     <form action="{% url 'app_user:edit_profile' user.id %}" enctype="multipart/form-data" method="POST">{% csrf_token %}
         

@@ -4,16 +4,22 @@
 
 {% block content %}
     <div class="container">
-        <h1>Schaufenster von <span class="orange-text text-lighten-1">{{ showcase_user.pseudonym_or_full_name }}</span></h1>
+        <h3>Schaufenster von <span class="orange-text text-lighten-1">{{ showcase_user.pseudonym_or_full_name }}</span></h3>
         {% if not showcase_user.showcaseDisabled %}
             {% for offer in offers %}
                 {% include 'app_book/_book_card.html' with user=showcase_user book=offer.book offer=offer %}
             {% endfor %}
             {% if offers.count == 0 %}
-                Es sind keine Bücher im Schaufenster vorhanden.
+                <div class="empty">
+                    <i class="material-icons">clear</i>
+                    <p>Es sind keine Bücher im Schaufenster vorhanden.</p>
+                </div>
             {% endif %}
         {% else %}
-            Dieses Schaufenster wurde vom Admin gesperrt.
+            <div class="empty">
+                <i class="material-icons">block</i>
+                <p>Dieses Schaufenster wurde vom Admin gesperrt.</p>
+            </div>
         {% endif %}
     </div>
 {% endblock %}

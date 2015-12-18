@@ -7,7 +7,7 @@
 {% block content %}
 
     <div class="container">
-        <h1>Alle Bücher</h1>
+        <h3>Alle Bücher</h3>
 
 
         <nav class="teal lighten-1">
@@ -73,7 +73,17 @@
             </div>
         </div>
         {% else %}
-            Es werde momentan keine Bücher zum Verkauf angeboten.
+            {% if request.GET.search_string %}
+                <div class="empty">
+                    <i class="material-icons">search</i>
+                    <p>Es wurden keine passenden Bücher gefunden.</p>
+                </div>
+            {% else %}
+                <div class="empty">
+                    <i class="material-icons">clear</i>
+                    <p>Es werden momentan keine Bücher zum Verkauf angeboten.</p>
+                </div>
+            {% endif %}
         {% endif %}
 
     </div>

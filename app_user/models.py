@@ -96,6 +96,11 @@ class User(AuthUser):
     def rating(self):
         return SellerRating.calculate_stars_for_user(self.id)
 
+    def image_url_or_blank(self):
+        if self.has_profile_image():
+            return MEDIA_URL + user.profileImage
+        return STATIC_URL + "img/blank-showcase.png"
+
 class ConfirmEmail(models.Model):
     uuid = models.CharField(max_length=50)
     user = models.OneToOneField(User)
