@@ -19,4 +19,18 @@ jQuery(function(){
   $('.js-alert-hide').on('click', function(event) {
     $(this).parents('.alert').fadeOut();
   });
+
+  $('#arrow-scroller').on('click', function(event) {
+    $.scrollTo('#books', 500);
+  });
+
+  $("nav[role=navigation] ul.navigation-bar li").each(function(index, element) {
+    $element = $(element);
+    href = $element.find('a').first().attr('href');
+    href = URI(href || "").path();
+    currentPath = document.location.pathname;
+    if (currentPath.indexOf(href) >= 0) {
+      $element.addClass('active');
+    }
+  });
 });

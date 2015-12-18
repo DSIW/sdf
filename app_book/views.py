@@ -51,6 +51,7 @@ def can_show_book(func):
         return func(request, *args, **kwargs)
     return check_and_call
 
+
 def can_change_book(func):
     def check_and_call(request, *args, **kwargs):
         id = kwargs.get("id")
@@ -62,8 +63,6 @@ def can_change_book(func):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         return func(request, *args, **kwargs)
     return check_and_call
-
-
 
 
 @can_change_book
@@ -164,6 +163,7 @@ def detailView(request, id):
         "payment_form": build_payment_form(payment)
     },  RequestContext(request))
 
+
 @login_required
 @can_change_book
 def editBook(request, id):
@@ -195,6 +195,7 @@ def showcaseView(request, user_id):
         "offers": offers,
     }, RequestContext(request))
 
+
 @login_required
 @can_change_book
 def deleteBook(request, id):
@@ -206,6 +207,7 @@ def deleteBook(request, id):
         return HttpResponseRedirect(reverse('app_book:archivesPage'), status=303)
     else:
         raise BaseException("Use http method DELETE for deleting a book.")
+
 
 @login_required
 def createBook(request):
@@ -224,6 +226,7 @@ def createBook(request):
         "book_form": ret_val.form_one,
         "offer_form": ret_val.form_two,
     }, RequestContext(request))
+
 
 @login_required
 @can_change_book
@@ -254,6 +257,7 @@ def publishBook(request, id):
         "book": book,
     }, RequestContext(request))
 
+
 @login_required
 @can_change_book
 def unpublishBook(request, id):
@@ -272,6 +276,7 @@ def unpublishBook(request, id):
         return HttpResponseRedirect(reverse('app_book:archivesPage'))
     else:
         raise ("Use http method PUT for unpublishing a book.")
+
 
 @login_required
 def counteroffer(request, id):
@@ -314,6 +319,7 @@ def counteroffer(request, id):
 
     return HttpResponseRedirect(reverse('app_book:book-detail', kwargs = {'id': book.id}))
 
+
 @login_required
 def accept_counteroffer(request, id):
     counteroffer = get_object_or_404(Counteroffer, id=id)
@@ -335,6 +341,7 @@ def accept_counteroffer(request, id):
         messages.add_message(request, messages.SUCCESS, 'Der Preisvorschlag wurde erfolgreich angenommen. Der Interessent wird benachrichtigt')
 
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
+
 
 @login_required
 def decline_counteroffer(request, id):
@@ -428,6 +435,7 @@ def showcasesOverView(request):
     template_name = 'app_book/showcaseOverview.html'
 
     filteredUsers = []
+
     sellerNameFilteredUsers = []
     filteredUsers.extend(filter_users_with_offered_books(User.objects.all()))
 
@@ -476,3 +484,14 @@ def showcasesOverView(request):
         "order_dir": order_dir,
         "request": request,
     }, RequestContext(request))
+
+
+def newestBooks(request):
+    template_name = 'app_book/newest_books.html'
+
+    offers = Offer.objects.filter(active=True).order_by('-updated')
+
+    return render_to_response(template_name, {
+        "offers": offers,
+    }, RequestContext(request))
+

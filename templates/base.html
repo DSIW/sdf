@@ -2,22 +2,7 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <title>{% block title %}SDF{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
-
-    <link type="text/css" href="{% static "css/materialize.css" %}" rel="stylesheet">
-    <link type="text/css" href="{% static "css/material_icons.css" %}" rel="stylesheet">
-    <link type="text/css" href="{% static "css/font-awesome.css" %}" rel="stylesheet">
-    <link type="text/css" href="{% static "css/style.css" %}" rel="stylesheet">
-
-    <script type="text/javascript" src="{% static "js/jquery-2.1.4.js" %}"></script>
-</head>
+{% include 'app/_head.html' %}
 
 <body class="{% block body_classes %}{% endblock %}">
 
@@ -33,7 +18,7 @@
 <div class="nav-fixed">
     <nav class="white" role="navigation">
         <div class="nav-wrapper container">
-            <a id="logo-container" href="{% url "app:startPage" %}" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
+          <a id="logo-container" href="{% if user.is_authenticated %}{% url "app_book:archivesPage" %}{% else %}{% url "app:startPage" %}{% endif %}" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
             {% if user.is_authenticated %}
               <ul id="nav-dropdown-profile" class="dropdown-content">
                 <li><a href="{% url 'app_user:user-details' user.pk %}">Mein Profil</a></li>
@@ -42,8 +27,8 @@
                 <li><a href="{% url 'logout' %}?next=/">Logout</a></li>
             </ul>
             {% endif %}
-            <ul class="right hide-on-med-and-down">
-                <li><a href="{% url 'app_book:showcases' %}">Alle Schaufenster</a></li>
+            <ul class="navigation-bar right hide-on-med-and-down">
+              <li><a href="{% url 'app_book:showcases' %}">Alle Schaufenster</a></li>
                 <li><a href="{% url 'app_book:books' %}">Alle Bücher</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
@@ -63,9 +48,9 @@
                 {% endif %}
             </ul>
 
-            <ul id="nav-mobile" class="side-nav">
+            <ul id="nav-mobile" class="navigation-bar side-nav">
                 <li><a href="{% url 'app_book:showcases' %}">Alle Schaufenster</a></li>
-                <li><a href="{% url 'app_book:books' %}">Bücher</a></li>
+                <li><a href="{% url 'app_book:books' %}">Alle Bücher</a></li>
                 <hr>
                 {% if user.is_authenticated %}
                   <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
@@ -81,71 +66,14 @@
 </div>
 
 <main>
-    {% for message in messages %}
-        <div class="container z-depth-1 alert alert-{{ message.tags }}">
-          <i class="material-icons alert-icon">
-            {% if message.tags == 'danger' %}
-            error
-            {% elif message.tags == 'warning' %}
-            warning
-            {% elif message.tags == 'success' %}
-            check
-            {% elif message.tags == 'info' %}
-            info
-            {% endif %}
-          </i>
-          <div class="message">{{ message }}</div>
-          <i class="material-icons alert-hide js-alert-hide">clear</i>
-        </div>
-    {% endfor %}
+    {% include 'app/_messages.html' %}
 
     {% block content %}
     {% endblock %}
 </main>
 
-<footer class="page-footer grey darken-4">
-    <div class="container">
-        <div class="row">
-            <div class="col l6 s12">
-                <p class="grey-text text-lighten-4">Wir sind ein Team von Studenten, die an diesem Projekt arbeiten, als
-                    wäre es ein Vollzeitjob. Jegliche Art der Hilfe ist willkommen, um das Projekt weiterzubringen.</p>
-            </div>
-            <div class="col l3 s12">
-                <p><div class="fb-like" data-href="//{{ request.get_host }}{% url "app:startPage" %}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div></p>
-            </div>
-            <div class="col l3 s12">
-                <ul>
-                    <li><a class="white-text" href="{% url 'app:imprint' %}">Impressum</a></li>
-                    <li><a class="white-text" href="{% url 'app:agb' %}">AGB</a></li>
-                    <li><a class="white-text" href="{% url 'app:privacy' %}">Datenschutz</a></li>
-                    <li><a class="white-text" href="{% url 'app:affiliate' %}">Affiliate</a></li>
-                    <li><a class="white-text" href="{% url 'app:team' %}">Team</a></li>
-                    <li><a class="white-text" href="{% url 'app:job' %}">Job</a></li>
-
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="footer-copyright">
-        <div class="container">
-            Made by us with love.
-        </div>
-    </div>
-</footer>
-
-
-<script type="text/javascript" src="{% static "js/widgets.js" %}"></script>
-<script type="text/javascript" src="{% static "js/jquery.cookie.js" %}"></script>
-<script type="text/javascript" src="{% static "js/moment.js" %}"></script>
-<script type="text/javascript" src="{% static "js/moment-de.js" %}"></script>
-<script type="text/javascript" src="{% static "js/moment-isocalendar.js" %}"></script>
-<script type="text/javascript" src="{% static "js/bootstrap.js" %}"></script>
-<script type="text/javascript" src="{% static "js/knockout-3.3.0.js" %}"></script>
-<script type="text/javascript" src="{% static "js/materialize.js" %}"></script>
-<script type="text/javascript" src="{% static "js/jquery.confirm.js" %}"></script>
-<script type="text/javascript" src="{% static "js/rails.js" %}"></script>
-<script type="text/javascript" src="{% static "js/confirmation.js" %}"></script>
-<script type="text/javascript" src="{% static "js/init.js" %}"></script>
+{% include 'app/_footer.html' %}
+{% include 'app/_js.html' %}
 
 </body>
 </html>

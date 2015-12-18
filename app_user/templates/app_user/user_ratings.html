@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="container">
-        <h1>Bewertungen für <span class="orange-text text-lighten-1">{{rated_user.pseudonym_or_full_name }}</span></h1>
+        <h3>Bewertungen für <span class="orange-text text-lighten-1">{{rated_user.pseudonym_or_full_name }}</span></h3>
 
             {% for rating in ratings %}
                 {% include 'app_user/_rating_entry.html' with user_rating=rating %}

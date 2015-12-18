@@ -1,0 +1,12 @@
+{% load template_extras %}
+{% load staticfiles %}
+
+<div class="highlights-box-cell" style="background-image: url('{{ MEDIA_URL }}{{ book.image }}')">
+    <div class="highlights-box-target">
+        <a href="{% url 'app_book:book-detail' book.id %}"></a>
+    </div>
+    <div class="highlights-box-hover-info bottom">
+        <span class="stars left"><i class="material-icons">star</i>{{ user.rating.rating }}</span>
+        <span class="price right">{{ offer.totalPrice|currency }}</span>
+    </div>
+</div>

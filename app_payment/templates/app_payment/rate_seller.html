@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container">
-    <h1>Verkäufer <span class="orange-text text-lighten-1">{{ rated_user.pseudonym_or_full_name }}</span> bewerten</h1>
+    <h3>Verkäufer <span class="orange-text text-lighten-1">{{ rated_user.pseudonym_or_full_name }}</span> bewerten</h3>
 
     <form action="{% url 'app_payment:rate-seller' id=payment.id %}" enctype="multipart/form-data" method="post">{% csrf_token %}
         {% if form.errors %}

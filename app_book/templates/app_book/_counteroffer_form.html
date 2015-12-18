@@ -5,13 +5,13 @@
 {% block content %}
   <div class="container">
         <div class="row">
-            <h1>Preisvorschlag</h1>
-            <h2>
+            <h3>Preisvorschlag</h3>
+            <h4>
                 Für
                 <span class="orange-text text-lighten-1">{{ book.name }}</span>
                 von Anbieter
                 <span class="orange-text text-lighten-1">{{ offer.seller_user.pseudonym_or_full_name }}</span>
-            </h2>
+            </h4>
         </div>
 
     <form action="{% url 'app_book:new_counteroffer' offer.id %}" method="post">{% csrf_token %}

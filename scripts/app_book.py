@@ -135,38 +135,194 @@ def import_data():
     from app_book.models import Book
     from app_book.models import User
 
-    app_book_1 = Book()
-    app_book_1.user = User.objects.filter(username='max').first()
-    app_book_1.name = 'Lightweight Django'
-    app_book_1.author = 'Julia Elman, Mark Lavin'
-    app_book_1.language = 'EN'
-    app_book_1.releaseDate = dateutil.parser.parse("2014-11-11")
-    app_book_1.pageNumber = 243
-    app_book_1.isbn10 = '149194594X'
-    app_book_1.isbn13 = '978-1491945940'
-    app_book_1.description = "Julia Elman has been working her brand of web skills for nearly a decade. She started out as a designer for an internal marketing group at a travel agency in Los Angeles, and quickly honed her skills as a web designer using HTML/CSS. Julia joined the Caktus Consulting Group in 2011 and is thrilled to work with some of the most talented developers this side of the Mississippi. She is actively involved with Girl Develop It RDU as an instructor to help contribute in educating women pursuing a career in technology. Mark is a lead Python/Django developer at Caktus Consulting Group in Carrboro, NC. He also runs a small homebrewing website written in Django called brewedbyus.com. He came to Python web development after a few years pricing derivatives on Wall Street. Mark maintains a number of open source projects primarily related to Django development and frequently contributes back to projects used by Caktus. When he isn't programming, Mark enjoys spending time with his wife and daughter, brewing beer, and running."
-    app_book_1 = importer.save_or_locate(app_book_1)
+    app_book = Book()
+    app_book.user = User.objects.filter(username='max').first()
+    app_book.name = 'Lightweight Django'
+    app_book.author = 'Julia Elman, Mark Lavin'
+    app_book.language = 'EN'
+    app_book.releaseDate = dateutil.parser.parse("2014-11-11")
+    app_book.pageNumber = 243
+    app_book.image = 'images/books/book_1.jpg'
+    app_book.isbn10 = '149194594X'
+    app_book.isbn13 = '978-1491945940'
+    app_book.description = "Julia Elman has been working her brand of web skills for nearly a decade. She started out as a designer for an internal marketing group at a travel agency in Los Angeles, and quickly honed her skills as a web designer using HTML/CSS. Julia joined the Caktus Consulting Group in 2011 and is thrilled to work with some of the most talented developers this side of the Mississippi. She is actively involved with Girl Develop It RDU as an instructor to help contribute in educating women pursuing a career in technology. Mark is a lead Python/Django developer at Caktus Consulting Group in Carrboro, NC. He also runs a small homebrewing website written in Django called brewedbyus.com. He came to Python web development after a few years pricing derivatives on Wall Street. Mark maintains a number of open source projects primarily related to Django development and frequently contributes back to projects used by Caktus. When he isn't programming, Mark enjoys spending time with his wife and daughter, brewing beer, and running."
+    app_book = importer.save_or_locate(app_book)
 
-    app_book_2 = Book()
-    app_book_2.user = User.objects.filter(username='max').first()
-    app_book_2.name = 'Hands-on Django: Going Beyond the Polls'
-    app_book_2.author = 'Brandon Lorenz'
-    app_book_2.language = 'EN'
-    app_book_2.releaseDate = dateutil.parser.parse("2016-03-25")
-    app_book_2.pageNumber = 0
-    app_book_2.isbn10 = '144936781X'
-    app_book_2.isbn13 = '978-1449367817'
-    app_book_2.description = ''
-    app_book_2 = importer.save_or_locate(app_book_2)
+    app_book = Book()
+    app_book.user = User.objects.filter(username='max').first()
+    app_book.name = 'Hands-on Django: Going Beyond the Polls'
+    app_book.author = 'Brandon Lorenz'
+    app_book.language = 'EN'
+    app_book.releaseDate = dateutil.parser.parse("2016-03-25")
+    app_book.pageNumber = 0
+    app_book.image = 'images/books/book_1.jpg'
+    app_book.isbn10 = '144936781X'
+    app_book.isbn13 = '978-1449367817'
+    app_book.description = ''
+    app_book = importer.save_or_locate(app_book)
 
-    app_book_3 = Book()
-    app_book_3.user = User.objects.filter(username='martin').first()
-    app_book_3.name = 'Test-Driven Development with Python'
-    app_book_3.author = 'Harry J.W. Percival'
-    app_book_3.language = 'EN'
-    app_book_3.releaseDate = dateutil.parser.parse("2014-06-19")
-    app_book_3.pageNumber = 478
-    app_book_3.isbn10 = '1449364829'
-    app_book_3.isbn13 = '978-1449364823'
-    app_book_3.description = ''
-    app_book_3 = importer.save_or_locate(app_book_3)
+    app_book = Book()
+    app_book.user = User.objects.filter(username='martin').first()
+    app_book.name = 'Test-Driven Development with Python'
+    app_book.author = 'Harry J.W. Percival'
+    app_book.language = 'EN'
+    app_book.releaseDate = dateutil.parser.parse("2014-06-19")
+    app_book.pageNumber = 478
+    app_book.image = 'images/books/book_1.jpg'
+    app_book.isbn10 = '1449364829'
+    app_book.isbn13 = '978-1449364823'
+    app_book.description = ''
+    app_book = importer.save_or_locate(app_book)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(username='martin').first()
+    app_book.name = 'Die Betrogene'
+    app_book.author = 'Charlotte Link'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2015-09-02")
+    app_book.pageNumber = 640
+    app_book.image = 'images/books/book_4.jpg'
+    app_book.isbn10 = '3734100852'
+    app_book.isbn13 = '978-3734100857'
+    app_book.description = '''
+Einsam wacht, wer um die Schuld weiß ...
+
+Um ein glückliches Leben betrogen – so fühlt sich Kate Linville, Polizistin bei Scotland Yard. Kontaktscheu und einsam, gibt es nur einen Menschen, den sie liebt: ihren Vater. Als dieser in seinem Haus grausam ermordet wird, verliert Kate ihren letzten Halt. Da sie dem alkoholkranken Ermittler vor Ort nicht traut, macht sie sich selbst auf die Spur dieses mysteriösen Verbrechens. Und entlarvt die Vergangenheit ihres Vaters als Trugbild, denn er war nicht der, für den sie ihn hielt.
+'''
+    app_book = importer.save_or_locate(app_book)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(username='martin').first()
+    app_book.name = 'Honigtot'
+    app_book.author = 'Hanni Münzer'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2015-04-13")
+    app_book.pageNumber = 480
+    app_book.image = 'images/books/book_5.jpg'
+    app_book.isbn10 = '3492307256'
+    app_book.isbn13 = '978-3492307256'
+    app_book.description = '''
+GEWIDMET DEN MUTIGEN FRAUEN DES WIDERSTANDS IM ZWEITEN WELTKRIEG. SIE SIND HELDINNEN.
+*********************************************************************************************************************************************
+»Mein größter Fehler war es, dass ich Hitler das Gewehr weggenommen habe. Hätte ich ihn sich nur umbringen lassen!« Helene Hanfstängl, 1959
+*********************************************************************************************************************************************
+Wie weit geht eine Mutter, um ihre Kinder zu retten? Wie weit geht eine Tochter, um ihren Vater zu rächen? Wie kann eine tiefe, alles verzehrende Liebe die Generationen überdauern und alte Wunden heilen?
+Als sich die junge Felicity auf die Suche nach ihrer Mutter macht, stößt sie dabei auf ein quälendes Geheimnis ihrer Familiengeschichte. Ihre Nachforschungen führen sie zurück in das dunkelste Kapitel unserer Vergangenheit und zum dramatischen Schicksal ihrer Urgroßmutter Elisabeth und deren Tochter Deborah. Ein Netz aus Liebe, Schuld und Sühne umfing beide Frauen und warf über Generationen einen Schatten auf Felicitys eigenes Leben.
+'''
+    app_book = importer.save_or_locate(app_book)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(username='martin').first()
+    app_book.name = 'Star Wars(TM) Das Erwachen der Macht. Raumschiffe und Fahrzeuge'
+    app_book.author = 'k.A.'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2015-12-18")
+    app_book.pageNumber = 48
+    app_book.image = 'images/books/book_6.jpg'
+    app_book.isbn10 = '3831028788'
+    app_book.isbn13 = '978-3831028788'
+    app_book.description = '''
+Atemberaubende Einblicke in die Technik von „STAR WARS™: Das Erwachen der Macht“ mit einzigartigen Darstellungen von den Fahrzeugen. Großformatige Illustrationen zeigen und erklären ihre neuen Waffen sowie faszinierende technische Details.
+'''
+    app_book = importer.save_or_locate(app_book)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(username='martin').first()
+    app_book.name = 'Was ich noch sagen wollte'
+    app_book.author = 'Helmut Schmidt'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2015-12-11")
+    app_book.pageNumber = 239
+    app_book.image = 'images/books/book_7.jpg'
+    app_book.isbn10 = '340667612X'
+    app_book.isbn13 = '978-3406676123'
+    app_book.description = '''
+Sieben Jahre nach Außer Dienst legte Helmut Schmidt ein neues eigenes Buch vor. Seine Ausgangsfrage lautet: Brauchen wir heute noch Vorbilder, und wenn ja, zu welchen Zielen sollen sie uns anleiten? Schmidt erzählt von Menschen, die ihn prägten und an deren Beispiel er sich orientierte.
+
+Politik ist pragmatisches Handeln zu sittlichen Zwecken, hat Helmut Schmidt einmal gesagt. Weil er stets pragmatisch handelte, hat man ihm früh das Etikett des "Machers" angeheftet. Dass seiner Politik aber immer ein strenges sittliches Koordinatensystem zugrunde lag, ahnten die wenigsten. Und die Bezugsgrößen in Schmidts ethischer Grundorientierung sind unverrückbar geblieben. Die frühe Lektüre von Mark Aurel und Cicero, die Beschäftigung mit Kant und Weber, die Vertiefung in die Philosophie Karl Poppers sind entscheidende Wegmarken in der Entwicklung eines Politikers, der den Wählern nie nach dem Mund redete. Ob Schmidt berichtet, wie sich ihm in Gesprächen mit dem ägyptischen Präsidenten Sadat die gemeinsamen Wurzeln von Judentum, Christentum und Islam erschlossen oder wie in den Begegnungen mit Deng Xiaoping das System des Konfuzianismus bestätigt wurde: Im Mittelpunkt steht stets die persönliche Faszination. Im einleitenden Kapitel "Frühe Prägungen" schreibt Schmidt über seine Schulzeit, über acht Jahre als Soldat – und über seine Frau Loki.
+'''
+    app_book = importer.save_or_locate(app_book)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(username='martin').first()
+    app_book.name = 'Passagier 23: Psychothriller'
+    app_book.author = 'Sebastian Fitzek'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2015-12-18")
+    app_book.pageNumber = 432
+    app_book.image = 'images/books/book_8.jpg'
+    app_book.isbn10 = '3426510170'
+    app_book.isbn13 = '978-3426510179'
+    app_book.description = '''
+Jedes Jahr verschwinden auf hoher See rund 20 Menschen spurlos von Kreuzfahrtschiffen. Noch nie kam jemand zurück. Bis jetzt ... 
+
+Martin Schwartz, Polizeipsychologe, hat vor fünf Jahren Frau und Sohn verloren. Es geschah während eines Urlaubs auf dem Kreuzfahrtschiff „Sultan of the Seas“ – niemand konnte ihm sagen, was genau geschah. Martin ist seither ein psychisches Wrack und betäubt sich mit Himmelfahrtskommandos als verdeckter Ermittler. 
+Mitten in einem Einsatz bekommt er den Anruf einer seltsamen alten Dame, die sich als Thrillerautorin bezeichnet: Er müsse unbedingt an Bord der „Sultan“ kommen, es gebe Beweise dafür, was seiner Familie zugestoßen ist. Nie wieder wollte Martin den Fuß auf ein Schiff setzen – und doch folgt er dem Hinweis und erfährt, dass ein vor Wochen auf der „Sultan“ verschwundenes Mädchen wieder aufgetaucht ist. Mit dem Teddy seines Sohnes im Arm … 
+'''
+    app_book = importer.save_or_locate(app_book)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(username='martin').first()
+    app_book.name = 'Darm mit Charme: Alles über ein unterschätztes Organ'
+    app_book.author = 'Giulia Enders'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2014-03-03")
+    app_book.pageNumber = 288
+    app_book.image = 'images/books/book_9.jpg'
+    app_book.isbn10 = '3550080417'
+    app_book.isbn13 = '978-3550080418'
+    app_book.description = '''
+Ausgerechnet der Darm! Das schwarze Schaf unter den Organen, das einem doch bisher eher unangenehm war. Aber dieses Image wird sich ändern. Denn Übergewicht, Depressionen und Allergien hängen mit einer gestörten Balance der Darmflora zusammen. Das heißt umgekehrt: Wenn wir uns in unserem Körper wohl fühlen, länger leben und glücklicher werden wollen, müssen wir unseren Darm pflegen. Das zumindest legen die neuesten Forschungen nahe. In diesem Buch erklärt die junge Wissenschaftlerin Giulia Enders vergnüglich, welch ein hochkomplexes und wunderbares Organ der Darm ist. Er ist der Schlüssel zu einem gesunden Körper und einem gesunden Geist und eröffnet uns einen ganz neuen Blick durch die Hintertür.
+'''
+    app_book = importer.save_or_locate(app_book)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(username='martin').first()
+    app_book.name = 'Altes Land'
+    app_book.author = 'Dörte Hansen'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2015-02-16")
+    app_book.pageNumber = 288
+    app_book.image = 'images/books/book_10.jpg'
+    app_book.isbn10 = '3813506479'
+    app_book.isbn13 = '978-3813506471'
+    app_book.description = '''
+Zwei Frauen, ein altes Haus und eine Art von Familie
+
+Das „Polackenkind“ ist die fünfjährige Vera auf dem Hof im Alten Land, wohin sie 1945 aus Ostpreußen mit ihrer Mutter geflohen ist. Ihr Leben lang fühlt sie sich fremd in dem großen, kalten Bauernhaus und kann trotzdem nicht davon lassen. Bis sechzig Jahre später plötzlich ihre Nichte Anne vor der Tür steht. Sie ist mit ihrem kleinen Sohn aus Hamburg-Ottensen geflüchtet, wo ehrgeizige Vollwert-Eltern ihre Kinder wie Preispokale durch die Straßen tragen – und wo Annes Mann eine Andere liebt. Vera und Anne sind einander fremd und haben doch viel mehr gemeinsam, als sie ahnen. 
+
+Mit scharfem Blick und trockenem Witz erzählt Dörte Hansen von zwei Einzelgängerinnen, die überraschend finden, was sie nie gesucht haben: eine Familie.
+'''
+    app_book = importer.save_or_locate(app_book)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(username='martin').first()
+    app_book.name = 'Jamies Superfood für jeden Tag'
+    app_book.author = 'Jamie Oliver'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2015-10-15")
+    app_book.pageNumber = 312
+    app_book.image = 'images/books/book_11.jpg'
+    app_book.isbn10 = '3831028931'
+    app_book.isbn13 = '978-3831028931'
+    app_book.description = '''
+Nach einer persönlichen Reise, bei der seine Ernährung im Vordergrund stand, präsentiert Jamie Oliver das Ergebnis dieser Erfahrung: ein Kochbuch für gesunden Genuss mit dem Versprechen, "(...) jedes Rezept darin ist eine gute Wahl". Das Prinzip ist eine einfache Gleichung: genial kochen + gesund genießen = glücklich sein. So hat Jamie über 90 originelle Rezepte für Frühstück, Mittag- und Abendessen entwickelt, die einem fundierten ernährungswissenschaftlichen Konzept folgen. Vom Protein-Porridge mit Haferflocken, Samen, Nüssen und Quinoa über Fisch-Tacos mit Kiwi-Limetten-Chili-Salsa bis hin zur Kürbislasagne mit Spinat, Hüttenkäse und Samen: Herausgekommen sind alltagstaugliche Gerichte, die kalorienarm, reich an Nährstoffen und voller Aroma sind Superfood eben, für ganz viel Genuss und wenig Reue.
+
+"Dieses Buch soll Ihnen die Tür zu einem bewussteren Umgang mit Essen öffnen, zu Mahlzeiten, die nicht nur satt machen, Energie liefern und die Laune heben, sondern auch heilende Kräfte haben. Ich möchte Ihnen mehr Wissen über gesunde Ernährung vermitteln und Ihnen zeigen, wie man eine ausgewogene Mahlzeit zusammenstellt." Jamie Oliver
+'''
+    app_book = importer.save_or_locate(app_book)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(username='martin').first()
+    app_book.name = 'Das Joshua-Profil'
+    app_book.author = 'Sebastian Fitzek'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2015-10-26")
+    app_book.pageNumber = 432
+    app_book.image = 'images/books/book_12.jpg'
+    app_book.isbn10 = '3785725450'
+    app_book.isbn13 = '978-3785725450'
+    app_book.description = '''
+Der erfolglose Schriftsteller Max ist ein gesetzestreuer Bürger. Anders als sein Bruder Cosmo, der in der Sicherheitsverwahrung einer psychiatrischen Anstalt sitzt, hat Max sich noch niemals im Leben etwas zuschulden kommen lassen. Doch in wenigen Tagen wird er eines der entsetzlichsten Verbrechen begehen, zu denen ein Mensch überhaupt fähig ist. Nur, dass er heute noch nichts davon weiß ... im Gegensatz zu denen, die ihn töten wollen, bevor es zu spät ist.
+'''
+    app_book = importer.save_or_locate(app_book)

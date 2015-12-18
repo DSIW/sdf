@@ -55,7 +55,7 @@ def login_user(request):
             else:
                 # Return a 'disabled account' error message
                 messages.add_message(request, messages.ERROR, 'Das Benutzerkonto ist deaktiviert.')
-            return HttpResponseRedirect(reverse('app:startPage'))
+            return HttpResponseRedirect(request.GET['next'] or reverse('app_book:archivesPage'))
         else:
             # Return an 'invalid login' error message.
             messages.add_message(request, messages.ERROR, 'Loginversuch fehlgeschlagen.')
@@ -106,7 +106,7 @@ def register_user(request):
             user = form.save()
             form.sendConfirmEmail(request, user)
             messages.add_message(request, messages.SUCCESS, 'Sie haben sich erfolgreich registriert.')
-            return HttpResponseRedirect(reverse('app:startPage'))
+            return HttpResponseRedirect(reverse('app_user:login'))
     else:
         form = RegistrationForm()
     return render_to_response('app_user/register.html', {'form': form}, RequestContext(request))
@@ -120,7 +120,7 @@ class UserUpdate(FormMessagesMixin, UpdateView):
     template_name_suffix = '_update_form'
 
     def get_success_url(self):
-        return reverse('app:startPage')
+        return reverse('app_user:user-details', kwargs={'pk': self.object.id})
 
     @method_decorator(login_required)
     @method_decorator(current_user)
@@ -148,7 +148,7 @@ def confirm_email(request, uuid):
                                  'Ihre E-Mail Adresse ' + user.email + ' wurde erfolgreich bestätigt')
     else:
         messages.add_message(request, messages.ERROR, 'Ihre E-Mail Adresse konnte nicht bestätigt werden')
-    return HttpResponseRedirect(reverse('app:startPage'))
+    return HttpResponseRedirect(reverse('app_user:login'))
 
 @login_required
 def changePassword(request):
@@ -158,7 +158,7 @@ def changePassword(request):
             form.save()
             update_session_auth_hash(request, request.user)
             messages.add_message(request, messages.SUCCESS, 'Das Passwort wurde erfolgreich geändert')
-            return HttpResponseRedirect(reverse('app:startPage'))
+            return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk':request.user.id}))
     else:
         form = PasswordChangeForm(user=request.user)
     action = reverse('app_user:change_password')

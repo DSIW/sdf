@@ -1,0 +1,15 @@
+{% load template_extras %}
+{% load staticfiles %}
+
+<div class="highlights-box-cell" style="background-image: url('{{ user.image_url_or_blank }}')">
+    <div class="highlights-box-hover-info top">
+        <span class="left"><i class="material-icons">account_circle</i>{{ user.pseudonym_or_full_name }}</span>
+    </div>
+    <div class="highlights-box-target">
+        <a href="{% url 'app_book:showcase' user.id %}"></a>
+    </div>
+    <div class="highlights-box-hover-info bottom">
+        <span class="left"><i class="material-icons">star</i>{{ user.rating.rating }}</span>
+        <span class="right">{{ user.books_count }}<i class="material-icons">book</i></span>
+    </div>
+</div>

@@ -7,17 +7,8 @@
     </div>
     <div class="card-content">
         <p class="card-title grey-text text-darken-4 book-title">
-            <i class="offer-state {% if book.is_published %}active{% else %}inactive{% endif %} tooltipped" data-tooltip="Status: {% if book.is_published %}Öffentlich{% else %}Nicht öffentlich{% endif %}"></i>
             <a href="{% url 'app_book:book-detail' book.id %}">{{ book.name }}</a>
+            <i class="offer-state {% if book.is_published %}active{% else %}inactive{% endif %} tooltipped" data-tooltip="Status: {% if book.is_published %}Öffentlich{% else %}Nicht öffentlich{% endif %}"></i>
         </p>
-        <div class="card-action">
-            {% if book.is_published %}
-                <a class="" href="{% url 'app_book:unpublishBook' book.id %}" data-method="put" data-confirm="true" data-confirm-custom="Wenn Sie das Angebot zurück ziehen, werden alle unbeantworteten Preisvorschläge abgelehnt. Sind Sie sicher, dass Sie fortfahren möchten?" data-confirm-ok="Nicht veröffentlichen">Nicht veröffentlichen</a>
-            {% else %}
-                <a class="" href="{% url 'app_book:publishBook' book.id %}">Veröffentlichen</a>
-            {% endif %}
-            <a class="" href="{% url 'app_book:editBook' book.id %}">Bearbeiten</a>
-            <a class="" href="{% url 'app_book:deleteBook' book.id %}" data-method="delete" data-confirm="true" title="Löschen">Löschen</a>
-        </div>
     </div>
 </div>
