@@ -134,6 +134,7 @@ def import_data():
 
     from app_book.models import Book
     from app_book.models import User
+    from app_book.models import Offer
 
     app_book = Book()
     app_book.user = User.objects.filter(username='max').first()
@@ -142,11 +143,20 @@ def import_data():
     app_book.language = 'EN'
     app_book.releaseDate = dateutil.parser.parse("2014-11-11")
     app_book.pageNumber = 243
-    app_book.image = 'images/books/book_1.jpg'
+    app_book.image = 'images/books/book_2.jpg'
     app_book.isbn10 = '149194594X'
     app_book.isbn13 = '978-1491945940'
     app_book.description = "Julia Elman has been working her brand of web skills for nearly a decade. She started out as a designer for an internal marketing group at a travel agency in Los Angeles, and quickly honed her skills as a web designer using HTML/CSS. Julia joined the Caktus Consulting Group in 2011 and is thrilled to work with some of the most talented developers this side of the Mississippi. She is actively involved with Girl Develop It RDU as an instructor to help contribute in educating women pursuing a career in technology. Mark is a lead Python/Django developer at Caktus Consulting Group in Carrboro, NC. He also runs a small homebrewing website written in Django called brewedbyus.com. He came to Python web development after a few years pricing derivatives on Wall Street. Mark maintains a number of open source projects primarily related to Django development and frequently contributes back to projects used by Caktus. When he isn't programming, Mark enjoys spending time with his wife and daughter, brewing beer, and running."
     app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T11:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(username='max').first()
+    offer.book = Book.objects.filter(name = 'Lightweight Django').first()
+    offer.price = 7.0
+    offer.shipping_price = 1.0
+    offer.active = True
+    offer = importer.save_or_locate(offer)
 
     app_book = Book()
     app_book.user = User.objects.filter(username='max').first()
@@ -154,12 +164,21 @@ def import_data():
     app_book.author = 'Brandon Lorenz'
     app_book.language = 'EN'
     app_book.releaseDate = dateutil.parser.parse("2016-03-25")
-    app_book.pageNumber = 0
-    app_book.image = 'images/books/book_1.jpg'
+    app_book.pageNumber = 300
+    app_book.image = 'images/books/book_3.jpg'
     app_book.isbn10 = '144936781X'
     app_book.isbn13 = '978-1449367817'
     app_book.description = ''
     app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T11:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(username='max').first()
+    offer.book = Book.objects.filter(name = 'Hands-on Django: Going Beyond the Polls').first()
+    offer.price = 7.0
+    offer.shipping_price = 1.0
+    offer.active = True
+    offer = importer.save_or_locate(offer)
 
     app_book = Book()
     app_book.user = User.objects.filter(username='martin').first()
@@ -168,7 +187,7 @@ def import_data():
     app_book.language = 'EN'
     app_book.releaseDate = dateutil.parser.parse("2014-06-19")
     app_book.pageNumber = 478
-    app_book.image = 'images/books/book_1.jpg'
+    app_book.image = 'images/books/book_15.jpg'
     app_book.isbn10 = '1449364829'
     app_book.isbn13 = '978-1449364823'
     app_book.description = ''
@@ -226,6 +245,15 @@ Atemberaubende Einblicke in die Technik von „STAR WARS™: Das Erwachen der Ma
 '''
     app_book = importer.save_or_locate(app_book)
 
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T11:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(username='martin').first()
+    offer.book = Book.objects.filter(name = 'Star Wars(TM) Das Erwachen der Macht. Raumschiffe und Fahrzeuge').first()
+    offer.price = 55.0
+    offer.shipping_price = 5.0
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
     app_book = Book()
     app_book.user = User.objects.filter(username='martin').first()
     app_book.name = 'Was ich noch sagen wollte'
@@ -242,6 +270,15 @@ Sieben Jahre nach Außer Dienst legte Helmut Schmidt ein neues eigenes Buch vor.
 Politik ist pragmatisches Handeln zu sittlichen Zwecken, hat Helmut Schmidt einmal gesagt. Weil er stets pragmatisch handelte, hat man ihm früh das Etikett des "Machers" angeheftet. Dass seiner Politik aber immer ein strenges sittliches Koordinatensystem zugrunde lag, ahnten die wenigsten. Und die Bezugsgrößen in Schmidts ethischer Grundorientierung sind unverrückbar geblieben. Die frühe Lektüre von Mark Aurel und Cicero, die Beschäftigung mit Kant und Weber, die Vertiefung in die Philosophie Karl Poppers sind entscheidende Wegmarken in der Entwicklung eines Politikers, der den Wählern nie nach dem Mund redete. Ob Schmidt berichtet, wie sich ihm in Gesprächen mit dem ägyptischen Präsidenten Sadat die gemeinsamen Wurzeln von Judentum, Christentum und Islam erschlossen oder wie in den Begegnungen mit Deng Xiaoping das System des Konfuzianismus bestätigt wurde: Im Mittelpunkt steht stets die persönliche Faszination. Im einleitenden Kapitel "Frühe Prägungen" schreibt Schmidt über seine Schulzeit, über acht Jahre als Soldat – und über seine Frau Loki.
 '''
     app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-02T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(username='martin').first()
+    offer.book = Book.objects.filter(name = 'Was ich noch sagen wollte').first()
+    offer.price = 14.0
+    offer.shipping_price = 3.0
+    offer.active = True
+    offer = importer.save_or_locate(offer)
 
     app_book = Book()
     app_book.user = User.objects.filter(username='martin').first()
@@ -295,6 +332,15 @@ Mit scharfem Blick und trockenem Witz erzählt Dörte Hansen von zwei Einzelgän
 '''
     app_book = importer.save_or_locate(app_book)
 
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-11-30T11:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(username='martin').first()
+    offer.book = Book.objects.filter(name = 'Altes Land').first()
+    offer.price = 10.0
+    offer.shipping_price = 1.0
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
     app_book = Book()
     app_book.user = User.objects.filter(username='martin').first()
     app_book.name = 'Jamies Superfood für jeden Tag'
@@ -312,6 +358,15 @@ Nach einer persönlichen Reise, bei der seine Ernährung im Vordergrund stand, p
 '''
     app_book = importer.save_or_locate(app_book)
 
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-10T10:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(username='martin').first()
+    offer.book = Book.objects.filter(name = 'Jamies Superfood für jeden Tag').first()
+    offer.price = 21.0
+    offer.shipping_price = 3.0
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
     app_book = Book()
     app_book.user = User.objects.filter(username='martin').first()
     app_book.name = 'Das Joshua-Profil'
@@ -326,3 +381,85 @@ Nach einer persönlichen Reise, bei der seine Ernährung im Vordergrund stand, p
 Der erfolglose Schriftsteller Max ist ein gesetzestreuer Bürger. Anders als sein Bruder Cosmo, der in der Sicherheitsverwahrung einer psychiatrischen Anstalt sitzt, hat Max sich noch niemals im Leben etwas zuschulden kommen lassen. Doch in wenigen Tagen wird er eines der entsetzlichsten Verbrechen begehen, zu denen ein Mensch überhaupt fähig ist. Nur, dass er heute noch nichts davon weiß ... im Gegensatz zu denen, die ihn töten wollen, bevor es zu spät ist.
 '''
     app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-10T10:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(username='martin').first()
+    offer.book = Book.objects.filter(name = 'Das Joshua-Profil').first()
+    offer.price = 5.0
+    offer.shipping_price = 1.0
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(username='maria').first()
+    app_book.name = 'Dead Mountain: The Untold True Story of the Dyatlov Pass Incident'
+    app_book.author = 'Donnie Eichar'
+    app_book.language = 'EN'
+    app_book.releaseDate = dateutil.parser.parse("2013-11-15")
+    app_book.pageNumber = 288
+    app_book.image = 'images/books/book_13.jpg'
+    app_book.isbn10 = '1452112746'
+    app_book.isbn13 = '978-1452112749'
+    app_book.description = '''
+In February 1959, a group of nine hikers in the Russian Ural Mountains died in a mysterious fashion on the eastern side of an elevation known as Dead Mountain. Eerie aspects of the incident - unsettling and unexplained causes of death, a strange final photograph by one of the hikers and signs of radioactivity - have led to decades of speculation over what really happened. This gripping work of literary nonfiction delves into the mystery through unprecedented access to the hikers' own journals and photographs (many translated and reproduced in the book); unseen government records; and dozens of interviews, including with the only surviving hiker; and the author's retracing the hikers' fateful journey.
+'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-10T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(username='maria').first()
+    offer.book = Book.objects.filter(name = 'Dead Mountain: The Untold True Story of the Dyatlov Pass Incident').first()
+    offer.price = 14.0
+    offer.shipping_price = 3.0
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(username='maria').first()
+    app_book.name = 'Der Mann ohne Eigenschaften'
+    app_book.author = 'Robert Musil'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2013-07-31")
+    app_book.pageNumber = 992
+    app_book.image = 'images/books/book_14.jpg'
+    app_book.isbn10 = '3730600400'
+    app_book.isbn13 = '978-3730600405'
+    app_book.description = '''
+Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und stellt sich permanent selbst in Frage. Ulrich steht für Robert Musils literarisches Vorhaben, die Wirklichkeit als das ziellose Ergebnis einer Überfülle von Möglichkeiten zu schildern. Der Held dieses Romans begegnet einem wahren Panoptikum aus Mit- und Gegenspielern: Akteuren der Wiener Diplomatie und des Großkapitals, Schwärmern, Revolutionären, einem Sexualmörder, einer esoterischen Salonkönigin. Der Leser blickt hier in das 'unbestechliche Bild eines Zerrspiegels' gebannt und fasziniert.
+'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-19T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(username='maria').first()
+    offer.book = Book.objects.filter(name = 'Der Mann ohne Eigenschaften').first()
+    offer.price = 30.0
+    offer.shipping_price = 6.0
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(username='maria').first()
+    app_book.name = 'Berge des Wahnsinns: Eine Horrorgeschichte'
+    app_book.author = 'H. P. Lovecraft '
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("1997-11-29")
+    app_book.pageNumber = 192
+    app_book.image = 'images/books/book_16.jpg'
+    app_book.isbn10 = '3518392603'
+    app_book.isbn13 = '978-3518392607'
+    app_book.description = '''
+»Der Held entdeckt zuerst die Ruinen einer Stadt, dann immer deutlichere Anzeichen für eine untergegangene Zivilisation... Die Stadt ist der bevorzugte Ort der Veränderung unter dem doppelten Vorzeichen des sehr Alten und des Ungeheuerlichen. Sie ist ein Palimpsest, das der Erzähler unter Gefährdung seiner geistigen Integrität zu entziffern verpflichtet ist...« Gilles Menegaldo
+'''
+
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(username='maria').first()
+    offer.book = Book.objects.filter(name = 'Berge des Wahnsinns: Eine Horrorgeschichte').first()
+    offer.price = 10.0
+    offer.shipping_price = 2.5
+    offer.active = True
+    offer = importer.save_or_locate(offer)

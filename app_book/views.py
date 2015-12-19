@@ -386,7 +386,7 @@ def books(request):
     else:
         filtered_offers.sort(key=lambda offer: offer.updated, reverse=order_dir_is_desc)
 
-    paginator = Paginator(filtered_offers, 3)
+    paginator = Paginator(filtered_offers, 4)
 
     try:
         offers = paginator.page(page)
@@ -465,7 +465,7 @@ def showcasesOverView(request):
         # most recent update
         filteredUsers.sort(key=lambda user: user.updated, reverse=order_dir_is_desc)
 
-    paginator = Paginator(filteredUsers, 3)
+    paginator = Paginator(filteredUsers, 4)
 
     try:
         users = paginator.page(page)
