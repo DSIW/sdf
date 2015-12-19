@@ -376,7 +376,7 @@ def books(request):
     order_dir_is_desc = order_dir == 'desc'
 
     if order_by == 'date':
-        filtered_offers.sort(key=lambda offer: offer.book.created, reverse=order_dir_is_desc)
+        filtered_offers.sort(key=lambda offer: offer.updated, reverse=order_dir_is_desc)
     elif order_by == 'title':
         filtered_offers.sort(key=lambda offer: offer.book.name.lower(), reverse=order_dir_is_desc)
     elif order_by == 'author':
