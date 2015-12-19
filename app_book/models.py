@@ -10,6 +10,7 @@ from sdf.base_settings import *
 from app_payment.models import Payment
 from paypal.standard.models import *
 import glob
+import isbnlib
 
 ACTIVE_PAYMENT_STATUSES = [ST_PP_CREATED, ST_PP_ACTIVE, ST_PP_PENDING, ST_PP_VOIDED]
 
@@ -25,6 +26,14 @@ def book_directory_path(instance, filename):
         os.remove(image)
     return upload_dir_path
 
+def validate_isbn10(value):
+      if not isbnlib.is_isbn10(value):
+          raise ValidationError('%s ist keine ISBN-10 Nummer' % value)
+
+def validate_isbn13(value):
+      if not isbnlib.is_isbn13(value):
+          raise ValidationError('%s ist keine ISBN-13 Nummer' % value)
+
 class Book(models.Model):
     user = models.ForeignKey(User, default=None)
 
@@ -34,8 +43,8 @@ class Book(models.Model):
     language = models.CharField(max_length=100)
     releaseDate = models.DateField('release_date')
     pageNumber = models.IntegerField(default=0, validators=[MinValueValidator(0),MaxValueValidator(9999)])
-    isbn10 = models.CharField(max_length=100)
-    isbn13 = models.CharField(max_length=100)
+    isbn10 = models.CharField(blank=True, max_length=100, validators=[validate_isbn10])
+    isbn13 = models.CharField(blank=True, max_length=100, validators=[validate_isbn13])
     image = models.FileField(help_text='max. 42 megabytes', upload_to=book_directory_path, null=False, default='images/books/book-cover-default.jpg', blank=True)
     description = models.TextField(default="", blank=True)
 
