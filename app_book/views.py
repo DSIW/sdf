@@ -106,6 +106,17 @@ def handleEditBook(request, id):
 
     # check validity of forms
     if (not book_form.is_valid()) or (offer_active and not offer_form.is_valid()):
+        if book_form.errors and 'image' in book_form.errors.keys():
+            # Workaround for showing existing cover image instead of broken result
+            old_errors = book_form._errors
+            if book:
+                original_book = Book.objects.get(pk=book.id)
+                book.image = original_book.image
+            files = {}
+            files.update(request.FILES)
+            if 'image' in files.keys(): del files['image']
+            book_form = BookForm(request.POST, files, instance=book)
+            book_form._errors = old_errors
         return StatusAndTwoForms(False, book_form, offer_form)
 
     try:

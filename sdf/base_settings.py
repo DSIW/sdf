@@ -212,3 +212,4 @@ PAYPAL_RECEIVER_EMAIL = "ottmann.jens@googlemail.com"
 ENDPOINT = "https://ws15sdf-b.f4.htw-berlin.de"
 
 UNPAID_PAYMENT_TIMEOUT = 30*60 # 30 minutes
+FILESIZE_LIMIT_MB = 5
