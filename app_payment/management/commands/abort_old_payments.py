@@ -15,5 +15,7 @@ class Command(BaseCommand):
         payments = Payment.objects.filter(payment_status__in=ACTIVE_PAYMENT_STATUSES, created_at__lte=last_valid_time)
 
         for payment in payments:
-            abort_payment(payment, notification=True)
-            self.stdout.write('Successfully abort payment "%s"' % payment.id)
+            # remove old payments which were created by fastbuy-button
+            if payment.book.source == 'fastbuy':
+                abort_payment(payment, notification=True)
+                self.stdout.write('Successfully abort payment "%s"' % payment.id)

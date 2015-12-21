@@ -329,10 +329,15 @@ def accept_counteroffer(request, id):
     payment = book.active_payment()
     if payment is None:
         payment = Payment()
-    success = start_payment(payment, offer, buyer)
+    success = start_payment(payment, offer, buyer, 'counteroffer')
     if success:
         payment.amount = counteroffer.price
         payment.save()
+
+        # hide book
+        offer.active = False
+        offer.save()
+
         Notification.counteroffer_accept(counteroffer, buyer, book, payment)
         messages.add_message(request, messages.SUCCESS, 'Der Preisvorschlag wurde erfolgreich angenommen. Der Interessent wird benachrichtigt')
 

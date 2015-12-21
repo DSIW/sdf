@@ -43,6 +43,12 @@ def complete_payment(payment):
         book = payment.book
         change_ownership(book.id, payment.buyer_user.id)
 
+        # duplicate offer
+        new_offer = book.offer()
+        new_offer.pk = None
+        new_offer.seller_user = payment.buyer_user
+        new_offer.save()
+
         Notification.fastbuy(payment.buyer_user, payment.seller_user, payment.book)
         Notification.request_rating(payment)
         return True
@@ -65,9 +71,9 @@ def update_payment_from_paypal_ipn(payment, paypal_ipn):
     elif payment.payment_status == ST_PP_CANCELLED:
         abort_payment(payment)
 
-def start_payment(payment, offer, buyer):
+def start_payment(payment, offer, buyer, source):
     if payment.id is None:
-        payment.init_process(offer, buyer)
+        payment.init_process(offer, buyer, source)
         decline_all_counteroffers_for_offer(offer)
         payment.save()
         return True

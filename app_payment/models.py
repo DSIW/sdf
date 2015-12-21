@@ -27,9 +27,10 @@ class Payment(models.Model):
     business = models.CharField(max_length=255)
     payment_status = models.CharField(max_length=255)
     custom = models.CharField(max_length=255)
+    source = models.CharField(max_length=255)
     created_at = models.DateTimeField()
 
-    def init_process(self, offer, user):
+    def init_process(self, offer, user, source):
         self.book = offer.book
         self.seller_user = self.book.offer().seller_user
         self.buyer_user = user
@@ -40,6 +41,7 @@ class Payment(models.Model):
         self.item_name = self.book.name + ' von ' + self.book.author
         self.currency_code = 'EUR'
         self.invoice = datetime.now().strftime('%Y%m%d-%H%M%S')+"-book-"+str(self.book.id)+"-seller-"+str(self.seller_user.id)
+        self.source = source
 
         self.save() # get id for custom JSON
         self.custom = json.dumps({'payment_id': self.id})

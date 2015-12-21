@@ -48,7 +48,7 @@ def start_paypal_payment(request, id):
     payment = offer.book.active_payment()
     if payment is None:
         payment = Payment()
-    success = start_payment(payment, offer, request.current_user)
+    success = start_payment(payment, offer, request.current_user, 'fastbuy')
 
     if success:
         messages.add_message(request, messages.SUCCESS, 'Das Buch ist nun im Bezahlprozess. Sie werden in Kürze zu Paypal weitergeleitet...')
