@@ -3,7 +3,9 @@
 
 <div class="card card-book small">
     <div class="card-image">
-        <img class="" src="{{ book.image_url_or_blank }}">
+        <a href="{% url 'app_book:book-detail' book.id %}">
+            <img class="" src="{{ book.image_url_or_blank }}">
+        </a>
     </div>
     <div class="card-content">
         <p class="card-title grey-text text-darken-4 book-title">
