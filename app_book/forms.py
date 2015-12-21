@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
+from django.utils.translation import ugettext, ugettext_lazy as _
 
 from .models import Book, Offer, Counteroffer
 
 from app.widgets import CustomFileInput
-
 from app.templatetags.template_extras import currency
+
 
 class BookForm(forms.ModelForm):
     '''
@@ -16,16 +17,11 @@ class BookForm(forms.ModelForm):
     labels: Definition was bei den Label Tags auf der Oberflaeche erscheinen soll. Wenn dies nicht definiert worde ist wird der Attributenname der Modellklasse genommen
     '''
     class Meta:
-        LANGUAGES = (
-            ('DE', _("Deutsch")),
-            ('EN', _("Englisch")),
-            ('FR', _("Französisch")),
-            ('SP', _("Spanisch")),
-        )
+
         model = Book
         exclude = ['Id', 'user']
         widgets = {
-            'language': forms.Select(choices=LANGUAGES),
+            'language': forms.Select(choices=map(lambda a: (a[0], ugettext(a[1])), settings.LANGUAGES)),
             'releaseDate': forms.DateInput(attrs={'class': 'datepicker'}),
             'image': CustomFileInput(),
         }
