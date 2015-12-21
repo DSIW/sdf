@@ -9,7 +9,9 @@ class CustomFileInput(FileInput):
     def render(self, name=None, value=None, attrs=None, single_attrs=None):
         self = ''
         if value:
-            self +='<img src="/media/' + value.__str__() + '" />'
+            self +='<img src="/media/' + str(value) + '" />'
+        else:
+            value = ''
         self += '''
             <div class="file-field input-field">
               <div class="btn">
@@ -17,7 +19,7 @@ class CustomFileInput(FileInput):
                 <input type="file" name="''' + name + '''" >
               </div>
               <div class="file-path-wrapper">
-                <input class="file-path validate" value="''' + value.__str__() + '''" type="text">
+                <input class="file-path validate" value="''' + str(value) + '''" type="text">
               </div>
             </div>'''
         return self
