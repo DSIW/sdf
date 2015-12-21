@@ -26,6 +26,10 @@ def book_directory_path(instance, filename):
         os.remove(image)
     return upload_dir_path
 
+def validate_image_filesize(fieldfile_obj):
+      if fieldfile_obj.file.size > FILESIZE_LIMIT_MB*1024*1024:
+          raise ValidationError("Die Maximalgröße beträgt %s MB" % str(FILESIZE_LIMIT_MB))
+
 def validate_isbn10(value):
       if not isbnlib.is_isbn10(value):
           raise ValidationError('%s ist keine ISBN-10 Nummer' % value)
@@ -45,7 +49,7 @@ class Book(models.Model):
     pageNumber = models.IntegerField(default=0, validators=[MinValueValidator(0),MaxValueValidator(9999)])
     isbn10 = models.CharField(blank=True, max_length=100, validators=[validate_isbn10])
     isbn13 = models.CharField(blank=True, max_length=100, validators=[validate_isbn13])
-    image = models.FileField(help_text='max. 42 megabytes', upload_to=book_directory_path, null=False, blank=True)
+    image = models.ImageField(help_text='max. %s MB' % FILESIZE_LIMIT_MB, upload_to=book_directory_path, null=False, blank=True, validators=[validate_image_filesize])
     description = models.TextField(default="", blank=True)
 
     def __str__(self):
