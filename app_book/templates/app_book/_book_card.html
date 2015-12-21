@@ -4,7 +4,7 @@
 
 <div class="card card-book small {% if book.is_in_active_payment_process %}payment{% endif %}">
     <div class="card-image waves-effect waves-block waves-light">
-        <img class="activator" src="{{ MEDIA_URL }}{{ book.image }}">
+        <img class="activator" src="{{ book.image_url_or_blank }}">
     </div>
     <div class="card-content">
         <i class="card-title activator grey-text text-darken-4 material-icons card-open">more_vert</i>

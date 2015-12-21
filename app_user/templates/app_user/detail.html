@@ -14,11 +14,7 @@
 
         <div class="row">
             <div class="col m4 s12">
-                {% if user.has_profile_image %}
-                    <img src="{{ MEDIA_URL }}{{ user.profileImage }}" class="user-profile" >
-                {% else %}
-                    <img src="{% static "img/blank-user-profile.png" %}" class="user-profile" />
-                {% endif %}
+                <img src="{{ user.image_url_or_blank }}" class="user-profile" >
             </div>
             <div class="col m8 s12">
                 <p>

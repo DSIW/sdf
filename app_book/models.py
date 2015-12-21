@@ -45,7 +45,7 @@ class Book(models.Model):
     pageNumber = models.IntegerField(default=0, validators=[MinValueValidator(0),MaxValueValidator(9999)])
     isbn10 = models.CharField(blank=True, max_length=100, validators=[validate_isbn10])
     isbn13 = models.CharField(blank=True, max_length=100, validators=[validate_isbn13])
-    image = models.FileField(help_text='max. 42 megabytes', upload_to=book_directory_path, null=False, default='images/books/book-cover-default.jpg', blank=True)
+    image = models.FileField(help_text='max. 42 megabytes', upload_to=book_directory_path, null=False, blank=True)
     description = models.TextField(default="", blank=True)
 
     def __str__(self):
@@ -80,6 +80,11 @@ class Book(models.Model):
 
     def is_in_active_payment_process(self):
         return self.active_payment() is not None
+
+    def image_url_or_blank(self):
+        if bool(self.image):
+            return MEDIA_URL + str(self.image)
+        return STATIC_URL + "img/blank-book-cover.jpg"
 
 
 class Offer(models.Model):
