@@ -17,7 +17,7 @@
     <nav class="transparent" role="navigation">
         <div class="container">
             <a id="logo-container" href="{% url "app:startPage" %}" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
-            <ul class="right hide-on-med-and-down">
+            <ul class="right">
                 {% if user.is_authenticated %}
                     <li><a class="btn-flat" href="{% url 'app_user:logout' %}?next=/" role="button">Logout</a></li>
                 {% else %}
