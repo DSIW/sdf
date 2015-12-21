@@ -572,10 +572,6 @@ ul.border-separated li:last-child {
   text-align: center;
   width: 880px;
 }
-.page-start .nav {
-  height: 0px;
-  z-index: 1; /* clickable button in FF */
-}
 .page-start nav.transparent {
   background-color: none;
   box-shadow: none;
