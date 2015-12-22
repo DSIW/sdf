@@ -33,4 +33,13 @@ jQuery(function(){
       $element.addClass('active');
     }
   });
+
+  $('.card-title-span').each(function ()
+  {
+    while( $(this).outerHeight() > $(this).parent().outerHeight() )
+    {
+        var smalerFontSize = parseFloat( $(this).css("font-size") )-1;
+        $(this).parent().css("font-size", (smalerFontSize) + "px");
+    }
+  });
 });

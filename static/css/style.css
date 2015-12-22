@@ -483,8 +483,10 @@ nav .profile-img {
   top: 15px;
 }
 .showcase .card-book .card-title {
-  line-height: 28px;
+  line-height: initial;
   margin-bottom: 15px;
+  height: 55px;
+  overflow:hidden;
 }
 .showcase .card-book .card-image {
   height: 310px;

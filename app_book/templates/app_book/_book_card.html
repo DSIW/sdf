@@ -8,7 +8,11 @@
     </div>
     <div class="card-content">
         <i class="card-title activator grey-text text-darken-4 material-icons card-open">more_vert</i>
-        <p class="card-title activator grey-text text-darken-4 book-title">{{ book.name }}</p>
+        <p class="card-title activator grey-text text-darken-4 book-title">
+            <span class="card-title-span">
+                {{ book.name }}
+            </span>
+        </p>
         <p class="author">{{ book.author }}</p>
         {% include 'app_user/_user_rating.html' with user=user %}
         <p class="card-title activator grey-text text-darken-4 price right">{{ offer.totalPrice|currency }}</p>
