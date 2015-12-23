@@ -365,14 +365,36 @@ nav .input-field.search-field input[type=search] {
   margin-top: 0;
 }
 
-nav .profile-img {
+.profile-img {
   line-height: 64px;
   vertical-align: middle;
+  height: 32px;
   width: 32px;
   margin-right: 10px;
   border: 1px solid #ccc;
+  border-radius: 100%;
   background-color: #FFF;
   padding: 2px;
+}
+
+.user-tag {
+  display: inline-block;
+  background-color: #EAEAEA;
+  padding: 1px 9px 1px 1px;
+  font-weight: bold;
+  border-radius: 17px;
+  line-height: 30px;
+  height: 34px;
+  color: rgba(0, 0, 0, 0.5);
+  position: relative;
+  top: -2px;
+}
+.user-tag:hover {
+  background-color: #D8D8D8;
+}
+.user-tag:active {
+  color: white;
+  background-color: #26A69A;
 }
 
 

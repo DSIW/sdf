@@ -41,14 +41,14 @@
                     <h5>Kaufinformationen:</h5>
                     <div class="col s6">
                         {% if request.user.authenticated %}
-                        {% if request.user.id == book.active_payment.buyer_user.id or request.user.id == book.active_payment.seller_user.id %}
-                        <p>Käufer: <strong>{{ book.active_payment.buyer_user.pseudonym_or_full_name }}</strong></p>
-                        {% endif %}
+                            {% if request.user.id == book.active_payment.buyer_user.id or request.user.id == book.active_payment.seller_user.id %}
+                                <p>Käufer: {% include 'app_user/_user_tag.html' with user=book.active_payment.buyer_user %}</p>
+                            {% endif %}
                         {% endif %}
                         {% if book.is_published %}
-                        <p>Verkäufer: <strong><a href="{% url 'app_user:user-details' book.offer.seller_user.id %}">{{ book.offer.seller_user.pseudonym_or_full_name }}</a></strong></p>
+                        <p>Verkäufer: {% include 'app_user/_user_tag.html' with user=book.offer.seller_user %}</p>
                         {% else %}
-                        <p>Besitzer: <strong><a href="{% url 'app_user:user-details' book.user.id %}">{{ book.user.pseudonym_or_full_name }}</a></strong></p>
+                        <p>Besitzer: {% include 'app_user/_user_tag.html' with user=book.user %}</p>
                         {% endif %}
                         <p>Verkaufsort: <strong><a href="https://www.google.de/maps?q={{ book.user.location }}" target="_new">{{ book.user.location }}</a></strong></p>
                         <p>Verkäuferbewertung:

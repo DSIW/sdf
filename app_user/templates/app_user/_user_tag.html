@@ -1,0 +1,4 @@
+<a href="{% url 'app_user:user-details' user.id %}" class="user-tag">
+    <img src="{{ user.image_url_or_blank }}" class="profile-img" / >
+    {{ user.pseudonym_or_full_name }}
+</a>
