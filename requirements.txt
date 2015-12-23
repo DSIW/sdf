@@ -2,6 +2,7 @@ decorator==4.0.4
 Django==1.8.5
 django-braces==1.8.1
 django-extensions==1.5.7
+django-file-resubmit==0.4.2
 django-paypal==0.2.7
 invoke==0.11.1
 ipython==4.0.0

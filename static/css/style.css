@@ -762,3 +762,8 @@ img.book-cover {
   43% { transform: rotate(0); }
   100% { transform: rotate(0); }
 }
+
+
+.file-field .file-path-wrapper {
+  padding-top: 10px;
+}
