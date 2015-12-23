@@ -508,6 +508,12 @@ nav .profile-img {
 .showcase .card-book.payment {
   opacity: 0.4;
 }
+.card .card-action a {
+  color: #26A69A;
+}
+.card .card-action a:hover {
+  color: #36CEBF;
+}
 form .seller-rating-star {
   cursor: pointer;
   font-size: 1.5em;
