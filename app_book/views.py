@@ -22,6 +22,7 @@ from django.utils.html import escape
 from app_payment.services import start_payment
 from .models import Book
 from .forms import BookForm
+from sdf import settings
 
 import watson
 import collections
@@ -402,7 +403,7 @@ def books(request):
     else:
         filtered_offers.sort(key=lambda offer: offer.updated, reverse=order_dir_is_desc)
 
-    paginator = Paginator(filtered_offers, 4)
+    paginator = Paginator(filtered_offers, settings.MAX_ELEMENTS_PER_PAGE)
 
     try:
         offers = paginator.page(page)
@@ -481,7 +482,7 @@ def showcasesOverView(request):
         # most recent update
         filteredUsers.sort(key=lambda user: user.updated, reverse=order_dir_is_desc)
 
-    paginator = Paginator(filteredUsers, 4)
+    paginator = Paginator(filtered_offers, settings.MAX_ELEMENTS_PER_PAGE)
 
     try:
         users = paginator.page(page)
