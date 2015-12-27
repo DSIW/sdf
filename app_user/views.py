@@ -131,7 +131,7 @@ class UserUpdate(FormMessagesMixin, UpdateView):
 def user_details(request, pk):
     template_name = 'app_user/detail.html'
     user = User.objects.filter(id=pk).first()
-    user.books_count = len(user.offer_set.all())
+    user.books_count = len(user.offer_set.exclude(active = False))
 
     return render_to_response(template_name, {'user': user}, RequestContext(request))
 
