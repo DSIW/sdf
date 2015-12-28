@@ -482,7 +482,7 @@ def showcasesOverView(request):
         # most recent update
         filteredUsers.sort(key=lambda user: user.updated, reverse=order_dir_is_desc)
 
-    paginator = Paginator(filtered_offers, settings.MAX_ELEMENTS_PER_PAGE)
+    paginator = Paginator(filteredUsers, settings.MAX_ELEMENTS_PER_PAGE)
 
     try:
         users = paginator.page(page)
