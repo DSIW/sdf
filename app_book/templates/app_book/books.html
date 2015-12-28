@@ -16,7 +16,7 @@
                 <ul id="nav_ul_sort" class="right">
                 {% with order_comp=order_by|add:"-"|add:order_dir %}
 
-                    <li>Erstellungsdatum:
+                    <li>Aktualisierungsdatum:
                         <ul class="right">
                             <li class="{% active order_comp 'date-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'date' 'order_dir' 'asc' %}" class="white-text">&#8593</a></li>
                             <li class="{% active order_comp 'date-desc'%}" ><a href="?{% url_replace_sort request 'order_by' 'date' 'order_dir' 'desc' %}" class="white-text">&#8595</a></li>
