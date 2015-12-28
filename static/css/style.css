@@ -223,6 +223,10 @@ a.disabled {
 
 /* MaterialCSS fixes */
 
+#logo-container .material-icons {
+    line-height: 56px;
+}
+
 .nav-fixed {
   position: fixed;
   width: 100%;
