@@ -505,12 +505,14 @@ nav .input-field.search-field input[type=search] {
 }
 .showcase .card-close {
   position: absolute;
-  right: 15px;
+  right: 5px;
   top: 15px;
 }
 .showcase .card-book .card-title {
-  line-height: 28px;
+  line-height: initial;
   margin-bottom: 15px;
+  height: 55px;
+  overflow:hidden;
 }
 .showcase .card-book .card-image {
   height: 310px;

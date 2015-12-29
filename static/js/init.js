@@ -33,4 +33,26 @@ jQuery(function(){
       $element.addClass('active');
     }
   });
+
+  $('.card-book').each(function ()
+  {
+    var targetParent = $(this).find(".card-content > p.book-title");
+    var target = targetParent.find("span");
+    var target2 = $(this).find(".card-reveal > span.card-title");
+
+    while( target.outerHeight() > targetParent.outerHeight() )
+    {
+        var smalerFontSize = parseFloat( target.css("font-size") )-1;
+        if(smalerFontSize < 10)
+        {
+          targetParent.css("text-overflow", "ellipsis");
+          target2.css("text-overflow", "ellipsis");
+          break;
+        }
+
+        targetParent.css("font-size", smalerFontSize+"px");
+        target2.css("font-size", smalerFontSize+"px");
+    }
+  });
 });
+

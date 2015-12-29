@@ -9,7 +9,7 @@
     </div>
     <div class="card-content">
         <p class="card-title grey-text text-darken-4 book-title">
-            <a href="{% url 'app_book:book-detail' book.id %}">{{ book.name }}</a>
+            <span><a href="{% url 'app_book:book-detail' book.id %}">{{ book.name }}</a></span>
             <i class="offer-state {% if book.is_published %}active{% else %}inactive{% endif %} tooltipped" data-tooltip="Status: {% if book.is_published %}Öffentlich{% else %}Nicht öffentlich{% endif %}"></i>
         </p>
     </div>
