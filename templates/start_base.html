@@ -21,7 +21,7 @@
                 {% if user.is_authenticated %}
                     <li><a class="btn-flat" href="{% url 'app_book:showcase' user.id %}?next=/" role="button">Schaufenster</a></li>
                     <li><a class="btn-flat" href="{% url 'app_book:archivesPage' %}?next=/" role="button">Archiv</a></li>
-                    <li><a class="btn-flat" href="{% url 'app_user:edit_profile' user.id %}?next=/" role="button">Profil</a></li>
+                    <li><a class="btn-flat" href="{% url 'app_user:user-details' user.id %}?next=/" role="button">Profil</a></li>
                     <li><a class="btn-flat" href="{% url 'app_user:logout' %}?next=/" role="button">Abmelden</a></li>
                 {% else %}
                     <li><a class="btn-flat" href="{% url 'login' %}" role="button">Anmelden</a></li>
