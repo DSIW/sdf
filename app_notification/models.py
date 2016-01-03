@@ -1,6 +1,6 @@
 # coding=utf-8
 from django.db import models
-from app_user.models import User
+from app_user.models import User, ChangeUserData
 from app_book.models import Book, Offer, Counteroffer
 from app_payment.models import Payment
 from datetime import datetime
@@ -16,6 +16,9 @@ class Notification(models.Model):
     COUNTEROFFER_DECLINE = 'COUNTEROFFER_DECLINE'  # Kaeufer bekommt Nachricht: Subject: Preisvorscvhlag fuer Buch X wurde nicht akzeptiert | Nachricht: Fuer das Buch X wurde Preisvorschlag nicht akzeptiert
     BOOK_SEND = 'BOOK_SEND' # Buch versendet
     REQUEST_RATING = 'REQUEST_RATING' # Den Verkäufer nach Erhalt des Buches bewerten.
+    CHANGE_PROFILE_ADMIN = 'CHANGE_PROFILE_ADMIN' # Notification fuer den Administrator wenn ein Antrag auf aendern des Benutzerprofils gestellt wurde
+    CHANGE_PROFILE_CUSTOMER= 'CHANGE_PROFILE_CUSTOMER' # Notification fuer den Kunden wenn ein Antrag auf aendern des Benutzerprofils angenommen / abgelehnt wurde
+    REMOVE_PROFILE_ADMIN = 'REMOVE_PROFILE_ADMIN' # Notification fuer den Administrator wenn ein Antrag auf Loeschung des Benutzerprofils gestellt wurde
     NOTIFICATION_TYPE = (
         (FASTBUY, 'Sofortkauf'),
         (ABORT_PAYMENT, 'Zahlungsabbruch'),
@@ -24,6 +27,9 @@ class Notification(models.Model):
         (COUNTEROFFER_DECLINE, 'Preisvorschlag abgelehnt'),
         (BOOK_SEND, 'Buch verschickt'),
         (REQUEST_RATING, 'Verkäufer bewerten'),
+        (CHANGE_PROFILE_ADMIN, 'Antrag ändern des Nutzerprofils Administrator'),
+        (CHANGE_PROFILE_CUSTOMER, 'Antrag angenommen / abgelehnt ändern des Nutzerprofils Kunde'),
+        (REMOVE_PROFILE_ADMIN, 'Antrag Löschung des Nutzerprofils '),
     )
 
     sender_user = models.ForeignKey(User, related_name='sender_user', default=None)
@@ -34,6 +40,7 @@ class Notification(models.Model):
     counter_offer = models.ForeignKey(Counteroffer, default=None, null=True, blank=True)
     book = models.ForeignKey(Book, default=None, null=True, blank=True)
     payment = models.ForeignKey(Payment, default=None, null=True, blank=True)
+    change_user_profile = models.ForeignKey(ChangeUserData, default=None, null=True, blank=True)
     read_at = models.DateTimeField(null=True, blank=True)
     notification_type = models.CharField(max_length=200,
                                          choices=NOTIFICATION_TYPE,
@@ -177,4 +184,82 @@ class Notification(models.Model):
             notification_type=Notification.REQUEST_RATING,
             payment=payment,
             receiver_user=payment.buyer_user)
+        new_notification.save()
+
+    @staticmethod
+    def request_change_userprofile_administrator(customer_user_id, changeUserData):
+        '''Diese Methode erstellt eine Notification wenn ein Kunde einen Antrag auf Datenaenderung erstellt
+        Diese Notification geht an alle Benutzer welche den Flag is_staff innehaben
+        '''
+        admins = User.objects.filter(is_staff = True)
+        customer_user = get_object_or_404(User, id=customer_user_id)
+
+        msg = 'Der Kunde ' + customer_user.pseudonym_or_full_name() + ' hat einen Antrag auf Datenänderung gestellt. Folgende Daten möchte der Kunde aktualisiert haben: <br>Klarname: ' + changeUserData.first_name + ' ' + changeUserData.last_name + ' ( ' + customer_user.first_name + ' ' + customer_user.last_name + ' )<br>'
+        if changeUserData.username is not '':
+            msg += 'Pseudonym: ' + changeUserData.username + ' ( ' + customer_user.username + ' ) <br>'
+        msg += 'E-Mail Adresse: ' + changeUserData.email + ' ( ' + customer_user.email + ' ) <br>Wohnort: ' + changeUserData.location + ' ( ' + customer_user.location + ' )'
+
+        for admin in admins:
+            subject = 'Antrag auf Datenänderung'
+
+            new_notification = Notification(
+                sender_user=customer_user,
+                subject=subject,
+                message=msg,
+                received_date=datetime.now(),
+                notification_type=Notification.CHANGE_PROFILE_ADMIN,
+                change_user_profile=changeUserData,
+                receiver_user=admin)
+            new_notification.save()
+
+    @staticmethod
+    def request_change_userprofile_customer(admin_user_id, customer_user_id, accepted):
+        '''Diese Methode erstellt eine Notification wenn ein ein Antrag auf Datenaenderung akzeptiert / abgelehnt wurde
+        Diese Notification geht an den Kunde welcher die Anfrage erstellt hat
+        '''
+        customer_user = get_object_or_404(User, id=customer_user_id)
+        admin_user = get_object_or_404(User, id=admin_user_id)
+
+        user_data = '<br>Klarname: ' + customer_user.full_name()
+
+        if customer_user.username is not '':
+            user_data += '<br>Pseudonym: ' + customer_user.username
+
+        user_data += '<br>E-Mail Adresse: ' + customer_user.email + '<br>Wohnort: ' + customer_user.location
+
+        if(accepted == True):
+            subject = 'Antrag auf Datenänderung akzeptiert'
+            msg = 'Ihr Antrag auf Datenänderung wurde akzeptiert und aktualisiert. Folgende Daten wurden aktualisiert: ' + user_data
+        else:
+            subject = 'Antrag auf Datenänderung abgelehnt'
+            msg = 'Ihr Antrag auf Datenänderung wurde leider abgelehnt. Folgende Daten sind weiterhin gespeichert: ' + user_data
+
+        new_notification = Notification(
+            sender_user=admin_user,
+            subject=subject,
+            message=msg,
+            received_date=datetime.now(),
+            notification_type=Notification.CHANGE_PROFILE_CUSTOMER,
+            receiver_user=customer_user)
+        new_notification.save()
+
+
+    @staticmethod
+    def request_remove_userprofile_administrator(customer_user_id):
+        '''Diese Methode erstellt eine Notification wenn ein Kunde einen Antrag auf loeschung seiner Daten erstellt hat
+        Diese Notification geht an alle Benutzer welche den Flag is_staff innehaben
+        '''
+        admins = User.objects.filter(is_staff = True)
+        customer_user = get_object_or_404(User, id=customer_user_id)
+
+        for admin in admins:
+            subject = 'Antrag auf Löschung'
+            msg = 'Der Kunde ' + customer_user.pseudonym_or_full_name() + ' hat einen Antrag auf Löschung gestellt.'
+            new_notification = Notification(
+                sender_user=customer_user,
+                subject=subject,
+                message=msg,
+                received_date=datetime.now(),
+                notification_type=Notification.REMOVE_PROFILE_ADMIN,
+                receiver_user=admin)
         new_notification.save()

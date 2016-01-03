@@ -4,15 +4,24 @@ import threading
 from django import forms
 from django.http import HttpRequest
 from django.utils.crypto import get_random_string
+from django.core.exceptions import ValidationError
+
 from django.core.urlresolvers import reverse
 from django.forms import ModelForm
 from django.core.mail import send_mail
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import User, ConfirmEmail
+from .models import User, ConfirmEmail, ChangeUserData
 from app.widgets import CustomFileInput
 from sdf import settings
 
+
+def validate_not_real_name(value):
+    for user in User.objects.all():
+        if user.full_name().lower() == value.lower():
+            raise ValidationError('%s entspricht einem bereits registrierten Klarnamen.' % value, code='name_collision')
+        if user.username is not None and user.username.lower() == value.lower():
+            raise ValidationError('Pseudonym bereits vergeben.', code='unique')
 
 class RegistrationForm(UserCreationForm):
     first_name = forms.TextInput()
@@ -31,16 +40,19 @@ class RegistrationForm(UserCreationForm):
         self.fields['email'].required = True
         self.fields['first_name'].required = True
         self.fields['last_name'].required = True
+        self.fields['location'].required = True
         self.fields['profileImage'].required = False
         self.fields['profileImage'].widget = CustomFileInput()
 
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'paypal', 'password1', 'password2', 'profileImage']
+        fields = ['username', 'first_name', 'last_name', 'location', 'email', 'paypal', 'password1', 'password2', 'profileImage']
 
-        def clean_username(self):
-            return self.cleaned_data['username'] or None
+    def clean_username(self):
+        if self.cleaned_data['username']:
+            validate_not_real_name(self.cleaned_data["username"])
+        return self.cleaned_data['username'] or None
 
 
     def save(self, commit=True):
@@ -49,6 +61,7 @@ class RegistrationForm(UserCreationForm):
         user.paypal = self.cleaned_data['paypal']
         user.profileImage = self.cleaned_data['profileImage']
         user.username = self.cleaned_data['username'] or None
+        user.location = self.cleaned_data['location']
 
         if commit:
             user.save()
@@ -82,24 +95,23 @@ class EmailThread(threading.Thread):
 
 class CustomUpdateForm(ModelForm):
 
+
     def __init__(self, *args, **kwargs):
         super(CustomUpdateForm, self).__init__(*args, **kwargs)
-
-        username = self.instance.username
-        if username is not None and len(username) > 0:
-            self.fields['username'].widget.attrs['disabled'] = True
-            if self._errors and self._errors['username']:
-                del self._errors['username']
-        self.fields['profileImage'].required = False
-        self.fields['profileImage'].widget = CustomFileInput()
-
-    class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'paypal', 'profileImage']
+        self.user = kwargs.pop('initial', None)
+        if self.user['username'] is '':
+            del self.fields["username"]
 
     def clean_username(self):
-        username = self.instance.username
-        if username is None or len(username) == 0:
-            return self.cleaned_data['username'] or None
-        else:
-            return self.instance.username
+        cleaned_data = super(CustomUpdateForm, self).clean()
+        username = cleaned_data["username"]
+        if username != self.user["username"]:
+            validate_not_real_name(cleaned_data["username"])
+
+        return username
+
+    class Meta:
+        model = ChangeUserData
+        fields = ['username', 'first_name', 'last_name', 'email', 'location']
+
+
