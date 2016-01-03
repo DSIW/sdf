@@ -2,6 +2,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core import validators
 from django.db.models import Max
 from django.contrib.auth.models  import User as AuthUser, BaseUserManager
 from sdf.base_settings import *
@@ -10,12 +11,6 @@ import glob
 
 from app_payment.models import SellerRating
 
-def validate_not_real_name(value):
-    for user in User.objects.all():
-        if user.full_name().lower() == value.lower():
-            raise ValidationError('%s entspricht einem bereits registrierten Klarnamen.' % value, code='name_collision')
-        if user.username is not None and user.username.lower() == value.lower():
-            raise ValidationError('Pseudonym bereits vergeben.', code='unique')
 
 def user_directory_path(instance, filename):
     if instance.id is None:
@@ -57,7 +52,7 @@ class User(AuthUser):
     AuthUser._meta.get_field('username')._null = True
     AuthUser._meta.get_field('username').blank = True
     AuthUser._meta.get_field('username').null = True
-    AuthUser._meta.get_field('username').validators.append(validate_not_real_name)
+
     AuthUser._meta.get_field('username').error_messages = {'unique': 'Das gewählte Pseudonym ist bereits vergeben.',
                                                         'invalid': 'Bitte ein gültiges Pseudonym eingeben. Dieses darf nur Buchstaben, Ziffern und @/./+/-/_ enthalten.',
                                                         'name_collision': 'Das Pseudonym entspricht einem bereits registrierten Klarnamen.'}
@@ -69,7 +64,7 @@ class User(AuthUser):
 
     emailConfirm = models.BooleanField(default=False,verbose_name='E-mail bestätigt')
     profileImage = models.ImageField(upload_to=user_directory_path, null=True)
-    location = models.CharField(max_length=255, default='')
+    location = models.CharField(('Ort'),max_length=255, default='')
     paypal = models.CharField(max_length=50)
     user_ptr = models.OneToOneField(AuthUser)
     showcaseDisabled = models.BooleanField(default=False, verbose_name='Schaufenster gesperrt')
@@ -113,3 +108,16 @@ class ConfirmEmail(models.Model):
 class PasswordReset(models.Model):
     uuid = models.CharField(max_length=50)
     user = models.OneToOneField(User)
+
+class ChangeUserData(models.Model):
+    user = models.OneToOneField(User)
+    username = models.CharField(('Username'), max_length=30, unique=True,
+         error_messages={'unique': 'Das gewählte Pseudonym ist bereits vergeben.',
+            'invalid': 'Bitte ein gültiges Pseudonym eingeben. Dieses darf nur Buchstaben, Ziffern und @/./+/-/_ enthalten.',
+            'name_collision': 'Das Pseudonym entspricht einem bereits registrierten Klarnamen.'})
+    first_name = models.CharField(('Vorname'), max_length=30, blank=True)
+    last_name = models.CharField(('Nachname'), max_length=30, blank=True)
+    email = models.EmailField(('E-Mailadresse'), blank=True)
+    location = models.CharField(('Ort'),max_length=255, blank=True)
+
+

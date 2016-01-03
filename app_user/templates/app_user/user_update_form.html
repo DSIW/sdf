@@ -4,7 +4,7 @@
 
 {% block content %}
   <div class="container">
-    <h3>Account bearbeiten</h3>
+    <h3>Antrag zur Accountänderung</h3>
 
     <form action="{% url 'app_user:edit_profile' user.id %}" enctype="multipart/form-data" method="POST">{% csrf_token %}
         
@@ -21,7 +21,7 @@
             {% endif %}
         </div>
         {% endfor %}
-      <input type="submit" class="btn btn-success" value="Account aktualisieren">
+      <input type="submit" class="btn btn-success" value="Antrag absenden">
     </form>
   </div>
 {% endblock %}

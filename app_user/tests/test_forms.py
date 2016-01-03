@@ -10,11 +10,12 @@ class FormTests(TestCase):
 
     def setUp(self):
         #pwd = test
-        User.objects.create(first_name="Bernd", last_name="Lauert", username="testuser_fix", password="pbkdf2_sha256$20000$d8Zk6o89XrYZ$O9WiWbzttZu4TGpZn2ZZf5UJ5cwhJq2c/ZtrRbUWQ/0=")
+        User.objects.create(first_name="Bernd", last_name="Lauert", location="Berlin", username="testuser_fix", password="pbkdf2_sha256$20000$d8Zk6o89XrYZ$O9WiWbzttZu4TGpZn2ZZf5UJ5cwhJq2c/ZtrRbUWQ/0=")
         self.form_data = {
             'username': 'testuser',
             'first_name': 'Bernd',
             'last_name': 'Lullert',
+            'location' : 'Berlin',
             'email': 'test@mail.com',
             'paypal': 'test@mail.com',
             'password1': 'test',

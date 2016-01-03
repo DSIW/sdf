@@ -18,9 +18,11 @@
                                 <span class="subject">{{ notification.subject }}</span>
                                 <span class="badge orange-text text-lighten-1">neu</span>
                             </div>
-                            <div class="collapsible-body"><p>{{ notification.message }}</p>
+                            {% autoescape off %}
+                                <div class="collapsible-body"><p>{{ notification.message }}</p>
+                            {% endautoescape %}
 
-                                <!-- Wird nur angezeigt wenn ein Preisvorschlag gemacht wurde -->
+                            <!-- Wird nur angezeigt wenn ein Preisvorschlag gemacht wurde -->
                                 {% if notification.notification_type == "COUNTEROFFER" and notification.counter_offer.active == True %}
                                     <div class="row text-right">
                                         <div class="col s3">
@@ -57,6 +59,27 @@
                                     <div class="row text-right">
                                         <div class="col s3">
                                         <a href="{% url 'app_payment:paypal_redirection' notification.payment_id %}" data-method="post" class="btn waves-effect waves-light">Bezahlen</a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                <!-- Wird nur angezeigt wenn ein Antrag auf Datenaenderungen erstellt wurde -->
+                                {% if notification.notification_type == "CHANGE_PROFILE_ADMIN" %}
+                                    <div class="row text-right">
+                                        <div class="col s3">
+                                            <a href="{% url 'app_user:change_user_profile_accept' notification.change_user_profile_id %}" data-method="post" class="btn waves-effect waves-light">Akzeptieren</a>
+                                        </div>
+                                        <div class="col s3">
+                                            <a href="{% url 'app_user:change_user_profile_decline' notification.change_user_profile_id %}" data-method="post" class="btn waves-effect waves-light">Ablehnen</a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                <!-- Wird nur angezeigt wenn ein Antrag auf Loeschung erstellt wurde -->
+                                {% if notification.notification_type == "REMOVE_PROFILE_ADMIN" %}
+                                    <div class="row text-right">
+                                        <div class="col s3">
+                                            <a href="#" class="btn waves-effect waves-light">Annehmen</a>
                                         </div>
                                     </div>
                                 {% endif %}

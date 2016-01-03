@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Account aktualisieren{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h3>Antrag zur Accountänderung</h3>
+
+    <div class="row">
+        <div class="col s12 m6">
+          <div class="card">
+            <div class="card-content white-text">
+              <p class="black-text">Für Ihren Accout liegt ein offener Änderungsantrag vor. Warten Sie ab, bis dieser bearbeitet wurde oder löschen Sie den Antrag.</p>
+            </div>
+            <div class="card-action">
+              <a class="btn  white-text" data-method="delete" href="#">Antrag löschen</a>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+{% endblock %}

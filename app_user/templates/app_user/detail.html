@@ -31,11 +31,12 @@
                 <p>Öffentliche Bücher: <strong>{{ user.books_count }}</strong></p>
 
                 <ul class="links border-separated">
+
                     {% if user.id == request.user.id %}
                         <li><a href="{% url 'app_user:edit_profile' user.pk %}" class="btn">Bearbeiten</a></li>
                     {% endif %}
-                    <li><a href="{% url 'app_book:showcase' user.id %}">Zum Schaufenster</a></li>
-                    <li><a href="{% url 'app_user:user_ratings' user.id %}">Bewertungen</a></li>
+                    <li><a href="{% url 'app_book:showcase' user.id %}" class="btn">Zum Schaufenster</a></li>
+                    <li><a href="{% url 'app_user:user_ratings' user.id %}" class="btn">Bewertungen</a></li>
                 </ul>
             </div>
         </div>

@@ -12,6 +12,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.forms import SetPasswordForm
+from django.shortcuts import get_object_or_404
 
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import update_session_auth_hash, authenticate, login
@@ -20,7 +21,8 @@ from django.contrib.auth.views import login as loginview
 from django.contrib.auth.decorators import login_required
 
 from django.core.mail import EmailMessage
-from .models import User, ConfirmEmail, PasswordReset
+from .models import User, ConfirmEmail, PasswordReset, ChangeUserData
+from app_notification.models import Notification
 
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
@@ -111,21 +113,47 @@ def register_user(request):
         form = RegistrationForm()
     return render_to_response('app_user/register.html', {'form': form}, RequestContext(request))
 
+@login_required
+def user_update(request, pk):
+    user = User.objects.filter(id=pk).first()
+    data = {
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'location': user.location
+        }
 
-class UserUpdate(FormMessagesMixin, UpdateView):
-    model = User
-    form_class = CustomUpdateForm
-    form_invalid_message = _('Account konnte nicht aktualisiert werden.')
-    form_valid_message = _('Account wurde erfolgreich aktualisiert.')
-    template_name_suffix = '_update_form'
+    changeUserDataTmp = ChangeUserData.objects.filter(user_id=user.id).first()
+    if changeUserDataTmp is not None:
+        if request.method == "DELETE":
+            changeUserDataTmp.delete()
+            messages.add_message(request, messages.SUCCESS, "Ihr Antrag wurde gelöscht")
+            return HttpResponseRedirect(reverse('app_user:edit_profile', kwargs={'pk':request.user.id}))
+        else:
+            return render_to_response('app_user/user_update_error.html',{}, RequestContext(request))
 
-    def get_success_url(self):
-        return reverse('app_user:user-details', kwargs={'pk': self.object.id})
+    if request.method == "POST":
+        form = CustomUpdateForm(request.POST, initial=data)
 
-    @method_decorator(login_required)
-    @method_decorator(current_user)
-    def dispatch(self, *args, **kwargs):
-        return super(UserUpdate, self).dispatch(*args, **kwargs)
+        if not form.has_changed():
+            messages.add_message(request, messages.ERROR,
+                     "Es wurde keine Daten geändert")
+            return render_to_response('app_user/user_update_form.html', {'form': form}, RequestContext(request))
+        if form.is_valid():
+            form.user = user
+
+            changeUserData = form.save(commit=False)
+            changeUserData.user_id = user.id
+            changeUserData.save()
+            Notification.request_change_userprofile_administrator(user.id, changeUserData)
+            messages.add_message(request, messages.SUCCESS,
+                     "Ihr Antrag wurde erfolgreich versendet und wird in Kürze von einem Moderator bearbeitet. Sie erhalten anschließend eine Benachrichtigung")
+            return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk':request.user.id}))
+    else:
+        form = CustomUpdateForm(data, initial=data)
+
+    return render_to_response('app_user/user_update_form.html', {'form': form}, RequestContext(request))
 
 @login_required
 def user_details(request, pk):
@@ -241,3 +269,31 @@ def user_ratings(request, id):
     user = User.objects.filter(pk=id).first()
     ratings = SellerRating.objects.filter(rated_user_id=id)
     return render_to_response('app_user/user_ratings.html',{'rated_user':user,'ratings':ratings},RequestContext(request))
+
+def change_user_profile(request, change_user_data_id, accepted):
+    change_user_data = get_object_or_404(ChangeUserData, id=change_user_data_id)
+    user = change_user_data.user
+
+    if(accepted):
+        user.first_name = change_user_data.first_name
+        user.username = change_user_data.username
+        user.last_name = change_user_data.last_name
+        user.email = change_user_data.email
+        user.location = change_user_data.location
+
+        user.save()
+
+    change_user_data.delete()
+    Notification.request_change_userprofile_customer(request.user.id, user.id, accepted)
+
+@login_required
+def change_user_profile_decline(request, change_user_data_id):
+    change_user_profile(request, change_user_data_id, False)
+    messages.add_message(request, messages.SUCCESS, 'Antrag auf Benutzerdatenänderung wurde erfolgreich abgelehnt')
+    return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
+
+@login_required
+def change_user_profile_accept(request, change_user_data_id):
+    change_user_profile(request, change_user_data_id, True)
+    messages.add_message(request, messages.SUCCESS, 'Benutzerdaten wurden erfolgreich aktualisiert')
+    return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
