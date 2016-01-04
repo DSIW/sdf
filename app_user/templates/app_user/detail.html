@@ -14,23 +14,24 @@
   <div class="container-wrapper">
     <div class="container">
 
-      <div class="row">
-        <div class="col m4 s12">
-          <img src="{{ user.image_url_or_blank }}" class="user-profile" >
-        </div>
-          <div class="col m8 s12">
-            <p>
-            {% if user.username|length > 0 %}
-            Pseudonym: <strong>{{ user.username }}</strong>
-            {% else %}
-            Name: <strong>{{ user.full_name }}</strong> <a id="opener">(Pseudonym angeben)</a>
-            {% endif %}
-            </p>
-            <p>Bewertung:
-            {% include 'app_user/_user_rating.html' with user=user %}
-            </p>
-            <p>Ort: <strong><a href="https://www.google.de/maps?q={{ user.location }}" target="_new">{{ user.location }}</a></strong></p>
-            <p>Öffentliche Bücher: <strong>{{ user.books_count }}</strong></p>
+        <div class="row">
+            <div class="col m4 s12">
+                <img src="{{ user.image_url_or_blank }}" class="user-profile" >
+            </div>
+            <div class="col m8 s12">
+                <p>
+                    {% if user.username|length > 0 %}
+                        Pseudonym: <strong>{{ user.username }}</strong>
+                    {% else %}
+                        Name: <strong>{{ user.full_name }}</strong> <a id="opener"></a>
+                        <a class="waves-effect waves-light  modal-trigger" href="#modal1">(Pseudonym angeben)</a>
+                    {% endif %}
+                </p>
+                <p>Bewertung:
+                    {% include 'app_user/_user_rating.html' with user=user %}
+                </p>
+                <p>Ort: <strong><a href="https://www.google.de/maps?q={{ user.location }}" target="_new">{{ user.location }}</a></strong></p>
+                <p>Öffentliche Bücher: <strong>{{ user.books_count }}</strong></p>
 
             <ul class="links border-separated">
               {% if user.id == request.user.id %}
@@ -41,13 +42,15 @@
             </ul>
           </div>
       </div>
-
+  
     </div>
 
-
-
-<div id="dialog" title="Psueodnym angeben">
-   <form action="{% url 'app_user:user-details'  user.id %}" method="post">{% csrf_token %}
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Pseudonym angeben</h4>
+    <p>TODO: Hinweis dass Pseudonym nur ein mal frei gewählt werden kann. Danach via Antrag</p>
+       <form action="{% url 'app_user:user-details'  user.id %}" method="post">{% csrf_token %}
           {% for field in form.visible_fields %}
           <div class="input-field {% if field.errors %}has-error{% endif %}">
               {{ field }}
@@ -63,25 +66,15 @@
           {% endfor %}
           <input type="submit" class="btn btn-success" value="Pseudonym vergeben">
       </form>
-</div>
+    </div>
+  </div>
 
  <script>
-  $(function() {
-    $( "#dialog" ).dialog({
-      autoOpen: {{ autoopen }},
-      show: {
-        effect: "blind",
-        duration: 1000
-      },
-      hide: {
-        effect: "explode",
-        duration: 1000
-      }
-    });
-
-    $( "#opener" ).click(function() {
-      $( "#dialog" ).dialog( "open" );
-    });
+   $(document).ready(function(){
+    $('.modal-trigger').leanModal();
+       if({{ autoopen }}){
+           $('#modal1').openModal();
+       }
   });
   </script>
 {% endblock %}
