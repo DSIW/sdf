@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+    {% block content %}
+        <div class="container center center-block">
+        <h3>Interner Fehler.</h3>
+        <p>HTTP 500. Irgendwas läuft nicht ganz so, wie es sollte. Wird aber behoben, versprochen!</p>
+        <img src="{% static "img/serverfault.gif" %}" />
+
+        </div>
+    {% endblock %}
