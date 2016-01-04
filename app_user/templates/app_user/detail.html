@@ -23,7 +23,7 @@
             {% if user.username|length > 0 %}
             Pseudonym: <strong>{{ user.username }}</strong>
             {% else %}
-            Name: <strong>{{ user.full_name }}</strong>
+            Name: <strong>{{ user.full_name }}</strong> <a id="opener">(Pseudonym angeben)</a>
             {% endif %}
             </p>
             <p>Bewertung:
@@ -43,5 +43,45 @@
       </div>
 
     </div>
-  </div>
+
+
+
+<div id="dialog" title="Psueodnym angeben">
+   <form action="{% url 'app_user:user-details'  user.id %}" method="post">{% csrf_token %}
+          {% for field in form.visible_fields %}
+          <div class="input-field {% if field.errors %}has-error{% endif %}">
+              {{ field }}
+              <label>{{ field.label }}</label>
+              {% if field.errors %}
+                  <span class="help-block">
+                      {% for error in field.errors %}
+                          {{ error|escape }}
+                      {% endfor %}
+                  </span>
+              {% endif %}
+          </div>
+          {% endfor %}
+          <input type="submit" class="btn btn-success" value="Pseudonym vergeben">
+      </form>
+</div>
+
+ <script>
+  $(function() {
+    $( "#dialog" ).dialog({
+      autoOpen: {{ autoopen }},
+      show: {
+        effect: "blind",
+        duration: 1000
+      },
+      hide: {
+        effect: "explode",
+        duration: 1000
+      }
+    });
+
+    $( "#opener" ).click(function() {
+      $( "#dialog" ).dialog( "open" );
+    });
+  });
+  </script>
 {% endblock %}

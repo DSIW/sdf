@@ -120,3 +120,15 @@ class CustomUpdateForm(ModelForm):
         fields = ['username', 'first_name', 'last_name', 'email', 'location']
 
 
+class UsernameForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UsernameForm, self).__init__(*args, **kwargs)
+    class Meta:
+        model = ChangeUserData
+        fields = ['username']
+
+    def clean_username(self):
+        cleaned_data = super(UsernameForm, self).clean()
+        validate_not_real_name(cleaned_data["username"])
+
+        return cleaned_data["username"]
