@@ -67,6 +67,7 @@ class User(AuthUser):
     location = models.CharField(('Ort'),max_length=255, default='')
     paypal = models.CharField(max_length=50)
     user_ptr = models.OneToOneField(AuthUser)
+    enabled_notifications_via_email = models.BooleanField(default=True)
     showcaseDisabled = models.BooleanField(default=False, verbose_name='Schaufenster gesperrt')
 
     objects = MyUserManager()

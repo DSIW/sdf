@@ -7,7 +7,13 @@
         <h4>
             Ihre Nachrichten
         </h4>
-
+        <div class="switch text-right" style="margin-bottom: 20px;">
+            <label>
+                Email-Benachrichtigung
+                <input id="notification-toggle" {% if user.enabled_notifications_via_email %} checked {% endif %}type="checkbox">
+                <span class="lever"></span>
+            </label>
+        </div>
         <div id="accordion">
             {% if notifications.count > 0 %}
                 <ul class="notifications collapsible" data-collapsible="accordion">
@@ -100,6 +106,13 @@
         $(document).ready(function () {
             $('.collapsible').collapsible({
                 accordion: true // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+            });
+
+            $('#notification-toggle').change(function() {
+                $.ajax({
+                    method: 'post',
+                    url: '/notifications/toggleEmail/'
+                });
             });
 
             $('ul.notifications li.new').on('click', function(event) {

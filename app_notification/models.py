@@ -1,4 +1,7 @@
 # coding=utf-8
+import threading
+
+from django.core.mail import send_mail
 from django.db import models
 from app_user.models import User, ChangeUserData
 from app_book.models import Book, Offer, Counteroffer
@@ -7,6 +10,8 @@ from datetime import datetime
 from django.shortcuts import get_object_or_404
 
 from app.templatetags import template_extras
+from sdf import settings
+
 
 class Notification(models.Model):
     FASTBUY = 'FASTBUY'  # Empfdaenger bekommt Notification => Subject: Buch X wurde gekauft | Nachricht: Person X hat NBuch Y gekauft
@@ -62,6 +67,7 @@ class Notification(models.Model):
         )
 
         notification.save()
+        NotificationEmailThread(seller).start()
 
     @staticmethod
     def abort_unpaid_payment(payment):
@@ -80,6 +86,7 @@ class Notification(models.Model):
         )
 
         notification.save()
+        NotificationEmailThread(payment.buyer_user).start()
 
     @staticmethod
     def counteroffer(counteroffer, seller, buyer, book):
@@ -98,6 +105,7 @@ class Notification(models.Model):
         )
 
         notification.save()
+        NotificationEmailThread(seller).start()
 
     @staticmethod
     def counteroffer_decline(counteroffer, buyer, book):
@@ -117,6 +125,7 @@ class Notification(models.Model):
         )
 
         notification.save()
+        NotificationEmailThread(buyer).start()
 
     @staticmethod
     def counteroffer_accept(counteroffer, buyer, book, payment):
@@ -137,6 +146,8 @@ class Notification(models.Model):
         )
 
         notification.save()
+        NotificationEmailThread(buyer).start()
+
 
     def __str__(self):
         return self.subject + ", " + self.message
@@ -154,7 +165,7 @@ class Notification(models.Model):
 
         # Buchversand bestaetigt
         subject = 'Das Buch ' + book.name + ' wurde verschickt.'
-        msg = 'Der Verkäufer hat bestätigt das er das Buch: "' + book.name + '" zu Ihnen versendet hat.'
+        msg = 'Der Verkäufer hat bestätigt, dass er das Buch "' + book.name + '" zu Ihnen versendet hat.'
 
         new_notification = Notification(
             sender_user=seller,
@@ -167,6 +178,8 @@ class Notification(models.Model):
         )
 
         new_notification.save()
+        NotificationEmailThread(buyer).start()
+
 
     def __str__(self):
         return self.subject + ", " + self.message
@@ -185,6 +198,7 @@ class Notification(models.Model):
             payment=payment,
             receiver_user=payment.buyer_user)
         new_notification.save()
+        NotificationEmailThread(payment.buyer_user).start()
 
     @staticmethod
     def request_change_userprofile_administrator(customer_user_id, changeUserData):
@@ -263,3 +277,22 @@ class Notification(models.Model):
                 notification_type=Notification.REMOVE_PROFILE_ADMIN,
                 receiver_user=admin)
         new_notification.save()
+
+class NotificationEmailThread(threading.Thread):
+    def __init__(self, recipient, subject=None, emailMessage=None):
+        if not subject:
+            self.subject = 'Neue Benachrichtigung eingegangen'
+        else:
+            self.subject = subject
+        if not emailMessage:
+            self.emailMessage = 'Hallo '+ recipient.first_name + ' '+ recipient.last_name +', <br><br>Es liegt eine neue Benachrichtigung vor. Bitte <a href="'+settings.ENDPOINT+'">besuchen Sie Book²</a>, um die Benachrichtigung einzusehen.<br><br>Ihr Book²-Team'
+        else:
+            self.emailMessage = emailMessage
+        self.recipient = recipient
+        self.address = self.recipient.email
+        threading.Thread.__init__(self)
+
+    def run (self):
+        if(self.recipient.enabled_notifications_via_email):
+            send_mail(self.subject, self.emailMessage, settings.EMAIL_HOST_USER,
+                      [self.address], fail_silently=True, html_message=self.emailMessage)

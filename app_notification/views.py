@@ -17,11 +17,12 @@ def notificationPageView(request):
     :param request: Der Request der erzeugt wurde
     :return: allNotifications: Alle Notifications
     '''
-    notifications = Notification.objects.filter(receiver_user_id = request.user.id).order_by('-id')
+    notifications = Notification.objects.filter(receiver_user_id = request.current_user.id).order_by('-id')
 
     template_name = 'notifications.html'
     return render_to_response(template_name, {
         "notifications": notifications,
+        "user": request.current_user,
     }, RequestContext(request))
 
 
@@ -35,6 +36,17 @@ def read_notification(request, id):
         return JsonResponse({'read_at': notification.read_at})
     return JsonResponse({'error': True})
 
+# Call via AJAX
+@login_required
+def notificationEmailToggle(request):
+    if request.method == 'POST':
+        user = request.current_user
+        enabled = user.enabled_notifications_via_email
+        user.enabled_notifications_via_email = not enabled
+        user.save()
+        return JsonResponse({'state': not enabled})
+    return JsonResponse({'error': True})
+
 
 @login_required
 def notificationSendBookPageView(request, id):
@@ -43,7 +55,7 @@ def notificationSendBookPageView(request, id):
     :param request: Der Request der erzeugt wurde
     :id Id der der notification
     '''
-    Notification.send_book(id);
+    Notification.send_book(id)
 
     messages.add_message(request, messages.SUCCESS,
                          'Versandstatus wurde erfolgreich geändert. Der Käufer wird benachrichtigt')
