@@ -392,7 +392,7 @@ Der erfolglose Schriftsteller Max ist ein gesetzestreuer Bürger. Anders als sei
     offer = importer.save_or_locate(offer)
 
     app_book = Book()
-    app_book.user = User.objects.filter(username='maria').first()
+    app_book.user = User.objects.filter(username='marie').first()
     app_book.name = 'Dead Mountain: The Untold True Story of the Dyatlov Pass Incident'
     app_book.author = 'Donnie Eichar'
     app_book.language = 'EN'
@@ -408,7 +408,7 @@ In February 1959, a group of nine hikers in the Russian Ural Mountains died in a
 
     offer = Offer()
     offer.updated = dateutil.parser.parse("2015-12-10T12:00:00.000000+00:00")
-    offer.seller_user = User.objects.filter(username='maria').first()
+    offer.seller_user = User.objects.filter(username='marie').first()
     offer.book = Book.objects.filter(name = 'Dead Mountain: The Untold True Story of the Dyatlov Pass Incident').first()
     offer.price = 14.0
     offer.shipping_price = 3.0
@@ -416,7 +416,7 @@ In February 1959, a group of nine hikers in the Russian Ural Mountains died in a
     offer = importer.save_or_locate(offer)
 
     app_book = Book()
-    app_book.user = User.objects.filter(username='maria').first()
+    app_book.user = User.objects.filter(username='marie').first()
     app_book.name = 'Der Mann ohne Eigenschaften'
     app_book.author = 'Robert Musil'
     app_book.language = 'DE'
@@ -432,7 +432,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
 
     offer = Offer()
     offer.updated = dateutil.parser.parse("2015-12-19T12:00:00.000000+00:00")
-    offer.seller_user = User.objects.filter(username='maria').first()
+    offer.seller_user = User.objects.filter(username='marie').first()
     offer.book = Book.objects.filter(name = 'Der Mann ohne Eigenschaften').first()
     offer.price = 30.0
     offer.shipping_price = 6.0
@@ -440,7 +440,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     offer = importer.save_or_locate(offer)
 
     app_book = Book()
-    app_book.user = User.objects.filter(username='maria').first()
+    app_book.user = User.objects.filter(username='marie').first()
     app_book.name = 'Berge des Wahnsinns: Eine Horrorgeschichte'
     app_book.author = 'H. P. Lovecraft '
     app_book.language = 'DE'
@@ -457,7 +457,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
 
     offer = Offer()
     offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
-    offer.seller_user = User.objects.filter(username='maria').first()
+    offer.seller_user = User.objects.filter(username='marie').first()
     offer.book = Book.objects.filter(name = 'Berge des Wahnsinns: Eine Horrorgeschichte').first()
     offer.price = 10.0
     offer.shipping_price = 2.5
