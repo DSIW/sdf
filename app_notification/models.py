@@ -196,7 +196,7 @@ class Notification(models.Model):
 
         msg = 'Der Kunde ' + customer_user.pseudonym_or_full_name() + ' hat einen Antrag auf Datenänderung gestellt. Folgende Daten möchte der Kunde aktualisiert haben: <br>Klarname: ' + changeUserData.first_name + ' ' + changeUserData.last_name + ' ( ' + customer_user.first_name + ' ' + customer_user.last_name + ' )<br>'
         if changeUserData.username is not '':
-            msg += 'Pseudonym: ' + changeUserData.username + ' ( ' + customer_user.username + ' ) <br>'
+            msg += 'Pseudonym: ' + changeUserData.username + ' ( ' + str(customer_user.username) + ' ) <br>'
         msg += 'E-Mail Adresse: ' + changeUserData.email + ' ( ' + customer_user.email + ' ) <br>Wohnort: ' + changeUserData.location + ' ( ' + customer_user.location + ' )'
 
         for admin in admins:
