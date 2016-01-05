@@ -463,3 +463,50 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     offer.shipping_price = 2.5
     offer.active = True
     offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='andrej@andrej.in').first()
+    app_book.name = 'Ночной Дозор'
+    app_book.author = 'Сергей Лукьяненко'
+    app_book.language = 'RU'
+    app_book.releaseDate = dateutil.parser.parse("2004")
+    app_book.pageNumber = 384
+    app_book.image = 'images/books/book_17.jpg'
+    app_book.isbn10 = '5-17-025476-8'
+    app_book.isbn13 = '978-5-17-025476-7'
+    app_book.description = '''
+ На ночных улицах - опасно. Но речь не о преступниках и маньяках. На ночных улицах живет другая опасность - те, что называют себя Иными. Вампиры и оборотни, колдуньи и ведьмаки. Те, кто выходит на охоту, когда садится солнце. Те, чья сила велика, с кем не справиться обычным оружием. Но по следу "ночных охотников" веками следуют охотники другие - Ночной Дозор. Они сражаются с порождениями мрака и побеждают их, но при этом свято блюдут древний Договор, заключенный между Светлыми и Темными… '''
+
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='andrej@andrej.in').first()
+    offer.book = Book.objects.filter(name = 'Ночной Дозор').first()
+    offer.price = 20
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='andrej@andrej.in').first()
+    app_book.name = 'Die Abenteuer des Stefón Rudel'
+    app_book.author = 'Stefan Knapp'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2004")
+    app_book.pageNumber = 384
+    app_book.image = 'images/books/book_18.jpg'
+    app_book.isbn10 = '84-9015-648-4'
+    app_book.isbn13 = '978-84-9015-648-3'
+    app_book.description = '''
+        Das Buch handelt von jungen Stefón Rudel der zahlreiche Abenteuer auf Menschheitsabsicherungsplattos erlebt.Der Autor Stefan Knapp hat auf einzig Art und Weise die Abenteuer des Stefón Rudel in einer Fantastischen Abenteuergeschichte zusammengefasst.'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='andrej@andrej.in').first()
+    offer.book = Book.objects.filter(name = 'Die Abenteuer des Stefón Rudel').first()
+    offer.price = 1
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)

@@ -197,3 +197,20 @@ def import_data():
     auth_user_3.is_active = True
     auth_user_3.date_joined = dateutil.parser.parse("2015-11-08T14:22:49.437731+00:00")
     auth_user_3 = importer.save_or_locate(auth_user_3)
+
+    auth_user_4 = User()
+    auth_user_4.password = 'pbkdf2_sha256$20000$6fimTWmnvrhn$ubTKr8VttnnIR3vp+2bsVJQb3Vxkz9MXkJfKvJf9Jic='
+    auth_user_4.last_login = dateutil.parser.parse("2015-11-08T14:22:59.793180+00:00")
+    auth_user_4.is_superuser = False
+    auth_user_4.first_name = 'Andrej'
+    auth_user_4.last_name = 'Beliakov'
+    auth_user_4.email = 'andrej@andrej.in'
+    auth_user_4.emailConfirm = True
+    auth_user_4.paypal = 'andrej@andrej.in'
+    auth_user_4.location = 'Berlin'
+    auth_user_4.is_staff = False
+    auth_user_4.is_active = True
+    auth_user_4.date_joined = dateutil.parser.parse("2015-12-08T14:21:49.434251+00:00")
+    auth_user_4 = importer.save_or_locate(auth_user_4)
+
+
