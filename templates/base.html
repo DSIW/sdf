@@ -48,7 +48,7 @@
                             <img src="{{ request.current_user.image_url_or_blank }}" class="circle profile-img" />
                             {{ request.current_user.pseudonym_or_full_name }}<i class="material-icons right">arrow_drop_down</i></a></li>
                 {% else %}
-                    <li><a href="{% url 'login' %}">Anmelden</a></li>
+                    <li><a href="{% url 'app_user:login' %}">Anmelden</a></li>
                     <li><a href="{% url 'app_user:register' %}">Registrieren</a></li>
                 {% endif %}
 
@@ -65,7 +65,7 @@
                   <li><a href="{% url 'app_user:change_password' %}">Passwort ändern</a></li>
                   <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
                 {% else %}
-                    <li><a href="{% url 'login' %}">Anmelden</a></li>
+                    <li><a href="{% url 'app_user:login' %}">Anmelden</a></li>
                     <li><a href="{% url 'app_user:register' %}">Registrieren</a></li>
                 {% endif %}
             </ul>
