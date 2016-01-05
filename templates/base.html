@@ -47,7 +47,11 @@
                     <li><a class="dropdown-button" href="javascript:;" data-constrainwidth="false" data-activates="nav-dropdown-profile">
                             <img src="{{ request.current_user.image_url_or_blank }}" class="circle profile-img" />
                             {{ request.current_user.pseudonym_or_full_name }}<i class="material-icons right">arrow_drop_down</i></a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Anmelden</a></li>
+                    <li><a href="{% url 'app_user:register' %}">Regstrieren</a></li>
                 {% endif %}
+
             </ul>
 
             <ul id="nav-mobile" class="navigation-bar side-nav">
@@ -60,6 +64,9 @@
                   <li><a href="{% url 'app_user:edit_profile' user.id %}">Mein Profil</a></li>
                   <li><a href="{% url 'app_user:change_password' %}">Passwort ändern</a></li>
                   <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Anmelden</a></li>
+                    <li><a href="{% url 'app_user:register' %}">Regstrieren</a></li>
                 {% endif %}
             </ul>
             <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
