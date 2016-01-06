@@ -6,40 +6,42 @@
 {% block body_classes %}user-detail{% endblock %}
 
 {% block content %}
+  <h3 class="container">
+    <span class="grey-text title-type">Nutzer</span><br />
+    <span class="orange-text text-lighten-1">{{ user.pseudonym_or_full_name }}</span>
+  </h3>
+
+  <div class="container-wrapper">
     <div class="container">
-        <h3 class="line">
-            <span class="grey-text title-type">Nutzer</span><br />
-            <span class="orange-text text-lighten-1">{{ user.pseudonym_or_full_name }}</span>
-        </h3>
 
-        <div class="row">
-            <div class="col m4 s12">
-                <img src="{{ user.image_url_or_blank }}" class="user-profile" >
-            </div>
-            <div class="col m8 s12">
-                <p>
-                    {% if user.username|length > 0 %}
-                        Pseudonym: <strong>{{ user.username }}</strong>
-                    {% else %}
-                        Name: <strong>{{ user.full_name }}</strong>
-                    {% endif %}
-                </p>
-                <p>Bewertung:
-                    {% include 'app_user/_user_rating.html' with user=user %}
-                </p>
-                <p>Ort: <strong><a href="https://www.google.de/maps?q={{ user.location }}" target="_new">{{ user.location }}</a></strong></p>
-                <p>Öffentliche Bücher: <strong>{{ user.books_count }}</strong></p>
-
-                <ul class="links border-separated">
-
-                    {% if user.id == request.user.id %}
-                        <li><a href="{% url 'app_user:edit_profile' user.pk %}" class="btn">Bearbeiten</a></li>
-                    {% endif %}
-                    <li><a href="{% url 'app_book:showcase' user.id %}" class="btn">Zum Schaufenster</a></li>
-                    <li><a href="{% url 'app_user:user_ratings' user.id %}" class="btn">Bewertungen</a></li>
-                </ul>
-            </div>
+      <div class="row">
+        <div class="col m4 s12">
+          <img src="{{ user.image_url_or_blank }}" class="user-profile" >
         </div>
+          <div class="col m8 s12">
+            <p>
+            {% if user.username|length > 0 %}
+            Pseudonym: <strong>{{ user.username }}</strong>
+            {% else %}
+            Name: <strong>{{ user.full_name }}</strong>
+            {% endif %}
+            </p>
+            <p>Bewertung:
+            {% include 'app_user/_user_rating.html' with user=user %}
+            </p>
+            <p>Ort: <strong><a href="https://www.google.de/maps?q={{ user.location }}" target="_new">{{ user.location }}</a></strong></p>
+            <p>Öffentliche Bücher: <strong>{{ user.books_count }}</strong></p>
+
+            <ul class="links border-separated">
+              {% if user.id == request.user.id %}
+              <li><a href="{% url 'app_user:edit_profile' user.pk %}" class="btn">Bearbeiten</a></li>
+              {% endif %}
+              <li><a href="{% url 'app_book:showcase' user.id %}" class="btn">Zum Schaufenster</a></li>
+              <li><a href="{% url 'app_user:user_ratings' user.id %}" class="btn">Bewertungen</a></li>
+            </ul>
+          </div>
+      </div>
 
     </div>
+  </div>
 {% endblock %}

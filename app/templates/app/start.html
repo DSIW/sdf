@@ -1,29 +1,31 @@
 {% extends 'start_base.html' %}
 {% load staticfiles %}
 
-{% block body_classes %}page-start{% endblock %}
+{% block body_classes %}page-start image3{% endblock %}
 
 {% block content %}
+
 <div class="main-header">
-    <div class="section no-pad-bot container">
-        <div class="row center citations">
-            <p class="s12">
-                {% if user.is_authenticated %}
-                    Viel Spaß beim Stöbern, {{ request.current_user.pseudonym_or_full_name }}!
-                {% else %}
-                    {{ citation }}
-                {% endif %}
-            </p>
-        </div>
-    </div>
+    <span class="citations">
+        {% if user.is_authenticated %}
+            Viel Spaß beim Stöbern, {{ request.current_user.pseudonym_or_full_name }}!
+        {% else %}
+            {{ citation }}
+        {% endif %}
+    </span>
 </div>
+
 <a id="arrow-scroller" class="start-arrow material-icons">keyboard_arrow_down</a>
+<a id="arrow-scroller1" class="start-arrow material-icons">keyboard_arrow_down</a>
+<a id="arrow-scroller2" class="start-arrow material-icons">keyboard_arrow_down</a>
 
 <div id="books" class="container section">
-    <h5 class="header light">Neueste Bücher: </h5>
+    <h5 class="header light">
+      Neueste Bücher
+      <a href="{% url 'app_book:books' %}" class="btn-flat btn-more right">Mehr</a>
+    </h5>
 
-    <!--   Icon Section   -->
-    <div class="highlights-box-row">
+    <div class="flex-container">
         {% for offer in offers %}
             {% include 'app/_book_card.html' with user=offer.seller_user book=offer.book offer=offer %}
         {% endfor %}
@@ -31,20 +33,19 @@
             <p class="empty">Es sind leider keine Bücher vorhanden!</p>
         {% endif %}
     </div>
-
-    <a href="{% url 'app_book:books' %}" class="btn-flat right">Mehr</a>
 </div>
-
 
 <div class="parallax-container valign-wrapper">
-    <div class="parallax"><img src="{% static "img/book3.jpg" %}" alt="Unsplashed background img 2"></div>
-</div>
+        <div class="parallax"><img src="{% static "img/book3.jpg" %}" alt="Unsplashed background img 2"></div>
+    </div>
 
 <div class="container section">
-    <h5 class="header light">Kürzlich aktualisierte Schaufenster: </h5>
+    <h5 class="header light">
+      Kürzlich aktualisierte Schaufenster
+      <a href="{% url 'app_book:showcases' %}" class="btn-flat btn-more right">Mehr</a>
+    </h5>
 
-    <!--   Icon Section   -->
-    <div class="highlights-box-row">
+    <div class="flex-container">
         {% for user in users %}
             {% include 'app/_user_card.html' with user=user %}
         {% endfor %}
@@ -52,7 +53,6 @@
             <p class="empty">Es sind leider keine Schaufenster vorhanden!</p>
         {% endif %}
     </div>
-
-    <a href="{% url 'app_book:showcases' %}" class="btn-flat right">Mehr</a>
 </div>
+
 {% endblock %}

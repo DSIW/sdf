@@ -3,27 +3,41 @@
 {% block body_classes %}showcase{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h3>Archiv</h3>
+    <h3 class="container">
+        <span class="grey-text title-type">Archiv</span><br />
+        <span class="orange-text text-lighten-1">{{ request.current_user.pseudonym_or_full_name }}</span>
 
-        <div class="row">
-            <div class="col s12">
-                <a class="waves-effect waves-light btn" href="{% url 'app_book:createBook' %}"><i class="material-icons left">add</i>Buch anlegen</a>
+        <a class="waves-effect waves-light btn right" href="{% url 'app_book:createBook' %}"><i class="material-icons left">add</i>Buch anlegen</a>
+    </h3>
+
+    <div class="container-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col s12">
+                </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col s12">
+            {% if allBooks|length > 0 %}
+
+            <div class="flex-container">
+
                 {% for book in allBooks %}
-                   {% include 'app_book/_archive_card.html' with book=book %}
+
+                {% include 'app_book/_archive_card.html' with book=book %}
+
                 {% endfor %}
-                {% if allBooks|length == 0 %}
-                    <div class="empty">
-                        <i class="material-icons">clear</i>
-                        <p>Sie besitzen keine Bücher. Kaufen Sie Bücher oder legen Sie welche an.</p>
-                    </div>
-                {% endif %}
+
             </div>
+
+            {% else %}
+
+            <div class="empty">
+                <i class="material-icons">clear</i>
+                <p>Sie besitzen keine Bücher. Kaufen Sie Bücher oder legen Sie welche an.</p>
+            </div>
+
+            {% endif %}
+
         </div>
     </div>
 {% endblock %}

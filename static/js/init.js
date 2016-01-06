@@ -20,9 +20,9 @@ jQuery(function(){
     $(this).parents('.alert').fadeOut();
   });
 
-  $('#arrow-scroller').on('click', function(event) {
-    $.scrollTo('#books', 500);
-  });
+  $('#arrow-scroller').on('click', function(event) { $.scrollTo('#books', 500); });
+  $('#arrow-scroller1').on('click', function(event) { $.scrollTo('#books', 500); });
+  $('#arrow-scroller2').on('click', function(event) { $.scrollTo('#books', 500); });
 
   $("nav[role=navigation] ul.navigation-bar li").each(function(index, element) {
     $element = $(element);

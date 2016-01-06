@@ -3,19 +3,22 @@
 {% block body_classes %}notifications{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h4>
-            Ihre Nachrichten
-        </h4>
-        <div class="switch text-right" style="margin-bottom: 20px;">
-            <label>
-                Email-Benachrichtigung
-                <input id="notification-toggle" {% if user.enabled_notifications_via_email %} checked {% endif %}type="checkbox">
-                <span class="lever"></span>
-            </label>
-        </div>
-        <div id="accordion">
-            {% if notifications.count > 0 %}
+    <h3 class="container">
+        <span class="grey-text title-type"></span><br />
+        <span class="orange-text text-lighten-1">Nachrichten</span>
+    </h3>
+
+    <div class="container-wrapper">
+        <div class="container">
+            <div class="switch text-right" style="margin-bottom: 20px;">
+                <label>
+                    Email-Benachrichtigung
+                    <input id="notification-toggle" {% if user.enabled_notifications_via_email %} checked {% endif %}type="checkbox">
+                    <span class="lever"></span>
+                </label>
+            </div>
+            <div id="accordion">
+                {% if notifications.count > 0 %}
                 <ul class="notifications collapsible" data-collapsible="accordion">
                     {% for notification in notifications %}
                         <li data-record-id="{{ notification.id }}" class="{% if notification.read_at == None %}new{% endif %}">
@@ -29,76 +32,77 @@
                             {% endautoescape %}
 
                             <!-- Wird nur angezeigt wenn ein Preisvorschlag gemacht wurde -->
-                                {% if notification.notification_type == "COUNTEROFFER" and notification.counter_offer.active == True %}
-                                    <div class="row text-right">
-                                        <div class="col s3">
-                                            <a href="{% url 'app_book:accept_counteroffer' notification.counter_offer.id %}"
-                                            class="btn waves-effect waves-light">Annehmen</a>
-                                        </div>
-                                        <div class="col s3">
-                                            <a href="{% url 'app_book:decline_counteroffer' notification.counter_offer.id %}"
-                                            class="btn waves-effect waves-light">Ablehnen</a>
-                                        </div>
+                            {% if notification.notification_type == "COUNTEROFFER" and notification.counter_offer.active == True %}
+                                <div class="row text-right">
+                                    <div class="col s3">
+                                        <a href="{% url 'app_book:accept_counteroffer' notification.counter_offer.id %}"
+                                        class="btn waves-effect waves-light">Annehmen</a>
                                     </div>
-                                {% endif %}
+                                    <div class="col s3">
+                                        <a href="{% url 'app_book:decline_counteroffer' notification.counter_offer.id %}"
+                                        class="btn waves-effect waves-light">Ablehnen</a>
+                                    </div>
+                                </div>
+                            {% endif %}
 
-                                <!-- Wird nur angezeigt wenn ein Preisvorschlag Angenommen wurde -->
-                                {% if notification.counter_offer.accepted and notification.notification_type != "BOOK_SEND" and notification.notification_type == "COUNTEROFFER_ACCEPT" and notification.sender_user_id == request.current_user.id or notification.notification_type == "FASTBUY" %}
-                                    <div class="row text-right">
-                                        <div class="col s3">
-                                            <a href="{% url 'app_notification:notificationsSendBookPage' notification.id %}"
-                                               class="btn waves-effect waves-light">Versenden</a>
-                                        </div>
-                                    </div>
-                                {% endif %}
-
-                                {% if notification.notification_type == "REQUEST_RATING" and notification.payment_id != None %}
-                                    <div class="row text-right">
-                                        <div class="col s3">
-                                            <a href="{% url 'app_payment:rate-seller' notification.payment_id %}" class="btn waves-effect waves-light">Bewerten</a>
-                                        </div>
-                                    </div>
-                                {% endif %}
-
-                                <!-- Wird nur angezeigt wenn ein Preisvorschlag angenommen wurde -->
-                                {% if notification.notification_type == "COUNTEROFFER_ACCEPT" %}
-                                    <div class="row text-right">
-                                        <div class="col s3">
-                                        <a href="{% url 'app_payment:paypal_redirection' notification.payment_id %}" data-method="post" class="btn waves-effect waves-light">Bezahlen</a>
-                                        </div>
-                                    </div>
-                                {% endif %}
-
-                                <!-- Wird nur angezeigt wenn ein Antrag auf Datenaenderungen erstellt wurde -->
-                                {% if notification.notification_type == "CHANGE_PROFILE_ADMIN" %}
-                                    <div class="row text-right">
-                                        <div class="col s3">
-                                            <a href="{% url 'app_user:change_user_profile_accept' notification.change_user_profile_id %}" data-method="post" class="btn waves-effect waves-light">Akzeptieren</a>
-                                        </div>
-                                        <div class="col s3">
-                                            <a href="{% url 'app_user:change_user_profile_decline' notification.change_user_profile_id %}" data-method="post" class="btn waves-effect waves-light">Ablehnen</a>
-                                        </div>
-                                    </div>
-                                {% endif %}
-
-                                <!-- Wird nur angezeigt wenn ein Antrag auf Loeschung erstellt wurde -->
-                                {% if notification.notification_type == "REMOVE_PROFILE_ADMIN" %}
-                                    <div class="row text-right">
-                                        <div class="col s3">
-                                            <a href="#" class="btn waves-effect waves-light">Annehmen</a>
-                                        </div>
-                                    </div>
-                                {% endif %}
+                            <!-- Wird nur angezeigt wenn ein Preisvorschlag Angenommen wurde -->
+                            {% if notification.counter_offer.accepted and notification.notification_type != "BOOK_SEND" and notification.notification_type == "COUNTEROFFER_ACCEPT" and notification.sender_user_id == request.current_user.id or notification.notification_type == "FASTBUY" %}
+                            <div class="row text-right">
+                                <div class="col s3">
+                                    <a href="{% url 'app_notification:notificationsSendBookPage' notification.id %}"
+                                       class="btn waves-effect waves-light">Versenden</a>
+                                </div>
                             </div>
-                        </li>
+                            {% endif %}
+
+                            {% if notification.notification_type == "REQUEST_RATING" and notification.payment_id != None %}
+                            <div class="row text-right">
+                                <div class="col s3">
+                                    <a href="{% url 'app_payment:rate-seller' notification.payment_id %}" class="btn waves-effect waves-light">Bewerten</a>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Wird nur angezeigt wenn ein Preisvorschlag angenommen wurde -->
+                            {% if notification.notification_type == "COUNTEROFFER_ACCEPT" %}
+                                <div class="row text-right">
+                                    <div class="col s3">
+                                    <a href="{% url 'app_payment:paypal_redirection' notification.payment_id %}" data-method="post" class="btn waves-effect waves-light">Bezahlen</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <!-- Wird nur angezeigt wenn ein Antrag auf Datenaenderungen erstellt wurde -->
+                            {% if notification.notification_type == "CHANGE_PROFILE_ADMIN" %}
+                                <div class="row text-right">
+                                    <div class="col s3">
+                                        <a href="{% url 'app_user:change_user_profile_accept' notification.change_user_profile_id %}" data-method="post" class="btn waves-effect waves-light">Akzeptieren</a>
+                                    </div>
+                                    <div class="col s3">
+                                        <a href="{% url 'app_user:change_user_profile_decline' notification.change_user_profile_id %}" data-method="post" class="btn waves-effect waves-light">Ablehnen</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <!-- Wird nur angezeigt wenn ein Antrag auf Loeschung erstellt wurde -->
+                            {% if notification.notification_type == "REMOVE_PROFILE_ADMIN" %}
+                                <div class="row text-right">
+                                    <div class="col s3">
+                                        <a href="#" class="btn waves-effect waves-light">Annehmen</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </li>
                     {% endfor %}
                 </ul>
-            {% else %}
+                {% else %}
                 <div class="empty">
                     <i class="material-icons">notifications_off</i>
                     <p>Es sind keine Nachrichten vorhanden!</p>
                 </div>
-            {% endif %}
+                {% endif %}
+            </div>
         </div>
     </div>
 

@@ -3,72 +3,77 @@
 {% block body_classes %}page-rating{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h3>Verkäufer <span class="orange-text text-lighten-1">{{ rated_user.pseudonym_or_full_name }}</span> bewerten</h3>
+    <h3 class="container">
+        <span class="grey-text title-type">Verkäufer bewerten</span><br />
+        <span class="orange-text text-lighten-1">{{ rated_user.pseudonym_or_full_name }}</span>
+    </h3>
 
-    <form action="{% url 'app_payment:rate-seller' id=payment.id %}" enctype="multipart/form-data" method="post">{% csrf_token %}
-        {% if form.errors %}
-            <div class="z-depth-1 alert alert-error">{{ form.errors }}</div>
-        {% endif %}
-        {% for hidden in form.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
-
-        <span class="seller-rating" id="rating_span">
-            <ul>
-                <i class="material-icons seller-rating-star" id="rating_star_1">star_border</i>
-                <i class="material-icons seller-rating-star" id="rating_star_2">star_border</i>
-                <i class="material-icons seller-rating-star" id="rating_star_3">star_border</i>
-                <i class="material-icons seller-rating-star" id="rating_star_4">star_border</i>
-                <i class="material-icons seller-rating-star" id="rating_star_5">star_border</i>
-            </ul>
-        </span>
-        {% for field in form.visible_fields %}
-            <div class="input-field {% if field.errors %}has-error{% endif %}">
-                {{ field }}
-                <label>{{ field.label }}</label>
-                {% if field.errors %}
-                <span class="help-block">
-                    {% for error in field.errors %}
-                    {{ error|escape }}
-                    {% endfor %}
-                </span>
+    <div class="container-wrapper">
+        <div class="container">
+            <form action="{% url 'app_payment:rate-seller' id=payment.id %}" enctype="multipart/form-data" method="post">{% csrf_token %}
+                {% if form.errors %}
+                <div class="z-depth-1 alert alert-error">{{ form.errors }}</div>
                 {% endif %}
-            </div>
-        {% endfor %}
-        <input type="submit" class="btn btn-success" value="Speichern">
-    </form>
-</div>
-<script type="text/javascript">
-    var displayNewRating = function(event, pos) {
-        var i = 1;
-        for (; i <= pos; i++) {
-            $('#rating_star_'+i).text('star');
+                {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+                {% endfor %}
+
+                <span class="seller-rating" id="rating_span">
+                    <ul>
+                        <i class="material-icons seller-rating-star" id="rating_star_1">star_border</i>
+                        <i class="material-icons seller-rating-star" id="rating_star_2">star_border</i>
+                        <i class="material-icons seller-rating-star" id="rating_star_3">star_border</i>
+                        <i class="material-icons seller-rating-star" id="rating_star_4">star_border</i>
+                        <i class="material-icons seller-rating-star" id="rating_star_5">star_border</i>
+                    </ul>
+                </span>
+                {% for field in form.visible_fields %}
+                <div class="input-field {% if field.errors %}has-error{% endif %}">
+                    {{ field }}
+                    <label>{{ field.label }}</label>
+                    {% if field.errors %}
+                    <span class="help-block">
+                        {% for error in field.errors %}
+                        {{ error|escape }}
+                        {% endfor %}
+                    </span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <input type="submit" class="btn btn-success" value="Speichern">
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var displayNewRating = function(event, pos) {
+            var i = 1;
+            for (; i <= pos; i++) {
+                $('#rating_star_'+i).text('star');
+            }
+            for (; i < 6; i++) {
+                $('#rating_star_'+i).text('star_border');
+            }
         }
-        for (; i < 6; i++) {
-            $('#rating_star_'+i).text('star_border');
+        var setRating = function(event, pos) {
+            $('#id_rating').val(pos);
+            displayNewRating(event, pos);
         }
-    }
-    var setRating = function(event, pos) {
-        $('#id_rating').val(pos);
-        displayNewRating(event, pos);
-    }
-    var setSelectedRating = function(event) {
-        var old = $('#id_rating').val();
-        displayNewRating(event, old);
-    }
-    for (var i = 1; i < 6; i++) {
-        $element = $('#rating_star_'+i);
-        $element.on('click', function(event) {
-            var rating = $(this).attr("id").split('_')[2];
-            setRating(event, rating);
-        }).on('mouseover', function(event) {
-            var rating = $(this).attr("id").split('_')[2];
-            displayNewRating(event, rating);
-        });
-    }
-    $('#rating_span').on('mouseleave', function(event){
-        setSelectedRating(event);
-    })
-</script>
+        var setSelectedRating = function(event) {
+            var old = $('#id_rating').val();
+            displayNewRating(event, old);
+        }
+        for (var i = 1; i < 6; i++) {
+            $element = $('#rating_star_'+i);
+            $element.on('click', function(event) {
+                var rating = $(this).attr("id").split('_')[2];
+                setRating(event, rating);
+            }).on('mouseover', function(event) {
+                var rating = $(this).attr("id").split('_')[2];
+                displayNewRating(event, rating);
+            });
+        }
+        $('#rating_span').on('mouseleave', function(event){
+            setSelectedRating(event);
+        })
+    </script>
 {% endblock %}

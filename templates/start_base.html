@@ -16,6 +16,8 @@
 <div class="nav">
     <nav class="transparent" role="navigation">
         <div class="container">
+            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+
             <a id="logo-container" href="{% url "app:startPage" %}" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
             <ul class="right hide-on-med-and-down">
                 {% if user.is_authenticated %}
@@ -44,17 +46,15 @@
                     <li><a href="{% url 'app_user:register' %}">Registrieren</a></li>
                 {% endif %}
             </ul>
-            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+
         </div>
     </nav>
 </div>
 
 <main>
     {% include 'app/_messages.html' %}
+    {% block content %}{% endblock %}
 </main>
-
-{% block content %}
-{% endblock %}
 
 {% include 'app/_footer.html' %}
 {% include 'app/_js.html' %}
