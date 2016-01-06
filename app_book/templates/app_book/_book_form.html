@@ -32,7 +32,9 @@
                 if (isbn13.val().length === 0) {
                     var isbn = ISBN.parse(isbn10.val().replace(/\D/g,''));
                     isbn10.val(isbn.asIsbn10(true));
+                    isbn10.siblings('label').addClass('active');
                     isbn13.val(isbn.asIsbn13(true));
+                    isbn13.siblings('label').addClass('active');
                 }
             });
 
@@ -40,7 +42,9 @@
                 if (isbn10.val().length === 0) {
                     var isbn = ISBN.parse(isbn13.val().replace(/\D/g,''));
                     isbn10.val(isbn.asIsbn10(true));
+                    isbn10.siblings('label').addClass('active');
                     isbn13.val(isbn.asIsbn13(true));
+                    isbn13.siblings('label').addClass('active');
                 }
             });
         });
