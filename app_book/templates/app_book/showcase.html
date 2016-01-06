@@ -3,23 +3,41 @@
 {% block body_classes %}showcase{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h3>Schaufenster von <span class="orange-text text-lighten-1">{{ showcase_user.pseudonym_or_full_name }}</span></h3>
-        {% if not showcase_user.showcaseDisabled %}
-            {% for offer in offers %}
+    <h3 class="container">
+        <span class="grey-text title-type">Schaufenster</span><br />
+        <span class="orange-text text-lighten-1">{{ showcase_user.pseudonym_or_full_name }}</span>
+    </h3>
+
+    <div class="container-wrapper">
+        <div class="container">
+            {% if offers.count > 0 and not showcase_user.showcaseDisabled %}
+
+            <div class="flex-container">
+
+                {% for offer in offers %}
+
                 {% include 'app_book/_book_card.html' with user=showcase_user book=offer.book offer=offer %}
-            {% endfor %}
-            {% if offers.count == 0 %}
-                <div class="empty">
-                    <i class="material-icons">clear</i>
-                    <p>Es sind keine Bücher im Schaufenster vorhanden.</p>
-                </div>
-            {% endif %}
-        {% else %}
+
+                {% endfor %}
+
+            </div>
+
+            {% elif offers.count == 0 %}
+
+            <div class="empty">
+                <i class="material-icons">clear</i>
+                <p>Es sind keine Bücher im Schaufenster vorhanden.</p>
+            </div>
+
+            {% else %}
+
             <div class="empty">
                 <i class="material-icons">block</i>
                 <p>Dieses Schaufenster wurde vom Admin gesperrt.</p>
             </div>
-        {% endif %}
+
+            {% endif %}
+
+        </div>
     </div>
 {% endblock %}

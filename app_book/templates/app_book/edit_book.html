@@ -3,26 +3,27 @@
 {% block body_classes %}books-edit{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <h3>
-                <span class="grey-text title-type">Buch</span><br />
-                <span class="orange-text text-lighten-1">{{ book.name }}</span>
-            </h3>
+    <h3 class="container">
+        <span class="grey-text title-type">Buch</span><br />
+        <span class="orange-text text-lighten-1">{{ book_form.instance.name }}</span>
+    </h3>
+
+    <div class="container-wrapper">
+        <div class="container">
+            <form method="post" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    {% include 'app_book/_book_form.html' with form=book_form embedded=True %}
+                </div>
+
+                <div class="row">
+                    {% include 'app_book/_offer_form.html' with form=offer_form embedded=True %}
+                </div>
+
+                <div class="row">
+                    <button type="submit" class="btn waves-effect waves-light">Speichern <i class="material-icons right">send</i></button>
+                </div>
+            </form>
         </div>
-        <form method="post" action="" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="row">
-                {% include 'app_book/_book_form.html' with form=book_form embedded=True %}
-            </div>
-
-            <div class="row">
-                {% include 'app_book/_offer_form.html' with form=offer_form embedded=True %}
-            </div>
-
-            <div class="row">
-                <button type="submit" class="btn waves-effect waves-light">Speichern <i class="material-icons right">send</i></button>
-            </div>
-        </form>
     </div>
 {% endblock %}
