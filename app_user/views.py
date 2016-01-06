@@ -38,6 +38,10 @@ from app_payment.models import SellerRating
 from sdf import settings
 
 def login_user(request):
+    # prevent a logged in user from accessing the login page
+    if(request.user.pk):
+        return HttpResponseRedirect(reverse('app_book:archivesPage'))
+
     form = AuthenticationForm
     if request.method == "POST":
 
@@ -101,6 +105,10 @@ def resend_confirmation_mail(request, email):
 
 
 def register_user(request):
+    # prevent a logged in user from accessing the registration page
+    if(request.user.pk):
+        return HttpResponseRedirect(reverse('app_book:archivesPage'))
+
     if request.method == 'POST':
         form = RegistrationForm(request.POST, request.FILES)
         if form.is_valid():

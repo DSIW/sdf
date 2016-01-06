@@ -9,8 +9,8 @@ from django.conf.urls import include, url
 
 urlpatterns = [
     # accounts
-    url(r'^accounts/login/$', auth_views.login, name='login'),
-    url(r'^accounts/logout/$', auth_views.logout, name='logout'),
+    url(r'^login/$', views.login_user, name='login'),
+    url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^accounts/register/$', views.register_user, name='register'),
     url(r'^accounts/resend_confirmation_mail/(?P<email>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,20})/$$', views.resend_confirmation_mail, name='resend_confirmation_mail'),
     url(r'^accounts/emailconfirm/(?P<uuid>[0-9a-zA-Z]+)/$', views.confirm_email, name='confirm_email'),
@@ -22,5 +22,4 @@ urlpatterns = [
     url(r'^accounts/(?P<change_user_data_id>[0-9]+)/change_user_profile_decline/$', views.change_user_profile_decline, name='change_user_profile_decline'),
     url(r'^accounts/(?P<change_user_data_id>[0-9]+)/change_user_profile_accept/$', views.change_user_profile_accept, name='change_user_profile_accept'),
     url(r'^password_reset/$', views.password_reset, name='reset_password'),
-    url(r'^login/$', views.login_user, name='login'),
 ]

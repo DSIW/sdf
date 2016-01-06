@@ -24,7 +24,7 @@
                     <li><a class="btn-flat" href="{% url 'app_user:user-details' user.id %}?next=/" role="button">Profil</a></li>
                     <li><a class="btn-flat" href="{% url 'app_user:logout' %}?next=/" role="button">Abmelden</a></li>
                 {% else %}
-                    <li><a class="btn-flat" href="{% url 'login' %}" role="button">Anmelden</a></li>
+                    <li><a class="btn-flat" href="{% url 'app_user:login' %}" role="button">Anmelden</a></li>
                     <li><a class="btn-flat" href="{% url 'app_user:register' %}" role="button">Registrieren</a></li>
                 {% endif %}
             </ul>
@@ -40,7 +40,7 @@
                     <li><a href="{% url 'app_user:change_password' %}">Passwort ändern</a></li>
                     <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
                 {% else %}
-                    <li><a href="{% url 'login' %}">Anmelden</a></li>
+                    <li><a href="{% url 'app_user:login' %}">Anmelden</a></li>
                     <li><a href="{% url 'app_user:register' %}">Registrieren</a></li>
                 {% endif %}
             </ul>
