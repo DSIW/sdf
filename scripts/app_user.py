@@ -188,10 +188,10 @@ def import_data():
     auth_user_3.is_superuser = False
     auth_user_3.username = 'marie'
     auth_user_3.first_name = 'Marie'
-    auth_user_3.last_name = 'Mustermann'
-    auth_user_3.email = 'marie@mustermann.de'
+    auth_user_3.last_name = 'M'
+    auth_user_3.email = 'marie@book2.de'
     auth_user_3.emailConfirm = True
-    auth_user_3.paypal = 'marie@mustermann.de'
+    auth_user_3.paypal = 'marie@book2.de'
     auth_user_3.location = 'Berlin'
     auth_user_3.is_staff = False
     auth_user_3.is_active = True
