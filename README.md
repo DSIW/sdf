@@ -23,6 +23,7 @@
 
 ## Requirements
 
+* `libjpeg`: if you do not have this already installed do `sudo apt-get install libjpeg-dev`
 * `decorator`: Required by `ipython`
 * `django-braces`: Mixins for views. E.g. FormMessagesMixin for Django's generic views
 * `django-extensions`: Enhanced commands: `./manage.py (show_urls|validate_templates|shell_plus|runserver_plus)`

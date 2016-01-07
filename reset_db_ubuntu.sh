@@ -6,5 +6,6 @@ for d in $(find . -type d -name "migrations"); do find $d -iname "*.py" -and -no
 rm db.sqlite3
 python3 manage.py makemigrations
 python3 manage.py migrate
+python3 manage.py runscript app_staticpage
 python3 manage.py runscript app_user
 python3 manage.py runscript app_book

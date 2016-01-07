@@ -3,6 +3,13 @@
 from django.views.generic.base import TemplateView
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.contrib import messages
+
+from .models import StaticPage
+from .forms import StaticPageForm
 
 from app_payment.models import SellerRating
 from app_user.models import User
@@ -60,10 +67,32 @@ def start_page_view(request, elems=5):
     }, RequestContext(request))
 
 
-def page_info(request, template_name, title):
-    return render_to_response(template_name, {"title": title}, RequestContext(request))
-
-
 def raise_exception(request):
     raise Exception("Exception for testing via GET /raise")
 
+def staticPageView(request, name):
+    page = StaticPage.objects.filter(name=name).first()
+
+    if page == None or (request.method == 'POST' and not request.user.is_superuser):
+        messages.add_message(request, messages.ERROR, 'Ungültiger Vorgang!')
+        return HttpResponseRedirect(reverse('app:startPage'))
+
+    form = staticPageEdit(request,page)
+
+    return render_to_response("app/staticPage.html", {"page":page, "form":form}, RequestContext(request))
+
+@login_required
+def staticPageEdit(request, page):
+    form = StaticPageForm(request.POST, instance=page)
+
+    if request.method == 'POST':
+        form = StaticPageForm(request.POST, instance=page)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'Statischer Inhalt wurde geändert!')
+        else:
+            messages.add_message(request, messages.ERROR, 'Statischer Inhalt konnte nicht geändert werden!')
+    else:
+        form = StaticPageForm(instance=page)
+
+    return form
