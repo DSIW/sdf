@@ -620,6 +620,13 @@ nav .input-field.search-field input[type=search] {
     height: 157px;
 }
 
+.card-book .disabled-showcase-indicator {
+  position: absolute;
+  right: 15px;
+  font-size: 1.7em;
+  top: 323px;
+  color: #ccc;
+}
 .showcase .card-open {
   position: absolute;
   right: 11px;

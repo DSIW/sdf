@@ -23,7 +23,7 @@ def start_page_view(request, elems=5):
     template_name = 'app/start.html'
 
     filtered_users = []
-    filtered_users.extend(filter_users_with_offered_books(User.objects.all()))
+    filtered_users.extend(filter_users_with_offered_books(request, User.objects.all()))
 
     for user in filtered_users:
         user.books_count = len(user.offer_set.all())

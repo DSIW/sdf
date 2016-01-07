@@ -18,6 +18,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.db import IntegrityError
 from django.utils.html import escape
+from django.http import JsonResponse
 
 from app_payment.services import start_payment
 from .models import Book
@@ -420,9 +421,9 @@ def books(request):
     }, RequestContext(request))
 
 
-def filter_users_with_offered_books(users):
+def filter_users_with_offered_books(request, users):
     for user in users:
-        if not user.showcaseDisabled and len(user.offer_set.filter(active=True)) > 0:
+        if (request.user.is_superuser or not user.showcaseDisabled) and len(user.offer_set.filter(active=True)) > 0:
             yield user
 
 def filter_users_by_name_or_nick(user, nickname=None, real_name=None):
@@ -450,7 +451,7 @@ def showcasesOverView(request):
     filteredUsers = []
 
     sellerNameFilteredUsers = []
-    filteredUsers.extend(filter_users_with_offered_books(User.objects.all()))
+    filteredUsers.extend(filter_users_with_offered_books(request, User.objects.all()))
 
     page = escape(request.GET.get('page'))
     order_by = escape(request.GET.get('order_by', 'date'))
@@ -508,3 +509,14 @@ def newestBooks(request):
         "offers": offers,
     }, RequestContext(request))
 
+
+# Call via AJAX
+@login_required
+def toggleDisabledState(request, user_id):
+    if request.method == 'POST' and request.user.is_superuser:
+        user = User.objects.filter(id=user_id).first()
+        disabled = user.showcaseDisabled
+        user.showcaseDisabled = not disabled
+        user.save()
+        return JsonResponse({'state': not disabled})
+    return JsonResponse({'error': True})

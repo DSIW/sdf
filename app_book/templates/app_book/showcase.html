@@ -10,6 +10,27 @@
 
     <div class="container-wrapper">
         <div class="container">
+            {% if user.is_superuser %}
+                <div class="switch text-right" style="margin-bottom: 20px;">
+                    <label>
+                        Sperren
+                        <input data-user-id="{{ showcase_user.id }}" id="disable-showcase" {% if showcase_user.showcaseDisabled %} checked {% endif %}type="checkbox">
+                        <span class="lever"></span>
+                    </label>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $('#disable-showcase').change(function() {
+                            $.ajax({
+                                method: 'post',
+                                url: '/accounts/'+$(this).data('user-id')+'/showcase/toggleDisabledState',
+                                success: function() { window.location.reload(); }
+                            });
+                        });
+                    });
+                </script>
+            {% endif %}
+
             {% if offers.count > 0 and not showcase_user.showcaseDisabled %}
 
             <div class="flex-container">

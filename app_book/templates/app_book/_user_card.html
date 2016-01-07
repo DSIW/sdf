@@ -11,6 +11,9 @@
     <div class="card-content">
         <p class="card-title grey-text text-darken-4">
             <a href="{% url 'app_book:showcase' user.id %}" >{{ user.pseudonym_or_full_name }}</a>
+            {% if user.showcaseDisabled %}
+                <i class="material-icons disabled-showcase-indicator">block</i>
+            {% endif %}
         </p>
         <p class="right">Bücher: {{ user.books_count }}</p>
         <p class="seller-rating left">

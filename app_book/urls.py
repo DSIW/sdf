@@ -8,6 +8,7 @@ from . import views
 
 urlpatterns = [
     # books
+    url(r'^accounts/(?P<user_id>[0-9]+)/showcase/toggleDisabledState$', views.toggleDisabledState, name='showcase-toggle-disabled-state'),
     url(r'^accounts/(?P<user_id>[0-9]+)/showcase$', views.showcaseView, name='showcase'),
     url(r'^archive/', views.archivesPageView, name='archivesPage'),
     url(r'^books/create', views.createBook, name='createBook'),
