@@ -3,16 +3,16 @@
 {% block body_classes %}archive{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
+        <div class="container">
             <h3>
                 <span class="grey-text title-type">Buch</span><br />
                 <span class="orange-text text-lighten-1">{{ book.name }}</span>
             </h3>
         </div>
-
-        <div class="row">
-            {% include 'app_book/_offer_form.html' with form=offer_form %}
+        <div class="container-wrapper">
+            <div class="container">
+                {% include 'app_book/_offer_form.html' with form=offer_form %}
+            </div>
         </div>
-    </div>
+
 {% endblock %}
