@@ -157,9 +157,9 @@ def import_data():
     auth_user_1.username = 'max'
     auth_user_1.first_name = 'Max'
     auth_user_1.last_name = 'Mustermann'
-    auth_user_1.email = 'max@mustermann.de'
+    auth_user_1.email = 'max@book2.de'
     auth_user_1.emailConfirm = True
-    auth_user_1.paypal = settings.SEED_MAX_PAYPAL or 'max@mustermann.de'
+    auth_user_1.paypal = settings.SEED_MAX_PAYPAL or 'max@book2.de'
     auth_user_1.location = 'Berlin'
     auth_user_1.is_staff = False
     auth_user_1.is_active = True
