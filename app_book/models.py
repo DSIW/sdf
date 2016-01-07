@@ -98,12 +98,15 @@ class Offer(models.Model):
     price = models.FloatField()
     shipping_price = models.FloatField()
     active = models.BooleanField(default=False)
+    allow_counteroffers = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ("seller_user", "book")
 
     def __str__(self):
-        return "" + str(self.seller_user.pseudonym_or_full_name()) + ", <Book: " + str(self.book) + ">, " + str(self.price) + ", " + str(self.shipping_price)
+        return "" + str(self.seller_user.pseudonym_or_full_name()) + ", <Book: " + str(self.book) + ">, " \
+               + str(self.price) + ", " + str(self.shipping_price) + ", active:" + str(self.active) + \
+               ", allow_offers:" + str(self.allow_counteroffers)
 
     def totalPrice(self):
         return self.price + self.shipping_price

@@ -296,6 +296,10 @@ def counteroffer(request, id):
     user = get_object_or_404(User, id=request.user.id)
     book = get_object_or_404(Book, id=offer.book.id)
 
+    if not offer.allow_counteroffers:
+        messages.add_message(request, messages.ERROR, 'Der Verkäufer erlaubt keine Preisvorschläge!')
+        return HttpResponseRedirect(reverse('app_book:book-detail', kwargs = {'id': book.id}))
+
     counter_offer = Counteroffer(offer=offer, creator=user, price=offer.totalPrice(), active=True, accepted=False)
     offer_form = CounterofferForm(instance=counter_offer)
     if request.method == 'GET':

@@ -92,7 +92,9 @@
               {% endif %}
               {% else %}
               <a href="{% url 'app_payment:start_paypal_payment' book.offer.id %}" data-method="post" class="btn">Für {{ book.total_price|currency }} Kaufen</a><br />
+              {% if book.offer.allow_counteroffers %}
               <a href="{% url 'app_book:new_counteroffer' book.offer.id %}" style="margin-top: 5px;" class="right">Anderen Preis vorschlagen</a>
+              {% endif %}
               {% endif %}
               {% if book.user.id == request.user.id %}
               <a class="btn btn-danger" href="{% url 'app_book:deleteBook' book.id %}" data-method="delete" data-confirm="true" title="Löschen">Löschen</a>
