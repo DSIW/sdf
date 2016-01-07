@@ -376,6 +376,11 @@ a.disabled {
 .input-field {
   min-height: 51px;
 }
+.input-field input {
+  /* clickable label */
+  position: relative;
+  z-index: 1;
+}
 .input-field label {
   left: 0;
 }
