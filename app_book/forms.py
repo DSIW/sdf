@@ -39,11 +39,12 @@ class BookForm(forms.ModelForm):
 class OfferForm(forms.ModelForm):
     class Meta:
         model = Offer
-        fields = ['active', 'price', 'shipping_price']
+        fields = ['active', 'price', 'shipping_price', 'allow_counteroffers']
         labels = {
             'active': _('Verkaufen'),
             'price': _('Buchpreis'),
             'shipping_price': _('Versandpreis'),
+            'allow_counteroffers': _('Akzeptiere Preisvorschläge'),
         }
 
 class PublishOfferForm(OfferForm):
