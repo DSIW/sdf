@@ -21,7 +21,7 @@ class BookForm(forms.ModelForm):
         model = Book
         exclude = ['Id', 'user']
         widgets = {
-            'language': forms.Select(choices=map(lambda a: (a[0], ugettext(a[1])), settings.LANGUAGES)),
+            'language': forms.Select(choices=map(lambda a: (a[0], ugettext(a[1])+' ('+a[0].upper()+')'), settings.LANGUAGES)),
             'releaseDate': forms.DateInput(attrs={'class': 'datepicker'}),
             'image': CustomFileInput(),
         }
