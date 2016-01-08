@@ -16,8 +16,9 @@
                     <div class="z-depth-1 alert alert-error">{{ form.username.label }} oder {{ form.password.label }} sind falsch!</div>
                     {% endif %}
 
-                    <form method="post" action="{% url 'django.contrib.auth.views.login' %}?next={% if next %}{{next}}{% else %}/archive/{% endif %}">
+                    <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
                         {% csrf_token %}
+                        <input type="hidden" name="next" value="{{next}}" />
                         <div class="input-field">
                             {{ form.username.label_tag }}
                             {{ form.username }}
