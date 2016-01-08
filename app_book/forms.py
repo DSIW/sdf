@@ -34,6 +34,7 @@ class BookForm(forms.ModelForm):
             'isbn10': _('ISBN-10'),
             'isbn13': _('ISBN-13'),
             'image': _('Bild'),
+            'description': _('Beschreibung'),
         }
 
 class OfferForm(forms.ModelForm):
