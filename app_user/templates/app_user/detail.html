@@ -49,7 +49,7 @@
   <div id="modal1" class="modal">
     <div class="modal-content">
       <h4>Pseudonym angeben</h4>
-    <p>TODO: Hinweis dass Pseudonym nur ein mal frei gewählt werden kann. Danach via Antrag</p>
+    <p>Sie können einmalig ein Pseudonym frei wählen. Eine Änderung des Pseudonyms ist anschließend über den Antrag zur Änderung der Nutzerdaten möglich.</p>
        <form action="{% url 'app_user:user-details'  user.id %}" method="post">{% csrf_token %}
           {% for field in form.visible_fields %}
           <div class="input-field {% if field.errors %}has-error{% endif %}">
