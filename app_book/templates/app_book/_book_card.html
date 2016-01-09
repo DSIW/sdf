@@ -4,17 +4,19 @@
 
 <div class="card card-book small {% if book.is_in_active_payment_process %}payment{% endif %}">
     <div class="card-image waves-effect waves-block waves-light">
-        <img class="activator" src="{{ book.image_url_or_blank }}">
+        <a href="{% url 'app_book:book-detail' book.id %}" class="grey-text text-darken-4">
+          <img src="{{ book.image_url_or_blank }}">
+        </a>
     </div>
     <div class="card-content">
         <i class="card-title activator grey-text text-darken-4 material-icons card-open">more_vert</i>
         <p class="card-title grey-text text-darken-4 book-title">
-            <span class="card-title-span activator">
-                {{ book.name }}
+            <span class="card-title-span">
+                <a href="{% url 'app_book:book-detail' book.id %}" class="grey-text text-darken-4">{{ book.name }}</a>
             </span>
         </p>
         <p class="author">{{ book.author }}</p>
-        <p class="card-title activator grey-text text-darken-4 price right">{{ offer.totalPrice|currency }}</p>
+        <a href="{% url 'app_book:book-detail' book.id %}" class="card-title grey-text text-darken-4 price right">{{ offer.totalPrice|currency }}</a>
         {% include 'app_user/_user_rating.html' with user=user %}
     </div>
     <div class="card-reveal">
