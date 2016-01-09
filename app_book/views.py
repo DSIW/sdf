@@ -294,8 +294,13 @@ def publishBook(request, id):
 @login_required
 @can_change_book
 def unpublishBook(request, id):
+    book = get_object_or_404(Book, id=id)
+
+    if book.is_in_active_payment_process():
+        messages.add_message(request, messages.ERROR, 'Das Buch wird gerade verkauft und kann daher nicht unveröffentlicht werden!')
+        return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': id}))
+
     if request.method == 'PUT':
-        book = get_object_or_404(Book, id=id)
         unpublish_book(book)
         messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun nicht mehr zum Verkauf angeboten!')
         # decline all active counteroffers:
