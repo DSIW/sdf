@@ -284,7 +284,7 @@ def publishBook(request, id):
             try:
                 offer_form_obj.save()
                 messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun zum Verkauf angeboten!')
-                return HttpResponseRedirect(reverse('app_book:archivesPage'))
+                return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': id}))
             except ValueError as e:
                 messages.add_message(request, messages.ERROR,
                                      'Das Buch konnte leider nicht zum Verkauf angeboten werden!')
@@ -315,7 +315,7 @@ def unpublishBook(request, id):
         # use GET request for redirected location via HTTP status code 303 (see other).
 
         counteroffers.update(active=False, accepted=False)
-        return HttpResponseRedirect(reverse('app_book:archivesPage'))
+        return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': id}))
     else:
         raise ("Use http method PUT for unpublishing a book.")
 
