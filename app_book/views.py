@@ -148,7 +148,7 @@ def handleEditBook(request, id):
                 # TODO: hack(ish) find better solution
                 Offer.objects.filter(pk=offer.id).update(active=False)
 
-            return StatusAndTwoForms(True, None, None)
+            return StatusAndTwoForms(True, book_form, offer_form)
 
     except ValueError as e:
         return StatusAndTwoForms(False, book_form, offer_form)
@@ -234,7 +234,7 @@ def createBook(request):
 
         if ret_val.status:
             messages.add_message(request, messages.SUCCESS, 'Das Buch wurde erfolgreich angelegt!')
-            return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': id}))
+            return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': ret_val.form_one.instance.id}))
         else:
             messages.add_message(request, messages.ERROR, 'Das Buch konnte leider nicht angelegt werden!')
     else:
