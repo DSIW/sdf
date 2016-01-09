@@ -18,7 +18,8 @@ from sdf import settings
 
 def validate_not_real_name(value):
     for user in User.objects.all():
-        if user.full_name().lower() == value.lower():
+        username_without_whitespaces = user.full_name().replace(" ", "")
+        if user.full_name().lower() == value.lower() or username_without_whitespaces.lower() == value.lower():
             raise ValidationError('%s entspricht einem bereits registrierten Klarnamen.' % value, code='name_collision')
         if user.username is not None and user.username.lower() == value.lower():
             raise ValidationError('Pseudonym bereits vergeben.', code='unique')
