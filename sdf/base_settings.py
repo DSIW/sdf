@@ -211,8 +211,8 @@ if not hasattr(globals(), 'SECRET_KEY'):
 
 #Paypal
 PAYPAL_TEST = True
-PAYPAL_RECEIVER_EMAIL = "ottmann.jens@googlemail.com"
-ENDPOINT = "https://ws15sdf-b.f4.htw-berlin.de"
+PAYPAL_RECEIVER_EMAIL = "max@book2.de"
+ENDPOINT = "https://sdf.ngrok.com"
 
 UNPAID_PAYMENT_TIMEOUT = 30*60 # 30 minutes
 FILESIZE_LIMIT_MB = 5
