@@ -216,3 +216,13 @@ ENDPOINT = "https://ws15sdf-b.f4.htw-berlin.de"
 
 UNPAID_PAYMENT_TIMEOUT = 30*60 # 30 minutes
 FILESIZE_LIMIT_MB = 5
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+    "file_resubmit": {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        "LOCATION": '/tmp/file_resubmit/'
+    },
+}

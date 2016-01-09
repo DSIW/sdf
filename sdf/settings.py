@@ -9,16 +9,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 ALLOWED_HOSTS = ['127.0.0.1','localhost']
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-    },
-    "file_resubmit": {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        "LOCATION": '/tmp/file_resubmit/'
-    },
-}
-
 # Import local settings
 try:
     from sdf.local_settings import *
