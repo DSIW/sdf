@@ -61,7 +61,7 @@
                 {% if user.is_authenticated %}
                   <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
                   <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
-                  <li><a href="{% url 'app_user:edit_profile' user.id %}">Mein Profil</a></li>
+                  <li><a href="{% url 'app_user:user-details' user.id %}">Mein Profil</a></li>
                   <li><a href="{% url 'app_user:change_password' %}">Passwort ändern</a></li>
                   <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
                 {% else %}
