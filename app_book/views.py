@@ -227,8 +227,13 @@ def showcaseView(request, user_id):
 @login_required
 @can_change_book
 def deleteBook(request, id):
+    book = get_object_or_404(Book, id=id)
+
+    if book.is_in_active_payment_process():
+        messages.add_message(request, messages.ERROR, 'Das Buch wird gerade verkauft und kann daher nicht gelöscht werden!')
+        return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': id}))
+
     if request.method == 'DELETE':
-        book = get_object_or_404(Book, id=id)
         book.delete()
         messages.add_message(request, messages.SUCCESS, 'Das Buch wurde erfolgreich gelöscht!')
         # use GET request for redirected location via HTTP status code 303 (see other).
