@@ -69,15 +69,16 @@ def can_change_book(func):
 
 @can_change_book
 def showEditBook(request, id, offer_enabled):
-    offer = None
-    book_form = BookForm()
-    offer_form = OfferForm()
-
     if id is not None:
         book = Book.objects.get(pk=id)
         offer = book.offer_set.first()
         book_form = BookForm(instance=book)
         offer_form = OfferForm(instance=offer)
+    else:
+        offer = None
+        book_form = BookForm()
+        offer_form = OfferForm()
+
 
     if offer_enabled is not None:
         offer_form.initial['id_active'] = offer_enabled
