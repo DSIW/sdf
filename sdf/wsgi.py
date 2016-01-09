@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 WSGI config for sdf project.
 
@@ -11,6 +13,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sdf.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sdf.staging_settings")
 
 application = get_wsgi_application()

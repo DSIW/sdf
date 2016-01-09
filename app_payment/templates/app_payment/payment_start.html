@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h3 class="container">
+        <span class="grey-text title-type"></span><br />
+        <span class="orange-text text-lighten-1">Bezahlung</span>
+    </h3>
+
+    <div class="container-wrapper">
+        <div class="container">
+            <p>Weiterleitung in 2 Sekunden...</p>
+
+            {% include 'app_payment/_paypal_button.html' with payment_form=payment_form hidden=True %}
+        </div>
+    </div>
+
+    <script type="text/javascript" charset="utf-8">
+        jQuery(function() {
+            setTimeout(function() {
+                $('form').submit();
+            }, 1000);
+        });
+    </script>
+{% endblock %}

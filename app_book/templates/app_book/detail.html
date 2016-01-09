@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% load template_extras %}
+{% load staticfiles %}
+
+{% block body_classes %}book-details{% endblock %}
+
+{% block content %}
+    <h3 class="container">
+        <span class="grey-text title-type">Buch</span><br />
+        <span class="orange-text text-lighten-1">{{ book.name }}</span>
+    </h3>
+
+    <div class="container-wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="col l4 s12">
+            <img src="{{ book.image_url_or_blank }}" class="book-cover detailView" />
+          </div>
+          <div class="col l8 s12">
+            <p>Status:
+            {% if book.is_in_active_payment_process %}
+            <span class="sdf-badge">Im Bezahlprozess</span>
+            <span class="right orange-text countdown tooltipped" data-tooltip="Zahlungsfrist">
+                <i class="material-icons left">timer</i>
+                <span data-enddate="{{ book.active_payment.last_valid_time|date:"c" }}" data-payment-id="{{ book.active_payment.id }}" class="payment-countdown">
+                </span>
+            </span>
+            {% elif book.is_published %}
+            <span class="sdf-badge">Öffentlich</span>
+            {% else %}
+            <span class="sdf-badge">Privat</span>
+            {% endif %}
+            </p>
+            <p>Autor: <strong>{{ book.author }}</strong></p>
+            <p>Seitenanzahl: <strong>{{ book.pageNumber }}</strong></p>
+            <p>ISBN-10: <strong>{{ book.isbn10 }}</strong></p>
+            <p>ISBN-13: <strong>{{ book.isbn13 }}</strong></p>
+            {% if book.description %}
+            <p>
+            Beschreibung:<br />
+            {{ book.description }}
+            </p>
+            {% endif %}
+            <p><div class="fb-like" data-href="//{{ request.get_host }}{{ request.path }}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div></p>
+            <div class="row seller-details">
+              <h5>Kaufinformationen:</h5>
+              <div class="col s6">
+                {% if request.user.authenticated %}
+                {% if request.user.id == book.active_payment.buyer_user.id or request.user.id == book.active_payment.seller_user.id %}
+                <p>Käufer: <strong>{{ book.active_payment.buyer_user.pseudonym_or_full_name }}</strong></p>
+                {% endif %}
+                {% endif %}
+                {% if book.is_published %}
+                <p>Verkäufer: <strong><a href="{% url 'app_user:user-details' book.offer.seller_user.id %}">{{ book.offer.seller_user.pseudonym_or_full_name }}</a></strong></p>
+                {% else %}
+                <p>Besitzer: <strong><a href="{% url 'app_user:user-details' book.user.id %}">{{ book.user.pseudonym_or_full_name }}</a></strong></p>
+                {% endif %}
+                <p>Verkaufsort: <strong><a href="https://www.google.de/maps?q={{ book.user.location }}" target="_new">{{ book.user.location }}</a></strong></p>
+                <p>Verkäuferbewertung:
+                <strong>
+                  {% include 'app_user/_user_rating.html' with user=book.user %}
+                </strong>
+                </p>
+              </div>
+              <div class="col s6">
+                {% if book.is_published %}
+                <div class="right-align">
+                  <p>Preis: <strong>{{ book.price|currency }}</strong></p>
+                  <p>Versandkosten: <strong>{{ book.shipping_price|currency }}</strong></p>
+                  <p class="price-total"><strong>Gesamt: {{ book.total_price|currency }}</strong></p>
+                  {% if book.offer.highest_counteroffer_price > 0.0 %}
+                  <p style="color: green;">Höchster Preisvorschlag: <strong>{{ book.offer.highest_counteroffer_price|currency }}</strong></p>
+                  {% endif %}
+                </div>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-actions right-align">
+              <img width="70px" style="float: left;" src="{% static "img/paypal.png" %}">
+              {% if book.is_private %}
+              <a href="{% url 'app_book:editBook' book.id %}" class="btn">Bearbeiten</a>
+              <a href="{% url 'app_book:publishBook' book.id %}" class="btn">Veröffentlichen</a>
+              {% elif book.user.id == request.user.id %}
+              {% if book.is_in_active_payment_process %}
+              <a href="javascript:;" data-method="put" class="btn disabled">Nicht veröffentlichen</a>
+              {% else %}
+              <a href="{% url 'app_book:unpublishBook' book.id %}" data-method="put" data-confirm="true" data-confirm-custom="Wenn Sie das Angebot zurück ziehen, werden alle unbeantworteten Preisvorschläge abgelehnt. Sind Sie sicher, dass Sie fortfahren möchten?" data-confirm-ok="Nicht veröffentlichen" class="btn">Nicht veröffentlichen</a>
+              {% endif %}
+              {% elif book.is_in_active_payment_process %}
+              {% if book.active_payment.buyer_user.id == request.user.id %}
+              {% include 'app_payment/_paypal_button.html' with payment_form=payment_form hidden=False %}
+              <a href="{% url 'app_payment:payment-cancel' book.active_payment.id %}" class="btn">Bezahlprozess abbrechen</a>
+              {% else %}
+              <a href="javascript:;" class="btn disabled">Im Bezahlprozess...</a>
+              {% endif %}
+              {% else %}
+              <a href="{% url 'app_payment:start_paypal_payment' book.offer.id %}" data-method="post" class="btn">Für {{ book.total_price|currency }} Kaufen</a><br />
+              {% if book.offer.allow_counteroffers %}
+              <a href="{% url 'app_book:new_counteroffer' book.offer.id %}" style="margin-top: 5px;" class="right">Anderen Preis vorschlagen</a>
+              {% endif %}
+              {% endif %}
+              {% if book.user.id == request.user.id %}
+              <a class="btn btn-danger" href="{% url 'app_book:deleteBook' book.id %}" data-method="delete" data-confirm="true" title="Löschen">Löschen</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            $countdown = $('.payment-countdown');
+            if ($countdown != undefined) {
+                var endDate = new Date($countdown.data('enddate'));
+                var counter;
+                function updateCountdown() {
+                    if (new Date() - endDate > 0) {
+                        $countdown.text("Zahlungs-Frist ist abgelaufen!");
+                        clearInterval(counter);
+                        paymentId = $countdown.data('payment-id');
+                        $.ajax({
+                            method: 'post',
+                            url: '/payments/'+paymentId+'/cancel/',
+                            success: function() { window.location.reload(); }
+                        });
+                    } else {
+                        var diff = moment(endDate).fromNow(true);
+                        $countdown.text(diff);
+                    }
+                }
+                updateCountdown();
+                counter = setInterval(updateCountdown, 10000);
+            }
+        });
+    </script>
+{% endblock %}

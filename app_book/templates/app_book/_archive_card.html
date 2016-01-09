@@ -1,0 +1,16 @@
+{% load template_extras %}
+{% load staticfiles %}
+
+<div class="card card-book small">
+    <div class="card-image">
+        <a href="{% url 'app_book:book-detail' book.id %}">
+            <img class="" src="{{ book.image_url_or_blank }}">
+        </a>
+    </div>
+    <div class="card-content">
+        <p class="card-title grey-text text-darken-4 book-title">
+            <span><a href="{% url 'app_book:book-detail' book.id %}">{{ book.name }}</a></span>
+            <i class="offer-state {% if book.is_published %}active{% else %}inactive{% endif %} tooltipped" data-tooltip="Status: {% if book.is_published %}Öffentlich{% else %}Nicht öffentlich{% endif %}"></i>
+        </p>
+    </div>
+</div>

@@ -1,0 +1,88 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+{% include 'app/_head.html' %}
+
+<body class="{% block body_classes %}{% endblock %}">
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/de_DE/sdk.js#xfbml=1&version=v2.5";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="nav-fixed">
+    <nav class="white" role="navigation">
+        <div class="nav-wrapper container">
+          <a id="logo-container" href="{% if user.is_authenticated %}{% url "app_book:archivesPage" %}{% else %}{% url "app:startPage" %}{% endif %}" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
+            {% if user.is_authenticated %}
+              <ul id="nav-dropdown-profile" class="dropdown-content">
+                <li><a href="{% url 'app_user:user-details' user.pk %}">Mein Profil</a></li>
+                <li><a href="{% url 'app_user:change_password' %}">Passwort ändern</a></li>
+                <li class="divider"></li>
+                <li><a href="{% url 'logout' %}?next=/">Logout</a></li>
+            </ul>
+            {% endif %}
+            <ul class="navigation-bar right hide-on-med-and-down">
+              <li><a href="{% url 'app_book:showcases' %}">Alle Schaufenster</a></li>
+                <li><a href="{% url 'app_book:books' %}">Alle Bücher</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
+                    <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
+                    <li>
+                        <a href="{% url 'app_notification:notificationsPage' %}">
+                            <i id="notification-indicator" class="material-icons tooltipped {% if unread_notification_exist %}ring{% endif %}" data-tooltip="Nachrichten">
+                                {% if unread_notification_exist %}
+                                    notifications_active
+                                {% else %}
+                                    notifications
+                                {% endif %}
+                            </i>
+                        </a>
+                    </li>
+                    <li><a class="dropdown-button" href="javascript:;" data-constrainwidth="false" data-activates="nav-dropdown-profile">
+                            <img src="{{ request.current_user.image_url_or_blank }}" class="circle profile-img" />
+                            {{ request.current_user.pseudonym_or_full_name }}<i class="material-icons right">arrow_drop_down</i></a></li>
+                {% else %}
+                    <li><a href="{% url 'app_user:login' %}">Anmelden</a></li>
+                    <li><a href="{% url 'app_user:register' %}">Registrieren</a></li>
+                {% endif %}
+
+            </ul>
+
+            <ul id="nav-mobile" class="navigation-bar side-nav">
+                <li><a href="{% url 'app_book:showcases' %}">Alle Schaufenster</a></li>
+                <li><a href="{% url 'app_book:books' %}">Alle Bücher</a></li>
+                <hr>
+                {% if user.is_authenticated %}
+                  <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
+                  <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
+                  <li><a href="{% url 'app_user:user-details' user.id %}">Mein Profil</a></li>
+                  <li><a href="{% url 'app_user:change_password' %}">Passwort ändern</a></li>
+                  <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
+                {% else %}
+                    <li><a href="{% url 'app_user:login' %}">Anmelden</a></li>
+                    <li><a href="{% url 'app_user:register' %}">Registrieren</a></li>
+                {% endif %}
+            </ul>
+            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
+</div>
+
+<main>
+    {% include 'app/_messages.html' %}
+
+    {% block content %}
+    {% endblock %}
+</main>
+
+{% include 'app/_footer.html' %}
+{% include 'app/_js.html' %}
+
+</body>
+</html>

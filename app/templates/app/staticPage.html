@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block body_classes %}page-static{% endblock %}
+
+{% block content %}
+    {% if not user.is_superuser %}
+
+        <h3 class="container">
+            <span class="grey-text title-type"></span><br />
+            <span class="orange-text text-lighten-1">{{ page.title }}</span>
+        </h3>
+
+        <div class="container-wrapper">
+            <div class="container">
+                <p>{{ page.content|safe|linebreaks }}</p>
+            </div>
+        </div>
+
+    {% else %}
+
+        <h3 class="container">
+            <span class="grey-text title-type">Statische Seite bearbeiten</span><br />
+            <span class="orange-text text-lighten-1">{{ page.title }}</span>
+        </h3>
+
+        <div class="container-wrapper">
+            <div class="container">
+                <form role="form" method="post" action="">
+                    {% csrf_token %}
+
+                    {% for field in form.visible_fields %}
+                        <div class="input-field {% if field.errors %}has-error{% endif %}">
+                            {{ field }}
+                            <label>{{ field.label }}</label>
+                            {% if field.errors %}
+                                <span class="help-block">
+                                    {% for error in field.errors %}
+                                        {{ error|escape }}
+                                    {% endfor %}
+                                </span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn waves-effect waves-light">Speichern <i class="material-icons right">send</i></button>
+                </form>
+            </div>
+        </div>
+
+    {% endif %}
+{% endblock %}

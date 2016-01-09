@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block body_classes %}showcase{% endblock %}
+
+{% block content %}
+    <h3 class="container">
+        <span class="grey-text title-type">Schaufenster</span><br />
+        <span class="orange-text text-lighten-1">{{ showcase_user.pseudonym_or_full_name }}</span>
+    </h3>
+
+    <div class="container-wrapper">
+        <div class="container">
+            {% if user.is_superuser %}
+                <div class="switch text-right" style="margin-bottom: 20px;">
+                    <label>
+                        Sperren
+                        <input data-user-id="{{ showcase_user.id }}" id="disable-showcase" {% if showcase_user.showcaseDisabled %} checked {% endif %}type="checkbox">
+                        <span class="lever"></span>
+                    </label>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $('#disable-showcase').change(function() {
+                            $.ajax({
+                                method: 'post',
+                                url: '/accounts/'+$(this).data('user-id')+'/showcase/toggleDisabledState',
+                                success: function() { window.location.reload(); }
+                            });
+                        });
+                    });
+                </script>
+            {% endif %}
+
+            {% if offers.count > 0 and not showcase_user.showcaseDisabled %}
+
+            <div class="flex-container">
+
+                {% for offer in offers %}
+
+                {% include 'app_book/_book_card.html' with user=showcase_user book=offer.book offer=offer %}
+
+                {% endfor %}
+
+            </div>
+
+            {% elif offers.count == 0 %}
+
+            <div class="empty">
+                <i class="material-icons">clear</i>
+                <p>Es sind keine Bücher im Schaufenster vorhanden.</p>
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+                <i class="material-icons">block</i>
+                <p>Dieses Schaufenster wurde vom Admin gesperrt.</p>
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

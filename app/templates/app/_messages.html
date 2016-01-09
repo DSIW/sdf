@@ -1,0 +1,17 @@
+{% for message in messages %}
+    <div class="container z-depth-1 alert alert-{{ message.tags }}">
+        <i class="material-icons alert-icon">
+        {% if message.tags == 'danger' %}
+        error
+        {% elif message.tags == 'warning' %}
+        warning
+        {% elif message.tags == 'success' %}
+        check
+        {% elif message.tags == 'info' %}
+        info
+        {% endif %}
+        </i>
+        <div class="message">{{ message }}</div>
+        <i class="material-icons alert-hide js-alert-hide">clear</i>
+    </div>
+{% endfor %}

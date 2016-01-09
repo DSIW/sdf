@@ -1,0 +1,23 @@
+{% load template_extras %}
+
+<ul class="pagination">
+    {% if items.has_previous %}
+        <li class=""><a href="?{% url_replace request 'page' items.previous_page_number %}"><i class="material-icons">chevron_left</i></a></li>
+    {% else %}
+        <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+    {% endif %}
+
+    {% for page in items.paginator.page_range %}
+        {% if page == items.number %}
+            <li class="active teal lighten-1"><a href="?{% url_replace request 'page' page %}">{{ page }}</a></li>
+        {% else %}
+            <li class=""><a href="?{% url_replace request 'page' page  %}">{{ page }}</a></li>
+        {% endif %}
+    {% endfor %}
+
+    {% if items.has_next %}
+        <li class=""><a href="?{% url_replace request 'page' items.next_page_number %}"><i class="material-icons">chevron_right</i></a></li>
+    {% else %}
+        <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+    {% endif %}
+</ul>

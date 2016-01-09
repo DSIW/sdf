@@ -1,4 +1,4 @@
-# SDF Project
+# SDF Project ![travis-ci](https://travis-ci.org/DSIW/sdf.svg)
 
 ## Getting started
 
@@ -8,8 +8,9 @@
 1. Add virtualenvwrapper to your zsh plugins if your're using oh-my-zsh and restart your terminal
 1. `cd sdf`
 1. Create a new environment named `django_sdf` via `mkvirtualenv django_sdf`
+1. Execute `workon django_sdf`
 1. Install required packages via `pip install -r requirements.txt`
-1. Migrate your DB via `python manage.py migrate`
+1. Reset your DB via `./reset_db.sh`. This will migrate your DB and some seed data will be imported.
 1. Run server in development mode on port 3001 via `python manage.py runserver 3001`
 1. Open the app via `http://localhost:3001`
 
@@ -19,6 +20,78 @@
 1. `cp config/django_sdf.conf /etc/nginx/conf.d`
 1. Start and enable nginx service (e.g. `systemctl start nginx.service; systemctl enable nginx.service`)
 1. Now you can request the site via `http://sdf.localhost` if local server is running via `python manage.py runserver 3001`.
+
+## Requirements
+
+* `libjpeg`: if you do not have this already installed do `sudo apt-get install libjpeg-dev`
+* `decorator`: Required by `ipython`
+* `django-braces`: Mixins for views. E.g. FormMessagesMixin for Django's generic views
+* `django-extensions`: Enhanced commands: `./manage.py (show_urls|validate_templates|shell_plus|runserver_plus)`
+* `django-paypal`: [Paypal](https://developer.paypal.com) integration
+* `invoke`: Invoke commands
+* `ipython`: Interactive shell with history support. Run `./manage.py shell_plus`
+* `ipython-genutils`: Required by `ipython`
+* `path.py`: Required by `ipython`
+* `pexpect`: Required by `ipython`
+* `pickleshare`: Required by `ipython`
+* `ptyprocess`: Required by `ipython`
+* `requests`: Required by `django-paypal`
+* `python-dateutil`: Required by `./reset_db.sh`
+* `simplegeneric`: Required by `ipython`
+* `six`: Required by `django-extensions`
+* `traitlets`: Required by `ipython`
+* `Werkzeug`: Optional dependency of `django-extensions`
+* `wheel`: required for installation of pure python and native C extension packages
+* `django-watson`: Required for searching
+
+## Notices
+
+* We use [Material Design](http://materializecss.com)
+* We use [Material Icons](https://www.google.com/design/icons/)
+* We use [Fontawesome Icons](http://fontawesome.io/icons) if no icon in Material Design exists
+
+## Getting search to work
+
+For `watson` to work, you need to execute the following tasks:
+
+1. `manage.py syncdb`
+1. `manage.py installwatson`
+
+If you already have a populated database, you also need to build the indices:
+
+1. `manage.py buildwatson`
+
+
+## Getting Pillow to work
+
+Pillow is needed for image processing.
+For `Pillow` to work, you need to execute the following tasks:
+
+1. install `python-image` via package manager (e.g. `apt-get install python-image`)
+1. `pip3 install -r requirements.txt`
+
+
+## Getting PayPal to work
+
+For `paypal` to work, you need to execute the following tasks:
+
+1. Signup at [Paypal Developer](https://developer.paypal.com)
+1. Add this content to `sdf/local_settings.py`:
+```
+PAYPAL_TEST = True
+PAYPAL_RECEIVER_EMAIL = "...-facilitator@example.com"
+ENDPOINT = "https://abc.ngrok.com"
+SEED_MAX_PAYPAL = "...-facilitator@example.com"
+SEED_MARTIN_PAYPAL = "...-buyer@example.com"
+```
+1. `manage.py makemigrations`
+1. `manage.py migrate`
+1. Start [ngrok](https://ngrok.com) via `ngrok -proto=https -subdomain=abc 3001`
+1. Set cronjob via `crontab -e` and add this line:
+```
+*/10 * * * * python3 /path/to/sdf/manage.py abort_old_payments
+```
+
 
 ## Important Style Guide
 

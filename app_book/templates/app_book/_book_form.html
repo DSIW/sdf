@@ -1,0 +1,51 @@
+{% if not embedded %}
+<form role="form" method="post" action="">
+    {% csrf_token %}
+{% endif %}
+
+    {% for field in form.visible_fields %}
+    <div class="input-field {% if field.errors %}has-error{% endif %}">
+        {{ field }}
+        {%  if field.name != 'image' %}
+        <label>{{ field.label }}</label>
+        {% endif %}
+        {% if field.errors %}
+            <span class="help-block">
+                {% for error in field.errors %}
+                    {{ error|escape }}
+                {% endfor %}
+            </span>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+{% if not embedded %}
+    <button type="submit" class="btn waves-effect waves-light">Speichern <i class="material-icons right">send</i></button>
+</form>
+{% endif %}
+    <script>
+        $(document).ready(function () {
+            var isbn10 = $('#id_isbn10');
+            var isbn13 = $('#id_isbn13');
+
+            isbn10.change(function () {
+                if (isbn13.val().length === 0) {
+                    var isbn = ISBN.parse(isbn10.val().replace(/\D/g,''));
+                    isbn10.val(isbn.asIsbn10(true));
+                    isbn10.siblings('label').addClass('active');
+                    isbn13.val(isbn.asIsbn13(true));
+                    isbn13.siblings('label').addClass('active');
+                }
+            });
+
+            isbn13.change(function () {
+                if (isbn10.val().length === 0) {
+                    var isbn = ISBN.parse(isbn13.val().replace(/\D/g,''));
+                    isbn10.val(isbn.asIsbn10(true));
+                    isbn10.siblings('label').addClass('active');
+                    isbn13.val(isbn.asIsbn13(true));
+                    isbn13.siblings('label').addClass('active');
+                }
+            });
+        });
+    </script>
