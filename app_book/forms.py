@@ -3,6 +3,7 @@
 from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.datastructures import SortedDict
 
 from .models import Book, Offer, Counteroffer
 
@@ -16,8 +17,18 @@ class BookForm(forms.ModelForm):
     widgets: Defintion wie die Eingabefelder auszusehen haben. Hier am Beispiel css Klasse von Bootstrap genutzt und Vorschau eingebaut
     labels: Definition was bei den Label Tags auf der Oberflaeche erscheinen soll. Wenn dies nicht definiert worde ist wird der Attributenname der Modellklasse genommen
     '''
-    class Meta:
+    delete_saved_image = forms.BooleanField(required=False, label='Bild löschen')
 
+    ordered_field_names = ('name', 'author', 'language', 'releaseDate', 'pageNumber', 'isbn10', 'isbn13', 'image', 'delete_saved_image', 'description')
+
+    def __init__(self, *args, **kwargs):
+        self.book = kwargs.get('instance')
+        super(BookForm, self).__init__(*args, **kwargs)
+        self.rearrange_field_order()
+        if not (self.book and self.book.image):
+            del self.fields['delete_saved_image']
+
+    class Meta:
         model = Book
         exclude = ['Id', 'user']
         widgets = {
@@ -36,6 +47,17 @@ class BookForm(forms.ModelForm):
             'image': _('Bild'),
             'description': _('Beschreibung'),
         }
+
+    def rearrange_field_order(self):
+        original_fields = self.fields
+        new_fields = SortedDict()
+
+        for field_name in self.ordered_field_names:
+            field = original_fields.get(field_name)
+            if field:
+                new_fields[field_name] = field
+
+        self.fields = new_fields
 
 class OfferForm(forms.ModelForm):
     class Meta:

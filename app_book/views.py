@@ -128,6 +128,10 @@ def handleEditBook(request, id):
                 book_form_obj = book_form.save(commit=False)
                 book_form_obj.user_id = request.user.id
                 book_form_obj.save()
+            elif ('delete_saved_image' in request.POST and request.POST['delete_saved_image'] == 'on'):
+                book_form_obj = book_form.save(commit=False)
+                book_form_obj.image = None
+                book_form_obj.save()
             else:
                 book_form_obj = book_form.save()
 

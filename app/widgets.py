@@ -14,7 +14,7 @@ class CustomFileInput(AdminResubmitImageWidget):
         output += '''
             <div class="file-field input-field">
               <div class="btn">
-                <span>File</span>
+                <span>Datei</span>
                 <input type="file" id="''' + name + '''" name="''' + name + '''" >
               </div>
               <div class="file-path-wrapper">'''
