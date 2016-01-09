@@ -112,7 +112,7 @@ class PasswordReset(models.Model):
 
 class ChangeUserData(models.Model):
     user = models.OneToOneField(User)
-    username = models.CharField(('Username'), max_length=30, unique=True, default=None, null=True,
+    username = models.CharField(('Pseudonym'), max_length=30, unique=True, default=None, null=True,
          error_messages={'unique': 'Das gewählte Pseudonym ist bereits vergeben.',
             'invalid': 'Bitte ein gültiges Pseudonym eingeben. Dieses darf nur Buchstaben, Ziffern und @/./+/-/_ enthalten.',
             'name_collision': 'Das Pseudonym entspricht einem bereits registrierten Klarnamen.'})
