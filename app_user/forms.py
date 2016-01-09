@@ -138,7 +138,7 @@ class ImageForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ImageForm, self).__init__(*args, **kwargs)
-        self.fields['profileImage'].required = True
+        self.fields['profileImage'].required = False
         self.fields['profileImage'].widget = CustomFileInput()
 
     class Meta:
