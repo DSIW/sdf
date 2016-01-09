@@ -39,10 +39,21 @@ def build_payment_form(payment):
 @login_required
 def start_paypal_payment(request, id):
     template_name = 'app_payment/payment_start.html'
+    try:
+        offer = Offer.objects.get(id=id)
+    except Offer.DoesNotExist:
+        messages.add_message(request, messages.INFO, 'Verkaufsangebot existiert nicht.')
+        return HttpResponseRedirect(reverse('app_book:showcases'))
 
-    offer = Offer.objects.get(id=id)
+    if not offer.active:
+        messages.add_message(request, messages.INFO, 'Das Verkaufsangebot ist nicht aktiv.')
+        return HttpResponseRedirect(reverse('app_book:showcases'))
 
     if request.method != 'POST':
+        return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': offer.book.id}))
+
+    if request.user.pk == offer.seller_user.pk:
+        messages.add_message(request, messages.INFO, 'Sie können Ihre eigenen Bücher nicht kaufen.')
         return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': offer.book.id}))
 
     payment = offer.book.active_payment()
