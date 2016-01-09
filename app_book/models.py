@@ -46,7 +46,7 @@ class Book(models.Model):
     author = models.CharField(max_length=200)
     language = models.CharField(max_length=100)
     releaseDate = models.DateField('release_date')
-    pageNumber = models.IntegerField(default=0, validators=[MinValueValidator(0),MaxValueValidator(9999)])
+    pageNumber = models.IntegerField(default='', validators=[MinValueValidator(1),MaxValueValidator(9999)])
     isbn10 = models.CharField(blank=True, max_length=100, validators=[validate_isbn10])
     isbn13 = models.CharField(blank=True, max_length=100, validators=[validate_isbn13])
     image = models.ImageField(help_text='max. %s MB' % FILESIZE_LIMIT_MB, upload_to=book_directory_path, null=False, blank=True, validators=[validate_image_filesize])

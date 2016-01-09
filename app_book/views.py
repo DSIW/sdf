@@ -69,15 +69,16 @@ def can_change_book(func):
 
 @can_change_book
 def showEditBook(request, id, offer_enabled):
-    offer = None
-    book_form = BookForm()
-    offer_form = OfferForm()
-
     if id is not None:
         book = Book.objects.get(pk=id)
         offer = book.offer_set.first()
         book_form = BookForm(instance=book)
         offer_form = OfferForm(instance=offer)
+    else:
+        offer = None
+        book_form = BookForm()
+        offer_form = OfferForm()
+
 
     if offer_enabled is not None:
         offer_form.initial['id_active'] = offer_enabled
@@ -126,6 +127,10 @@ def handleEditBook(request, id):
             if id is None:
                 book_form_obj = book_form.save(commit=False)
                 book_form_obj.user_id = request.user.id
+                book_form_obj.save()
+            elif ('delete_saved_image' in request.POST and request.POST['delete_saved_image'] == 'on'):
+                book_form_obj = book_form.save(commit=False)
+                book_form_obj.image = None
                 book_form_obj.save()
             else:
                 book_form_obj = book_form.save()
