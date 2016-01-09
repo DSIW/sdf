@@ -18,7 +18,8 @@ from sdf import settings
 
 def validate_not_real_name(value):
     for user in User.objects.all():
-        if user.full_name().lower() == value.lower():
+        username_without_whitespaces = user.full_name().replace(" ", "")
+        if user.full_name().lower() == value.lower() or username_without_whitespaces.lower() == value.lower():
             raise ValidationError('%s entspricht einem bereits registrierten Klarnamen.' % value, code='name_collision')
         if user.username is not None and user.username.lower() == value.lower():
             raise ValidationError('Pseudonym bereits vergeben.', code='unique')
@@ -95,14 +96,13 @@ class EmailThread(threading.Thread):
 
 class CustomUpdateForm(ModelForm):
 
-
     delete_saved_image = forms.BooleanField(required=False, label='Bild löschen')
 
     def __init__(self, *args, **kwargs):
         super(CustomUpdateForm, self).__init__(*args, **kwargs)
         self.user = kwargs.pop('initial', None)
         self.modelUser = User.objects.filter(email=self.user['email']).first()
-        if self.user['username'] is '':
+        if self.user['username'] is None:
             del self.fields["username"]
         if not (self.modelUser and self.modelUser.profileImage):
             del self.fields['delete_saved_image']
@@ -120,3 +120,15 @@ class CustomUpdateForm(ModelForm):
         fields = ['username', 'first_name', 'last_name', 'email', 'location']
 
 
+class UsernameForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UsernameForm, self).__init__(*args, **kwargs)
+    class Meta:
+        model = ChangeUserData
+        fields = ['username']
+
+    def clean_username(self):
+        cleaned_data = super(UsernameForm, self).clean()
+        validate_not_real_name(cleaned_data["username"])
+
+        return cleaned_data["username"]

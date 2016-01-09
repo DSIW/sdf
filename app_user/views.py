@@ -1,5 +1,4 @@
 ﻿# -*- coding: utf-8 -*-
-
 from django.http import HttpRequest
 from django.utils.crypto import get_random_string
 from django.utils.html import format_html
@@ -30,7 +29,7 @@ from django.utils.translation import ugettext_lazy as _
 from braces.views import FormMessagesMixin
 from smtplib import SMTPRecipientsRefused
 from .models import User, ConfirmEmail
-from .forms import CustomUpdateForm,RegistrationForm
+from .forms import CustomUpdateForm,RegistrationForm, UsernameForm
 from app_payment.models import SellerRating
 
 
@@ -169,7 +168,19 @@ def user_details(request, pk):
     user = User.objects.filter(id=pk).first()
     user.books_count = len(user.offer_set.exclude(active = False))
 
-    return render_to_response(template_name, {'user': user}, RequestContext(request))
+    autoopen = 'false'
+    if request.method == "POST":
+        form = UsernameForm(request.POST)
+        if form.is_valid():
+            user.username = form.clean_username()
+            user.save()
+        else:
+            autoopen = 'true'
+    else:
+        form = UsernameForm()
+
+
+    return render_to_response(template_name, {'user': user, 'form': form, 'autoopen': autoopen}, RequestContext(request))
 
 def confirm_email(request, uuid):
     confirmEmail = ConfirmEmail.objects.filter(uuid=uuid).first()
