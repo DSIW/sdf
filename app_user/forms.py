@@ -96,7 +96,6 @@ class EmailThread(threading.Thread):
 
 class CustomUpdateForm(ModelForm):
 
-
     delete_saved_image = forms.BooleanField(required=False, label='Bild löschen')
 
     def __init__(self, *args, **kwargs):
