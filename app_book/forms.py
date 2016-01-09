@@ -25,6 +25,7 @@ class BookForm(forms.ModelForm):
         self.book = kwargs.get('instance')
         super(BookForm, self).__init__(*args, **kwargs)
         self.rearrange_field_order()
+        self.fields['language'].initial = 'de'
         if not (self.book and self.book.image):
             del self.fields['delete_saved_image']
 
