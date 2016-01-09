@@ -176,6 +176,10 @@ def detailView(request, id):
     book = get_object_or_404(Book, id=id)
     payment = book.active_payment()
 
+    if book.user.showcaseDisabled:
+        messages.add_message(request, messages.ERROR, 'Das Buch kann nicht angezeigt werden, da der Nutzer gesperrt ist!')
+        return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk': book.user.id}))
+
     return render_to_response(template_name, {
         "book": book,
         "payment_form": build_payment_form(payment)

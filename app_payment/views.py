@@ -46,6 +46,10 @@ def start_paypal_payment(request, id):
         messages.add_message(request, messages.INFO, 'Verkaufsangebot existiert nicht.')
         return HttpResponseRedirect(reverse('app_book:showcases'))
 
+    if offer.seller_user.showcaseDisabled:
+        messages.add_message(request, messages.ERROR, 'Das Buch kann nicht gekauft werden, da der Nutzer gesperrt ist!')
+        return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk': offer.seller_user.id}))
+
     if not offer.active:
         messages.add_message(request, messages.INFO, 'Das Verkaufsangebot ist nicht aktiv.')
         return HttpResponseRedirect(reverse('app_book:showcases'))
