@@ -15,12 +15,13 @@
     <div class="container">
 
         <div class="row">
-            <div class="col m4 s12">
-                <a class="waves-effect waves-light  imagemodal-trigger" href="#imagemodal">
+            <div class="col l4 m5 s12">
+                <a class="waves-effect waves-light image-edit-wrapper imagemodal-trigger" href="#imagemodal">
                     <img src="{{ user.image_url_or_blank }}" class="user-profile" >
+                    <span class="image-edit"><i class="material-icons">edit</i></span>
                 </a>
             </div>
-            <div class="col m8 s12">
+            <div class="col l8 m7 s12">
                 <p>
                     {% if user.username|length > 0 %}
                         Pseudonym: <strong>{{ user.username }}</strong>
