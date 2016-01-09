@@ -198,35 +198,6 @@ class BookTest(TestCase):
         self.assertEqual(len(book), 0, book)
         self.assertEqual(len(offer), 0, offer)
 
-    def test_handle_edit_book_unpublish(self):
-        book = Book.objects.all()
-        offer = Offer.objects.all()
-        self.assertEqual(len(book), 0)
-        self.assertEqual(len(offer), 0)
-
-        data = self.book_offer_data.copy()
-        self.client.post(reverse('app_book:createBook'), data=data)
-
-        book = Book.objects.all()
-        offer = Offer.objects.all()
-        self.assertEqual(len(book), 1, book)
-        self.assertGreater(book[0].image.size, 0)
-        self.assertEqual(len(offer), 1, offer)
-
-        data = self.book_offer_data.copy()
-
-        with open('fixtures/image1.jpg', 'rb') as img:
-            image = SimpleUploadedFile(img.name, img.read(), content_type='image/jpeg')
-            data['image'] = image
-        data['active'] = 'off'
-
-        self.client.post(reverse('app_book:editBook', kwargs={'id': book.first().id}), data=data)
-        offer = Offer.objects.all()
-
-        self.assertEqual(len(book), 1, book)
-        self.assertEqual(len(offer), 1, offer)
-        self.assertFalse(offer[0].active, offer)
-
     def test_delete_book(self):
         book = Book.objects.all()
         offer = Offer.objects.all()
