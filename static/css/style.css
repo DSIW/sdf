@@ -908,6 +908,12 @@ img.book-cover.detailView{
 .book-details .seller-details p:last-child {
   margin-bottom: 0;
 }
+.book-details .countdown {
+  line-height: 24px;
+}
+.book-details .countdown i {
+  margin-right: 3px;
+}
 
 
 /* Notifications */

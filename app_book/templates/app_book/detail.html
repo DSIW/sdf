@@ -21,7 +21,11 @@
             <p>Status:
             {% if book.is_in_active_payment_process %}
             <span class="sdf-badge">Im Bezahlprozess</span>
-            <span data-enddate="{{ book.active_payment.last_valid_time|date:"c" }}" data-payment-id="{{ book.active_payment.id }}" class="payment-countdown right orange-text"></span>
+            <span class="right orange-text countdown tooltipped" data-tooltip="Zahlungsfrist">
+                <i class="material-icons left">timer</i>
+                <span data-enddate="{{ book.active_payment.last_valid_time|date:"c" }}" data-payment-id="{{ book.active_payment.id }}" class="payment-countdown">
+                </span>
+            </span>
             {% elif book.is_published %}
             <span class="sdf-badge">Öffentlich</span>
             {% else %}
@@ -116,7 +120,6 @@
                 function updateCountdown() {
                     if (new Date() - endDate > 0) {
                         $countdown.text("Zahlungs-Frist ist abgelaufen!");
-                        $countdown.removeClass('orange-text').addClass('red-text');
                         clearInterval(counter);
                         paymentId = $countdown.data('payment-id');
                         $.ajax({
@@ -125,8 +128,8 @@
                             success: function() { window.location.reload(); }
                         });
                     } else {
-                        var diff = moment(endDate).fromNow();
-                        $countdown.text("Zahlungs-Frist läuft ab " + diff + ".");
+                        var diff = moment(endDate).fromNow(true);
+                        $countdown.text(diff);
                     }
                 }
                 updateCountdown();
