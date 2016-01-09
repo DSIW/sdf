@@ -3,7 +3,7 @@
 from django.db import models
 
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 from django.forms import ModelForm
@@ -60,6 +60,9 @@ class Payment(models.Model):
 
     def is_completed(self):
         return self.payment_status == ST_PP_COMPLETED
+
+    def last_valid_time(self):
+        return self.created_at + timedelta(seconds=settings.UNPAID_PAYMENT_TIMEOUT)
 
     def __str__(self):
         return self.buyer_user.full_name() + " buyes " + self.book.name + " from " + self.seller_user.full_name()

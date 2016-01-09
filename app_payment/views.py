@@ -9,6 +9,7 @@ from paypal.standard.forms import PayPalPaymentsForm
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 import json
 
 
@@ -99,11 +100,15 @@ def paypal_complete(request, id):
 def paypal_abort(request, id):
     payment = Payment.objects.filter(id=id).first()
     success = abort_payment(payment)
-    if success:
-        messages.add_message(request, messages.SUCCESS, 'Die Bezahlung wurde abgebrochen.')
+
+    if request.method == 'POST' and request.is_ajax():
+        return JsonResponse({'result': success})
     else:
-        messages.add_message(request, messages.ERROR, 'Die Bezahlung wurde nicht abgebrochen.')
-    return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': payment.book_id}))
+        if success:
+            messages.add_message(request, messages.SUCCESS, 'Die Bezahlung wurde abgebrochen.')
+        else:
+            messages.add_message(request, messages.ERROR, 'Die Bezahlung wurde nicht abgebrochen.')
+        return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': payment.book_id}))
 
 # Get new status info from paypal
 def paypal_ipn(sender, **kwargs):
