@@ -26,7 +26,7 @@ def start_page_view(request, elems=5):
     filtered_users.extend(filter_users_with_offered_books(request, User.objects.all()))
 
     for user in filtered_users:
-        user.books_count = len(user.offer_set.all())
+        user.books_count = len(user.offer_set.exclude(active = False))
         user.updated = (max(user.offer_set.all(), key=lambda offer: offer.updated)).updated
 
     filtered_users.sort(key=lambda user: user.updated, reverse=True)

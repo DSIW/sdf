@@ -502,7 +502,7 @@ def showcasesOverView(request):
         filteredUsers = list(filteredUsers)
 
     for user in filteredUsers:
-        user.books_count = len(user.offer_set.all())
+        user.books_count = len(user.offer_set.exclude(active = False))
         user.updated = (max(user.offer_set.all(), key=lambda offer: offer.updated)).updated
 
     if order_by == 'count':
