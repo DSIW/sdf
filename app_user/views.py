@@ -184,7 +184,7 @@ def user_details(request, pk):
             elif ('delete_saved_image' in request.POST and request.POST['delete_saved_image'] == 'on'):
                 user.profileImage = None
                 user.save()
-            imageform = ImageForm(instance=user)
+            return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk':request.user.id}))
         else:
             autoopen["imagemodal"] = 'true'
     elif request.method == "POST" and request.POST.get("form") == "updateUsername":
