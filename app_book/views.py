@@ -185,7 +185,7 @@ def editBook(request, id):
 
         if ret_val.status:
             messages.add_message(request, messages.SUCCESS, 'Das Buch wurde erfolgreich aktualisiert!')
-            return HttpResponseRedirect(reverse('app_book:archivesPage'))
+            return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': id}))
         else:
             messages.add_message(request, messages.ERROR, 'Das Buch konnte leider nicht aktualisiert werden!')
     else:
@@ -229,7 +229,7 @@ def createBook(request):
 
         if ret_val.status:
             messages.add_message(request, messages.SUCCESS, 'Das Buch wurde erfolgreich angelegt!')
-            return HttpResponseRedirect(reverse('app_book:archivesPage'))
+            return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': id}))
         else:
             messages.add_message(request, messages.ERROR, 'Das Buch konnte leider nicht angelegt werden!')
     else:
