@@ -177,8 +177,10 @@ def user_details(request, pk):
         form = UsernameForm()
         imageform = ImageForm(request.POST, request.FILES)
         if imageform.is_valid():
-            user.profileImage = request.FILES.get('profileImage')
-            user.save()
+            newImage = request.FILES.get('profileImage')
+            if newImage is not None:
+                user.profileImage = newImage
+                user.save()
             imageform = ImageForm()
         else:
             autoopen["imagemodal"] = 'true'
