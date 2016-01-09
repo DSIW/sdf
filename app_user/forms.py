@@ -102,7 +102,7 @@ class CustomUpdateForm(ModelForm):
         super(CustomUpdateForm, self).__init__(*args, **kwargs)
         self.user = kwargs.pop('initial', None)
         self.modelUser = User.objects.filter(email=self.user['email']).first()
-        if self.user['username'] is '':
+        if self.user['username'] is None:
             del self.fields["username"]
         if not (self.modelUser and self.modelUser.profileImage):
             del self.fields['delete_saved_image']

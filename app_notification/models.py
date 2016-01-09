@@ -209,7 +209,7 @@ class Notification(models.Model):
         customer_user = get_object_or_404(User, id=customer_user_id)
 
         msg = 'Der Kunde ' + customer_user.pseudonym_or_full_name() + ' hat einen Antrag auf Datenänderung gestellt. Folgende Daten möchte der Kunde aktualisiert haben: <br>Klarname: ' + changeUserData.first_name + ' ' + changeUserData.last_name + ' ( ' + customer_user.first_name + ' ' + customer_user.last_name + ' )<br>'
-        if changeUserData.username is not '':
+        if changeUserData.username is not None:
             msg += 'Pseudonym: ' + changeUserData.username + ' ( ' + str(customer_user.username) + ' ) <br>'
         msg += 'E-Mail Adresse: ' + changeUserData.email + ' ( ' + customer_user.email + ' ) <br>Wohnort: ' + changeUserData.location + ' ( ' + customer_user.location + ' )'
 
@@ -236,7 +236,7 @@ class Notification(models.Model):
 
         user_data = '<br>Klarname: ' + customer_user.full_name()
 
-        if customer_user.username is not '':
+        if customer_user.username is not None:
             user_data += '<br>Pseudonym: ' + customer_user.username
 
         user_data += '<br>E-Mail Adresse: ' + customer_user.email + '<br>Wohnort: ' + customer_user.location
