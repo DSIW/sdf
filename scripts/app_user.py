@@ -213,4 +213,18 @@ def import_data():
     auth_user_4.date_joined = dateutil.parser.parse("2015-12-08T14:21:49.434251+00:00")
     auth_user_4 = importer.save_or_locate(auth_user_4)
 
+    auth_user_5 = User()
+    auth_user_5.password = 'pbkdf2_sha256$20000$6fimTWmnvrhn$ubTKr8VttnnIR3vp+2bsVJQb3Vxkz9MXkJfKvJf9Jic='
+    auth_user_5.last_login = dateutil.parser.parse("2015-11-08T14:22:59.793180+00:00")
+    auth_user_5.is_superuser = False
+    auth_user_5.first_name = 'Jens'
+    auth_user_5.last_name = 'Ottmann'
+    auth_user_5.email = 'jens@book2.de'
+    auth_user_5.emailConfirm = True
+    auth_user_5.paypal = 'jens@book2.de'
+    auth_user_5.location = 'Berlin'
+    auth_user_5.is_staff = False
+    auth_user_5.is_active = True
+    auth_user_5.date_joined = dateutil.parser.parse("2015-12-08T14:21:49.434251+00:00")
+    auth_user_5 = importer.save_or_locate(auth_user_5)
 

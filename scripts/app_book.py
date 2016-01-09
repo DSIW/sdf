@@ -510,3 +510,95 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     offer.shipping_price = 3
     offer.active = True
     offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='jens@book2.de').first()
+    app_book.name = 'Die Expedition: In 13 Jahren um die Welt'
+    app_book.author = 'Jason Lewis'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2015")
+    app_book.pageNumber = 912
+    app_book.image = 'images/books/book_19.jpg'
+    app_book.isbn10 = '38-9029-458-8'
+    app_book.isbn13 = '978-38-9029-458-8'
+    app_book.description = '''
+        Im Pedalboot über den Atlantik und auf Inlineskates durch die USA, mit dem Fahrrad ins Outback und im Kajak auf den Nil: Genau 158 Monate und 23 Tage ist Jason Lewis unterwegs und erlebt vom Überfall durch Piraten bis hin zur Krokodilattacke alle Höhen und Tiefen einer außerordentlich intensiven Weltumrundung. Und trotz des brutalen Zusammenpralls mit einem Auto, einer Höhenerkrankung im Himalaja und Spionagevorwürfen im Sudan wird die bewegende Tour für den Ausnahmeabenteurer ein persönlicher Erfolg: Kann er doch an Hunderten Schulen junge Menschen mit seiner Idee von einer nachhaltigen gemeinsamen Zukunft begeistern. Eine der wohl längsten und inspirierendsten Reisen der Geschichte und ein Meilenstein des Genres in zwei attraktiven Bänden.'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='jens@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Die Expedition: In 13 Jahren um die Welt').first()
+    offer.price = 10
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='jens@book2.de').first()
+    app_book.name = 'Dachdecker wollte ich eh nicht werden: Das Leben aus der Rollstuhlperspektive'
+    app_book.author = 'Raúl Aguayo-Krauthausen'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2014")
+    app_book.pageNumber = 256
+    app_book.image = 'images/books/book_20.jpg'
+    app_book.isbn10 = '34-9962-281-5'
+    app_book.isbn13 = '978-34-9962-281-5'
+    app_book.description = '''
+        Ein persönliches Plädoyer für Toleranz und Freude am Leben Menschen tätscheln ihm den Kopf oder starren ihn an – Raúl Aguayo-Krauthausen, der aufgrund seiner Glasknochen im Rollstuhl sitzt und kleinwüchsig ist, weiß, dass viele Menschen Schwierigkeiten haben, mit Behinderten unverkrampft umzugehen. Dabei ist jeder zehnte Deutsche behindert, da sollten wir uns doch eigentlich an den Umgang mit jenen gewöhnt haben, die nicht «normal» sind. Doch das Gegenteil ist der Fall. Raúl Aguayo-Krauthausen sieht seine Behinderung als eine Eigenschaft von vielen. Er beschreibt mit Witz und Sachkenntnis, wie sein Alltag wirklich ist und wie ein Miteinander von behinderten und noch-nicht-behinderten Menschen aussehen kann. «Was soll denn an dieser Behinderung Besonderes sein? Raúl Krauthausen ist einfach ein sehr beeindruckender Mensch mit starken Gaben. Er hat viel zu sagen und sich über seinen Rollstuhl schon lange erhoben.» (Roger Willemsen)'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='jens@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Dachdecker wollte ich eh nicht werden: Das Leben aus der Rollstuhlperspektive').first()
+    offer.price = 5
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='jens@book2.de').first()
+    app_book.name = 'Die granulare Gesellschaft: Wie das Digitale unsere Wirklichkeit auflöst'
+    app_book.author = 'Christoph Kucklick'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2016")
+    app_book.pageNumber = 272
+    app_book.image = 'images/books/book_21.jpg'
+    app_book.isbn10 = '35-4837-625-8'
+    app_book.isbn13 = '978-35-4837-625-8'
+    app_book.description = '''
+        Die Digitalisierung verändert uns und unsere Welt fundamental: Die Differenz-Revolution vereinzelt die Menschen radikal und verstärkt die Ungleichheit. Die Intelligenz-Revolution mit der massenhaften Verbreitung intelligenter Maschinen führt zu einer Umverteilung von Wissen und Chancen – und ebenfalls zu stärkerer Ungleichheit. Müssen wir Menschen uns in Abgrenzung neu definieren als unberechenbare, spielerische und – im positiven Sinne – störende Wesen? Durch die Kontroll-Revolution werden wir nicht mehr ausgebeutet, sondern ausgedeutet und gefährden damit unsere Ideale wie Gerechtigkeit und Demokratie.'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='jens@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Die granulare Gesellschaft: Wie das Digitale unsere Wirklichkeit auflöst').first()
+    offer.price = 7
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='jens@book2.de').first()
+    app_book.name = 'Erkenne die Welt: Geschichte der Philosophie 1'
+    app_book.author = 'Richard David Precht'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2015")
+    app_book.pageNumber = 576
+    app_book.image = 'images/books/book_22.jpg'
+    app_book.isbn10 = '34-4231-262-0'
+    app_book.isbn13 = '978-34-4231-262-0'
+    app_book.description = '''
+        Richard David Precht erklärt uns in drei Bänden die großen Fragen, die sich die Menschen durch die Jahrhunderte gestellt haben. Im ersten Teil seiner auf drei Bände angelegten Geschichte der Philosophie beschreibt Richard David Precht die Entwicklung des abendländischen Denkens von der Antike bis zum Mittelalter. Kenntnisreich und detailliert verknüpft er die Linien der großen Menschheitsfragen und verfolgt die Entfaltung der wichtigsten Ideen – von den Ursprungsgefilden der abendländischen Philosophie an der schönen Küste Kleinasiens bis in die Klöster und Studierstuben, die Kirchen und Machtzentren des Spätmittelalters. Dabei bettet er die Philosophie in die politischen, wirtschaftlichen und sozialen Fragen der jeweiligen Zeit ein und macht sie auf diese Weise auch für eine größere Leserschaft lebendig. Ein Buch, das dazu hilft, sich einen tiefen Einblick in die Geschichte der Philosophie zu verschaffen und die Dinge zu ordnen. Tauchen Sie ein in die schier unerschöpfliche Fülle des Denkens!'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='jens@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Erkenne die Welt: Geschichte der Philosophie 1').first()
+    offer.price = 8
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
