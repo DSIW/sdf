@@ -185,6 +185,16 @@ def detailView(request, id):
 @login_required
 @can_change_book
 def editBook(request, id):
+    book = get_object_or_404(Book, id=id)
+
+    if book.is_in_active_payment_process():
+        messages.add_message(request, messages.ERROR, 'Das Buch wird gerade verkauft und kann daher nicht verändert werden!')
+        return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': id}))
+
+    if book.is_published():
+        messages.add_message(request, messages.ERROR, 'Das Buch ist öffentlich und kann daher nicht verändert werden!')
+        return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': id}))
+
     if request.method == 'POST':
         ret_val = handleEditBook(request, id)
 
