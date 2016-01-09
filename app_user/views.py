@@ -29,7 +29,7 @@ from django.utils.translation import ugettext_lazy as _
 from braces.views import FormMessagesMixin
 from smtplib import SMTPRecipientsRefused
 from .models import User, ConfirmEmail
-from .forms import CustomUpdateForm,RegistrationForm, UsernameForm
+from .forms import CustomUpdateForm,RegistrationForm, UsernameForm, ImageForm
 from app_payment.models import SellerRating
 
 
@@ -168,19 +168,34 @@ def user_details(request, pk):
     user = User.objects.filter(id=pk).first()
     user.books_count = len(user.offer_set.exclude(active = False))
 
-    autoopen = 'false'
-    if request.method == "POST":
+    autoopen = {
+        'usernamemodal': 'false',
+        'imagemodal' : 'false'
+    }
+
+    if request.method == "POST" and request.POST.get("form") == "updateProfileImage":
+        form = UsernameForm()
+        imageform = ImageForm(request.POST, request.FILES)
+        if imageform.is_valid():
+            user.profileImage = request.FILES.get('profileImage')
+            user.save()
+            imageform = ImageForm()
+        else:
+            autoopen["imagemodal"] = 'true'
+    elif request.method == "POST" and request.POST.get("form") == "updateUsername":
         form = UsernameForm(request.POST)
+        imageform = ImageForm()
         if form.is_valid():
             user.username = form.clean_username()
             user.save()
         else:
-            autoopen = 'true'
+            autoopen["usernamemodal"] = 'true'
     else:
         form = UsernameForm()
+        imageform = ImageForm()
 
 
-    return render_to_response(template_name, {'user': user, 'form': form, 'autoopen': autoopen}, RequestContext(request))
+    return render_to_response(template_name, {'user': user, 'form': form, 'imageform' : imageform, 'autoopen': autoopen}, RequestContext(request))
 
 def confirm_email(request, uuid):
     confirmEmail = ConfirmEmail.objects.filter(uuid=uuid).first()

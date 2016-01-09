@@ -16,7 +16,9 @@
 
         <div class="row">
             <div class="col m4 s12">
-                <img src="{{ user.image_url_or_blank }}" class="user-profile" >
+                <a class="waves-effect waves-light  imagemodal-trigger" href="#imagemodal">
+                    <img src="{{ user.image_url_or_blank }}" class="user-profile" >
+                </a>
             </div>
             <div class="col m8 s12">
                 <p>
@@ -24,7 +26,7 @@
                         Pseudonym: <strong>{{ user.username }}</strong>
                     {% else %}
                         Name: <strong>{{ user.full_name }}</strong>
-                        <a class="waves-effect waves-light  modal-trigger right" href="#modal1">Pseudonym angeben</a>
+                        <a class="waves-effect waves-light  usernamemodal-trigger right" href="#usernamemodal">Pseudonym angeben</a>
                     {% endif %}
                 </p>
                 <p>Bewertung:
@@ -46,7 +48,7 @@
     </div>
 
   <!-- Modal Structure -->
-  <div id="modal1" class="modal">
+  <div id="usernamemodal" class="modal">
     <div class="modal-content">
       <h4>Pseudonym angeben</h4>
     <p>Sie können einmalig ein Pseudonym frei wählen. Eine Änderung des Pseudonyms ist anschließend über den Antrag zur Änderung der Nutzerdaten möglich.</p>
@@ -64,17 +66,49 @@
               {% endif %}
           </div>
           {% endfor %}
+          <input type="hidden" value="updateUsername" name="form" />
           <input type="submit" class="btn btn-success" value="Pseudonym vergeben">
+      </form>
+    </div>
+  </div>
+  <div id="imagemodal" class="modal">
+    <div class="modal-content">
+      <h4>Profilbild ändern</h4>
+       <form action="{% url 'app_user:user-details'  user.id %}" enctype="multipart/form-data" method="post">{% csrf_token %}
+          {% for field in imageform.visible_fields %}
+          <div class="input-field {% if field.errors %}has-error{% endif %}">
+              {{ field }}
+              <label>{{ field.label }}</label>
+              {% if field.errors %}
+                  <span class="help-block">
+                      {% for error in field.errors %}
+                          {{ error|escape }}
+                      {% endfor %}
+                  </span>
+              {% endif %}
+          </div>
+          {% endfor %}
+          <input type="hidden" value="updateProfileImage" name="form" />
+          <input type="submit" class="btn btn-success" value="Profilbild aktualisieren">
       </form>
     </div>
   </div>
 
  <script>
    $(document).ready(function(){
-    $('.modal-trigger').leanModal();
-       if({{ autoopen }}){
-           $('#modal1').openModal();
+       $('.usernamemodal-trigger').leanModal();
+       $('.imagemodal-trigger').leanModal();
+
+       if({{ autoopen.usernamemodal }}){
+           $('#usernamemodal').openModal();
        }
-  });
+       if({{ autoopen.imagemodal }}){
+           $('#imagemodal').openModal();
+
+       }
+
+
+
+   });
   </script>
 {% endblock %}

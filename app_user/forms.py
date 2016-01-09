@@ -124,7 +124,7 @@ class UsernameForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(UsernameForm, self).__init__(*args, **kwargs)
     class Meta:
-        model = ChangeUserData
+        model = User
         fields = ['username']
 
     def clean_username(self):
@@ -132,3 +132,15 @@ class UsernameForm(ModelForm):
         validate_not_real_name(cleaned_data["username"])
 
         return cleaned_data["username"]
+
+class ImageForm(ModelForm):
+    profileImage = forms.FileField()
+
+    def __init__(self, *args, **kwargs):
+        super(ImageForm, self).__init__(*args, **kwargs)
+        self.fields['profileImage'].required = True
+        self.fields['profileImage'].widget = CustomFileInput()
+
+    class Meta:
+        model = User
+        fields = ['profileImage']
