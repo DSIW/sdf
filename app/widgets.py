@@ -26,7 +26,11 @@ class CustomFileInput(AdminResubmitImageWidget):
         if self.output_extra_data(value):
             output += self.output_extra_data(value)
         else:
-            output += '''<input class="file-path validate" value="''' + str(value) + '''" type="text">'''
+            if value is None:
+                filename = ''
+            else:
+                filename = str(value)
+            output += '''<input class="file-path validate" value="''' + filename + '''" type="text">'''
         output += '''</div>
             </div>
           <label class="active" for="''' + name + '''"><br />Bild (max. ''' + str(settings.FILESIZE_LIMIT_MB) + ''' MB)</label>

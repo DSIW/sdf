@@ -30,7 +30,6 @@ class RegistrationForm(UserCreationForm):
 
     paypal = forms.EmailInput()
     email = forms.EmailInput()
-    profileImage = forms.FileField()
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
@@ -96,16 +95,12 @@ class EmailThread(threading.Thread):
 
 class CustomUpdateForm(ModelForm):
 
-    delete_saved_image = forms.BooleanField(required=False, label='Bild löschen')
-
     def __init__(self, *args, **kwargs):
         super(CustomUpdateForm, self).__init__(*args, **kwargs)
         self.user = kwargs.pop('initial', None)
         self.modelUser = User.objects.filter(email=self.user['email']).first()
         if self.user['username'] is None:
             del self.fields["username"]
-        if not (self.modelUser and self.modelUser.profileImage):
-            del self.fields['delete_saved_image']
 
     def clean_username(self):
         cleaned_data = super(CustomUpdateForm, self).clean()
@@ -124,7 +119,7 @@ class UsernameForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(UsernameForm, self).__init__(*args, **kwargs)
     class Meta:
-        model = ChangeUserData
+        model = User
         fields = ['username']
 
     def clean_username(self):
@@ -132,3 +127,18 @@ class UsernameForm(ModelForm):
         validate_not_real_name(cleaned_data["username"])
 
         return cleaned_data["username"]
+
+class ImageForm(ModelForm):
+    delete_saved_image = forms.BooleanField(required=False, label='Bild löschen')
+
+    def __init__(self, *args, **kwargs):
+        super(ImageForm, self).__init__(*args, **kwargs)
+        self.fields['profileImage'].required = False
+        self.fields['profileImage'].widget = CustomFileInput()
+        self.user = kwargs.pop('instance', None)
+        if not (self.user and self.user.profileImage):
+            del self.fields['delete_saved_image']
+
+    class Meta:
+        model = User
+        fields = ['profileImage']
