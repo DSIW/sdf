@@ -507,10 +507,16 @@ nav .input-field.search-field input[type=search] {
   width: 100%;
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
+  justify-content: left;
   align-items: stretch;
   align-content: stretch;
 }
+
+.page-start .flex-container
+{
+  justify-content: center;
+}
+
 .highlights-box-cell {
   position: relative;
   width: 11vw;
@@ -574,11 +580,9 @@ nav .input-field.search-field input[type=search] {
 
 /* Showcase */
 .showcase .card-book {
-  width: 280px;
-  max-width: 574px;
-  min-height: 467px;
+  min-width: 280px;
+  height: 467px;
   margin: 5px;
-  flex: 1 0 auto;
 }
 
 .card.small .card-content {
@@ -637,6 +641,33 @@ nav .input-field.search-field input[type=search] {
 .card .card-action a:hover {
   color: #36CEBF;
 }
+/* keep in increasing order */
+/* 1 card in a row*/
+@media (max-width: 692px) {
+  .flex-container .card-book{
+    width: 100%;
+  }
+}
+/* keep increasing order */
+/* 2 cards in a row*/
+@media (min-width: 693px) {
+  .flex-container .card-book{
+    width: calc(50% - 10px);
+  }
+}
+/* 3 cards in a row*/
+@media (min-width: 1253px) {
+  .flex-container .card-book{
+    width: calc(33% - 10px);
+  }
+}
+/* 4 cards in a row*/
+@media (min-width: 1668px) {
+  .flex-container .card-book{
+    width: calc(25% - 10px);
+  }
+}
+
 form .seller-rating-star {
   cursor: pointer;
   font-size: 1.5em;
