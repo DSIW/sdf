@@ -30,7 +30,6 @@ class RegistrationForm(UserCreationForm):
 
     paypal = forms.EmailInput()
     email = forms.EmailInput()
-    profileImage = forms.FileField()
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
@@ -130,7 +129,6 @@ class UsernameForm(ModelForm):
         return cleaned_data["username"]
 
 class ImageForm(ModelForm):
-    profileImage = forms.FileField()
     delete_saved_image = forms.BooleanField(required=False, label='Bild löschen')
 
     def __init__(self, *args, **kwargs):
