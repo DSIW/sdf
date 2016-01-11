@@ -422,7 +422,7 @@ nav .input-field.search-field input[type=search] {
 .input-field.has-error .help-block {
   display: inline;
   position: relative;
-  top: -16px;
+  top: -9px;
   color: #b71c1c;
   font-size: 0.8rem;
 }
