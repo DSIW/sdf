@@ -24,6 +24,27 @@
                 </div>
             </div>
             <div class="col l8 m7 s12">
+                {% if request.user.is_superuser and not user.is_superuser %}
+                    <p class="switch right" style="margin-bottom: 20px;">
+                        <label>
+                            Mitarbeiter
+                            <input data-user-id="{{ user.id }}" id="disable-staff" {% if user.is_staff %} checked {% endif %}type="checkbox">
+                            <span class="lever"></span>
+                        </label>
+                    </p>
+                    <script>
+                        $(document).ready(function () {
+                            $('#disable-staff').change(function() {
+                                $.ajax({
+                                    method: 'post',
+                                    url: '/accounts/'+$(this).data('user-id')+'/toggleStaff',
+                                    success: function() { window.location.reload(); }
+                                });
+                            });
+                        });
+                    </script>
+                {% endif %}
+
                 <p>
                     {% if user.username|length > 0 %}
                         Pseudonym: <strong>{{ user.username }}</strong>

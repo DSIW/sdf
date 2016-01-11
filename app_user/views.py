@@ -8,6 +8,7 @@ from django.template import RequestContext
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.forms import SetPasswordForm
@@ -336,3 +337,15 @@ def change_user_profile_accept(request, change_user_data_id):
     change_user_profile(request, change_user_data_id, True)
     messages.add_message(request, messages.SUCCESS, 'Benutzerdaten wurden erfolgreich aktualisiert')
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
+
+
+# Call via AJAX
+@login_required
+def toggleStaff(request, pk):
+    if request.method == 'POST' and request.user.is_superuser:
+        user = User.objects.filter(id=pk).first()
+        is_staff = user.is_staff
+        user.is_staff = not is_staff
+        user.save()
+        return JsonResponse({'state': not is_staff})
+    return JsonResponse({'error': True})
