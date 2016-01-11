@@ -124,5 +124,3 @@ class ChangeUserData(models.Model):
     last_name = models.CharField(('Nachname'), max_length=30)
     email = models.EmailField(('E-Mailadresse'))
     location = models.CharField(('Ort'),max_length=255)
-
-

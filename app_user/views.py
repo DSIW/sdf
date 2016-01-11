@@ -30,6 +30,7 @@ from django.utils.translation import ugettext_lazy as _
 from braces.views import FormMessagesMixin
 from smtplib import SMTPRecipientsRefused
 from .models import User, ConfirmEmail
+from app_book.models import Book, Offer
 from .forms import CustomUpdateForm,RegistrationForm, UsernameForm, ImageForm
 from app_payment.models import SellerRating
 
@@ -339,6 +340,28 @@ def change_user_profile_accept(request, change_user_data_id):
     messages.add_message(request, messages.SUCCESS, 'Benutzerdaten wurden erfolgreich aktualisiert')
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
 
+@login_required
+def remove_user(request, remove_user_id):
+
+    '''Loesche Buecher'''
+    books = Book.objects.filter(user_id = remove_user_id)
+    for book in books:
+        print(book)
+        book.delete()
+
+    '''Loesche Schaufenster'''
+    offers = Offer.objects.filter(seller_user_id = remove_user_id)
+    for offer in offers:
+        print(offer)
+        offer.delete()
+
+
+    user = get_object_or_404(User, id=remove_user_id)
+    user.delete()
+
+
+    messages.add_message(request, messages.SUCCESS, 'Benutzer und alle seine Aktvitäten wurden erfolgreich gelöscht')
+    return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
 
 # Call via AJAX
 @login_required
