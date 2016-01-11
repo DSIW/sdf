@@ -593,7 +593,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.description = '''
         Richard David Precht erklärt uns in drei Bänden die großen Fragen, die sich die Menschen durch die Jahrhunderte gestellt haben. Im ersten Teil seiner auf drei Bände angelegten Geschichte der Philosophie beschreibt Richard David Precht die Entwicklung des abendländischen Denkens von der Antike bis zum Mittelalter. Kenntnisreich und detailliert verknüpft er die Linien der großen Menschheitsfragen und verfolgt die Entfaltung der wichtigsten Ideen – von den Ursprungsgefilden der abendländischen Philosophie an der schönen Küste Kleinasiens bis in die Klöster und Studierstuben, die Kirchen und Machtzentren des Spätmittelalters. Dabei bettet er die Philosophie in die politischen, wirtschaftlichen und sozialen Fragen der jeweiligen Zeit ein und macht sie auf diese Weise auch für eine größere Leserschaft lebendig. Ein Buch, das dazu hilft, sich einen tiefen Einblick in die Geschichte der Philosophie zu verschaffen und die Dinge zu ordnen. Tauchen Sie ein in die schier unerschöpfliche Fülle des Denkens!'''  
     app_book = importer.save_or_locate(app_book)
-    
+
     offer = Offer()
     offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
     offer.seller_user = User.objects.filter(email='jens@book2.de').first()
@@ -649,3 +649,96 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     offer.shipping_price = 3
     offer.active = True
     offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='alex@book2.de').first()
+    app_book.name = 'Harry Potter und die Kammer des Schreckens'
+    app_book.author = 'Joanne K. Rowling'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2006")
+    app_book.pageNumber = 368
+    app_book.image = 'images/books/book_23.jpg'
+    app_book.isbn10 = '3551354022'
+    app_book.isbn13 = '978-3551354020'
+    app_book.description = '''
+        Endlich wieder Schule! Einen solchen Seufzer kann nur der ausstoßen, dessen Ferien scheußlich und dessen Erinnerungen an das vergangene Schuljahr wunderbar waren: Harry Potter. Doch wie im Vorjahr stehen nicht nur Zaubertrankunterricht und Verwandlung auf dem Programm. Ein grauenhaftes Etwas treibt sein Unwesen in der Schule – ein Ungeheuer, für das nicht einmal die mächtigsten Zauberer eine Erklärung finden. Wird Harry mit Hilfe seiner Freunde Ron und Hermine das Rätsel lösen und Hogwarts von den dunklen Mächten befreien können?'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='alex@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Harry Potter und die Kammer des Schreckens').first()
+    offer.price = 15
+    offer.shipping_price = 5
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='alex@book2.de').first()
+    app_book.name = 'Harry Potter und der Gefangene von Askaban'
+    app_book.author = 'Joanne K. Rowling'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2007")
+    app_book.pageNumber = 480
+    app_book.image = 'images/books/book_24.jpg'
+    app_book.isbn10 = '3551354030'
+    app_book.isbn13 = '978-3551354037'
+    app_book.description = '''
+        Diesmal läuft in den Ferien alles gründlich schief. Weil Harry seine schreckliche Muggeltante mit einem Schwebezauber an die Zimmerdecke befördert hat, droht ihm jetzt der Schulverweis. Doch Harry darf zurück nach Hogwarts - und alle behandeln ihn plötzlich wie ein rohes Ei. Liegt das daran, dass ein gefürchteter Verbrecher es auf ihn abgesehen hat? Zusammen mit Ron und Hermine geht Harry der Sache nach. Und stößt auf jede Menge Geheimnisse.'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='alex@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Harry Potter und der Gefangene von Askaban').first()
+    offer.price = 10
+    offer.shipping_price = 5
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='alex@book2.de').first()
+    app_book.name = 'Doctor Who - Der zehnte Doctor: Bd. 1: Herrschaft des Schreckens'
+    app_book.author = 'Nick Abadzis'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2015")
+    app_book.pageNumber = 128
+    app_book.image = 'images/books/book_25.jpg'
+    app_book.isbn10 = '3957982871'
+    app_book.isbn13 = '978-3957982872'
+    app_book.description = '''
+       Doctor Who, der durch Zeit und Raum reist und in immer wieder neue Inkarnationen schlüpft, um die Menschheit vor Aliens, Robotern und Monstern zu bewahren, ist in der Popkultur Großbritanniens so fest verankert, wie Superman in den USA oder Tintin in Frankreich. Auch in Deutschland wächst die Fangemeinde der Whovians rasant. Der Start der aktuellen Staffel mit dem zwölften Doktor wurde sogar mit Sondervorführungen in den Kinos zelebriert. Nun erscheinen endlich auch die heiß ersehnten Comics hierzulande bei Panini. BAFTA Award für die beste Drama-Serie 2006 Der Comic-Hit zum Serien-Klassiker! Autor: Nick Abadzis Zeichner: Elena Casagrandeg'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-12T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='alex@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Doctor Who - Der zehnte Doctor: Bd. 1: Herrschaft des Schreckens').first()
+    offer.price = 12
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='alex@book2.de').first()
+    app_book.name = 'Doctor Who - Der elfte Doctor: Bd. 1: Nachleben'
+    app_book.author = 'Al Ewing'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2015")
+    app_book.pageNumber = 144
+    app_book.image = 'images/books/book_26.jpg'
+    app_book.isbn10 = '395798288X'
+    app_book.isbn13 = '978-3957982889'
+    app_book.description = '''
+       Doctor Who: Er ist über neunhundert Jahre alt, wechselt ab und zu den Körper und ist der Titelheld von Großbritanniens beliebtester Science-Fiction-Serie. Sein Raumschiff, die TARDIS, sieht aus wie eine blaue Telefonzelle, ist innen jedoch wesentlich größer als außen. Mit ihr reist der Doctor durch Raum und Zeit, auf der Suche nach Abenteuern und den Wundern des Universums. Und da es keinen Spaß macht, die allein zu entdecken, lädt der Timelord vom Planeten Gallifrey immer wieder Menschen ein, ihn auf seinen Reisen zu begleiten. Alice Obiefune betrauert gerade den Tod ihrer Mutter, als der Doctor wie eine Naturgewalt in ihr Leben platzt und es auf den Kopf stellt … obwohl, eigentlich ist es die TARDIS, die auf dem Kopf steht. Nun, egal … Die junge Frau wird vom Doctor mit auf die Jagd nach dem „Regenbogenhund“ genommen, besucht den schlimmsten Vergnügungspark der Galaxis und hat wesentlichen Einfluss auf die Karriere eines Musikers der 1970er Jahre – da bleibt wenig Zeit zur Trauer'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-11-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='alex@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Doctor Who - Der elfte Doctor: Bd. 1: Nachleben').first()
+    offer.price = 17
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
