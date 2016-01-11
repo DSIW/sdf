@@ -17,10 +17,14 @@
         <div class="row">
             <div class="col l4 m5 s12">
                 <div class="user-profile-widthConstraint">
-                    <a class="waves-effect waves-light image-edit-wrapper imagemodal-trigger aspectRatioBox" href="#imagemodal">
+                    {% if request.user.id == user.id %}
+                        <a class="waves-effect waves-light image-edit-wrapper imagemodal-trigger aspectRatioBox" href="#imagemodal">
+                            <img src="{{ user.image_url_or_blank }}" class="user-profile" >
+                            <span class="image-edit"><i class="material-icons">edit</i></span>
+                        </a>
+                    {% else %}
                         <img src="{{ user.image_url_or_blank }}" class="user-profile" >
-                        <span class="image-edit"><i class="material-icons">edit</i></span>
-                    </a>
+                    {% endif %}
                 </div>
             </div>
             <div class="col l8 m7 s12">

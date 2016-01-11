@@ -179,12 +179,13 @@ def user_details(request, pk):
         imageform = ImageForm(request.POST, request.FILES)
         if imageform.is_valid():
             newImage = request.FILES.get('profileImage')
-            if newImage is not None:
-                user.profileImage = newImage
-                user.save()
-            elif ('delete_saved_image' in request.POST and request.POST['delete_saved_image'] == 'on'):
-                user.profileImage = None
-                user.save()
+            if request.user.id == user.id:
+                if newImage is not None:
+                    user.profileImage = newImage
+                    user.save()
+                elif ('delete_saved_image' in request.POST and request.POST['delete_saved_image'] == 'on'):
+                    user.profileImage = None
+                    user.save()
             return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk':request.user.id}))
         else:
             autoopen["imagemodal"] = 'true'
