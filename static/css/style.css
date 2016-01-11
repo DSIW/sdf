@@ -697,8 +697,6 @@ form .seller-rating-star {
   background: #bdbdbd;
 }
 
-
-
 /* http://ansciath.tumblr.com/post/7347495869/css-aspect-ratio */
 .aspectRatioBox {
     position: relative !important;
@@ -718,6 +716,7 @@ form .seller-rating-star {
 {
   width: 80%;
   margin: 0 auto;
+  display: block;
 }
 
 img.user-profile {
