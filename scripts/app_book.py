@@ -593,6 +593,15 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.description = '''
         Richard David Precht erklärt uns in drei Bänden die großen Fragen, die sich die Menschen durch die Jahrhunderte gestellt haben. Im ersten Teil seiner auf drei Bände angelegten Geschichte der Philosophie beschreibt Richard David Precht die Entwicklung des abendländischen Denkens von der Antike bis zum Mittelalter. Kenntnisreich und detailliert verknüpft er die Linien der großen Menschheitsfragen und verfolgt die Entfaltung der wichtigsten Ideen – von den Ursprungsgefilden der abendländischen Philosophie an der schönen Küste Kleinasiens bis in die Klöster und Studierstuben, die Kirchen und Machtzentren des Spätmittelalters. Dabei bettet er die Philosophie in die politischen, wirtschaftlichen und sozialen Fragen der jeweiligen Zeit ein und macht sie auf diese Weise auch für eine größere Leserschaft lebendig. Ein Buch, das dazu hilft, sich einen tiefen Einblick in die Geschichte der Philosophie zu verschaffen und die Dinge zu ordnen. Tauchen Sie ein in die schier unerschöpfliche Fülle des Denkens!'''  
     app_book = importer.save_or_locate(app_book)
+    
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='jens@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Erkenne die Welt: Geschichte der Philosophie 1').first()
+    offer.price = 8
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
 
     app_book = Book()
     app_book.user = User.objects.filter(email='s0535844@htw-berlin.de').first()
@@ -617,7 +626,6 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     offer.active = True
     offer = importer.save_or_locate(offer)
       
-    app_book = Book()
     app_book = Book()
     app_book.user = User.objects.filter(email='s0535844@htw-berlin.de').first()
     app_book.name = '365 Sexstellungen: Heiße Sexspiele für ein ganzes Jahr'
