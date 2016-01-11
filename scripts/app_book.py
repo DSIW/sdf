@@ -493,8 +493,8 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.name = 'Die Abenteuer des Stefón Rudel'
     app_book.author = 'Stefan Knapp'
     app_book.language = 'DE'
-    app_book.releaseDate = dateutil.parser.parse("2004")
-    app_book.pageNumber = 384
+    app_book.releaseDate = dateutil.parser.parse("2012")
+    app_book.pageNumber = 446
     app_book.image = 'images/books/book_18.jpg'
     app_book.isbn10 = '84-9015-648-4'
     app_book.isbn13 = '978-84-9015-648-3'
