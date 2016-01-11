@@ -591,14 +591,53 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.isbn10 = '34-4231-262-0'
     app_book.isbn13 = '978-34-4231-262-0'
     app_book.description = '''
-        Richard David Precht erklärt uns in drei Bänden die großen Fragen, die sich die Menschen durch die Jahrhunderte gestellt haben. Im ersten Teil seiner auf drei Bände angelegten Geschichte der Philosophie beschreibt Richard David Precht die Entwicklung des abendländischen Denkens von der Antike bis zum Mittelalter. Kenntnisreich und detailliert verknüpft er die Linien der großen Menschheitsfragen und verfolgt die Entfaltung der wichtigsten Ideen – von den Ursprungsgefilden der abendländischen Philosophie an der schönen Küste Kleinasiens bis in die Klöster und Studierstuben, die Kirchen und Machtzentren des Spätmittelalters. Dabei bettet er die Philosophie in die politischen, wirtschaftlichen und sozialen Fragen der jeweiligen Zeit ein und macht sie auf diese Weise auch für eine größere Leserschaft lebendig. Ein Buch, das dazu hilft, sich einen tiefen Einblick in die Geschichte der Philosophie zu verschaffen und die Dinge zu ordnen. Tauchen Sie ein in die schier unerschöpfliche Fülle des Denkens!'''
+        Richard David Precht erklärt uns in drei Bänden die großen Fragen, die sich die Menschen durch die Jahrhunderte gestellt haben. Im ersten Teil seiner auf drei Bände angelegten Geschichte der Philosophie beschreibt Richard David Precht die Entwicklung des abendländischen Denkens von der Antike bis zum Mittelalter. Kenntnisreich und detailliert verknüpft er die Linien der großen Menschheitsfragen und verfolgt die Entfaltung der wichtigsten Ideen – von den Ursprungsgefilden der abendländischen Philosophie an der schönen Küste Kleinasiens bis in die Klöster und Studierstuben, die Kirchen und Machtzentren des Spätmittelalters. Dabei bettet er die Philosophie in die politischen, wirtschaftlichen und sozialen Fragen der jeweiligen Zeit ein und macht sie auf diese Weise auch für eine größere Leserschaft lebendig. Ein Buch, das dazu hilft, sich einen tiefen Einblick in die Geschichte der Philosophie zu verschaffen und die Dinge zu ordnen. Tauchen Sie ein in die schier unerschöpfliche Fülle des Denkens!'''  
+    app_book = importer.save_or_locate(app_book)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='s0535844@htw-berlin.de').first()
+    app_book.name = 'Der Dunkle Turm, Band 1: Schwarz'
+    app_book.author = 'Steven King'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2003-12-01")
+    app_book.pageNumber = 352
+    app_book.image = 'images/books/book_23.jpg'
+    app_book.isbn10 = '34-5387-556-7'
+    app_book.isbn13 = '978-34-5387-556-2'
+    app_book.description = '''
+        Im ersten Band von Stephen Kings epischer Fantasyserie durchstreift Roland, der letzte Revolvermann, auf der Suche nach dem mysteriösen Dunklen Turm eine sterbende Welt. Der Auftakt zur großen Saga jetzt in einer von Stephen King komplett überarbeiteten Fassung mit neuem Vorwort und neuer Einführung.'''
     app_book = importer.save_or_locate(app_book)
 
     offer = Offer()
     offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
-    offer.seller_user = User.objects.filter(email='jens@book2.de').first()
-    offer.book = Book.objects.filter(name = 'Erkenne die Welt: Geschichte der Philosophie 1').first()
-    offer.price = 8
+    offer.seller_user = User.objects.filter(email='s0535844@htw-berlin.de').first()
+    offer.book = Book.objects.filter(name = 'Der Dunkle Turm, Band 1: Schwarz').first()
+    offer.price = 5
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+      
+    app_book = Book()
+    app_book = Book()
+    app_book.user = User.objects.filter(email='s0535844@htw-berlin.de').first()
+    app_book.name = '365 Sexstellungen: Heiße Sexspiele für ein ganzes Jahr'
+    app_book.author = 'Randi Foxx'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2014-06-21")
+    app_book.pageNumber = 352
+    app_book.image = 'images/books/book_24.jpg'
+    app_book.isbn10 = '38-0943-322-5'
+    app_book.isbn13 = '978-38-0943-322-4'
+    app_book.description = '''
+        Spaß im Bett, und das an jedem Tag des Jahres. Abenteuerlustige Paare können hier die 365 heißesten Sexstellungen erproben. Wie wärs zum Start mit dem "Schlitten"? Aber auch die "Windmühle" und der "Ponyritt" lassen keine Langeweile aufkommen. Und zum krönenden Höhepunkt können Sie in einer "endlosen Umarmung" verschmelzen …'''
+    app_book = importer.save_or_locate(app_book)
+
+        
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='s0535844@htw-berlin.de').first()
+    offer.book = Book.objects.filter(name = '365 Sexstellungen: Heiße Sexspiele für ein ganzes Jahr').first()
+    offer.price = 5
     offer.shipping_price = 3
     offer.active = True
     offer = importer.save_or_locate(offer)
