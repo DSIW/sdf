@@ -13,10 +13,8 @@ urlpatterns = [
     # admin
     url(r'^admin/', include(admin.site.urls)),
 
-    # session
-
     # static
-    url(r'^staticpage/([a-z]+)$', views.staticPageView, name='staticpage'),
+    url(r'^page/([a-z]+)$', views.staticPageView, name='staticpage'),
 
     # for testing
     url(r'^raise$', views.raise_exception),
