@@ -4,7 +4,7 @@ from django.template import RequestContext
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
-from paypal.standard.ipn.signals import valid_ipn_received
+from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
 from paypal.standard.forms import PayPalPaymentsForm
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -33,8 +33,7 @@ def build_payment_form(payment):
         "currency_code": payment.currency_code,
         "notify_url": settings.ENDPOINT + reverse('app_payment:paypal-ipn'),
         "return_url": settings.ENDPOINT + reverse('app_payment:payment-success', kwargs={'id': payment.id}),
-        "cancel_return": settings.ENDPOINT + reverse('app_payment:payment-cancel', kwargs={'id': payment.id}),
-        "custom": payment.custom
+        "cancel_return": settings.ENDPOINT + reverse('app_payment:payment-cancel', kwargs={'id': payment.id})
     })
 
 @login_required
@@ -114,15 +113,14 @@ def paypal_abort(request, id):
             messages.add_message(request, messages.ERROR, 'Die Bezahlung wurde nicht abgebrochen.')
         return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': payment.book_id}))
 
-# Get new status info from paypal
+
 def paypal_ipn(sender, **kwargs):
     ipn_obj = sender
-    payment_id = json.loads(ipn_obj.custom)['payment_id']
-    payment = Payment.objects.filter(id=payment_id).first()
-    print('>>> New paypal status: '+sender.payment_status)
+    payment = Payment.objects.filter(invoice=ipn_obj.invoice).first()
     update_payment_from_paypal_ipn(payment, ipn_obj)
 
 valid_ipn_received.connect(paypal_ipn)
+invalid_ipn_received.connect(paypal_ipn)
 
 
 @login_required

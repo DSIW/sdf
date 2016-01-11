@@ -64,12 +64,14 @@ def abort_payment(payment, notification = False):
     return False
 
 def update_payment_from_paypal_ipn(payment, paypal_ipn):
-    payment.payment_status = paypal_ipn.payment_status
     payment.last_ipn = paypal_ipn
-    if payment.payment_status == ST_PP_COMPLETED:
+    if paypal_ipn.payment_status == ST_PP_COMPLETED:
         complete_payment(payment)
-    elif payment.payment_status == ST_PP_CANCELLED:
+    elif paypal_ipn.payment_status == ST_PP_CANCELLED:
         abort_payment(payment)
+    else:
+        payment.payment_status = paypal_ipn.payment_status
+        payment.save()
 
 def start_payment(payment, offer, buyer, source):
     if payment.id is None:

@@ -43,9 +43,6 @@ class Payment(models.Model):
         self.invoice = datetime.now().strftime('%Y%m%d-%H%M%S')+"-book-"+str(self.book.id)+"-seller-"+str(self.seller_user.id)
         self.source = source
 
-        self.save() # get id for custom JSON
-        self.custom = json.dumps({'payment_id': self.id})
-
     def save(self, *args, **kwargs):
         ''' On save, update created_at '''
         if not self.id:
