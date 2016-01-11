@@ -99,8 +99,11 @@ class CustomUpdateForm(ModelForm):
         super(CustomUpdateForm, self).__init__(*args, **kwargs)
         self.user = kwargs.pop('initial', None)
         self.modelUser = User.objects.filter(email=self.user['email']).first()
+
         if self.user['username'] is None:
             del self.fields["username"]
+        else:
+            self.fields["username"].required = False
 
     def clean_username(self):
         cleaned_data = super(CustomUpdateForm, self).clean()
@@ -113,7 +116,9 @@ class CustomUpdateForm(ModelForm):
     class Meta:
         model = ChangeUserData
         fields = ['username', 'first_name', 'last_name', 'email', 'location']
-
+        widgets = {
+            'username' : forms.TextInput(attrs = {'placeholder': 'Pseudonym löschen'}),
+        }
 
 class UsernameForm(ModelForm):
     def __init__(self, *args, **kwargs):
