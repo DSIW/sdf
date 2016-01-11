@@ -24,6 +24,11 @@ def validate_not_real_name(value):
         if user.username is not None and user.username.lower() == value.lower():
             raise ValidationError('Pseudonym bereits vergeben.', code='unique')
 
+def validate_email(value):
+    for user in User.objects.all():
+        if user.email.lower() == value.lower():
+            raise ValidationError('E-Mailaddresse bereits vergeben.', code='unique')
+
 class RegistrationForm(UserCreationForm):
     first_name = forms.TextInput()
     last_name = forms.TextInput()
@@ -112,6 +117,15 @@ class CustomUpdateForm(ModelForm):
             validate_not_real_name(cleaned_data["username"])
 
         return username
+
+    def clean_email(self):
+        cleaned_data = super(CustomUpdateForm, self).clean()
+        email = cleaned_data["email"]
+        if email != self.user["email"]:
+            validate_email(cleaned_data["email"])
+
+        return email
+
 
     class Meta:
         model = ChangeUserData
