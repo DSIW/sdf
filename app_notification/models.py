@@ -227,6 +227,7 @@ class Notification(models.Model):
                 change_user_profile=changeUserData,
                 receiver_user=admin)
             new_notification.save()
+            NotificationEmailThread(admin).start()
 
     @staticmethod
     def request_change_userprofile_customer(admin_user_id, customer_user_id, accepted):
@@ -260,6 +261,7 @@ class Notification(models.Model):
             notification_type=Notification.CHANGE_PROFILE_CUSTOMER,
             receiver_user=customer_user)
         new_notification.save()
+        NotificationEmailThread(customer_user).start()
 
 
     @staticmethod
@@ -281,6 +283,7 @@ class Notification(models.Model):
                 notification_type=Notification.REMOVE_PROFILE_ADMIN,
                 receiver_user=admin)
         new_notification.save()
+        NotificationEmailThread(admin).start()
 
 class NotificationEmailThread(threading.Thread):
     def __init__(self, recipient, subject=None, emailMessage=None):
