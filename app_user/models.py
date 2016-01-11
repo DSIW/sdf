@@ -69,7 +69,7 @@ class User(AuthUser):
     emailConfirm = models.BooleanField(default=False,verbose_name='E-mail bestätigt')
     profileImage = models.ImageField(upload_to=user_directory_path, null=True, validators=[validate_image_filesize])
     location = models.CharField(('Ort'),max_length=255, default='')
-    paypal = models.CharField(max_length=50)
+    paypal = models.CharField(('Paypal-Adresse'), max_length=50)
     user_ptr = models.OneToOneField(AuthUser)
     enabled_notifications_via_email = models.BooleanField(default=True)
     showcaseDisabled = models.BooleanField(default=False, verbose_name='Schaufenster gesperrt')
