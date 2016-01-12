@@ -355,13 +355,11 @@ def remove_user(request, remove_user_id):
     '''Loesche Buecher'''
     books = Book.objects.filter(user_id = remove_user_id)
     for book in books:
-        print(book)
         book.delete()
 
     '''Loesche Schaufenster'''
     offers = Offer.objects.filter(seller_user_id = remove_user_id)
     for offer in offers:
-        print(offer)
         offer.delete()
 
 
