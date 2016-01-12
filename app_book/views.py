@@ -21,6 +21,7 @@ from django.utils.html import escape
 from django.http import JsonResponse
 
 from app_payment.services import start_payment
+from app_notification.models import Notification
 from .models import Book
 from .forms import BookForm
 from sdf import settings
@@ -551,5 +552,6 @@ def toggleDisabledState(request, user_id):
         disabled = user.showcaseDisabled
         user.showcaseDisabled = not disabled
         user.save()
+        Notification.bann_unbann_user(request.user.id, user_id, not disabled)
         return JsonResponse({'state': not disabled})
     return JsonResponse({'error': True})

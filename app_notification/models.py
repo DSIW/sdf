@@ -24,6 +24,7 @@ class Notification(models.Model):
     CHANGE_PROFILE_ADMIN = 'CHANGE_PROFILE_ADMIN' # Notification fuer den Administrator wenn ein Antrag auf aendern des Benutzerprofils gestellt wurde
     CHANGE_PROFILE_CUSTOMER= 'CHANGE_PROFILE_CUSTOMER' # Notification fuer den Kunden wenn ein Antrag auf aendern des Benutzerprofils angenommen / abgelehnt wurde
     REMOVE_PROFILE_ADMIN = 'REMOVE_PROFILE_ADMIN' # Notification fuer den Administrator wenn ein Antrag auf Loeschung des Benutzerprofils gestellt wurde
+    BANN_UNBANN_USER = 'BANN_UNBANN_USER' # Notification fuer den User wenn er gesperrt/entsperrt wurde
     NOTIFICATION_TYPE = (
         (FASTBUY, 'Sofortkauf'),
         (ABORT_PAYMENT, 'Zahlungsabbruch'),
@@ -35,6 +36,7 @@ class Notification(models.Model):
         (CHANGE_PROFILE_ADMIN, 'Antrag ändern des Nutzerprofils Administrator'),
         (CHANGE_PROFILE_CUSTOMER, 'Antrag angenommen / abgelehnt ändern des Nutzerprofils Kunde'),
         (REMOVE_PROFILE_ADMIN, 'Antrag Löschung des Nutzerprofils '),
+        (BANN_UNBANN_USER, '(Ent-)Sperrung des Nutzerprofils '),
     )
 
     sender_user = models.ForeignKey(User, related_name='sender_user', default=None)
@@ -284,6 +286,30 @@ class Notification(models.Model):
                 receiver_user=admin)
         new_notification.save()
         NotificationEmailThread(admin).start()
+
+
+    @staticmethod
+    def bann_unbann_user(admin_user_id, customer_user_id, is_banned):
+        '''Diese Methode erstellt eine Notification wenn ein Benutzer gesperrt/entsperrt wurde'''
+        admin = get_object_or_404(User, id=admin_user_id)
+        customer_user = get_object_or_404(User, id=customer_user_id)
+
+        if is_banned:
+           subject = 'Sperrung des Accounts'
+           msg = 'Ihr Account wurde gesperrt!'
+        else:
+           subject = 'Entsperrung des Accounts'
+           msg = 'Ihr Account wurde entsperrt!'
+
+        new_notification = Notification(
+            sender_user=admin,
+            subject=subject,
+            message=msg,
+            received_date=datetime.now(),
+            notification_type=Notification.BANN_UNBANN_USER,
+            receiver_user=customer_user)
+        new_notification.save()
+        NotificationEmailThread(customer_user).start()
 
 class NotificationEmailThread(threading.Thread):
     def __init__(self, recipient, subject=None, emailMessage=None):
