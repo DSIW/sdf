@@ -88,7 +88,7 @@
                             {% if notification.notification_type == "REMOVE_PROFILE_ADMIN" %}
                                 <div class="row text-right">
                                     <div class="col s3">
-                                        <a href="#" class="btn waves-effect waves-light">Annehmen</a>
+                                        <a href="{% url 'app_user:remove_user' notification.sender_user_id %}" data-method="post" class="btn waves-effect waves-light">Annehmen</a>
                                     </div>
                                 </div>
                             {% endif %}

@@ -165,7 +165,7 @@ def import_data():
     auth_user_1.is_active = True
     auth_user_1.date_joined = dateutil.parser.parse("2015-11-08T14:22:49.437731+00:00")
     auth_user_1 = importer.save_or_locate(auth_user_1)
-    
+
     auth_user_1 = User()
     auth_user_1.password = 'pbkdf2_sha256$20000$f49atNcSl4xt$jBFjdFzW7X6ownYonQ7LK6EzMwshtYtLUxtdMqWGwks='
     auth_user_1.last_login = dateutil.parser.parse("2015-11-08T14:22:59.793180+00:00")
@@ -215,7 +215,7 @@ def import_data():
     auth_user_3 = importer.save_or_locate(auth_user_3)
 
     auth_user_4 = User()
-    auth_user_4.password = 'pbkdf2_sha256$20000$6fimTWmnvrhn$ubTKr8VttnnIR3vp+2bsVJQb3Vxkz9MXkJfKvJf9Jic='
+    auth_user_4.password = 'pbkdf2_sha256$20000$473uoFG8zUww$rGDY1uoRnp9f+pmkdzGDiaxm7Z6ue5NTAaVcOpN8CJw='
     auth_user_4.last_login = dateutil.parser.parse("2015-11-08T14:22:59.793180+00:00")
     auth_user_4.is_superuser = False
     auth_user_4.first_name = 'Andrej'
@@ -244,3 +244,34 @@ def import_data():
     auth_user_5.date_joined = dateutil.parser.parse("2015-12-08T14:21:49.434251+00:00")
     auth_user_5 = importer.save_or_locate(auth_user_5)
 
+
+    auth_user_6 = User()
+    auth_user_6.password = 'pbkdf2_sha256$20000$f49atNcSl4xt$jBFjdFzW7X6ownYonQ7LK6EzMwshtYtLUxtdMqWGwks='
+    auth_user_6.last_login = dateutil.parser.parse("2015-11-08T14:22:59.793180+00:00")
+    auth_user_6.is_superuser = False
+    auth_user_6.first_name = 'Alexander'
+    auth_user_6.last_name = 'Deutschmann'
+    auth_user_6.email = 'alex@book2.de'
+    auth_user_6.emailConfirm = True
+    auth_user_6.paypal = 'alex@book2.de'
+    auth_user_6.location = 'Karlsruhe'
+    auth_user_6.is_staff = False
+    auth_user_6.is_active = True
+    auth_user_6.date_joined = dateutil.parser.parse("2015-12-08T14:21:49.434251+00:00")
+    auth_user_6 = importer.save_or_locate(auth_user_6)
+
+
+    auth_user_7 = User()
+    auth_user_7.password = 'pbkdf2_sha256$20000$f49atNcSl4xt$jBFjdFzW7X6ownYonQ7LK6EzMwshtYtLUxtdMqWGwks='
+    auth_user_7.last_login = dateutil.parser.parse("2016-01-12T13:21:49.434251+00:00")
+    auth_user_7.is_superuser = False
+    auth_user_7.first_name = 'Jelger'
+    auth_user_7.last_name = 'Rosenfeld'
+    auth_user_7.email = 'book2@jelger.de'
+    auth_user_7.emailConfirm = True
+    auth_user_7.paypal = 'jelger@book2.de'
+    auth_user_7.location = 'Berlin'
+    auth_user_7.is_staff = False
+    auth_user_7.is_active = True
+    auth_user_7.date_joined = dateutil.parser.parse("2016-01-12T13:21:49.434251+00:00")
+    auth_user_7 = importer.save_or_locate(auth_user_7)

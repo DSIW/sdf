@@ -1,16 +1,15 @@
 from django.shortcuts import render
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
-from paypal.standard.ipn.signals import valid_ipn_received
+from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
 from paypal.standard.forms import PayPalPaymentsForm
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
-import json
 
 
 from app_book.models import Book, Offer, Counteroffer
@@ -32,9 +31,8 @@ def build_payment_form(payment):
         "invoice": payment.invoice,
         "currency_code": payment.currency_code,
         "notify_url": settings.ENDPOINT + reverse('app_payment:paypal-ipn'),
-        "return_url": settings.ENDPOINT + reverse('app_payment:payment-success', kwargs={'id': payment.id}),
-        "cancel_return": settings.ENDPOINT + reverse('app_payment:payment-cancel', kwargs={'id': payment.id}),
-        "custom": payment.custom
+        "return_url": settings.ENDPOINT + reverse('app_payment:payment-success', kwargs={'id': payment.id, 'secret': str(payment.secret)}),
+        "cancel_return": settings.ENDPOINT + reverse('app_payment:payment-cancel', kwargs={'id': payment.id})
     })
 
 @login_required
@@ -80,7 +78,7 @@ def start_paypal_payment(request, id):
 def paypal_redirection(request, id):
     template_name = 'app_payment/payment_start.html'
 
-    payment = Payment.objects.get(id=id)
+    payment = get_object_or_404(Payment, id=id)
 
     messages.add_message(request, messages.SUCCESS, 'Sie werden in Kürze zu Paypal weitergeleitet...')
 
@@ -91,7 +89,12 @@ def paypal_redirection(request, id):
 @csrf_exempt
 @login_required
 def paypal_complete(request, id):
-    payment = Payment.objects.filter(id=id).first()
+    payment = get_object_or_404(Payment, id=id)
+
+    if payment.secret != request.GET.get('secret'):
+        messages.add_message(request, messages.ERROR, 'Der Vorgang wurde verboten.')
+        return HttpResponseRedirect(reverse('app_book:archivesPage'))
+
     success = complete_payment(payment)
     if success:
         messages.add_message(request, messages.SUCCESS, 'Die Bezahlung wurde durchgeführt.')
@@ -102,7 +105,7 @@ def paypal_complete(request, id):
 @csrf_exempt
 @login_required
 def paypal_abort(request, id):
-    payment = Payment.objects.filter(id=id).first()
+    payment = get_object_or_404(Payment, id=id)
     success = abort_payment(payment)
 
     if request.method == 'POST' and request.is_ajax():
@@ -114,15 +117,14 @@ def paypal_abort(request, id):
             messages.add_message(request, messages.ERROR, 'Die Bezahlung wurde nicht abgebrochen.')
         return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': payment.book_id}))
 
-# Get new status info from paypal
+
 def paypal_ipn(sender, **kwargs):
     ipn_obj = sender
-    payment_id = json.loads(ipn_obj.custom)['payment_id']
-    payment = Payment.objects.filter(id=payment_id).first()
-    print('>>> New paypal status: '+sender.payment_status)
+    payment = Payment.objects.filter(invoice=ipn_obj.invoice).first()
     update_payment_from_paypal_ipn(payment, ipn_obj)
 
 valid_ipn_received.connect(paypal_ipn)
+invalid_ipn_received.connect(paypal_ipn)
 
 
 @login_required
@@ -134,9 +136,12 @@ def rate_seller(request, id):
     if rating is not None:
         messages.add_message(request,messages.ERROR,"Sie können ein Verkäufer pro Einkauf nur einmal bewerten.")
         return HttpResponseRedirect(backpath)
-    payment = Payment.objects.filter(pk=id).first()
+    payment = get_object_or_404(Payment, id=id)
     if payment is None:
         messages.add_message(request,messages.ERROR,"Sie können diesen Nutzer nicht bewerten.")
+        return HttpResponseRedirect(backpath)
+    if not payment.is_completed():
+        messages.add_message(request,messages.ERROR,"Sie können den Nutzer nur nach abgeschlossenen Käufen bewerten.")
         return HttpResponseRedirect(backpath)
     rated_user = User.objects.filter(pk=payment.seller_user.id).first()
     if request.method == 'POST':

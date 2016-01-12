@@ -56,7 +56,7 @@ class Book(models.Model):
         return self.name + ", " + self.author + " (" + self.language + ", " + str(self.releaseDate) + ")"
 
     def is_published(self):
-        return self.offer_set.count() > 0 and self.offer_set.first().active
+        return self.offer_set.count() > 0 and self.offer_set.filter(active = True).count() > 0
 
     def is_private(self):
         return not self.is_published()
@@ -77,7 +77,7 @@ class Book(models.Model):
         return self.offer().totalPrice()
 
     def offer(self):
-        return self.offer_set.first()
+        return self.offer_set.filter(active = True).first()
 
     def active_payment(self):
         return Payment.objects.filter(book=self, payment_status__in=ACTIVE_PAYMENT_STATUSES).first()
