@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block body_classes %}page-info{% endblock %}
+
+{% block content %}
+<h3 class="container">
+    <span class="grey-text title-type"></span><br />
+    <span class="orange-text text-lighten-1">FAQ</span>
+
+    {% if user and user.is_staff %}
+        <a href="{%url 'app:faq_create' %}" class="waves-effect waves-light btn right"><i class="material-icons left">add</i>Eintrag erstellen</a>
+    {% endif %}
+</h3>
+
+<div class="container-wrapper">
+    <div class="container">
+        {% if faqs|length > 0 %}
+            <div>
+                {% for faq in faqs %}
+                    {% include 'app/_faq_entry.html' with faq=faq %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty">
+                <i class="material-icons">clear</i>
+                <p>Es sind keine FAQ-Einträge vorhanden.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

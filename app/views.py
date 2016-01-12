@@ -1,12 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from django.views.generic.base import TemplateView
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+
+from .models import FAQ
+from .forms import FAQForm
+from app_user.models import User
 from django.contrib import messages
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.http import HttpResponseRedirect
+
+from django.core.urlresolvers import reverse
 
 from .models import StaticPage
 from .forms import StaticPageForm
@@ -69,6 +76,68 @@ def start_page_view(request, elems=5):
 
 def raise_exception(request):
     raise Exception("Exception for testing via GET /raise")
+
+def faq_list(request):
+    return render_to_response('app/faq_list.html',{'faqs':FAQ.objects.order_by('position')},RequestContext(request))
+
+def faq(request,id):
+    entry = get_object_or_404(FAQ,id=id)
+    return render_to_response('app/faq.html',{'faq':entry},RequestContext(request))
+
+
+@login_required
+@staff_member_required
+def faq_create(request):
+    if request.method == 'POST':
+        form = FAQForm(data=request.POST)
+        if form.is_valid():
+            form.save(commit= False)
+            form.instance.author = User.objects.filter(pk=request.user.id).first()
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'FAQ-Eintrag wurde erfolgreich erstellt!')
+            return HttpResponseRedirect(reverse('app:faq_list'))
+        else :
+            messages.add_message(request, messages.ERROR, 'Der Eintrag konnte leider nicht gespeichert werden. Bitte prüfen Sie ihre Eingabe!')
+            return render_to_response('app/faq_form.html', {'form': form, 'author': request.user,'action':'app:faq_create'}, RequestContext(request))
+    else:
+        form = FAQForm()
+        return render_to_response('app/faq_form.html', {'form': form, 'author': request.user, 'action':'app:faq_create'}, RequestContext(request))
+
+@login_required
+@staff_member_required
+def faq_edit(request,id):
+    entry = get_object_or_404(FAQ,id=id)
+    if request.method == 'POST':
+        form = FAQForm(data=request.POST, instance=entry)
+        if form.is_valid():
+            form.save(commit= False)
+            form.instance.author = User.objects.filter(pk=request.user.id).first()
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'FAQ-Eintrag wurde erfolgreich aktualisiert!')
+            return HttpResponseRedirect(reverse('app:faq_list'))
+        else :
+            messages.add_message(request, messages.ERROR, 'Der Eintrag konnte leider nicht gespeichert werden. Bitte prüfen Sie ihre eingabe!')
+            return render_to_response('app/faq_form.html', {'form': form, 'author': request.user, 'action': 'app:faq_edit','id':entry.id}, RequestContext(request))
+    else:
+        form = FAQForm(instance=entry)
+        return render_to_response('app/faq_form.html', {'form': form, 'author': request.user, 'action': 'app:faq_edit', 'id':entry.id}, RequestContext(request))
+
+
+
+@login_required
+@staff_member_required
+def faq_delete(request,id):
+    if request.method == 'DELETE':
+        entry = get_object_or_404(FAQ,id=id)
+        if entry is not None:
+            entry.delete()
+            messages.add_message(request, messages.SUCCESS, 'Der FAQ-Eintrag ist erfolgreich gelöscht worden.')
+            return HttpResponseRedirect(reverse('app:faq_list'))
+        else:
+            messages.add_message(request, messages.ERROR, 'Der FAQ-Eintrag konnte nicht gelöscht werden, da er nicht gefunden wurde.')
+            return HttpResponseRedirect(reverse('app:faq_list'))
+    else:
+        raise BaseException("Use http method DELETE for deleting a faq-entry.")
 
 def staticPageView(request, name):
     page = StaticPage.objects.filter(name=name).first()
