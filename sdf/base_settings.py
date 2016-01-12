@@ -179,7 +179,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-MAX_ELEMENTS_PER_PAGE = 8
+MAX_ELEMENTS_PER_PAGE = 12
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
