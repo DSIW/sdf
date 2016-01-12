@@ -8,6 +8,7 @@ from app_book.models import Book, Offer, Counteroffer
 from app_payment.models import Payment
 from datetime import datetime
 from django.shortcuts import get_object_or_404
+from django.core.urlresolvers import reverse
 
 from app.templatetags import template_extras
 from sdf import settings
@@ -69,7 +70,7 @@ class Notification(models.Model):
         )
 
         notification.save()
-        NotificationEmailThread(seller).start()
+        NotificationEmailThread(notification.receiver_user, notification.subject, notification.message).start()
 
     @staticmethod
     def abort_unpaid_payment(payment):
@@ -88,7 +89,7 @@ class Notification(models.Model):
         )
 
         notification.save()
-        NotificationEmailThread(payment.buyer_user).start()
+        NotificationEmailThread(notification.receiver_user, notification.subject, notification.message).start()
 
     @staticmethod
     def counteroffer(counteroffer, seller, buyer, book):
@@ -107,7 +108,7 @@ class Notification(models.Model):
         )
 
         notification.save()
-        NotificationEmailThread(seller).start()
+        NotificationEmailThread(notification.receiver_user, notification.subject, notification.message).start()
 
     @staticmethod
     def counteroffer_decline(counteroffer, buyer, book):
@@ -127,7 +128,7 @@ class Notification(models.Model):
         )
 
         notification.save()
-        NotificationEmailThread(buyer).start()
+        NotificationEmailThread(notification.receiver_user, notification.subject, notification.message).start()
 
     @staticmethod
     def counteroffer_accept(counteroffer, buyer, book, payment):
@@ -148,7 +149,7 @@ class Notification(models.Model):
         )
 
         notification.save()
-        NotificationEmailThread(buyer).start()
+        NotificationEmailThread(notification.receiver_user, notification.subject, notification.message).start()
 
 
     def __str__(self):
@@ -180,7 +181,7 @@ class Notification(models.Model):
         )
 
         new_notification.save()
-        NotificationEmailThread(buyer).start()
+        NotificationEmailThread(new_notification.receiver_user, new_notification.subject, new_notification.message).start()
 
 
     def __str__(self):
@@ -200,7 +201,7 @@ class Notification(models.Model):
             payment=payment,
             receiver_user=payment.buyer_user)
         new_notification.save()
-        NotificationEmailThread(payment.buyer_user).start()
+        NotificationEmailThread(new_notification.receiver_user, new_notification.subject, new_notification.message).start()
 
     @staticmethod
     def request_change_userprofile_administrator(customer_user_id, changeUserData):
@@ -229,7 +230,7 @@ class Notification(models.Model):
                 change_user_profile=changeUserData,
                 receiver_user=admin)
             new_notification.save()
-            NotificationEmailThread(admin).start()
+            NotificationEmailThread(new_notification.receiver_user, new_notification.subject, 'Nutzer möchte Profildaten geändert haben.').start()
 
     @staticmethod
     def request_change_userprofile_customer(admin_user_id, customer_user_id, accepted):
@@ -250,9 +251,11 @@ class Notification(models.Model):
 
         if(accepted == True):
             subject = 'Antrag auf Datenänderung akzeptiert'
+            emailMsg = 'Ihr Antrag auf Datenänderung wurde akzeptiert.'
             msg = 'Ihr Antrag auf Datenänderung wurde akzeptiert und aktualisiert. Folgende Daten wurden aktualisiert: ' + user_data
         else:
             subject = 'Antrag auf Datenänderung abgelehnt'
+            emailMsg = 'Ihr Antrag auf Datenänderung wurde abgelehnt.'
             msg = 'Ihr Antrag auf Datenänderung wurde leider abgelehnt. Folgende Daten sind weiterhin gespeichert: ' + user_data
 
         new_notification = Notification(
@@ -263,7 +266,7 @@ class Notification(models.Model):
             notification_type=Notification.CHANGE_PROFILE_CUSTOMER,
             receiver_user=customer_user)
         new_notification.save()
-        NotificationEmailThread(customer_user).start()
+        NotificationEmailThread(new_notification.receiver_user, new_notification.subject, emailMsg).start()
 
 
     @staticmethod
@@ -285,7 +288,7 @@ class Notification(models.Model):
                 notification_type=Notification.REMOVE_PROFILE_ADMIN,
                 receiver_user=admin)
         new_notification.save()
-        NotificationEmailThread(admin).start()
+        NotificationEmailThread(new_notification.receiver_user, new_notification.subject, 'Nutzer möchte Account gelöscht haben.').start()
 
 
     @staticmethod
@@ -309,18 +312,21 @@ class Notification(models.Model):
             notification_type=Notification.BANN_UNBANN_USER,
             receiver_user=customer_user)
         new_notification.save()
-        NotificationEmailThread(customer_user).start()
+        NotificationEmailThread(new_notification.receiver_user, new_notification.subject, new_notification.message).start()
 
 class NotificationEmailThread(threading.Thread):
     def __init__(self, recipient, subject=None, emailMessage=None):
-        if not subject:
-            self.subject = 'Neue Benachrichtigung eingegangen'
+        self.subject = 'book²: ' + (subject or 'Neue Benachrichtigung eingegangen')
+
+        self.emailMessage = 'Hallo '+ recipient.first_name + ' '+ recipient.last_name +',<br><br>'
+        if emailMessage:
+            self.emailMessage += emailMessage
         else:
-            self.subject = subject
-        if not emailMessage:
-            self.emailMessage = 'Hallo '+ recipient.first_name + ' '+ recipient.last_name +', <br><br>Es liegt eine neue Benachrichtigung vor. Bitte <a href="'+settings.ENDPOINT+'">besuchen Sie Book²</a>, um die Benachrichtigung einzusehen.<br><br>Ihr Book²-Team'
-        else:
-            self.emailMessage = emailMessage
+            self.emailMessage += 'Es liegt eine neue Benachrichtigung vor.'
+        notificationsLink = settings.ENDPOINT + reverse('app_notification:notificationsPage')
+        self.emailMessage += '<br><br><a href="'+notificationsLink+'">Zu den Nachrichten von book²</a>'
+        self.emailMessage += '<br><br>Ihr Book²-Team'
+
         self.recipient = recipient
         self.address = self.recipient.email
         threading.Thread.__init__(self)
