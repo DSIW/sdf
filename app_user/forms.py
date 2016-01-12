@@ -13,8 +13,11 @@ from django.contrib.auth.forms import UserCreationForm
 
 from .models import User, ConfirmEmail, ChangeUserData
 from app.widgets import CustomFileInput
+from app_payment.models import Payment
+from paypal.standard.models import *
 from sdf import settings
 
+ACTIVE_PAYMENT_STATUSES = [ST_PP_CREATED, ST_PP_ACTIVE, ST_PP_PENDING, ST_PP_VOIDED]
 
 def validate_not_real_name(value):
     for user in User.objects.all():
@@ -99,7 +102,7 @@ class EmailThread(threading.Thread):
                   [self.request.POST.get('email')], fail_silently=True, html_message=self.emailMessage)
 
 class CustomUpdateForm(ModelForm):
-
+    delete_account = forms.BooleanField(required=False, label='Account löschen')
     def __init__(self, *args, **kwargs):
         super(CustomUpdateForm, self).__init__(*args, **kwargs)
         self.user = kwargs.pop('initial', None)
@@ -118,14 +121,21 @@ class CustomUpdateForm(ModelForm):
 
         return username
 
+    def clean_delete_account(self):
+        cleaned_data = super(CustomUpdateForm, self).clean()
+        if cleaned_data["delete_account"]:
+            user = User.objects.filter(email = cleaned_data["email"]).first()
+            payments_buyer = Payment.objects.filter(payment_status__in=ACTIVE_PAYMENT_STATUSES, buyer_user_id = user.id);
+            payments_seller = Payment.objects.filter(payment_status__in=ACTIVE_PAYMENT_STATUSES, seller_user_id = user.id);
+            if payments_seller or payments_buyer:
+                raise ValidationError('Sie können Ihren Account nicht löschen, da noch offenen Kaufprozesse vorhanden sind', code='payment_collision')
+        return cleaned_data["delete_account"]
     def clean_email(self):
         cleaned_data = super(CustomUpdateForm, self).clean()
         email = cleaned_data["email"]
         if email != self.user["email"]:
             validate_email(cleaned_data["email"])
-
         return email
-
 
     class Meta:
         model = ChangeUserData

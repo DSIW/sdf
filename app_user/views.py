@@ -152,17 +152,24 @@ def user_update(request, pk):
             return render_to_response('app_user/user_update_form.html', {'form': form}, RequestContext(request))
         if form.is_valid():
             form.user = user
+            if form.cleaned_data["delete_account"]:
+                user.is_active = False;
+                user.save();
+                Notification.request_remove_userprofile_administrator(user.id)
+                messages.add_message(request, messages.SUCCESS,
+                     "Ihr Antrag wurde erfolgreich versendet und wird in Kürze von einem Moderator bearbeitet. Ihr Profil ist ab sofort deaktiviert und wird nach der Bestätigung des Admins gelöscht")
+                return HttpResponseRedirect(reverse('app_user:logout')+'?next=/')
 
-            changeUserData = form.save(commit=False)
-            changeUserData.user_id = user.id
-            changeUserData.save()
-            Notification.request_change_userprofile_administrator(user.id, changeUserData)
-            messages.add_message(request, messages.SUCCESS,
-                     "Ihr Antrag wurde erfolgreich versendet und wird in Kürze von einem Moderator bearbeitet. Sie erhalten anschließend eine Benachrichtigung")
-            return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk':request.user.id}))
+            else:
+                changeUserData = form.save(commit=False)
+                changeUserData.user_id = user.id
+                changeUserData.save()
+                Notification.request_change_userprofile_administrator(user.id, changeUserData)
+                messages.add_message(request, messages.SUCCESS,
+                         "Ihr Antrag wurde erfolgreich versendet und wird in Kürze von einem Moderator bearbeitet. Sie erhalten anschließend eine Benachrichtigung")
+                return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk':request.user.id}))
     else:
         form = CustomUpdateForm(data, initial=data)
-
     return render_to_response('app_user/user_update_form.html', {'form': form}, RequestContext(request))
 
 @login_required
