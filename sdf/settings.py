@@ -9,6 +9,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 ALLOWED_HOSTS = ['127.0.0.1','localhost']
 
+ENDPOINT = "https://sdf.ngrok.com"
+
 # Import local settings
 try:
     from sdf.local_settings import *
