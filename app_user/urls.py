@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^accounts/(?P<id>[0-9]+)/ratings/$', views.user_ratings, name='user_ratings'),
     url(r'^accounts/(?P<change_user_data_id>[0-9]+)/change_user_profile_decline/$', views.change_user_profile_decline, name='change_user_profile_decline'),
     url(r'^accounts/(?P<change_user_data_id>[0-9]+)/change_user_profile_accept/$', views.change_user_profile_accept, name='change_user_profile_accept'),
+    url(r'^accounts/(?P<remove_user_id>[0-9]+)/remove_user/$', views.remove_user, name='remove_user'),
     url(r'^password_reset/$', views.password_reset, name='reset_password'),
 ]

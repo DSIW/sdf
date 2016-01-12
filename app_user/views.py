@@ -30,6 +30,7 @@ from django.utils.translation import ugettext_lazy as _
 from braces.views import FormMessagesMixin
 from smtplib import SMTPRecipientsRefused
 from .models import User, ConfirmEmail
+from app_book.models import Book, Offer
 from .forms import CustomUpdateForm,RegistrationForm, UsernameForm, ImageForm
 from app_payment.models import SellerRating
 
@@ -129,7 +130,8 @@ def user_update(request, pk):
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email,
-            'location': user.location
+            'location': user.location,
+            'paypal' : user.paypal
         }
 
     changeUserDataTmp = ChangeUserData.objects.filter(user_id=user.id).first()
@@ -150,17 +152,24 @@ def user_update(request, pk):
             return render_to_response('app_user/user_update_form.html', {'form': form}, RequestContext(request))
         if form.is_valid():
             form.user = user
+            if form.cleaned_data["delete_account"]:
+                user.is_active = False;
+                user.save();
+                Notification.request_remove_userprofile_administrator(user.id)
+                messages.add_message(request, messages.SUCCESS,
+                     "Ihr Antrag wurde erfolgreich versendet und wird in Kürze von einem Moderator bearbeitet. Ihr Profil ist ab sofort deaktiviert und wird nach der Bestätigung des Admins gelöscht")
+                return HttpResponseRedirect(reverse('app_user:logout')+'?next=/')
 
-            changeUserData = form.save(commit=False)
-            changeUserData.user_id = user.id
-            changeUserData.save()
-            Notification.request_change_userprofile_administrator(user.id, changeUserData)
-            messages.add_message(request, messages.SUCCESS,
-                     "Ihr Antrag wurde erfolgreich versendet und wird in Kürze von einem Moderator bearbeitet. Sie erhalten anschließend eine Benachrichtigung")
-            return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk':request.user.id}))
+            else:
+                changeUserData = form.save(commit=False)
+                changeUserData.user_id = user.id
+                changeUserData.save()
+                Notification.request_change_userprofile_administrator(user.id, changeUserData)
+                messages.add_message(request, messages.SUCCESS,
+                         "Ihr Antrag wurde erfolgreich versendet und wird in Kürze von einem Moderator bearbeitet. Sie erhalten anschließend eine Benachrichtigung")
+                return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk':request.user.id}))
     else:
         form = CustomUpdateForm(data, initial=data)
-
     return render_to_response('app_user/user_update_form.html', {'form': form}, RequestContext(request))
 
 @login_required
@@ -321,6 +330,7 @@ def change_user_profile(request, change_user_data_id, accepted):
         user.last_name = change_user_data.last_name
         user.email = change_user_data.email
         user.location = change_user_data.location
+        user.paypal = change_user_data.paypal
 
         user.save()
 
@@ -339,6 +349,26 @@ def change_user_profile_accept(request, change_user_data_id):
     messages.add_message(request, messages.SUCCESS, 'Benutzerdaten wurden erfolgreich aktualisiert')
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
 
+@login_required
+def remove_user(request, remove_user_id):
+
+    '''Loesche Buecher'''
+    books = Book.objects.filter(user_id = remove_user_id)
+    for book in books:
+        book.delete()
+
+    '''Loesche Schaufenster'''
+    offers = Offer.objects.filter(seller_user_id = remove_user_id)
+    for offer in offers:
+        offer.delete()
+
+
+    user = get_object_or_404(User, id=remove_user_id)
+    user.delete()
+
+
+    messages.add_message(request, messages.SUCCESS, 'Benutzer und alle seine Aktvitäten wurden erfolgreich gelöscht')
+    return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
 
 # Call via AJAX
 @login_required
