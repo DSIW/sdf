@@ -128,7 +128,7 @@ class CustomUpdateForm(ModelForm):
             payments_buyer = Payment.objects.filter(payment_status__in=ACTIVE_PAYMENT_STATUSES, buyer_user_id = user.id);
             payments_seller = Payment.objects.filter(payment_status__in=ACTIVE_PAYMENT_STATUSES, seller_user_id = user.id);
             if payments_seller or payments_buyer:
-                raise ValidationError('Sie können Ihren Account nicht löschen, da noch offenen Kaufprozesse vorhanden sind', code='payment_collision')
+                raise ValidationError('Sie können Ihren Account nicht löschen, da noch offene Kaufprozesse vorhanden sind', code='payment_collision')
         return cleaned_data["delete_account"]
     def clean_email(self):
         cleaned_data = super(CustomUpdateForm, self).clean()
