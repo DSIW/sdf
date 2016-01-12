@@ -154,6 +154,7 @@ def user_update(request, pk):
             form.user = user
             if form.cleaned_data["delete_account"]:
                 user.is_active = False;
+                user.showcaseDisabled = True;
                 user.save();
                 Notification.request_remove_userprofile_administrator(user.id)
                 messages.add_message(request, messages.SUCCESS,
