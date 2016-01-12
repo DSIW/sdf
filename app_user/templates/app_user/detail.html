@@ -54,7 +54,9 @@
                         Pseudonym: <strong>{{ user.username }}</strong>
                     {% else %}
                         Name: <strong>{{ user.full_name }}</strong>
-                        <a class="waves-effect waves-light  usernamemodal-trigger right" href="#usernamemodal">Pseudonym angeben</a>
+                        {% if request.user.id == user.id %}
+                            <a class="waves-effect waves-light  usernamemodal-trigger right" href="#usernamemodal">Pseudonym angeben</a>
+                        {% endif %}
                     {% endif %}
                 </p>
                 <p>Bewertung:

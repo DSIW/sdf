@@ -189,7 +189,7 @@ def user_details(request, pk):
             return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk':request.user.id}))
         else:
             autoopen["imagemodal"] = 'true'
-    elif request.method == "POST" and request.POST.get("form") == "updateUsername":
+    elif request.method == "POST" and request.POST.get("form") == "updateUsername" and user.id == request.user.id:
         form = UsernameForm(request.POST)
         imageform = ImageForm()
         if form.is_valid():
