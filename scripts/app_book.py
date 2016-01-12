@@ -291,10 +291,10 @@ Politik ist pragmatisches Handeln zu sittlichen Zwecken, hat Helmut Schmidt einm
     app_book.isbn10 = '3426510170'
     app_book.isbn13 = '978-3426510179'
     app_book.description = '''
-Jedes Jahr verschwinden auf hoher See rund 20 Menschen spurlos von Kreuzfahrtschiffen. Noch nie kam jemand zurück. Bis jetzt ... 
+Jedes Jahr verschwinden auf hoher See rund 20 Menschen spurlos von Kreuzfahrtschiffen. Noch nie kam jemand zurück. Bis jetzt ...
 
-Martin Schwartz, Polizeipsychologe, hat vor fünf Jahren Frau und Sohn verloren. Es geschah während eines Urlaubs auf dem Kreuzfahrtschiff „Sultan of the Seas“ – niemand konnte ihm sagen, was genau geschah. Martin ist seither ein psychisches Wrack und betäubt sich mit Himmelfahrtskommandos als verdeckter Ermittler. 
-Mitten in einem Einsatz bekommt er den Anruf einer seltsamen alten Dame, die sich als Thrillerautorin bezeichnet: Er müsse unbedingt an Bord der „Sultan“ kommen, es gebe Beweise dafür, was seiner Familie zugestoßen ist. Nie wieder wollte Martin den Fuß auf ein Schiff setzen – und doch folgt er dem Hinweis und erfährt, dass ein vor Wochen auf der „Sultan“ verschwundenes Mädchen wieder aufgetaucht ist. Mit dem Teddy seines Sohnes im Arm … 
+Martin Schwartz, Polizeipsychologe, hat vor fünf Jahren Frau und Sohn verloren. Es geschah während eines Urlaubs auf dem Kreuzfahrtschiff „Sultan of the Seas“ – niemand konnte ihm sagen, was genau geschah. Martin ist seither ein psychisches Wrack und betäubt sich mit Himmelfahrtskommandos als verdeckter Ermittler.
+Mitten in einem Einsatz bekommt er den Anruf einer seltsamen alten Dame, die sich als Thrillerautorin bezeichnet: Er müsse unbedingt an Bord der „Sultan“ kommen, es gebe Beweise dafür, was seiner Familie zugestoßen ist. Nie wieder wollte Martin den Fuß auf ein Schiff setzen – und doch folgt er dem Hinweis und erfährt, dass ein vor Wochen auf der „Sultan“ verschwundenes Mädchen wieder aufgetaucht ist. Mit dem Teddy seines Sohnes im Arm …
 '''
     app_book = importer.save_or_locate(app_book)
 
@@ -326,7 +326,7 @@ Ausgerechnet der Darm! Das schwarze Schaf unter den Organen, das einem doch bish
     app_book.description = '''
 Zwei Frauen, ein altes Haus und eine Art von Familie
 
-Das „Polackenkind“ ist die fünfjährige Vera auf dem Hof im Alten Land, wohin sie 1945 aus Ostpreußen mit ihrer Mutter geflohen ist. Ihr Leben lang fühlt sie sich fremd in dem großen, kalten Bauernhaus und kann trotzdem nicht davon lassen. Bis sechzig Jahre später plötzlich ihre Nichte Anne vor der Tür steht. Sie ist mit ihrem kleinen Sohn aus Hamburg-Ottensen geflüchtet, wo ehrgeizige Vollwert-Eltern ihre Kinder wie Preispokale durch die Straßen tragen – und wo Annes Mann eine Andere liebt. Vera und Anne sind einander fremd und haben doch viel mehr gemeinsam, als sie ahnen. 
+Das „Polackenkind“ ist die fünfjährige Vera auf dem Hof im Alten Land, wohin sie 1945 aus Ostpreußen mit ihrer Mutter geflohen ist. Ihr Leben lang fühlt sie sich fremd in dem großen, kalten Bauernhaus und kann trotzdem nicht davon lassen. Bis sechzig Jahre später plötzlich ihre Nichte Anne vor der Tür steht. Sie ist mit ihrem kleinen Sohn aus Hamburg-Ottensen geflüchtet, wo ehrgeizige Vollwert-Eltern ihre Kinder wie Preispokale durch die Straßen tragen – und wo Annes Mann eine Andere liebt. Vera und Anne sind einander fremd und haben doch viel mehr gemeinsam, als sie ahnen.
 
 Mit scharfem Blick und trockenem Witz erzählt Dörte Hansen von zwei Einzelgängerinnen, die überraschend finden, was sie nie gesucht haben: eine Familie.
 '''
@@ -591,7 +591,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.isbn10 = '34-4231-262-0'
     app_book.isbn13 = '978-34-4231-262-0'
     app_book.description = '''
-        Richard David Precht erklärt uns in drei Bänden die großen Fragen, die sich die Menschen durch die Jahrhunderte gestellt haben. Im ersten Teil seiner auf drei Bände angelegten Geschichte der Philosophie beschreibt Richard David Precht die Entwicklung des abendländischen Denkens von der Antike bis zum Mittelalter. Kenntnisreich und detailliert verknüpft er die Linien der großen Menschheitsfragen und verfolgt die Entfaltung der wichtigsten Ideen – von den Ursprungsgefilden der abendländischen Philosophie an der schönen Küste Kleinasiens bis in die Klöster und Studierstuben, die Kirchen und Machtzentren des Spätmittelalters. Dabei bettet er die Philosophie in die politischen, wirtschaftlichen und sozialen Fragen der jeweiligen Zeit ein und macht sie auf diese Weise auch für eine größere Leserschaft lebendig. Ein Buch, das dazu hilft, sich einen tiefen Einblick in die Geschichte der Philosophie zu verschaffen und die Dinge zu ordnen. Tauchen Sie ein in die schier unerschöpfliche Fülle des Denkens!'''  
+        Richard David Precht erklärt uns in drei Bänden die großen Fragen, die sich die Menschen durch die Jahrhunderte gestellt haben. Im ersten Teil seiner auf drei Bände angelegten Geschichte der Philosophie beschreibt Richard David Precht die Entwicklung des abendländischen Denkens von der Antike bis zum Mittelalter. Kenntnisreich und detailliert verknüpft er die Linien der großen Menschheitsfragen und verfolgt die Entfaltung der wichtigsten Ideen – von den Ursprungsgefilden der abendländischen Philosophie an der schönen Küste Kleinasiens bis in die Klöster und Studierstuben, die Kirchen und Machtzentren des Spätmittelalters. Dabei bettet er die Philosophie in die politischen, wirtschaftlichen und sozialen Fragen der jeweiligen Zeit ein und macht sie auf diese Weise auch für eine größere Leserschaft lebendig. Ein Buch, das dazu hilft, sich einen tiefen Einblick in die Geschichte der Philosophie zu verschaffen und die Dinge zu ordnen. Tauchen Sie ein in die schier unerschöpfliche Fülle des Denkens!'''
     app_book = importer.save_or_locate(app_book)
 
     offer = Offer()
@@ -625,7 +625,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     offer.shipping_price = 3
     offer.active = True
     offer = importer.save_or_locate(offer)
-      
+
     app_book = Book()
     app_book.user = User.objects.filter(email='s0535844@htw-berlin.de').first()
     app_book.name = '365 Sexstellungen: Heiße Sexspiele für ein ganzes Jahr'
@@ -640,7 +640,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
         Spaß im Bett, und das an jedem Tag des Jahres. Abenteuerlustige Paare können hier die 365 heißesten Sexstellungen erproben. Wie wärs zum Start mit dem "Schlitten"? Aber auch die "Windmühle" und der "Ponyritt" lassen keine Langeweile aufkommen. Und zum krönenden Höhepunkt können Sie in einer "endlosen Umarmung" verschmelzen …'''
     app_book = importer.save_or_locate(app_book)
 
-        
+
     offer = Offer()
     offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
     offer.seller_user = User.objects.filter(email='s0535844@htw-berlin.de').first()
@@ -742,3 +742,50 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     offer.active = True
     offer = importer.save_or_locate(offer)
 
+    app_book = Book()
+    app_book.user = User.objects.filter(email='book2@jelger.de').first()
+    app_book.name = 'Die Kunst der Täuschung: Risikofaktor Mensch'
+    app_book.author = 'Kevin D. Mitnick, William Simon'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2006-03-27")
+    app_book.pageNumber = 416
+    app_book.image = 'images/books/book_29.jpg'
+    app_book.isbn10 = '3826615697'
+    app_book.isbn13 = '978-3826615696'
+    app_book.description = '''
+      In Die Kunst der Täuschung dreht sich alles um die Möglichkeit, jemandes Vertrauen mit Lügen zu erschleichen, um dieses Vertrauen dann zum eigenen Spaß und Vorteil zu missbrauchen. Hacker beschönigen dieses Vorgehen mit der Bezeichnung "soziales hacken" und der wohl bekannteste Hacker, Kevin Mitnick, analysiert in seinem Buch diese Technik mit zahlreichen Beispielszenarien.'''
+    app_book = importer.save_or_locate(app_book)
+
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2016-01-12T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='book2@jelger.de').first()
+    offer.book = Book.objects.filter(name = 'Die Kunst der Täuschung: Risikofaktor Mensch').first()
+    offer.price = 12
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='book2@jelger.de').first()
+    app_book.name = 'Philosophie des Zen-Buddhismus'
+    app_book.author = 'Byung-Chul Han'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2002-03-01")
+    app_book.pageNumber = 136
+    app_book.image = 'images/books/book_30.jpg'
+    app_book.isbn10 = '3150181852'
+    app_book.isbn13 = '978-3150181850'
+    app_book.description = '''
+      Der Zen-Buddhismus ist eine charakteristisch fernöstliche Form des Buddhismus. Er enthält philosophische Einsichten, die auf interessante Weise mit abendländischen Denkmustern kontrastieren. Der vorliegende Band stellt anschaulich dar, worin die philosophische Kraft des Zen-Buddhismus besteht, und führt zugleich in die Grundzüge fernöstlichen Denkens ein.'''
+    app_book = importer.save_or_locate(app_book)
+
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2016-01-12T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='book2@jelger.de').first()
+    offer.book = Book.objects.filter(name = 'Philosophie des Zen-Buddhismus').first()
+    offer.price = 1
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
