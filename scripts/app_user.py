@@ -244,7 +244,6 @@ def import_data():
     auth_user_5.date_joined = dateutil.parser.parse("2015-12-08T14:21:49.434251+00:00")
     auth_user_5 = importer.save_or_locate(auth_user_5)
 
-
     auth_user_6 = User()
     auth_user_6.password = 'pbkdf2_sha256$20000$f49atNcSl4xt$jBFjdFzW7X6ownYonQ7LK6EzMwshtYtLUxtdMqWGwks='
     auth_user_6.last_login = dateutil.parser.parse("2015-11-08T14:22:59.793180+00:00")
@@ -259,7 +258,6 @@ def import_data():
     auth_user_6.is_active = True
     auth_user_6.date_joined = dateutil.parser.parse("2015-12-08T14:21:49.434251+00:00")
     auth_user_6 = importer.save_or_locate(auth_user_6)
-
 
     auth_user_7 = User()
     auth_user_7.password = 'pbkdf2_sha256$20000$f49atNcSl4xt$jBFjdFzW7X6ownYonQ7LK6EzMwshtYtLUxtdMqWGwks='

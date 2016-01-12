@@ -1,0 +1,18 @@
+<div class="card rating-card black-text" >
+    <div class="card-content">
+        {% if user and user.is_staff %}
+        <p class="right">
+            <a href="{% url 'app:faq_edit' faq.id %}" class="btn">Bearbeiten</a>
+            <a href="{% url 'app:faq_delete' faq.id %}" data-method="delete" data-confirm="true" data-confirm-custom="Der FAQ-Eintrag wird unwiederruflich gelöscht. Sind Sie sicher, dass Sie fortfahren möchten?" data-confirm-ok="Löschen" class="btn">Löschen</a>
+        </p>
+        {% endif %}
+        <a href="{% url 'app:faq' faq.id %}" class="black-text">
+            <div><h4>{{faq.title}}</h4> </div>
+            <div>
+                {{ faq.text|safe|linebreaks|truncatechars:400}}  {%if faq.text|length > 400 %}<b>Weiterlesen...</b>{% endif %}
+                <hr />
+                <p style="font-size: x-small">Zuletzt geändert am <b>{{faq.updatedAt}}</b> von  <b>{{faq.author.pseudonym_or_full_name}}</b></p>
+            </div>
+        </a>
+    </div>
+</div>

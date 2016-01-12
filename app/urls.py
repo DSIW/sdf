@@ -14,6 +14,15 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
     # static
+
+    url(r'^faq/$',views.faq_list, name='faq_list'),
+    url(r'^faq/(?P<id>[0-9]+)/$',views.faq,name='faq'),
+    url(r'^faq/create/$',views.faq_create,name='faq_create'),
+    url(r'^faq/(?P<id>[0-9]+)/delete/$',views.faq_delete,name='faq_delete'),
+    url(r'^faq/(?P<id>[0-9]+)/edit/$',views.faq_edit,name='faq_edit'),
+
+
+
     url(r'^page/([a-z]+)$', views.staticPageView, name='staticpage'),
 
     # for testing
