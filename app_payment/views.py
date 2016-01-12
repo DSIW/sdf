@@ -121,7 +121,8 @@ def paypal_abort(request, id):
 def paypal_ipn(sender, **kwargs):
     ipn_obj = sender
     payment = Payment.objects.filter(invoice=ipn_obj.invoice).first()
-    update_payment_from_paypal_ipn(payment, ipn_obj)
+    if payment is not None:
+        update_payment_from_paypal_ipn(payment, ipn_obj)
 
 valid_ipn_received.connect(paypal_ipn)
 invalid_ipn_received.connect(paypal_ipn)
