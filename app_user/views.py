@@ -36,7 +36,7 @@ from app_payment.models import SellerRating
 
 
 # Custom Current User Decorator
-from sdf import settings
+from django.conf import settings
 
 def login_user(request):
     # prevent a logged in user from accessing the login page

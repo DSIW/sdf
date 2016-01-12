@@ -24,7 +24,7 @@ from app_payment.services import start_payment
 from app_notification.models import Notification
 from .models import Book
 from .forms import BookForm
-from sdf import settings
+from django.conf import settings
 
 import watson
 import collections

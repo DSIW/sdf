@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 
 from app.templatetags import template_extras
-from sdf import settings
+from django.conf import settings
 
 
 class Notification(models.Model):

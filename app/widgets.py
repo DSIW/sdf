@@ -3,7 +3,7 @@
 from file_resubmit.admin import AdminResubmitImageWidget
 import re
 
-from sdf import settings
+from django.conf import settings
 
 
 class CustomFileInput(AdminResubmitImageWidget):

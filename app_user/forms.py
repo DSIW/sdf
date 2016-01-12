@@ -15,7 +15,7 @@ from .models import User, ConfirmEmail, ChangeUserData
 from app.widgets import CustomFileInput
 from app_payment.models import Payment
 from paypal.standard.models import *
-from sdf import settings
+from django.conf import settings
 
 ACTIVE_PAYMENT_STATUSES = [ST_PP_CREATED, ST_PP_ACTIVE, ST_PP_PENDING, ST_PP_VOIDED]
 
