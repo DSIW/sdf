@@ -6,6 +6,8 @@
     <h3 class="container">
         <span class="grey-text title-type">Schaufenster</span><br />
         <span class="orange-text text-lighten-1">{{ showcase_user.pseudonym_or_full_name }}</span>
+
+        <a class="waves-effect waves-light btn right" href="{% url 'app_user:user-details' showcase_user.id %}">Zum Nutzer</a>
     </h3>
 
     <div class="container-wrapper">
