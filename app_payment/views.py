@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -79,7 +79,7 @@ def start_paypal_payment(request, id):
 def paypal_redirection(request, id):
     template_name = 'app_payment/payment_start.html'
 
-    payment = Payment.objects.get(id=id)
+    payment = get_object_or_404(Payment, id=id)
 
     messages.add_message(request, messages.SUCCESS, 'Sie werden in Kürze zu Paypal weitergeleitet...')
 
@@ -90,7 +90,7 @@ def paypal_redirection(request, id):
 @csrf_exempt
 @login_required
 def paypal_complete(request, id):
-    payment = Payment.objects.filter(id=id).first()
+    payment = get_object_or_404(Payment, id=id)
     success = complete_payment(payment)
     if success:
         messages.add_message(request, messages.SUCCESS, 'Die Bezahlung wurde durchgeführt.')
@@ -101,7 +101,7 @@ def paypal_complete(request, id):
 @csrf_exempt
 @login_required
 def paypal_abort(request, id):
-    payment = Payment.objects.filter(id=id).first()
+    payment = get_object_or_404(Payment, id=id)
     success = abort_payment(payment)
 
     if request.method == 'POST' and request.is_ajax():
@@ -128,11 +128,11 @@ def rate_seller(request, id):
     backpath = request.META.get('HTTP_REFERER')
     if backpath is None :
         backpath = reverse("app:startPage")
-    rating = SellerRating.objects.filter(payment_id=id).first()
+    rating = get_object_or_404(SellerRating, payment_id=id)
     if rating is not None:
         messages.add_message(request,messages.ERROR,"Sie können ein Verkäufer pro Einkauf nur einmal bewerten.")
         return HttpResponseRedirect(backpath)
-    payment = Payment.objects.filter(pk=id).first()
+    payment = get_object_or_404(Payment, id=id)
     if payment is None:
         messages.add_message(request,messages.ERROR,"Sie können diesen Nutzer nicht bewerten.")
         return HttpResponseRedirect(backpath)
