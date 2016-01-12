@@ -15,7 +15,7 @@ def change_ownership(book_id, to_user_id):
 
     try:
         book = Book.objects.get(pk=book_id)
-        offer = book.offer_set.first()
+        offer = book.offer_set.filter(active = True).first()
     except ObjectDoesNotExist as e:
         return False
 
@@ -43,11 +43,7 @@ def complete_payment(payment):
         book = payment.book
         change_ownership(book.id, payment.buyer_user.id)
 
-        # duplicate offer
-        new_offer = book.offer()
-        new_offer.pk = None
-        new_offer.seller_user = payment.buyer_user
-        new_offer.save()
+
 
         Notification.fastbuy(payment.buyer_user, payment.seller_user, payment.book)
         Notification.request_rating(payment)
