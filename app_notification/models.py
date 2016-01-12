@@ -244,7 +244,7 @@ class Notification(models.Model):
         else:
             user_data += '<br> Sie haben kein Pseudonym vergeben'
 
-        user_data += '<br>E-Mail Adresse: ' + customer_user.email + '<br>Wohnort: ' + customer_user.location
+        user_data += '<br>E-Mail Adresse: ' + customer_user.email + '<br>Paypal-Adresse: ' + customer_user.paypal +  '<br>Wohnort: ' + customer_user.location
 
         if(accepted == True):
             subject = 'Antrag auf Datenänderung akzeptiert'

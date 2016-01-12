@@ -130,7 +130,8 @@ def user_update(request, pk):
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email,
-            'location': user.location
+            'location': user.location,
+            'paypal' : user.paypal
         }
 
     changeUserDataTmp = ChangeUserData.objects.filter(user_id=user.id).first()
@@ -322,6 +323,7 @@ def change_user_profile(request, change_user_data_id, accepted):
         user.last_name = change_user_data.last_name
         user.email = change_user_data.email
         user.location = change_user_data.location
+        user.paypal = change_user_data.paypal
 
         user.save()
 

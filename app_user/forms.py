@@ -129,7 +129,7 @@ class CustomUpdateForm(ModelForm):
 
     class Meta:
         model = ChangeUserData
-        fields = ['username', 'first_name', 'last_name', 'email', 'location']
+        fields = ['username', 'first_name', 'last_name', 'email', 'location', 'paypal']
         widgets = {
             'username' : forms.TextInput(attrs = {'placeholder': 'Pseudonym löschen'}),
         }
