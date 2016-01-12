@@ -154,6 +154,7 @@ def user_update(request, pk):
             form.user = user
             if form.cleaned_data["delete_account"]:
                 user.is_active = False;
+                user.showcaseDisabled = True;
                 user.save();
                 Notification.request_remove_userprofile_administrator(user.id)
                 messages.add_message(request, messages.SUCCESS,
@@ -198,7 +199,7 @@ def user_details(request, pk):
             return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk':request.user.id}))
         else:
             autoopen["imagemodal"] = 'true'
-    elif request.method == "POST" and request.POST.get("form") == "updateUsername":
+    elif request.method == "POST" and request.POST.get("form") == "updateUsername" and user.id == request.user.id:
         form = UsernameForm(request.POST)
         imageform = ImageForm()
         if form.is_valid():

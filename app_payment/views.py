@@ -132,13 +132,16 @@ def rate_seller(request, id):
     backpath = request.META.get('HTTP_REFERER')
     if backpath is None :
         backpath = reverse("app:startPage")
-    rating = get_object_or_404(SellerRating, payment_id=id)
+    rating = SellerRating.objects.filter(payment_id=id).first()
     if rating is not None:
         messages.add_message(request,messages.ERROR,"Sie können ein Verkäufer pro Einkauf nur einmal bewerten.")
         return HttpResponseRedirect(backpath)
     payment = get_object_or_404(Payment, id=id)
     if payment is None:
         messages.add_message(request,messages.ERROR,"Sie können diesen Nutzer nicht bewerten.")
+        return HttpResponseRedirect(backpath)
+    if not payment.is_completed():
+        messages.add_message(request,messages.ERROR,"Sie können den Nutzer nur nach abgeschlossenen Käufen bewerten.")
         return HttpResponseRedirect(backpath)
     rated_user = User.objects.filter(pk=payment.seller_user.id).first()
     if request.method == 'POST':

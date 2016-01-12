@@ -221,7 +221,7 @@ def showcaseView(request, user_id):
     template_name = 'app_book/showcase.html'
 
     user = get_object_or_404(User, id=user_id)
-    offers = Offer.objects.filter(seller_user_id=user_id, active=True).all()
+    offers = Offer.objects.filter(seller_user=user, active=True).all()
 
     return render_to_response(template_name, {
         "showcase_user": user,
@@ -270,7 +270,8 @@ def createBook(request):
 @can_change_book
 def publishBook(request, id):
     book = get_object_or_404(Book, id=id)
-    offer = book.offer_set.first()
+    user = get_object_or_404(User, id=request.user.id)
+    offer = book.offer_set.filter(seller_user = user).first()
     offer_form = PublishOfferForm(instance=offer)
 
     if request.method == 'POST':
@@ -309,7 +310,8 @@ def unpublishBook(request, id):
         unpublish_book(book)
         messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun nicht mehr zum Verkauf angeboten!')
         # decline all active counteroffers:
-        offer = book.offer_set.first()
+        user = get_object_or_404(User, id=request.user.id)
+        offer = book.offer_set.filter(seller_user = user).first()
         counteroffers = Counteroffer.objects.filter(offer=offer, active=True)
         for co in counteroffers:
             Notification.counteroffer_decline(co, co.creator, book)
