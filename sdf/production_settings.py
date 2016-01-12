@@ -6,6 +6,7 @@ from sdf.base_settings import *
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    '141.45.146.248',
     '.htw-berlin.de', # Allow domain and subdomains
 ]
 
