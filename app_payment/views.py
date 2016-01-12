@@ -10,7 +10,6 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
-import json
 
 
 from app_book.models import Book, Offer, Counteroffer
@@ -32,7 +31,7 @@ def build_payment_form(payment):
         "invoice": payment.invoice,
         "currency_code": payment.currency_code,
         "notify_url": settings.ENDPOINT + reverse('app_payment:paypal-ipn'),
-        "return_url": settings.ENDPOINT + reverse('app_payment:payment-success', kwargs={'id': payment.id}),
+        "return_url": settings.ENDPOINT + reverse('app_payment:payment-success', kwargs={'id': payment.id, 'secret': str(payment.secret)}),
         "cancel_return": settings.ENDPOINT + reverse('app_payment:payment-cancel', kwargs={'id': payment.id})
     })
 
@@ -91,6 +90,11 @@ def paypal_redirection(request, id):
 @login_required
 def paypal_complete(request, id):
     payment = get_object_or_404(Payment, id=id)
+
+    if payment.secret != request.GET.get('secret'):
+        messages.add_message(request, messages.ERROR, 'Der Vorgang wurde verboten.')
+        return HttpResponseRedirect(reverse('app_book:archivesPage'))
+
     success = complete_payment(payment)
     if success:
         messages.add_message(request, messages.SUCCESS, 'Die Bezahlung wurde durchgeführt.')
