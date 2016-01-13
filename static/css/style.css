@@ -377,22 +377,22 @@ nav .input-field.search-field input[type=search] {
   background-color: #FFA726;
   /* needs to be 100% width for better float breaks of child ul elems */
   width: 100%;
-
-  border-right-width: 1px;
-  border-left-width: 1px;
-
   overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-top-width: 0;
+  border-right-width: 0;
 }
-
 #nav_ul_sort > li {
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
-  padding-left: 15px;
+  flex: 1 0 auto;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom-width: 0;
+  border-left-width: 0;
+  padding-left: 10px;
   float:right;
 }
-#nav_ul_sort > li:last-child {
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+#nav_ul_sort a{
+  padding: 0 10px;
 }
-
 
 .text-shadow {
     text-shadow: 0 1px 2px rgba(0,0,0,0.8);

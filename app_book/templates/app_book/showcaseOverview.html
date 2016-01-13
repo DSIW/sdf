@@ -14,7 +14,7 @@
         <nav class="orange lighten-1">
             <div class="nav-wrapper container">
 
-                <ul id="nav_ul_sort">
+                <ul id="nav_ul_sort" class="flex-container">
                     {% with order_comp=order_by|add:"-"|add:order_dir %}
 
                     <li>Aktualisierungsdatum:
@@ -23,9 +23,7 @@
                             <li class="{% active order_comp 'date-desc'%}" ><a href="?{% url_replace_sort request 'order_by' 'date' 'order_dir' 'desc' %}" class="white-text">&#8595;</a></li>
                         </ul>
                     </li>
-
                     <!-- TODO User rating asc  -->
-
                     <!-- TODO User rating desc -->
                     <li>Anzahl:
                         <ul class="right">
@@ -33,20 +31,20 @@
                             <li class="{% active order_comp 'count-desc' %}" ><a href="?{% url_replace_sort request 'order_by' 'count' 'order_dir' 'desc' %}" class="white-text">&#8595;</a></li>
                         </ul>
                     </li>
-
                     <li>Name:
                         <ul class="right">
                             <li class="{% active order_comp 'name-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'name' 'order_dir' 'asc' %}" class="white-text">&#8593;</a></li>
                             <li class="{% active order_comp 'name-desc' %}" ><a href="?{% url_replace_sort request 'order_by' 'name' 'order_dir' 'desc' %}" class="white-text">&#8595;</a></li>
                         </ul>
                     </li>
-                    <li class="left">
+                    <li>
                         <form role="form" method="get" action="?">
                             {% for field in request.GET %}
                             {% if field != 'seller' %}
                             <input type="hidden" name="{{ field }}" value="{% field_value request field %}"/>
                             {% endif %}
                             {% endfor %}
+
                             <div class="input-field search-field">
                                 <label for="search"><i class="material-icons">search</i></label>
                                 <input placeholder="Verkäufer" name="seller" type="search" id="search-field" class="field" maxlength="" value="{{ request.GET.seller }}">
