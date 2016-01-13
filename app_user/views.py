@@ -173,7 +173,6 @@ def user_update(request, pk):
         form = CustomUpdateForm(data, initial=data)
     return render_to_response('app_user/user_update_form.html', {'form': form}, RequestContext(request))
 
-@login_required
 def user_details(request, pk):
     template_name = 'app_user/detail.html'
     user = User.objects.filter(id=pk).first()
@@ -315,7 +314,6 @@ def password_new(request, uuid):
     action = reverse('app_user:new_password', kwargs={'uuid': uuid})
     return render_to_response('app_user/password.html', {'form': form, 'action': action}, RequestContext(request))
 
-@login_required
 def user_ratings(request, id):
     user = User.objects.filter(pk=id).first()
     ratings = SellerRating.objects.filter(rated_user_id=id)
