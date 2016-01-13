@@ -756,7 +756,6 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
       In Die Kunst der Täuschung dreht sich alles um die Möglichkeit, jemandes Vertrauen mit Lügen zu erschleichen, um dieses Vertrauen dann zum eigenen Spaß und Vorteil zu missbrauchen. Hacker beschönigen dieses Vorgehen mit der Bezeichnung "soziales hacken" und der wohl bekannteste Hacker, Kevin Mitnick, analysiert in seinem Buch diese Technik mit zahlreichen Beispielszenarien.'''
     app_book = importer.save_or_locate(app_book)
 
-
     offer = Offer()
     offer.updated = dateutil.parser.parse("2016-01-12T12:00:00.000000+00:00")
     offer.seller_user = User.objects.filter(email='book2@jelger.de').first()
@@ -765,6 +764,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     offer.shipping_price = 3
     offer.active = True
     offer = importer.save_or_locate(offer)
+
 
     app_book = Book()
     app_book.user = User.objects.filter(email='book2@jelger.de').first()
@@ -780,7 +780,6 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
       Der Zen-Buddhismus ist eine charakteristisch fernöstliche Form des Buddhismus. Er enthält philosophische Einsichten, die auf interessante Weise mit abendländischen Denkmustern kontrastieren. Der vorliegende Band stellt anschaulich dar, worin die philosophische Kraft des Zen-Buddhismus besteht, und führt zugleich in die Grundzüge fernöstlichen Denkens ein.'''
     app_book = importer.save_or_locate(app_book)
 
-
     offer = Offer()
     offer.updated = dateutil.parser.parse("2016-01-12T12:00:00.000000+00:00")
     offer.seller_user = User.objects.filter(email='book2@jelger.de').first()
@@ -789,3 +788,59 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     offer.shipping_price = 3
     offer.active = True
     offer = importer.save_or_locate(offer)
+
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='daniel@book2.de').first()
+    app_book.name = 'The Martian'
+    app_book.author = 'Andy Weir'
+    app_book.language = 'EN'
+    app_book.releaseDate = dateutil.parser.parse("2014-02-11")
+    app_book.pageNumber = 384
+    app_book.image = 'images/books/book_31.jpg'
+    app_book.isbn10 = '0804139024'
+    app_book.isbn13 = '978-0804139021'
+    app_book.description = '''
+      Six days ago, astronaut Mark Watney became one of the first people to walk on Mars.
+      Now, he's sure he'll be the first person to die there.
+      After a dust storm nearly kills him and forces his crew to evacuate while thinking him dead, Mark finds himself stranded and completely alone with no way to even signal Earth that he’s alive—and even if he could get word out, his supplies would be gone long before a rescue could arrive.
+      Chances are, though, he won't have time to starve to death. The damaged machinery, unforgiving environment, or plain-old "human error" are much more likely to kill him first.
+      But Mark isn't ready to give up yet. Drawing on his ingenuity, his engineering skills—and a relentless, dogged refusal to quit—he steadfastly confronts one seemingly insurmountable obstacle after the next. Will his resourcefulness be enough to overcome the impossible odds against him?'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2016-01-12T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='daniel@book2.de').first()
+    offer.book = Book.objects.filter(name = 'The Martian').first()
+    offer.price = 7.50
+    offer.shipping_price = 3.99
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+    
+    app_book = Book()
+    app_book.user = User.objects.filter(email='daniel@book2.de').first()
+    app_book.name = 'Nineteen Eighty-Four'
+    app_book.author = 'George Orwell'
+    app_book.language = 'EN'
+    app_book.releaseDate = dateutil.parser.parse("1949-06-01")
+    app_book.pageNumber = 368
+    app_book.image = 'images/books/book_32.jpg'
+    app_book.isbn10 = '0141191201'
+    app_book.isbn13 = '978-0141191201'
+    app_book.description = '''
+      Winston Smith works for the Ministry of Truth in London, chief city of Airstrip One. Big Brother stares out from every poster, the Thought Police uncover every act of betrayal.
+      When Winston finds love with Julia, he discovers that life does not have to be dull and deadening, and awakens to new possibilities. 
+      Despite the police helicopters that hover and circle overhead, Winston and Julia begin to question the Party; they are drawn towards conspiracy. Yet Big Brother will not tolerate dissent - even in the mind. 
+      For those with original thoughts they invented Room 101.'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2016-01-12T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='daniel@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Nineteen Eighty-Four').first()
+    offer.price = 3.74
+    offer.shipping_price = 2.99
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+
