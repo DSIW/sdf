@@ -143,7 +143,7 @@ def import_data():
     app_book.language = 'EN'
     app_book.releaseDate = dateutil.parser.parse("2014-11-11")
     app_book.pageNumber = 243
-    app_book.image = 'images/books/book_2.jpg'
+    app_book.image = 'images/books/book_1.jpg'
     app_book.isbn10 = '149194594X'
     app_book.isbn13 = '978-1491945940'
     app_book.description = "Julia Elman has been working her brand of web skills for nearly a decade. She started out as a designer for an internal marketing group at a travel agency in Los Angeles, and quickly honed her skills as a web designer using HTML/CSS. Julia joined the Caktus Consulting Group in 2011 and is thrilled to work with some of the most talented developers this side of the Mississippi. She is actively involved with Girl Develop It RDU as an instructor to help contribute in educating women pursuing a career in technology. Mark is a lead Python/Django developer at Caktus Consulting Group in Carrboro, NC. He also runs a small homebrewing website written in Django called brewedbyus.com. He came to Python web development after a few years pricing derivatives on Wall Street. Mark maintains a number of open source projects primarily related to Django development and frequently contributes back to projects used by Caktus. When he isn't programming, Mark enjoys spending time with his wife and daughter, brewing beer, and running."
@@ -165,7 +165,7 @@ def import_data():
     app_book.language = 'EN'
     app_book.releaseDate = dateutil.parser.parse("2016-03-25")
     app_book.pageNumber = 300
-    app_book.image = 'images/books/book_3.jpg'
+    app_book.image = 'images/books/book_2.jpg'
     app_book.isbn10 = '144936781X'
     app_book.isbn13 = '978-1449367817'
     app_book.description = ''
@@ -187,7 +187,7 @@ def import_data():
     app_book.language = 'EN'
     app_book.releaseDate = dateutil.parser.parse("2014-06-19")
     app_book.pageNumber = 478
-    app_book.image = 'images/books/book_15.jpg'
+    app_book.image = 'images/books/book_3.jpg'
     app_book.isbn10 = '1449364829'
     app_book.isbn13 = '978-1449364823'
     app_book.description = ''
@@ -446,7 +446,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("1997-11-29")
     app_book.pageNumber = 192
-    app_book.image = 'images/books/book_16.jpg'
+    app_book.image = 'images/books/book_15.jpg'
     app_book.isbn10 = '3518392603'
     app_book.isbn13 = '978-3518392607'
     app_book.description = '''
@@ -471,7 +471,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'RU'
     app_book.releaseDate = dateutil.parser.parse("2004")
     app_book.pageNumber = 384
-    app_book.image = 'images/books/book_17.jpg'
+    app_book.image = 'images/books/book_16.jpg'
     app_book.isbn10 = '5-17-025476-8'
     app_book.isbn13 = '978-5-17-025476-7'
     app_book.description = '''
@@ -495,7 +495,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2012")
     app_book.pageNumber = 446
-    app_book.image = 'images/books/book_18.jpg'
+    app_book.image = 'images/books/book_17.jpg'
     app_book.isbn10 = '84-9015-648-4'
     app_book.isbn13 = '978-84-9015-648-3'
     app_book.description = '''
@@ -518,7 +518,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2015")
     app_book.pageNumber = 912
-    app_book.image = 'images/books/book_19.jpg'
+    app_book.image = 'images/books/book_18.jpg'
     app_book.isbn10 = '38-9029-458-8'
     app_book.isbn13 = '978-38-9029-458-8'
     app_book.description = '''
@@ -541,7 +541,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2014")
     app_book.pageNumber = 256
-    app_book.image = 'images/books/book_20.jpg'
+    app_book.image = 'images/books/book_19.jpg'
     app_book.isbn10 = '34-9962-281-5'
     app_book.isbn13 = '978-34-9962-281-5'
     app_book.description = '''
@@ -564,7 +564,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2016")
     app_book.pageNumber = 272
-    app_book.image = 'images/books/book_21.jpg'
+    app_book.image = 'images/books/book_20.jpg'
     app_book.isbn10 = '35-4837-625-8'
     app_book.isbn13 = '978-35-4837-625-8'
     app_book.description = '''
@@ -587,7 +587,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2015")
     app_book.pageNumber = 576
-    app_book.image = 'images/books/book_22.jpg'
+    app_book.image = 'images/books/book_21.jpg'
     app_book.isbn10 = '34-4231-262-0'
     app_book.isbn13 = '978-34-4231-262-0'
     app_book.description = '''
@@ -610,7 +610,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2003-12-01")
     app_book.pageNumber = 352
-    app_book.image = 'images/books/book_23.jpg'
+    app_book.image = 'images/books/book_22.jpg'
     app_book.isbn10 = '34-5387-556-7'
     app_book.isbn13 = '978-34-5387-556-2'
     app_book.description = '''
@@ -633,7 +633,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2014-06-21")
     app_book.pageNumber = 352
-    app_book.image = 'images/books/book_24.jpg'
+    app_book.image = 'images/books/book_23.jpg'
     app_book.isbn10 = '38-0943-322-5'
     app_book.isbn13 = '978-38-0943-322-4'
     app_book.description = '''
@@ -657,7 +657,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2006")
     app_book.pageNumber = 368
-    app_book.image = 'images/books/book_25.jpg'
+    app_book.image = 'images/books/book_24.jpg'
     app_book.isbn10 = '3551354022'
     app_book.isbn13 = '978-3551354020'
     app_book.description = '''
@@ -680,7 +680,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2007")
     app_book.pageNumber = 480
-    app_book.image = 'images/books/book_26.jpg'
+    app_book.image = 'images/books/book_25.jpg'
     app_book.isbn10 = '3551354030'
     app_book.isbn13 = '978-3551354037'
     app_book.description = '''
@@ -703,7 +703,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2015")
     app_book.pageNumber = 128
-    app_book.image = 'images/books/book_27.jpg'
+    app_book.image = 'images/books/book_26.jpg'
     app_book.isbn10 = '3957982871'
     app_book.isbn13 = '978-3957982872'
     app_book.description = '''
@@ -726,7 +726,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2015")
     app_book.pageNumber = 144
-    app_book.image = 'images/books/book_28.jpg'
+    app_book.image = 'images/books/book_27.jpg'
     app_book.isbn10 = '395798288X'
     app_book.isbn13 = '978-3957982889'
     app_book.description = '''
@@ -749,7 +749,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2006-03-27")
     app_book.pageNumber = 416
-    app_book.image = 'images/books/book_29.jpg'
+    app_book.image = 'images/books/book_28.jpg'
     app_book.isbn10 = '3826615697'
     app_book.isbn13 = '978-3826615696'
     app_book.description = '''
@@ -773,7 +773,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2002-03-01")
     app_book.pageNumber = 136
-    app_book.image = 'images/books/book_30.jpg'
+    app_book.image = 'images/books/book_29.jpg'
     app_book.isbn10 = '3150181852'
     app_book.isbn13 = '978-3150181850'
     app_book.description = '''
@@ -797,7 +797,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'EN'
     app_book.releaseDate = dateutil.parser.parse("2014-02-11")
     app_book.pageNumber = 384
-    app_book.image = 'images/books/book_31.jpg'
+    app_book.image = 'images/books/book_30.jpg'
     app_book.isbn10 = '0804139024'
     app_book.isbn13 = '978-0804139021'
     app_book.description = '''
@@ -824,7 +824,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'EN'
     app_book.releaseDate = dateutil.parser.parse("1949-06-01")
     app_book.pageNumber = 368
-    app_book.image = 'images/books/book_32.jpg'
+    app_book.image = 'images/books/book_31.jpg'
     app_book.isbn10 = '0141191201'
     app_book.isbn13 = '978-0141191201'
     app_book.description = '''
