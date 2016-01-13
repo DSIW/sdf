@@ -590,10 +590,12 @@ nav .input-field.search-field input[type=search] {
     height: 157px;
 }
 
-.card-book img.activator{
-  object-fit: cover;
+.card-book img{
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: 50% 0;
+
 }
 
 .card-book .disabled-showcase-indicator {
