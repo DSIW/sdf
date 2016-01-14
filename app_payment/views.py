@@ -88,10 +88,10 @@ def paypal_redirection(request, id):
 
 @csrf_exempt
 @login_required
-def paypal_complete(request, id):
+def paypal_complete(request, id, secret):
     payment = get_object_or_404(Payment, id=id)
 
-    if payment.secret != request.GET.get('secret'):
+    if str(payment.secret) != str(secret):
         messages.add_message(request, messages.ERROR, 'Der Vorgang wurde verboten.')
         return HttpResponseRedirect(reverse('app_book:archivesPage'))
 
