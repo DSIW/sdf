@@ -98,8 +98,7 @@ def paypal_complete(request, id):
     success = complete_payment(payment)
     if success:
         messages.add_message(request, messages.SUCCESS, 'Die Bezahlung wurde durchgeführt.')
-    else:
-        messages.add_message(request, messages.ERROR, 'Die Bezahlung wurde nicht durchgeführt.')
+
     return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': payment.book_id}))
 
 @csrf_exempt
@@ -113,8 +112,6 @@ def paypal_abort(request, id):
     else:
         if success:
             messages.add_message(request, messages.SUCCESS, 'Die Bezahlung wurde abgebrochen.')
-        else:
-            messages.add_message(request, messages.ERROR, 'Die Bezahlung wurde nicht abgebrochen.')
         return HttpResponseRedirect(reverse('app_book:book-detail', kwargs={'id': payment.book_id}))
 
 
