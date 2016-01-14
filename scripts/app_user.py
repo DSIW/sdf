@@ -163,6 +163,7 @@ def import_data():
     auth_user_1.location = 'Berlin'
     auth_user_1.is_staff = False
     auth_user_1.is_active = True
+    auth_user_1.profileImage = 'images/profiles/profile_2.png'
     auth_user_1.date_joined = dateutil.parser.parse("2015-11-08T14:22:49.437731+00:00")
     auth_user_1 = importer.save_or_locate(auth_user_1)
 
