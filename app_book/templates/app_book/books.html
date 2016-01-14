@@ -17,6 +17,20 @@
           <ul id="nav_ul_sort" class="flex-container">
             {% with order_comp=order_by|add:"-"|add:order_dir %}
 
+            <li>
+              <form role="form" method="get" action="?">
+                {% for field in request.GET %}
+                {% if field != 'seller' %}
+                <input type="hidden" name="{{ field }}" value="{% field_value request field %}"/>
+                {% endif %}
+                {% endfor %}
+
+                <div class="input-field search-field">
+                  <label for="search"><i class="material-icons">search</i></label>
+                  <input placeholder="Suchbegriff" name="search_string" type="search" id="search-field" class="field" maxlength="" value="{{ request.GET.search_string }}">
+                </div>
+              </form>
+            </li>
             <li>Erstellungsdatum:
               <ul class="right">
                 <li class="{% active order_comp 'date-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'date' 'order_dir' 'asc' %}" class="white-text">&#8593</a></li>
@@ -40,20 +54,6 @@
                 <li class="{% active order_comp 'price-asc' %}" ><a href="?{% url_replace_sort request 'order_by' 'price' 'order_dir' 'asc' %}" class="white-text">&#8593</a></li>
                 <li class="{% active order_comp 'price-desc' %}" ><a href="?{% url_replace_sort request 'order_by' 'price' 'order_dir' 'desc' %}" class="white-text">&#8595</a></li>
               </ul>
-            </li>
-            <li>
-              <form role="form" method="get" action="?">
-                {% for field in request.GET %}
-                {% if field != 'seller' %}
-                <input type="hidden" name="{{ field }}" value="{% field_value request field %}"/>
-                {% endif %}
-                {% endfor %}
-
-                <div class="input-field search-field">
-                  <label for="search"><i class="material-icons">search</i></label>
-                  <input placeholder="Suchbegriff" name="search_string" type="search" id="search-field" class="field" maxlength="" value="{{ request.GET.search_string }}">
-                </div>
-              </form>
             </li>
 
             {% endwith %}
