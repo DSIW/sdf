@@ -213,6 +213,7 @@ def import_data():
     auth_user_3.is_staff = False
     auth_user_3.is_active = True
     auth_user_3.date_joined = dateutil.parser.parse("2015-11-08T14:22:49.437731+00:00")
+    auth_user_3.profileImage = 'images/profiles/profile_4.jpg'
     auth_user_3 = importer.save_or_locate(auth_user_3)
 
     auth_user_4 = User()
