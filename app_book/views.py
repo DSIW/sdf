@@ -33,7 +33,7 @@ from app_user.models import User
 from app_payment.models import SellerRating, Payment
 from app_notification.models import Notification
 
-from .decorators import can_show_book, can_change_book
+from .decorators import can_show_book, can_change_book, can_reply_to_offer
 from .models import Book, Offer, Counteroffer
 from .forms import BookForm, OfferForm, PublishOfferForm, CounterofferForm
 from .services import unpublish_book
@@ -340,6 +340,7 @@ def counteroffer(request, id):
 
 
 @login_required
+@can_reply_to_offer
 def accept_counteroffer(request, id):
     counteroffer = get_object_or_404(Counteroffer, id=id)
     buyer = get_object_or_404(User, id=counteroffer.creator.id)
@@ -368,6 +369,7 @@ def accept_counteroffer(request, id):
 
 
 @login_required
+@can_reply_to_offer
 def decline_counteroffer(request, id):
     counteroffer = get_object_or_404(Counteroffer, id=id)
     buyer = get_object_or_404(User, id=counteroffer.creator.id)
