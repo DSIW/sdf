@@ -30,7 +30,6 @@ class Payment(models.Model):
     custom = models.CharField(max_length=255)
     source = models.CharField(max_length=255)
     created_at = models.DateTimeField()
-    secret = models.UUIDField(default=uuid.uuid4, editable=False)
 
     def init_process(self, offer, user, source):
         self.book = offer.book
