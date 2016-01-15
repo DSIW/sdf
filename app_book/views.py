@@ -33,6 +33,7 @@ from app_user.models import User
 from app_payment.models import SellerRating, Payment
 from app_notification.models import Notification
 
+from .decorators import can_show_book, can_change_book
 from .models import Book, Offer, Counteroffer
 from .forms import BookForm, OfferForm, PublishOfferForm, CounterofferForm
 from .services import unpublish_book
@@ -40,33 +41,6 @@ from app_payment.views import build_payment_form
 
 StatusAndTwoForms = collections.namedtuple("StatusAndTwoForms", ["status", "form_one", "form_two"], verbose=False,
                                            rename=False)
-
-# Custom Ownership Decorator
-def can_show_book(func):
-    def check_and_call(request, *args, **kwargs):
-        id = kwargs.get("id")
-        if id == None:
-            return func(request, *args, **kwargs)
-        book = get_object_or_404(Book, id=id)
-        if book.is_private() and not (book.user.id == request.user.id):
-            messages.add_message(request, messages.ERROR, 'Sie haben keine Berechtigung das Buch anzusehen!')
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        return func(request, *args, **kwargs)
-    return check_and_call
-
-
-def can_change_book(func):
-    def check_and_call(request, *args, **kwargs):
-        id = kwargs.get("id")
-        if id == None:
-            return func(request, *args, **kwargs)
-        book = get_object_or_404(Book, id=id)
-        if not (book.user.id == request.user.id):
-            messages.add_message(request, messages.ERROR, 'Sie haben keine Berechtigung das Buch anzusehen!')
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        return func(request, *args, **kwargs)
-    return check_and_call
-
 
 @can_change_book
 def showEditBook(request, id, offer_enabled):
