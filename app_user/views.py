@@ -19,6 +19,7 @@ from django.contrib.auth import update_session_auth_hash, authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import login as loginview
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 
 from django.core.mail import EmailMessage
 from .models import User, ConfirmEmail, PasswordReset, ChangeUserData
@@ -29,6 +30,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from braces.views import FormMessagesMixin
 from smtplib import SMTPRecipientsRefused
+from .decorators import can_change_user
 from .models import User, ConfirmEmail
 from app_book.models import Book, Offer
 from .forms import CustomUpdateForm,RegistrationForm, UsernameForm, ImageForm
@@ -123,6 +125,7 @@ def register_user(request):
     return render_to_response('app_user/register.html', {'form': form}, RequestContext(request))
 
 @login_required
+@can_change_user
 def user_update(request, pk):
     user = User.objects.filter(id=pk).first()
     data = {
@@ -337,18 +340,21 @@ def change_user_profile(request, change_user_data_id, accepted):
     Notification.request_change_userprofile_customer(request.user.id, user.id, accepted)
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def change_user_profile_decline(request, change_user_data_id):
     change_user_profile(request, change_user_data_id, False)
     messages.add_message(request, messages.SUCCESS, 'Antrag auf Benutzerdatenänderung wurde erfolgreich abgelehnt')
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def change_user_profile_accept(request, change_user_data_id):
     change_user_profile(request, change_user_data_id, True)
     messages.add_message(request, messages.SUCCESS, 'Benutzerdaten wurden erfolgreich aktualisiert')
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def remove_user(request, remove_user_id):
 
     '''Loesche Buecher'''
