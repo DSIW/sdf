@@ -7,7 +7,7 @@
 
 <div class="main-header">
     <span class="citations">
-        {% if user.is_authenticated %}
+        {% if request.user.is_authenticated %}
             Viel Spaß beim Stöbern, {{ request.current_user.pseudonym_or_full_name }}!
         {% else %}
             {{ citation }}

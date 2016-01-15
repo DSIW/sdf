@@ -20,7 +20,7 @@
 
             <a id="logo-container" href="{% url "app:startPage" %}" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
             <ul class="right hide-on-med-and-down">
-                {% if user.is_authenticated %}
+                {% if request.user.is_authenticated %}
                     <li><a class="btn-flat" href="{% url 'app_book:showcase' user.id %}?next=/" role="button">Schaufenster</a></li>
                     <li><a class="btn-flat" href="{% url 'app_book:archivesPage' %}?next=/" role="button">Archiv</a></li>
                     <li><a class="btn-flat" href="{% url 'app_user:user-details' user.id %}?next=/" role="button">Profil</a></li>
@@ -35,7 +35,7 @@
                 <li><a href="{% url 'app_book:showcases' %}">Schaufenster</a></li>
                 <li><a href="{% url 'app_book:books' %}">Bücher</a></li>
                 <hr>
-                {% if user.is_authenticated %}
+                {% if request.user.is_authenticated %}
                     <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
                     <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
                     <li><a href="{% url 'app_user:user-details' user.id %}">Mein Profil</a></li>
