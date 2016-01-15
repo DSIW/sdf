@@ -1,63 +1,100 @@
-{% extends 'start_base.html' %}
 {% load staticfiles %}
 
-{% block body_classes %}page-start image3{% endblock %}
+<!DOCTYPE html>
+<html>
+{% include 'app/_head.html' %}
 
-{% block content %}
+<body class="page-start">
 
-<div class="main-header">
-    <span class="citations">
-        {% if request.user.is_authenticated %}
-            Viel Spaß beim Stöbern, {{ request.current_user.pseudonym_or_full_name }}!
-        {% else %}
-            {{ citation }}
-        {% endif %}
-    </span>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/de_DE/sdk.js#xfbml=1&version=v2.5";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 
-    <a id="arrow-scroller" class="start-arrow material-icons">keyboard_arrow_down</a>
-    <a id="arrow-scroller1" class="start-arrow material-icons">keyboard_arrow_down</a>
-    <a id="arrow-scroller2" class="start-arrow material-icons">keyboard_arrow_down</a>
-</div>
+    <div id="start-header">
+        <a id="logo-container" href="{% url "app:startPage" %}">
+            <span class="material-icons">chrome_reader_mode</span>Book²
+        </a>
 
-<div id="books" class="container section">
-    <h5 class="header light">
-      Neueste Bücher
-      <a href="{% url 'app_book:books' %}" class="btn-flat btn-more right">Mehr</a>
-    </h5>
+        <span class="citations">
+            {% if request.user.is_authenticated %}
+                Viel Spaß beim Stöbern, {{ request.current_user.pseudonym_or_full_name }}!
+            {% else %}
+                {{ citation }}
+            {% endif %}
+        </span>
 
-    <div class="flex-container">
-        {% for offer in offers %}
-            {% include 'app/_book_card.html' with user=offer.seller_user book=offer.book offer=offer %}
-        {% endfor %}
-        {% if offers|length == 0 %}
-            <p class="empty">Es sind leider keine Bücher vorhanden!</p>
-        {% endif %}
+        <nav class="transparent flex-container" role="navigation">
+            {% if user.is_authenticated %}
+                <a class="btn" href="{% url 'app_book:showcase' user.id %}?next=/" role="button">Schaufenster</a>
+                <a class="btn" href="{% url 'app_book:archivesPage' %}?next=/" role="button">Archiv</a>
+                <a class="btn" href="{% url 'app_user:user-details' user.id %}?next=/" role="button">Profil</a>
+                <a class="btn" href="{% url 'app_user:logout' %}?next=/" role="button">Abmelden</a>
+            {% else %}
+                <a class="btn" href="{% url 'app_user:register' %}" role="button">Registrieren</a>
+                <a class="btn" href="{% url 'app_user:login' %}" role="button">Anmelden</a>
+            {% endif %}
+        </nav>
+
+        <a id="arrow-scroller" class="start-arrow material-icons">keyboard_arrow_down</a>
+        <a id="arrow-scroller1" class="start-arrow material-icons">keyboard_arrow_down</a>
+        <a id="arrow-scroller2" class="start-arrow material-icons">keyboard_arrow_down</a>
     </div>
-</div>
 
-<div class="container section">
-    <h5 class="header light">
-      Kürzlich aktualisierte Schaufenster
-      <a href="{% url 'app_book:showcases' %}" class="btn-flat btn-more right">Mehr</a>
-    </h5>
+    <main class="image3">
+        {% include 'app/_messages.html' %}
 
-    <div class="flex-container">
-        {% for user in users %}
-            {% include 'app/_user_card.html' with user=user %}
-        {% endfor %}
-        {% if users|length == 0 %}
-            <p class="empty">Es sind leider keine Schaufenster vorhanden!</p>
-        {% endif %}
-    </div>
-</div>
+        <div id="books" class="container section">
+            <h5 class="header light">
+              Neueste Bücher
+              <a href="{% url 'app_book:books' %}" class="btn-more right">Mehr</a>
+            </h5>
 
-<script type="text/javascript" charset="utf-8">
-    $(document).ready(function() {
-        var displayHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
-        displayHeight = displayHeight+'px';
-        $('.page-start .main-header').css('height', displayHeight);
-        $('main').css('margin-top', displayHeight)
-    });
-</script>
+            <div class="flex-container">
+                {% for offer in offers %}
+                    {% include 'app/_book_card.html' with user=offer.seller_user book=offer.book offer=offer %}
+                {% endfor %}
+                {% if offers|length == 0 %}
+                    <p class="empty">Es sind leider keine Bücher vorhanden!</p>
+                {% endif %}
+            </div>
 
-{% endblock %}
+            <h5 class="header light">
+              Kürzlich aktualisierte Schaufenster
+              <a href="{% url 'app_book:showcases' %}" class="btn-more right">Mehr</a>
+            </h5>
+
+            <div class="flex-container">
+                {% for user in users %}
+                    {% include 'app/_user_card.html' with user=user %}
+                {% endfor %}
+                {% if users|length == 0 %}
+                    <p class="empty">Es sind leider keine Schaufenster vorhanden!</p>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    {% include 'app/_footer.html' %}
+    {% include 'app/_js.html' %}
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function(){
+            var displayHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+            $('#start-header').css('height', displayHeight+'px');
+            $('#start-header').find('.start-arrow').each(function(){
+                $(this).css('display', 'block');
+            });
+            $('#arrow-scroller').css("top", displayHeight-70+"px");
+            $('#arrow-scroller1').css("top", displayHeight-55+"px");
+            $('#arrow-scroller2').css("top", displayHeight-40+"px");
+        });
+    </script>
+</body>
+</html>
+
+
