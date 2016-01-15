@@ -11,7 +11,9 @@
     <div class="container-wrapper">
         <div class="container">
             <form action="{% url 'app_payment:rate-seller' id=payment.id %}" enctype="multipart/form-data" method="post">{% csrf_token %}
-                {% if form.errors %}
+                {% if form.errors.rating %}
+                <div class="z-depth-1 alert alert-error">Bitte bewerten Sie den Nutzer.</div>
+                {% elif form.errors %}
                 <div class="z-depth-1 alert alert-error">{{ form.errors }}</div>
                 {% endif %}
                 {% for hidden in form.hidden_fields %}

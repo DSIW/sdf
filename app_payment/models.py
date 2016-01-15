@@ -69,8 +69,8 @@ class SellerRating(models.Model):
      payment = models.ForeignKey(Payment,related_name='rated_payment')
      rating_user = models.ForeignKey('app_user.User',related_name='rating_buyer')
      rated_user = models.ForeignKey('app_user.User',related_name='rated_seller')
-     rating = models.PositiveIntegerField(validators=[MinValueValidator(0),MaxValueValidator(10)])
-     textrating = models.CharField(max_length=200)
+     rating = models.PositiveIntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
+     textrating = models.CharField(max_length=200, blank=True)
      updatedAt  = models.DateField('updated_at')
      createdAt  = models.DateField('created_at')
      def save(self, *args, **kwargs):

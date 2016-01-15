@@ -994,6 +994,12 @@ img.book-cover.detailView{
   line-height: 30px;
   font-style: italic;
 }
+.rating-text-small {
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 15px;
+  font-style: italic;
+}
 
 
 @keyframes ring {
