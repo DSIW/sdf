@@ -16,7 +16,6 @@
                         <a href="{% url 'app:faq_delete' faq.id %}" data-method="delete" data-confirm="true" data-confirm-custom="Der FAQ-Eintrag wird unwiederruflich gelöscht. Sind Sie sicher, dass Sie fortfahren möchten?" data-confirm-ok="Löschen" class="btn">Löschen</a>
                     </p>
                 {% endif %}
-                <div><h4>{{faq.title}}</h4> </div>
                 <div>
                     {{ faq.text|safe|linebreaks}}
                     <hr />
