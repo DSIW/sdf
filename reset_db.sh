@@ -9,3 +9,4 @@ python manage.py migrate
 python manage.py runscript app_staticpage
 python manage.py runscript app_user
 python manage.py runscript app_book
+python manage.py runscript app_faq
