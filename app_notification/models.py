@@ -211,12 +211,20 @@ class Notification(models.Model):
         admins = User.objects.filter(is_staff = True)
         customer_user = get_object_or_404(User, id=customer_user_id)
 
-        msg = 'Der Kunde ' + customer_user.pseudonym_or_full_name() + ' hat einen Antrag auf Datenänderung gestellt. Folgende Daten möchte der Kunde aktualisiert haben: <br>Klarname: ' + changeUserData.first_name + ' ' + changeUserData.last_name + ' ( ' + customer_user.first_name + ' ' + customer_user.last_name + ' )<br>'
+        msg = 'Der Kunde ' + customer_user.pseudonym_or_full_name() + ' hat einen Antrag auf Datenänderung gestellt. Folgende Daten möchte der Kunde aktualisiert haben: <br>'
+        if (changeUserData.first_name+changeUserData.last_name) != (customer_user.first_name+customer_user.last_name):
+            msg += 'Klarname: ' + changeUserData.first_name + ' ' + changeUserData.last_name + ' (vorher: ' + customer_user.first_name + ' ' + customer_user.last_name + ')<br>'
         if changeUserData.username is not None:
-            msg += 'Pseudonym: ' + changeUserData.username + ' ( ' + str(customer_user.username) + ' ) <br>'
+            if changeUserData.username != customer_user.username:
+                msg += 'Pseudonym: ' + changeUserData.username + ' (vorher: ' + str(customer_user.username) + ') <br>'
         elif customer_user.username is not None:
-            msg += 'Das Pseudonym soll gelöscht werden. ( ' + str(customer_user.username) + ' ) <br>'
-        msg += 'E-Mail Adresse: ' + changeUserData.email + ' ( ' + customer_user.email + ' ) <br>Wohnort: ' + changeUserData.location + ' ( ' + customer_user.location + ' )'
+            msg += 'Das Pseudonym soll gelöscht werden. (vorher: ' + str(customer_user.username) + ') <br>'
+        if changeUserData.email != customer_user.email:
+            msg += 'E-Mail Adresse: ' + changeUserData.email + ' (vorher: ' + customer_user.email + ') <br>'
+        if changeUserData.location != customer_user.location:
+            msg += 'Wohnort: ' + changeUserData.location + ' (vorher: ' + customer_user.location + ') <br>'
+        if changeUserData.paypal != customer_user.paypal:
+            msg += 'Paypal Adresse: ' + changeUserData.paypal + ' (vorher: ' + customer_user.paypal + ') <br>'
 
         for admin in admins:
             subject = 'Antrag auf Datenänderung'
