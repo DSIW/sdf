@@ -67,7 +67,7 @@
                 {% if book.is_published %}
                 <div class="right-align">
                   <p>Preis: <strong>{{ book.price|currency }}</strong></p>
-                  <p>Versandkosten: <strong>{{ book.shipping_price|currency }}</strong></p>
+                  <p>Versand: <strong>{{ book.shipping_price|currency }}</strong></p>
                   <p class="price-total"><strong>Gesamt: {{ book.total_price|currency }}</strong></p>
                   {% if book.offer.highest_counteroffer_price > 0.0 %}
                   <p style="color: green;">Höchster Preisvorschlag: <strong>{{ book.offer.highest_counteroffer_price|currency }}</strong></p>
