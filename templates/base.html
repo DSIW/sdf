@@ -15,8 +15,8 @@
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 
-<div class="nav-fixed">
-    <nav class="white" role="navigation">
+
+<nav id="nav-fixed" role="navigation">
         <div class="nav-wrapper container">
           <a id="logo-container" href="{% if request.user.is_authenticated %}{% url "app_book:archivesPage" %}{% else %}{% url "app:startPage" %}{% endif %}" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
             {% if request.user.is_authenticated %}
@@ -75,7 +75,7 @@
             <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
         </div>
     </nav>
-</div>
+
 
 <main>
     {% include 'app/_messages.html' %}

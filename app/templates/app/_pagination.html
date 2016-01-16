@@ -1,5 +1,7 @@
 {% load template_extras %}
 
+{% if items.paginator.page_range|length > 1 %}
+
 <ul class="pagination">
     {% if items.has_previous %}
         <li class=""><a href="?{% url_replace request 'page' items.previous_page_number %}"><i class="material-icons">chevron_left</i></a></li>
@@ -21,3 +23,5 @@
         <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
     {% endif %}
 </ul>
+
+{% endif %}

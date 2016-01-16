@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="container">
-        <h3>Neuste zum Verkauf angebotene Bücher</span></h3>
+        <h3>Neuste zum Verkauf angebotene Bücher</h3>
 
         {% for offer in offers %}
             {% include 'app_book/_book_card.html' with user=offer.seller_user book=offer.book offer=offer %}
