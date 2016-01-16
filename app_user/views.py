@@ -64,7 +64,10 @@ def login_user(request):
             else:
                 # Return a 'disabled account' error message
                 messages.add_message(request, messages.ERROR, 'Das Benutzerkonto ist deaktiviert.')
-            return HttpResponseRedirect(request.POST['next'] or reverse('app_book:archivesPage'))
+            if not 'next' in request.POST:
+                return HttpResponseRedirect(reverse('app_book:archivesPage'))
+            else:
+                return HttpResponseRedirect(request.POST['next'])
         else:
             # Return an 'invalid login' error message.
             messages.add_message(request, messages.ERROR, 'Loginversuch fehlgeschlagen.')
