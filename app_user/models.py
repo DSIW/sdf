@@ -93,7 +93,7 @@ class User(AuthUser):
             return self.full_name()
 
     def full_name(self):
-        return mark_safe('{}&nbsp;{}'.format(escape(self.first_name), escape(self.last_name)))
+        return mark_safe('{} {}'.format(escape(self.first_name), escape(self.last_name)))
 
     def rating(self):
         return SellerRating.calculate_stars_for_user(self.id)
