@@ -246,7 +246,7 @@ def changePassword(request):
     else:
         form = PasswordChangeForm(user=request.user)
     action = reverse('app_user:change_password')
-    return render_to_response('app_user/password.html', {'form': form, 'action': action}, RequestContext(request))
+    return render_to_response('app_user/password.html', {'form': form, 'action': action, 'title': 'Passwort ändern'}, RequestContext(request))
 
 def sendPasswordResetEmail(request):
     email = request.POST.get('email', '')
@@ -294,7 +294,7 @@ def password_reset(request):
     else:
         form = PasswordResetForm()
     action = reverse('app_user:reset_password')
-    return render_to_response('app_user/password.html', {'form': form, 'action': action}, RequestContext(request))
+    return render_to_response('app_user/password.html', {'form': form, 'action': action, 'title': 'Passwort vergessen'}, RequestContext(request))
 
 # Diese Methode setzt das Password eines Benutzers.
 def password_new(request, uuid):
@@ -318,7 +318,7 @@ def password_new(request, uuid):
     else:
         form = SetPasswordForm(user=user)
     action = reverse('app_user:new_password', kwargs={'uuid': uuid})
-    return render_to_response('app_user/password.html', {'form': form, 'action': action}, RequestContext(request))
+    return render_to_response('app_user/password.html', {'form': form, 'action': action, 'title': 'Neues Passwort'}, RequestContext(request))
 
 def user_ratings(request, pk):
     user = get_object_or_404(User, id=pk)
