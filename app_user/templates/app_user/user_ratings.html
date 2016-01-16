@@ -6,20 +6,22 @@
     <h3 class="container">
         <span class="grey-text title-type">Bewertungen</span><br />
         <span class="orange-text text-lighten-1">{{rated_user.pseudonym_or_full_name }}</span>
+        <span class="right">
+            {% include 'app_user/_rating_stars.html' with user_rating=rated_user.rating  %}
+        </span>
     </h3>
 
     <div class="container-wrapper">
         <div class="container">
             {% for rating in ratings %}
-            {% include 'app_user/_rating_entry.html' with user_rating=rating %}
+                {% include 'app_user/_rating_entry.html' with user_rating=rating %}
             {% endfor %}
             {% if ratings.count == 0 %}
-            <div class="empty">
-                <i class="material-icons">star_outline</i>
-                <p>Es sind keine Bewertungen vorhanden.</p>
-            </div>
+                <div class="empty">
+                    <i class="material-icons">star_outline</i>
+                    <p>Es sind keine Bewertungen vorhanden.</p>
+                </div>
             {% endif %}
-
         </div>
     </div>
 {% endblock %}

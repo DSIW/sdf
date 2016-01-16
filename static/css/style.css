@@ -18,12 +18,12 @@ body {
 h3.container {
   margin-bottom: 30px;
 }
-h3 span {
+h3 > span {
   background-color: #FFF;
   padding: 0 7px;
   box-shadow: 0 1px 1px rgba(0,0,0,0.3);
 }
-h3 span:first-child {
+h3 > span:first-child {
   margin-bottom: 3px;
   display: inline-block;
 }
@@ -994,11 +994,9 @@ img.book-cover.detailView{
   line-height: 30px;
   font-style: italic;
 }
-.rating-text-small {
-  font-weight: 300;
-  font-size: 12px;
-  line-height: 15px;
-  font-style: italic;
+h3 .seller-rating-star {
+  font-size: 2rem;
+  width: 2rem;
 }
 
 

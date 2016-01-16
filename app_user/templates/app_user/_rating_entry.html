@@ -4,13 +4,10 @@
             {% include 'app_user/_rating_stars.html' with user_rating=user_rating  %}
             {{user_rating.rating_user.pseudonym_or_full_name }} am {{ user_rating.updatedAt }}
         </p>
-            {% if not user_rating.textrating %}
-        <p class="grey-text rating-text-small">
-            keine Textbewertung abgegeben
-            {% else %}
-        <p class="grey-text rating-text">
-            {{user_rating.textrating}}
-            {% endif %}
-        </p>
+        {% if user_rating.textrating %}
+            <p class="grey-text rating-text">
+                {{user_rating.textrating}}
+            </p>
+        {% endif %}
     </div>
 </div>
