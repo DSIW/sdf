@@ -11,14 +11,11 @@
     <div class="container-wrapper">
         <div class="container">
             <form action="{% url 'app_payment:rate-seller' id=payment.id %}" enctype="multipart/form-data" method="post">{% csrf_token %}
-                {% if form.errors %}
-                <div class="z-depth-1 alert alert-error">{{ form.errors }}</div>
-                {% endif %}
                 {% for hidden in form.hidden_fields %}
-                {{ hidden }}
+                    {{ hidden }}
                 {% endfor %}
 
-                <span class="seller-rating" id="rating_span">
+                <div class="input-field seller-rating {% if form.errors.rating %}has-error{% endif %}" id="rating_span">
                     <ul>
                         <i class="material-icons seller-rating-star" id="rating_star_1">star_border</i>
                         <i class="material-icons seller-rating-star" id="rating_star_2">star_border</i>
@@ -26,7 +23,13 @@
                         <i class="material-icons seller-rating-star" id="rating_star_4">star_border</i>
                         <i class="material-icons seller-rating-star" id="rating_star_5">star_border</i>
                     </ul>
-                </span>
+                    {% if form.errors.rating %}
+                    <div class="has-error">
+                        <span class="help-block">Bitte geben Sie eine Bewertung ab.</span>
+                    </div>
+                    {% endif %}
+                </div>
+
                 {% for field in form.visible_fields %}
                 <div class="input-field {% if field.errors %}has-error{% endif %}">
                     {{ field }}

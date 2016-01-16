@@ -317,9 +317,9 @@ def password_new(request, uuid):
     action = reverse('app_user:new_password', kwargs={'uuid': uuid})
     return render_to_response('app_user/password.html', {'form': form, 'action': action}, RequestContext(request))
 
-def user_ratings(request, id):
-    user = User.objects.filter(pk=id).first()
-    ratings = SellerRating.objects.filter(rated_user_id=id)
+def user_ratings(request, pk):
+    user = get_object_or_404(User, id=pk)
+    ratings = SellerRating.objects.filter(rated_user_id=pk)
     return render_to_response('app_user/user_ratings.html',{'rated_user':user,'ratings':ratings},RequestContext(request))
 
 def change_user_profile(request, change_user_data_id, accepted):

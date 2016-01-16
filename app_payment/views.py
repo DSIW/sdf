@@ -142,10 +142,10 @@ def rate_seller(request, id):
             form.instance.rating_user = User.objects.filter(pk=request.user.id).first()
             form.save()
             messages.add_message(request, messages.SUCCESS, 'Vielen Dank, Ihre Bewertung wurde gespeichert!')
-            return HttpResponseRedirect(reverse('app_book:showcase', kwargs={'user_id': rated_user.id}))
-        else :
-            messages.add_message(request, messages.SUCCESS, 'Die Bewertung konnte nicht abgespeichert werden.')
-            return render_to_response('app_payment/rate_seller.html', {'form': form, 'rated_user': rated_user, 'rating_user': request.user}, RequestContext(request))
+            return HttpResponseRedirect(reverse('app_user:user_ratings', kwargs={'pk': rated_user.id}))
+        else:
+            messages.add_message(request, messages.ERROR, 'Die Bewertung konnte nicht abgegeben werden!')
+            return render_to_response('app_payment/rate_seller.html', {'payment': payment, 'form': form}, RequestContext(request))
     else:
         form = RateSellerForm()
         return render_to_response('app_payment/rate_seller.html', {'form': form, 'rating_user': request.user,'rated_user': rated_user,'payment':payment}, RequestContext(request))
