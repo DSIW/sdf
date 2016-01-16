@@ -775,13 +775,6 @@ ul.border-separated li:last-child {
   border-right: none;
 }
 
-.page-start .parallax img {
-  -webkit-filter: grayscale(50%);
-  -moz-filter: grayscale(50%);
-  -ms-filter: grayscale(50%);
-  -o-filter: grayscale(50%);
-  filter: grayscale(50%);
-}
 .page-start .empty {
   color: #808080;
   font-size: 1.5em;
