@@ -153,9 +153,9 @@ class UsernameForm(ModelForm):
 
     def clean_username(self):
         cleaned_data = super(UsernameForm, self).clean()
-        validate_not_real_name(cleaned_data["username"])
-
-        return cleaned_data["username"]
+        if cleaned_data["username"]:
+            validate_not_real_name(cleaned_data["username"])
+        return cleaned_data["username"] or None
 
 class ImageForm(ModelForm):
     delete_saved_image = forms.BooleanField(required=False, label='Bild löschen')
