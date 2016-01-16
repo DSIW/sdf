@@ -7,6 +7,8 @@ from django.db.models import Max
 from django.contrib.auth.models  import User as AuthUser, BaseUserManager
 from sdf.base_settings import *
 from datetime import datetime
+from django.utils.html import mark_safe, escape
+
 import glob
 
 from app_payment.models import SellerRating
@@ -91,7 +93,7 @@ class User(AuthUser):
             return self.full_name()
 
     def full_name(self):
-        return ' '.join([self.first_name, self.last_name])
+        return mark_safe("%s&nbsp;%s" % (escape(self.first_name), escape(self.last_name)))
 
     def rating(self):
         return SellerRating.calculate_stars_for_user(self.id)
