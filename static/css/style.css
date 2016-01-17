@@ -171,6 +171,10 @@ form .input-field img {
   cursor: pointer;
   animation: rub 1.5s ease-in-out infinite;
 }
+.page-start nav ul li:hover,
+.page-start nav ul li.active {
+  background-color: transparent;
+}
 
 .flex-container {
   width: 100%;
