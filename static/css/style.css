@@ -97,33 +97,31 @@ form .input-field img {
   background: url(/static/img/book5.jpg) no-repeat center bottom;
   background-size: cover;
 }
-#start-header nav{
-  flex-wrap: wrap-reverse;
-}
-#start-header nav a.btn{
-  width: 180px;
-  margin: 5px 2px 0 2px;
-}
-#start-header #logo-container{
-  color: #eee;
-  display: block;
-  text-align: center;
-  font-size: 8vw;
-  line-height: 8vw;
-  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.6);
-}
-#start-header #logo-container span.material-icons{
-  font-size: 10.5vw;
-  vertical-align: -2.0vw;
-}
 #start-header .citations {
-  display: block;
-  margin: 50px 0;
-  color: #eee;
-  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.9);
-  font-family: 'Pacifico', cursive;
-  font-size: 2.4rem;
-  text-align: center;
+    color: #fff;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.6);
+    font-family: "Pacifico",cursive;
+    font-size: 2.4em;
+    text-align: center;
+    width: calc(100% - 4rem);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+#start-header nav{
+  position: absolute;
+  top: 20px;
+  left: 0;
+}
+#start-header nav a.button-collapse{
+    color: #fff;
+}
+#start-header nav a.brand-logo {
+    color: #212121;
+}
+#start-header nav .brand-logo i {
+    color: #212121;
+    line-height: 61px;
 }
 
 .page-start main {

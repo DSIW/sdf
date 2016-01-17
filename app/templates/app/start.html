@@ -16,9 +16,35 @@
     }(document, 'script', 'facebook-jssdk'));</script>
 
     <div id="start-header">
-        <a id="logo-container" href="{% url "app:startPage" %}">
-            <span class="material-icons">chrome_reader_mode</span>Book²
-        </a>
+        <nav class="transparent" role="navigation">
+            <div class="container">
+                <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+
+                <a id="logo-container" href="/" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
+                <ul class="right hide-on-med-and-down">
+
+                        <li><a class="btn-flat" href="/accounts/2/showcase?next=/" role="button">Schaufenster</a></li>
+                        <li><a class="btn-flat" href="/archive/?next=/" role="button">Archiv</a></li>
+                        <li><a class="btn-flat" href="/accounts/2/?next=/" role="button">Profil</a></li>
+                        <li><a class="btn-flat" href="/logout/?next=/" role="button">Abmelden</a></li>
+
+                </ul>
+
+                <ul style="left: -250px;" id="nav-mobile" class="side-nav">
+                    <li><a href="/showcases">Schaufenster</a></li>
+                    <li><a href="/books">Bücher</a></li>
+                    <hr>
+
+                        <li><a href="/accounts/2/showcase">Mein Schaufenster</a></li>
+                        <li><a href="/archive/">Archiv</a></li>
+                        <li><a href="/accounts/2/">Mein Profil</a></li>
+                        <li><a href="/accounts/password/">Passwort ändern</a></li>
+                        <li><a href="/logout/?next=/">Abmelden</a></li>
+
+                </ul>
+
+            </div>
+        </nav>
 
         <span class="citations">
             {% if request.user.is_authenticated %}
@@ -28,17 +54,7 @@
             {% endif %}
         </span>
 
-        <nav class="transparent flex-container" role="navigation">
-            {% if user.is_authenticated %}
-                <a class="btn" href="{% url 'app_book:showcase' user.id %}?next=/" role="button">Schaufenster</a>
-                <a class="btn" href="{% url 'app_book:archivesPage' %}?next=/" role="button">Archiv</a>
-                <a class="btn" href="{% url 'app_user:user-details' user.id %}?next=/" role="button">Profil</a>
-                <a class="btn" href="{% url 'app_user:logout' %}?next=/" role="button">Abmelden</a>
-            {% else %}
-                <a class="btn" href="{% url 'app_user:register' %}" role="button">Registrieren</a>
-                <a class="btn" href="{% url 'app_user:login' %}" role="button">Anmelden</a>
-            {% endif %}
-        </nav>
+
 
         <a id="arrow-scroller" class="start-arrow material-icons">keyboard_arrow_down</a>
         <a id="arrow-scroller1" class="start-arrow material-icons">keyboard_arrow_down</a>
@@ -89,9 +105,10 @@
             $('#start-header').find('.start-arrow').each(function(){
                 $(this).css('display', 'block');
             });
-            $('#arrow-scroller').css("top", displayHeight-70+"px");
-            $('#arrow-scroller1').css("top", displayHeight-55+"px");
-            $('#arrow-scroller2').css("top", displayHeight-40+"px");
+            $('#arrow-scroller').css("top", displayHeight-110+"px");
+            $('#arrow-scroller1').css("top", displayHeight-95+"px");
+            $('#arrow-scroller2').css("top", displayHeight-80+"px");
+            $('#start-header').find('.citations').css("top", displayHeight/2+"px");
         });
     </script>
 </body>
