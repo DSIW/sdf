@@ -87,7 +87,7 @@ class BookTest(TestCase):
         self.assertEqual(len(offer), 1, offer)
 
     def check_permission_error(self, response):
-        self.assertRedirects(response, reverse('app:startPage'))
+        self.assertRedirects(response, reverse('app_book:books'))
         message = list(response.context['messages'])[1]
         self.assertTrue(self.error_message, message.message)
 

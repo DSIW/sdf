@@ -7,6 +7,8 @@ from django.db.models import Max
 from django.contrib.auth.models  import User as AuthUser, BaseUserManager
 from sdf.base_settings import *
 from datetime import datetime
+from django.utils.html import mark_safe, escape
+
 import glob
 
 from app_payment.models import SellerRating
@@ -47,6 +49,10 @@ class MyUserManager(BaseUserManager):
         return user
 
 class User(AuthUser):
+    def validate_image_filesize(fieldfile_obj):
+      if fieldfile_obj.file.size > FILESIZE_LIMIT_MB*1024*1024:
+          raise ValidationError("Die Maximalgröße beträgt %s MB" % str(FILESIZE_LIMIT_MB))
+
     # auth_user fields: username, first_name, last_name, email, password, is_staff, is_active, is_super
     AuthUser._meta.get_field('username')._blank = True
     AuthUser._meta.get_field('username')._null = True
@@ -63,9 +69,9 @@ class User(AuthUser):
                                                         'invalid': 'Bitte eine gültige E-Mail-Adresse angeben.'}
 
     emailConfirm = models.BooleanField(default=False,verbose_name='E-mail bestätigt')
-    profileImage = models.ImageField(upload_to=user_directory_path, null=True)
+    profileImage = models.ImageField(upload_to=user_directory_path, null=True, validators=[validate_image_filesize])
     location = models.CharField(('Ort'),max_length=255, default='')
-    paypal = models.CharField(max_length=50)
+    paypal = models.CharField(('Paypal-Adresse'), max_length=50)
     user_ptr = models.OneToOneField(AuthUser)
     enabled_notifications_via_email = models.BooleanField(default=True)
     showcaseDisabled = models.BooleanField(default=False, verbose_name='Schaufenster gesperrt')
@@ -87,7 +93,7 @@ class User(AuthUser):
             return self.full_name()
 
     def full_name(self):
-        return ' '.join([self.first_name, self.last_name])
+        return mark_safe('{} {}'.format(escape(self.first_name), escape(self.last_name)))
 
     def rating(self):
         return SellerRating.calculate_stars_for_user(self.id)
@@ -120,5 +126,4 @@ class ChangeUserData(models.Model):
     last_name = models.CharField(('Nachname'), max_length=30)
     email = models.EmailField(('E-Mailadresse'))
     location = models.CharField(('Ort'),max_length=255)
-
-
+    paypal = models.EmailField(('Paypal-Adresse'))

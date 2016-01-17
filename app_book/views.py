@@ -21,9 +21,10 @@ from django.utils.html import escape
 from django.http import JsonResponse
 
 from app_payment.services import start_payment
+from app_notification.models import Notification
 from .models import Book
 from .forms import BookForm
-from sdf import settings
+from django.conf import settings
 
 import watson
 import collections
@@ -32,6 +33,7 @@ from app_user.models import User
 from app_payment.models import SellerRating, Payment
 from app_notification.models import Notification
 
+from .decorators import can_show_book, can_change_book, can_reply_to_offer
 from .models import Book, Offer, Counteroffer
 from .forms import BookForm, OfferForm, PublishOfferForm, CounterofferForm
 from .services import unpublish_book
@@ -39,33 +41,6 @@ from app_payment.views import build_payment_form
 
 StatusAndTwoForms = collections.namedtuple("StatusAndTwoForms", ["status", "form_one", "form_two"], verbose=False,
                                            rename=False)
-
-# Custom Ownership Decorator
-def can_show_book(func):
-    def check_and_call(request, *args, **kwargs):
-        id = kwargs.get("id")
-        if id == None:
-            return func(request, *args, **kwargs)
-        book = get_object_or_404(Book, id=id)
-        if book.is_private() and not (book.user.id == request.user.id):
-            messages.add_message(request, messages.ERROR, 'Sie haben keine Berechtigung das Buch anzusehen!')
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        return func(request, *args, **kwargs)
-    return check_and_call
-
-
-def can_change_book(func):
-    def check_and_call(request, *args, **kwargs):
-        id = kwargs.get("id")
-        if id == None:
-            return func(request, *args, **kwargs)
-        book = get_object_or_404(Book, id=id)
-        if not (book.user.id == request.user.id):
-            messages.add_message(request, messages.ERROR, 'Sie haben keine Berechtigung das Buch anzusehen!')
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        return func(request, *args, **kwargs)
-    return check_and_call
-
 
 @can_change_book
 def showEditBook(request, id, offer_enabled):
@@ -220,7 +195,7 @@ def showcaseView(request, user_id):
     template_name = 'app_book/showcase.html'
 
     user = get_object_or_404(User, id=user_id)
-    offers = Offer.objects.filter(seller_user_id=user_id, active=True).all()
+    offers = Offer.objects.filter(seller_user=user, active=True).all()
 
     return render_to_response(template_name, {
         "showcase_user": user,
@@ -269,7 +244,8 @@ def createBook(request):
 @can_change_book
 def publishBook(request, id):
     book = get_object_or_404(Book, id=id)
-    offer = book.offer_set.first()
+    user = get_object_or_404(User, id=request.user.id)
+    offer = book.offer_set.filter(seller_user = user).first()
     offer_form = PublishOfferForm(instance=offer)
 
     if request.method == 'POST':
@@ -308,7 +284,8 @@ def unpublishBook(request, id):
         unpublish_book(book)
         messages.add_message(request, messages.SUCCESS, 'Das Buch wird nun nicht mehr zum Verkauf angeboten!')
         # decline all active counteroffers:
-        offer = book.offer_set.first()
+        user = get_object_or_404(User, id=request.user.id)
+        offer = book.offer_set.filter(seller_user = user).first()
         counteroffers = Counteroffer.objects.filter(offer=offer, active=True)
         for co in counteroffers:
             Notification.counteroffer_decline(co, co.creator, book)
@@ -325,6 +302,10 @@ def counteroffer(request, id):
     offer = get_object_or_404(Offer, id=id)
     user = get_object_or_404(User, id=request.user.id)
     book = get_object_or_404(Book, id=offer.book.id)
+
+    if user.id == offer.seller_user.id:
+        messages.add_message(request, messages.ERROR, 'Sie können sich nicht selbst Preisvorschläge machen!')
+        return HttpResponseRedirect(reverse('app_book:book-detail', kwargs = {'id': book.id}))
 
     if not offer.allow_counteroffers:
         messages.add_message(request, messages.ERROR, 'Der Verkäufer erlaubt keine Preisvorschläge!')
@@ -363,6 +344,7 @@ def counteroffer(request, id):
 
 
 @login_required
+@can_reply_to_offer
 def accept_counteroffer(request, id):
     counteroffer = get_object_or_404(Counteroffer, id=id)
     buyer = get_object_or_404(User, id=counteroffer.creator.id)
@@ -391,6 +373,7 @@ def accept_counteroffer(request, id):
 
 
 @login_required
+@can_reply_to_offer
 def decline_counteroffer(request, id):
     counteroffer = get_object_or_404(Counteroffer, id=id)
     buyer = get_object_or_404(User, id=counteroffer.creator.id)
@@ -502,7 +485,7 @@ def showcasesOverView(request):
         filteredUsers = list(filteredUsers)
 
     for user in filteredUsers:
-        user.books_count = len(user.offer_set.all())
+        user.books_count = len(user.offer_set.exclude(active = False))
         user.updated = (max(user.offer_set.all(), key=lambda offer: offer.updated)).updated
 
     if order_by == 'count':
@@ -551,5 +534,6 @@ def toggleDisabledState(request, user_id):
         disabled = user.showcaseDisabled
         user.showcaseDisabled = not disabled
         user.save()
+        Notification.bann_unbann_user(request.user.id, user_id, not disabled)
         return JsonResponse({'state': not disabled})
     return JsonResponse({'error': True})

@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from app_payment.models import Payment
 from app_payment.services import abort_payment
 from paypal.standard.models import *
-from sdf import settings
+from django.conf import settings
 from datetime import datetime, timedelta
 
 ACTIVE_PAYMENT_STATUSES = [ST_PP_CREATED, ST_PP_ACTIVE, ST_PP_PENDING, ST_PP_VOIDED]

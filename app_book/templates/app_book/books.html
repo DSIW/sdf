@@ -10,11 +10,12 @@
       <span class="orange-text text-lighten-1">Alle Bücher</span>
   </h3>
 
-  <div class="container-wrapper nav">
-    <nav class="orange lighten-1">
-        <div class="nav-wrapper container">
+  <div class="container-wrapper">
 
-          <ul id="nav_ul_sort">
+    <nav class="orange lighten-1">
+        <div class="container">
+
+          <ul id="nav_ul_sort" class="flex-container">
             {% with order_comp=order_by|add:"-"|add:order_dir %}
 
             <li>Erstellungsdatum:
@@ -48,6 +49,7 @@
                 <input type="hidden" name="{{ field }}" value="{% field_value request field %}"/>
                 {% endif %}
                 {% endfor %}
+
                 <div class="input-field search-field">
                   <label for="search"><i class="material-icons">search</i></label>
                   <input placeholder="Suchbegriff" name="search_string" type="search" id="search-field" class="field" maxlength="" value="{{ request.GET.search_string }}">
@@ -60,7 +62,7 @@
         </div>
       </nav>
 
-      <div class="container">
+    <div class="container">
         {% if offers|length > 0 %}
 
         <div class="flex-container">
@@ -95,6 +97,7 @@
 
         {% endif %}
       </div>
+
   </div>
 
 {% endblock %}

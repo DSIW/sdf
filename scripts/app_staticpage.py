@@ -28,7 +28,7 @@
 import os, sys
 from django.db import transaction
 
-from sdf import settings
+from django.conf import settings
 
 class BasicImportHelper(object):
 

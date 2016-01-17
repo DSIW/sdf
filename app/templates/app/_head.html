@@ -18,4 +18,9 @@
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
 
     <script type="text/javascript" src="{% static "js/jquery-2.1.4.js" %}"></script>
+
+    {% if book %}
+    <meta property="og:title" content="{{ book.name }}"/>
+    <meta property="og:description"   content="{{ book.description }}" />
+    {% endif %}
 </head>

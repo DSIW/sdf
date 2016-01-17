@@ -28,7 +28,7 @@
 import os, sys
 from django.db import transaction
 
-from sdf import settings
+from django.conf import settings
 
 class BasicImportHelper(object):
 
@@ -163,7 +163,25 @@ def import_data():
     auth_user_1.location = 'Berlin'
     auth_user_1.is_staff = False
     auth_user_1.is_active = True
+    auth_user_1.profileImage = 'images/profiles/profile_2.png'
     auth_user_1.date_joined = dateutil.parser.parse("2015-11-08T14:22:49.437731+00:00")
+    auth_user_1 = importer.save_or_locate(auth_user_1)
+
+    auth_user_1 = User()
+    auth_user_1.password = 'pbkdf2_sha256$20000$f49atNcSl4xt$jBFjdFzW7X6ownYonQ7LK6EzMwshtYtLUxtdMqWGwks='
+    auth_user_1.last_login = dateutil.parser.parse("2015-11-08T14:22:59.793180+00:00")
+    auth_user_1.is_superuser = False
+    auth_user_1.username = 'der_klaus'
+    auth_user_1.first_name = 'Klaus'
+    auth_user_1.last_name = 'Strohmenger'
+    auth_user_1.email = 's0535844@htw-berlin.de'
+    auth_user_1.emailConfirm = True
+    auth_user_1.paypal = 'klaus@book2.de'
+    auth_user_1.location = 'Berlin'
+    auth_user_1.is_staff = False
+    auth_user_1.is_active = True
+    auth_user_1.date_joined = dateutil.parser.parse("2015-12-12T15:20:45.437731+00:00")
+    auth_user_1.profileImage = 'images/profiles/profile_3.png'
     auth_user_1 = importer.save_or_locate(auth_user_1)
 
     auth_user_2 = User()
@@ -196,10 +214,11 @@ def import_data():
     auth_user_3.is_staff = False
     auth_user_3.is_active = True
     auth_user_3.date_joined = dateutil.parser.parse("2015-11-08T14:22:49.437731+00:00")
+    auth_user_3.profileImage = 'images/profiles/profile_5.jpg'
     auth_user_3 = importer.save_or_locate(auth_user_3)
 
     auth_user_4 = User()
-    auth_user_4.password = 'pbkdf2_sha256$20000$6fimTWmnvrhn$ubTKr8VttnnIR3vp+2bsVJQb3Vxkz9MXkJfKvJf9Jic='
+    auth_user_4.password = 'pbkdf2_sha256$20000$473uoFG8zUww$rGDY1uoRnp9f+pmkdzGDiaxm7Z6ue5NTAaVcOpN8CJw='
     auth_user_4.last_login = dateutil.parser.parse("2015-11-08T14:22:59.793180+00:00")
     auth_user_4.is_superuser = False
     auth_user_4.first_name = 'Andrej'
@@ -211,6 +230,7 @@ def import_data():
     auth_user_4.is_staff = False
     auth_user_4.is_active = True
     auth_user_4.date_joined = dateutil.parser.parse("2015-12-08T14:21:49.434251+00:00")
+    auth_user_4.profileImage = 'images/profiles/profile_6.png'
     auth_user_4 = importer.save_or_locate(auth_user_4)
 
     auth_user_5 = User()
@@ -226,5 +246,53 @@ def import_data():
     auth_user_5.is_staff = False
     auth_user_5.is_active = True
     auth_user_5.date_joined = dateutil.parser.parse("2015-12-08T14:21:49.434251+00:00")
+    auth_user_5.profileImage = 'images/profiles/profile_7.png'
     auth_user_5 = importer.save_or_locate(auth_user_5)
 
+    auth_user_6 = User()
+    auth_user_6.password = 'pbkdf2_sha256$20000$f49atNcSl4xt$jBFjdFzW7X6ownYonQ7LK6EzMwshtYtLUxtdMqWGwks='
+    auth_user_6.last_login = dateutil.parser.parse("2015-11-08T14:22:59.793180+00:00")
+    auth_user_6.is_superuser = False
+    auth_user_6.first_name = 'Alexander'
+    auth_user_6.last_name = 'Deutschmann'
+    auth_user_6.email = 'alex@book2.de'
+    auth_user_6.emailConfirm = True
+    auth_user_6.paypal = 'alex@book2.de'
+    auth_user_6.location = 'Karlsruhe'
+    auth_user_6.is_staff = False
+    auth_user_6.is_active = True
+    auth_user_6.date_joined = dateutil.parser.parse("2015-12-08T14:21:49.434251+00:00")
+    auth_user_6.profileImage = 'images/profiles/profile_8.jpg'
+    auth_user_6 = importer.save_or_locate(auth_user_6)
+
+    auth_user_7 = User()
+    auth_user_7.password = 'pbkdf2_sha256$20000$f49atNcSl4xt$jBFjdFzW7X6ownYonQ7LK6EzMwshtYtLUxtdMqWGwks='
+    auth_user_7.last_login = dateutil.parser.parse("2016-01-12T13:21:49.434251+00:00")
+    auth_user_7.is_superuser = False
+    auth_user_7.first_name = 'Jelger'
+    auth_user_7.last_name = 'Rosenfeld'
+    auth_user_7.email = 'book2@jelger.de'
+    auth_user_7.emailConfirm = True
+    auth_user_7.paypal = 'jelger@book2.de'
+    auth_user_7.location = 'Berlin'
+    auth_user_7.is_staff = False
+    auth_user_7.is_active = True
+    auth_user_7.date_joined = dateutil.parser.parse("2016-01-12T13:21:49.434251+00:00")
+    auth_user_7.profileImage = 'images/profiles/profile_9.jpg'
+    auth_user_7 = importer.save_or_locate(auth_user_7)
+
+    auth_user_8 = User()
+    auth_user_8.password = 'pbkdf2_sha256$20000$f49atNcSl4xt$jBFjdFzW7X6ownYonQ7LK6EzMwshtYtLUxtdMqWGwks='
+    auth_user_8.last_login = dateutil.parser.parse("2016-01-12T13:21:49.434251+00:00")
+    auth_user_8.is_superuser = False
+    auth_user_8.first_name = 'Daniel'
+    auth_user_8.last_name = 'C'
+    auth_user_8.email = 'daniel@book2.de'
+    auth_user_8.emailConfirm = True
+    auth_user_8.paypal = 'daniel@book2.de'
+    auth_user_8.location = 'Berlin'
+    auth_user_8.is_staff = False
+    auth_user_8.is_active = True
+    auth_user_8.date_joined = dateutil.parser.parse("2016-01-12T13:21:49.434251+00:00")
+    auth_user_8.profileImage = 'images/profiles/profile_10.jpg'
+    auth_user_8 = importer.save_or_locate(auth_user_8)

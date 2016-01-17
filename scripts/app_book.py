@@ -143,7 +143,7 @@ def import_data():
     app_book.language = 'EN'
     app_book.releaseDate = dateutil.parser.parse("2014-11-11")
     app_book.pageNumber = 243
-    app_book.image = 'images/books/book_2.jpg'
+    app_book.image = 'images/books/book_1.jpg'
     app_book.isbn10 = '149194594X'
     app_book.isbn13 = '978-1491945940'
     app_book.description = "Julia Elman has been working her brand of web skills for nearly a decade. She started out as a designer for an internal marketing group at a travel agency in Los Angeles, and quickly honed her skills as a web designer using HTML/CSS. Julia joined the Caktus Consulting Group in 2011 and is thrilled to work with some of the most talented developers this side of the Mississippi. She is actively involved with Girl Develop It RDU as an instructor to help contribute in educating women pursuing a career in technology. Mark is a lead Python/Django developer at Caktus Consulting Group in Carrboro, NC. He also runs a small homebrewing website written in Django called brewedbyus.com. He came to Python web development after a few years pricing derivatives on Wall Street. Mark maintains a number of open source projects primarily related to Django development and frequently contributes back to projects used by Caktus. When he isn't programming, Mark enjoys spending time with his wife and daughter, brewing beer, and running."
@@ -165,7 +165,7 @@ def import_data():
     app_book.language = 'EN'
     app_book.releaseDate = dateutil.parser.parse("2016-03-25")
     app_book.pageNumber = 300
-    app_book.image = 'images/books/book_3.jpg'
+    app_book.image = 'images/books/book_2.jpg'
     app_book.isbn10 = '144936781X'
     app_book.isbn13 = '978-1449367817'
     app_book.description = ''
@@ -187,7 +187,7 @@ def import_data():
     app_book.language = 'EN'
     app_book.releaseDate = dateutil.parser.parse("2014-06-19")
     app_book.pageNumber = 478
-    app_book.image = 'images/books/book_15.jpg'
+    app_book.image = 'images/books/book_3.jpg'
     app_book.isbn10 = '1449364829'
     app_book.isbn13 = '978-1449364823'
     app_book.description = ''
@@ -291,10 +291,10 @@ Politik ist pragmatisches Handeln zu sittlichen Zwecken, hat Helmut Schmidt einm
     app_book.isbn10 = '3426510170'
     app_book.isbn13 = '978-3426510179'
     app_book.description = '''
-Jedes Jahr verschwinden auf hoher See rund 20 Menschen spurlos von Kreuzfahrtschiffen. Noch nie kam jemand zurück. Bis jetzt ... 
+Jedes Jahr verschwinden auf hoher See rund 20 Menschen spurlos von Kreuzfahrtschiffen. Noch nie kam jemand zurück. Bis jetzt ...
 
-Martin Schwartz, Polizeipsychologe, hat vor fünf Jahren Frau und Sohn verloren. Es geschah während eines Urlaubs auf dem Kreuzfahrtschiff „Sultan of the Seas“ – niemand konnte ihm sagen, was genau geschah. Martin ist seither ein psychisches Wrack und betäubt sich mit Himmelfahrtskommandos als verdeckter Ermittler. 
-Mitten in einem Einsatz bekommt er den Anruf einer seltsamen alten Dame, die sich als Thrillerautorin bezeichnet: Er müsse unbedingt an Bord der „Sultan“ kommen, es gebe Beweise dafür, was seiner Familie zugestoßen ist. Nie wieder wollte Martin den Fuß auf ein Schiff setzen – und doch folgt er dem Hinweis und erfährt, dass ein vor Wochen auf der „Sultan“ verschwundenes Mädchen wieder aufgetaucht ist. Mit dem Teddy seines Sohnes im Arm … 
+Martin Schwartz, Polizeipsychologe, hat vor fünf Jahren Frau und Sohn verloren. Es geschah während eines Urlaubs auf dem Kreuzfahrtschiff „Sultan of the Seas“ – niemand konnte ihm sagen, was genau geschah. Martin ist seither ein psychisches Wrack und betäubt sich mit Himmelfahrtskommandos als verdeckter Ermittler.
+Mitten in einem Einsatz bekommt er den Anruf einer seltsamen alten Dame, die sich als Thrillerautorin bezeichnet: Er müsse unbedingt an Bord der „Sultan“ kommen, es gebe Beweise dafür, was seiner Familie zugestoßen ist. Nie wieder wollte Martin den Fuß auf ein Schiff setzen – und doch folgt er dem Hinweis und erfährt, dass ein vor Wochen auf der „Sultan“ verschwundenes Mädchen wieder aufgetaucht ist. Mit dem Teddy seines Sohnes im Arm …
 '''
     app_book = importer.save_or_locate(app_book)
 
@@ -326,7 +326,7 @@ Ausgerechnet der Darm! Das schwarze Schaf unter den Organen, das einem doch bish
     app_book.description = '''
 Zwei Frauen, ein altes Haus und eine Art von Familie
 
-Das „Polackenkind“ ist die fünfjährige Vera auf dem Hof im Alten Land, wohin sie 1945 aus Ostpreußen mit ihrer Mutter geflohen ist. Ihr Leben lang fühlt sie sich fremd in dem großen, kalten Bauernhaus und kann trotzdem nicht davon lassen. Bis sechzig Jahre später plötzlich ihre Nichte Anne vor der Tür steht. Sie ist mit ihrem kleinen Sohn aus Hamburg-Ottensen geflüchtet, wo ehrgeizige Vollwert-Eltern ihre Kinder wie Preispokale durch die Straßen tragen – und wo Annes Mann eine Andere liebt. Vera und Anne sind einander fremd und haben doch viel mehr gemeinsam, als sie ahnen. 
+Das „Polackenkind“ ist die fünfjährige Vera auf dem Hof im Alten Land, wohin sie 1945 aus Ostpreußen mit ihrer Mutter geflohen ist. Ihr Leben lang fühlt sie sich fremd in dem großen, kalten Bauernhaus und kann trotzdem nicht davon lassen. Bis sechzig Jahre später plötzlich ihre Nichte Anne vor der Tür steht. Sie ist mit ihrem kleinen Sohn aus Hamburg-Ottensen geflüchtet, wo ehrgeizige Vollwert-Eltern ihre Kinder wie Preispokale durch die Straßen tragen – und wo Annes Mann eine Andere liebt. Vera und Anne sind einander fremd und haben doch viel mehr gemeinsam, als sie ahnen.
 
 Mit scharfem Blick und trockenem Witz erzählt Dörte Hansen von zwei Einzelgängerinnen, die überraschend finden, was sie nie gesucht haben: eine Familie.
 '''
@@ -446,7 +446,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("1997-11-29")
     app_book.pageNumber = 192
-    app_book.image = 'images/books/book_16.jpg'
+    app_book.image = 'images/books/book_15.jpg'
     app_book.isbn10 = '3518392603'
     app_book.isbn13 = '978-3518392607'
     app_book.description = '''
@@ -471,7 +471,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'RU'
     app_book.releaseDate = dateutil.parser.parse("2004")
     app_book.pageNumber = 384
-    app_book.image = 'images/books/book_17.jpg'
+    app_book.image = 'images/books/book_16.jpg'
     app_book.isbn10 = '5-17-025476-8'
     app_book.isbn13 = '978-5-17-025476-7'
     app_book.description = '''
@@ -493,9 +493,9 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.name = 'Die Abenteuer des Stefón Rudel'
     app_book.author = 'Stefan Knapp'
     app_book.language = 'DE'
-    app_book.releaseDate = dateutil.parser.parse("2004")
-    app_book.pageNumber = 384
-    app_book.image = 'images/books/book_18.jpg'
+    app_book.releaseDate = dateutil.parser.parse("2012")
+    app_book.pageNumber = 446
+    app_book.image = 'images/books/book_17.jpg'
     app_book.isbn10 = '84-9015-648-4'
     app_book.isbn13 = '978-84-9015-648-3'
     app_book.description = '''
@@ -518,7 +518,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2015")
     app_book.pageNumber = 912
-    app_book.image = 'images/books/book_19.jpg'
+    app_book.image = 'images/books/book_18.jpg'
     app_book.isbn10 = '38-9029-458-8'
     app_book.isbn13 = '978-38-9029-458-8'
     app_book.description = '''
@@ -541,7 +541,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2014")
     app_book.pageNumber = 256
-    app_book.image = 'images/books/book_20.jpg'
+    app_book.image = 'images/books/book_19.jpg'
     app_book.isbn10 = '34-9962-281-5'
     app_book.isbn13 = '978-34-9962-281-5'
     app_book.description = '''
@@ -564,7 +564,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2016")
     app_book.pageNumber = 272
-    app_book.image = 'images/books/book_21.jpg'
+    app_book.image = 'images/books/book_20.jpg'
     app_book.isbn10 = '35-4837-625-8'
     app_book.isbn13 = '978-35-4837-625-8'
     app_book.description = '''
@@ -587,7 +587,7 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     app_book.language = 'DE'
     app_book.releaseDate = dateutil.parser.parse("2015")
     app_book.pageNumber = 576
-    app_book.image = 'images/books/book_22.jpg'
+    app_book.image = 'images/books/book_21.jpg'
     app_book.isbn10 = '34-4231-262-0'
     app_book.isbn13 = '978-34-4231-262-0'
     app_book.description = '''
@@ -602,3 +602,245 @@ Ulrich heißt der 'Mann ohne Eigenschaften', er ist Mathematiker, Philosoph und 
     offer.shipping_price = 3
     offer.active = True
     offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='s0535844@htw-berlin.de').first()
+    app_book.name = 'Der Dunkle Turm, Band 1: Schwarz'
+    app_book.author = 'Steven King'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2003-12-01")
+    app_book.pageNumber = 352
+    app_book.image = 'images/books/book_22.jpg'
+    app_book.isbn10 = '34-5387-556-7'
+    app_book.isbn13 = '978-34-5387-556-2'
+    app_book.description = '''
+        Im ersten Band von Stephen Kings epischer Fantasyserie durchstreift Roland, der letzte Revolvermann, auf der Suche nach dem mysteriösen Dunklen Turm eine sterbende Welt. Der Auftakt zur großen Saga jetzt in einer von Stephen King komplett überarbeiteten Fassung mit neuem Vorwort und neuer Einführung.'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='s0535844@htw-berlin.de').first()
+    offer.book = Book.objects.filter(name = 'Der Dunkle Turm, Band 1: Schwarz').first()
+    offer.price = 5
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='s0535844@htw-berlin.de').first()
+    app_book.name = '365 Sexstellungen: Heiße Sexspiele für ein ganzes Jahr'
+    app_book.author = 'Randi Foxx'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2014-06-21")
+    app_book.pageNumber = 352
+    app_book.image = 'images/books/book_23.jpg'
+    app_book.isbn10 = '38-0943-322-5'
+    app_book.isbn13 = '978-38-0943-322-4'
+    app_book.description = '''
+        Spaß im Bett, und das an jedem Tag des Jahres. Abenteuerlustige Paare können hier die 365 heißesten Sexstellungen erproben. Wie wärs zum Start mit dem "Schlitten"? Aber auch die "Windmühle" und der "Ponyritt" lassen keine Langeweile aufkommen. Und zum krönenden Höhepunkt können Sie in einer "endlosen Umarmung" verschmelzen …'''
+    app_book = importer.save_or_locate(app_book)
+
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='s0535844@htw-berlin.de').first()
+    offer.book = Book.objects.filter(name = '365 Sexstellungen: Heiße Sexspiele für ein ganzes Jahr').first()
+    offer.price = 5
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='alex@book2.de').first()
+    app_book.name = 'Harry Potter und die Kammer des Schreckens'
+    app_book.author = 'Joanne K. Rowling'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2006")
+    app_book.pageNumber = 368
+    app_book.image = 'images/books/book_24.jpg'
+    app_book.isbn10 = '3551354022'
+    app_book.isbn13 = '978-3551354020'
+    app_book.description = '''
+        Endlich wieder Schule! Einen solchen Seufzer kann nur der ausstoßen, dessen Ferien scheußlich und dessen Erinnerungen an das vergangene Schuljahr wunderbar waren: Harry Potter. Doch wie im Vorjahr stehen nicht nur Zaubertrankunterricht und Verwandlung auf dem Programm. Ein grauenhaftes Etwas treibt sein Unwesen in der Schule – ein Ungeheuer, für das nicht einmal die mächtigsten Zauberer eine Erklärung finden. Wird Harry mit Hilfe seiner Freunde Ron und Hermine das Rätsel lösen und Hogwarts von den dunklen Mächten befreien können?'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='alex@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Harry Potter und die Kammer des Schreckens').first()
+    offer.price = 15
+    offer.shipping_price = 5
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='alex@book2.de').first()
+    app_book.name = 'Harry Potter und der Gefangene von Askaban'
+    app_book.author = 'Joanne K. Rowling'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2007")
+    app_book.pageNumber = 480
+    app_book.image = 'images/books/book_25.jpg'
+    app_book.isbn10 = '3551354030'
+    app_book.isbn13 = '978-3551354037'
+    app_book.description = '''
+        Diesmal läuft in den Ferien alles gründlich schief. Weil Harry seine schreckliche Muggeltante mit einem Schwebezauber an die Zimmerdecke befördert hat, droht ihm jetzt der Schulverweis. Doch Harry darf zurück nach Hogwarts - und alle behandeln ihn plötzlich wie ein rohes Ei. Liegt das daran, dass ein gefürchteter Verbrecher es auf ihn abgesehen hat? Zusammen mit Ron und Hermine geht Harry der Sache nach. Und stößt auf jede Menge Geheimnisse.'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='alex@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Harry Potter und der Gefangene von Askaban').first()
+    offer.price = 10
+    offer.shipping_price = 5
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='alex@book2.de').first()
+    app_book.name = 'Doctor Who - Der zehnte Doctor: Bd. 1: Herrschaft des Schreckens'
+    app_book.author = 'Nick Abadzis'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2015")
+    app_book.pageNumber = 128
+    app_book.image = 'images/books/book_26.jpg'
+    app_book.isbn10 = '3957982871'
+    app_book.isbn13 = '978-3957982872'
+    app_book.description = '''
+       Doctor Who, der durch Zeit und Raum reist und in immer wieder neue Inkarnationen schlüpft, um die Menschheit vor Aliens, Robotern und Monstern zu bewahren, ist in der Popkultur Großbritanniens so fest verankert, wie Superman in den USA oder Tintin in Frankreich. Auch in Deutschland wächst die Fangemeinde der Whovians rasant. Der Start der aktuellen Staffel mit dem zwölften Doktor wurde sogar mit Sondervorführungen in den Kinos zelebriert. Nun erscheinen endlich auch die heiß ersehnten Comics hierzulande bei Panini. BAFTA Award für die beste Drama-Serie 2006 Der Comic-Hit zum Serien-Klassiker! Autor: Nick Abadzis Zeichner: Elena Casagrandeg'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-12-12T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='alex@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Doctor Who - Der zehnte Doctor: Bd. 1: Herrschaft des Schreckens').first()
+    offer.price = 12
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='alex@book2.de').first()
+    app_book.name = 'Doctor Who - Der elfte Doctor: Bd. 1: Nachleben'
+    app_book.author = 'Al Ewing'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2015")
+    app_book.pageNumber = 144
+    app_book.image = 'images/books/book_27.jpg'
+    app_book.isbn10 = '395798288X'
+    app_book.isbn13 = '978-3957982889'
+    app_book.description = '''
+       Doctor Who: Er ist über neunhundert Jahre alt, wechselt ab und zu den Körper und ist der Titelheld von Großbritanniens beliebtester Science-Fiction-Serie. Sein Raumschiff, die TARDIS, sieht aus wie eine blaue Telefonzelle, ist innen jedoch wesentlich größer als außen. Mit ihr reist der Doctor durch Raum und Zeit, auf der Suche nach Abenteuern und den Wundern des Universums. Und da es keinen Spaß macht, die allein zu entdecken, lädt der Timelord vom Planeten Gallifrey immer wieder Menschen ein, ihn auf seinen Reisen zu begleiten. Alice Obiefune betrauert gerade den Tod ihrer Mutter, als der Doctor wie eine Naturgewalt in ihr Leben platzt und es auf den Kopf stellt … obwohl, eigentlich ist es die TARDIS, die auf dem Kopf steht. Nun, egal … Die junge Frau wird vom Doctor mit auf die Jagd nach dem „Regenbogenhund“ genommen, besucht den schlimmsten Vergnügungspark der Galaxis und hat wesentlichen Einfluss auf die Karriere eines Musikers der 1970er Jahre – da bleibt wenig Zeit zur Trauer'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2015-11-18T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='alex@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Doctor Who - Der elfte Doctor: Bd. 1: Nachleben').first()
+    offer.price = 17
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='book2@jelger.de').first()
+    app_book.name = 'Die Kunst der Täuschung: Risikofaktor Mensch'
+    app_book.author = 'Kevin D. Mitnick, William Simon'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2006-03-27")
+    app_book.pageNumber = 416
+    app_book.image = 'images/books/book_28.jpg'
+    app_book.isbn10 = '3826615697'
+    app_book.isbn13 = '978-3826615696'
+    app_book.description = '''
+      In Die Kunst der Täuschung dreht sich alles um die Möglichkeit, jemandes Vertrauen mit Lügen zu erschleichen, um dieses Vertrauen dann zum eigenen Spaß und Vorteil zu missbrauchen. Hacker beschönigen dieses Vorgehen mit der Bezeichnung "soziales hacken" und der wohl bekannteste Hacker, Kevin Mitnick, analysiert in seinem Buch diese Technik mit zahlreichen Beispielszenarien.'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2016-01-12T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='book2@jelger.de').first()
+    offer.book = Book.objects.filter(name = 'Die Kunst der Täuschung: Risikofaktor Mensch').first()
+    offer.price = 12
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='book2@jelger.de').first()
+    app_book.name = 'Philosophie des Zen-Buddhismus'
+    app_book.author = 'Byung-Chul Han'
+    app_book.language = 'DE'
+    app_book.releaseDate = dateutil.parser.parse("2002-03-01")
+    app_book.pageNumber = 136
+    app_book.image = 'images/books/book_29.jpg'
+    app_book.isbn10 = '3150181852'
+    app_book.isbn13 = '978-3150181850'
+    app_book.description = '''
+      Der Zen-Buddhismus ist eine charakteristisch fernöstliche Form des Buddhismus. Er enthält philosophische Einsichten, die auf interessante Weise mit abendländischen Denkmustern kontrastieren. Der vorliegende Band stellt anschaulich dar, worin die philosophische Kraft des Zen-Buddhismus besteht, und führt zugleich in die Grundzüge fernöstlichen Denkens ein.'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2016-01-12T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='book2@jelger.de').first()
+    offer.book = Book.objects.filter(name = 'Philosophie des Zen-Buddhismus').first()
+    offer.price = 1
+    offer.shipping_price = 3
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+
+    app_book = Book()
+    app_book.user = User.objects.filter(email='daniel@book2.de').first()
+    app_book.name = 'The Martian'
+    app_book.author = 'Andy Weir'
+    app_book.language = 'EN'
+    app_book.releaseDate = dateutil.parser.parse("2014-02-11")
+    app_book.pageNumber = 384
+    app_book.image = 'images/books/book_30.jpg'
+    app_book.isbn10 = '0804139024'
+    app_book.isbn13 = '978-0804139021'
+    app_book.description = '''
+      Six days ago, astronaut Mark Watney became one of the first people to walk on Mars.
+      Now, he's sure he'll be the first person to die there.
+      After a dust storm nearly kills him and forces his crew to evacuate while thinking him dead, Mark finds himself stranded and completely alone with no way to even signal Earth that he’s alive—and even if he could get word out, his supplies would be gone long before a rescue could arrive.
+      Chances are, though, he won't have time to starve to death. The damaged machinery, unforgiving environment, or plain-old "human error" are much more likely to kill him first.
+      But Mark isn't ready to give up yet. Drawing on his ingenuity, his engineering skills—and a relentless, dogged refusal to quit—he steadfastly confronts one seemingly insurmountable obstacle after the next. Will his resourcefulness be enough to overcome the impossible odds against him?'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2016-01-12T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='daniel@book2.de').first()
+    offer.book = Book.objects.filter(name = 'The Martian').first()
+    offer.price = 7.50
+    offer.shipping_price = 3.99
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+    
+    app_book = Book()
+    app_book.user = User.objects.filter(email='daniel@book2.de').first()
+    app_book.name = 'Nineteen Eighty-Four'
+    app_book.author = 'George Orwell'
+    app_book.language = 'EN'
+    app_book.releaseDate = dateutil.parser.parse("1949-06-01")
+    app_book.pageNumber = 368
+    app_book.image = 'images/books/book_31.jpg'
+    app_book.isbn10 = '0141191201'
+    app_book.isbn13 = '978-0141191201'
+    app_book.description = '''
+      Winston Smith works for the Ministry of Truth in London, chief city of Airstrip One. Big Brother stares out from every poster, the Thought Police uncover every act of betrayal.
+      When Winston finds love with Julia, he discovers that life does not have to be dull and deadening, and awakens to new possibilities. 
+      Despite the police helicopters that hover and circle overhead, Winston and Julia begin to question the Party; they are drawn towards conspiracy. Yet Big Brother will not tolerate dissent - even in the mind. 
+      For those with original thoughts they invented Room 101.'''
+    app_book = importer.save_or_locate(app_book)
+
+    offer = Offer()
+    offer.updated = dateutil.parser.parse("2016-01-12T12:00:00.000000+00:00")
+    offer.seller_user = User.objects.filter(email='daniel@book2.de').first()
+    offer.book = Book.objects.filter(name = 'Nineteen Eighty-Four').first()
+    offer.price = 3.74
+    offer.shipping_price = 2.99
+    offer.active = True
+    offer = importer.save_or_locate(offer)
+
+

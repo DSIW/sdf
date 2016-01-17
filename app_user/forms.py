@@ -13,8 +13,11 @@ from django.contrib.auth.forms import UserCreationForm
 
 from .models import User, ConfirmEmail, ChangeUserData
 from app.widgets import CustomFileInput
-from sdf import settings
+from app_payment.models import Payment
+from paypal.standard.models import *
+from django.conf import settings
 
+ACTIVE_PAYMENT_STATUSES = [ST_PP_CREATED, ST_PP_ACTIVE, ST_PP_PENDING, ST_PP_VOIDED]
 
 def validate_not_real_name(value):
     for user in User.objects.all():
@@ -24,13 +27,17 @@ def validate_not_real_name(value):
         if user.username is not None and user.username.lower() == value.lower():
             raise ValidationError('Pseudonym bereits vergeben.', code='unique')
 
+def validate_email(value):
+    for user in User.objects.all():
+        if user.email.lower() == value.lower():
+            raise ValidationError('E-Mailaddresse bereits vergeben.', code='unique')
+
 class RegistrationForm(UserCreationForm):
     first_name = forms.TextInput()
     last_name = forms.TextInput()
 
     paypal = forms.EmailInput()
     email = forms.EmailInput()
-    profileImage = forms.FileField()
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
@@ -95,17 +102,16 @@ class EmailThread(threading.Thread):
                   [self.request.POST.get('email')], fail_silently=True, html_message=self.emailMessage)
 
 class CustomUpdateForm(ModelForm):
-
-    delete_saved_image = forms.BooleanField(required=False, label='Bild löschen')
-
+    delete_account = forms.BooleanField(required=False, label='Account löschen')
     def __init__(self, *args, **kwargs):
         super(CustomUpdateForm, self).__init__(*args, **kwargs)
         self.user = kwargs.pop('initial', None)
         self.modelUser = User.objects.filter(email=self.user['email']).first()
+
         if self.user['username'] is None:
             del self.fields["username"]
-        if not (self.modelUser and self.modelUser.profileImage):
-            del self.fields['delete_saved_image']
+        else:
+            self.fields["username"].required = False
 
     def clean_username(self):
         cleaned_data = super(CustomUpdateForm, self).clean()
@@ -115,20 +121,53 @@ class CustomUpdateForm(ModelForm):
 
         return username
 
+    def clean_delete_account(self):
+        cleaned_data = super(CustomUpdateForm, self).clean()
+        if cleaned_data["delete_account"]:
+            user = User.objects.filter(email = cleaned_data["email"]).first()
+            payments_buyer = Payment.objects.filter(payment_status__in=ACTIVE_PAYMENT_STATUSES, buyer_user_id = user.id);
+            payments_seller = Payment.objects.filter(payment_status__in=ACTIVE_PAYMENT_STATUSES, seller_user_id = user.id);
+            if payments_seller or payments_buyer:
+                raise ValidationError('Sie können Ihren Account nicht löschen, da noch offene Kaufprozesse vorhanden sind', code='payment_collision')
+        return cleaned_data["delete_account"]
+    def clean_email(self):
+        cleaned_data = super(CustomUpdateForm, self).clean()
+        email = cleaned_data["email"]
+        if email != self.user["email"]:
+            validate_email(cleaned_data["email"])
+        return email
+
     class Meta:
         model = ChangeUserData
-        fields = ['username', 'first_name', 'last_name', 'email', 'location']
-
+        fields = ['username', 'first_name', 'last_name', 'email', 'location', 'paypal']
+        widgets = {
+            'username' : forms.TextInput(attrs = {'placeholder': 'Pseudonym löschen'}),
+        }
 
 class UsernameForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(UsernameForm, self).__init__(*args, **kwargs)
     class Meta:
-        model = ChangeUserData
+        model = User
         fields = ['username']
 
     def clean_username(self):
         cleaned_data = super(UsernameForm, self).clean()
-        validate_not_real_name(cleaned_data["username"])
+        if cleaned_data["username"]:
+            validate_not_real_name(cleaned_data["username"])
+        return cleaned_data["username"] or None
 
-        return cleaned_data["username"]
+class ImageForm(ModelForm):
+    delete_saved_image = forms.BooleanField(required=False, label='Bild löschen')
+
+    def __init__(self, *args, **kwargs):
+        super(ImageForm, self).__init__(*args, **kwargs)
+        self.fields['profileImage'].required = False
+        self.fields['profileImage'].widget = CustomFileInput()
+        self.user = kwargs.pop('instance', None)
+        if not (self.user and self.user.profileImage):
+            del self.fields['delete_saved_image']
+
+    class Meta:
+        model = User
+        fields = ['profileImage']

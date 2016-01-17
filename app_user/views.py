@@ -1,4 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
+import threading
+from django.core.mail import send_mail
 from django.http import HttpRequest
 from django.utils.crypto import get_random_string
 from django.utils.html import format_html
@@ -8,6 +10,7 @@ from django.template import RequestContext
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.forms import SetPasswordForm
@@ -18,6 +21,7 @@ from django.contrib.auth import update_session_auth_hash, authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import login as loginview
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 
 from django.core.mail import EmailMessage
 from .models import User, ConfirmEmail, PasswordReset, ChangeUserData
@@ -28,13 +32,15 @@ from django.utils.translation import ugettext_lazy as _
 
 from braces.views import FormMessagesMixin
 from smtplib import SMTPRecipientsRefused
+from .decorators import can_change_user
 from .models import User, ConfirmEmail
-from .forms import CustomUpdateForm,RegistrationForm, UsernameForm
+from app_book.models import Book, Offer
+from .forms import CustomUpdateForm,RegistrationForm, UsernameForm, ImageForm
 from app_payment.models import SellerRating
 
 
 # Custom Current User Decorator
-from sdf import settings
+from django.conf import settings
 
 def login_user(request):
     # prevent a logged in user from accessing the login page
@@ -60,7 +66,10 @@ def login_user(request):
             else:
                 # Return a 'disabled account' error message
                 messages.add_message(request, messages.ERROR, 'Das Benutzerkonto ist deaktiviert.')
-            return HttpResponseRedirect(request.POST['next'] or reverse('app_book:archivesPage'))
+            if not 'next' in request.POST:
+                return HttpResponseRedirect(reverse('app_book:archivesPage'))
+            else:
+                return HttpResponseRedirect(request.POST['next'])
         else:
             # Return an 'invalid login' error message.
             messages.add_message(request, messages.ERROR, 'Loginversuch fehlgeschlagen.')
@@ -121,6 +130,7 @@ def register_user(request):
     return render_to_response('app_user/register.html', {'form': form}, RequestContext(request))
 
 @login_required
+@can_change_user
 def user_update(request, pk):
     user = User.objects.filter(id=pk).first()
     data = {
@@ -128,7 +138,8 @@ def user_update(request, pk):
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email,
-            'location': user.location
+            'location': user.location,
+            'paypal' : user.paypal
         }
 
     changeUserDataTmp = ChangeUserData.objects.filter(user_id=user.id).first()
@@ -149,38 +160,66 @@ def user_update(request, pk):
             return render_to_response('app_user/user_update_form.html', {'form': form}, RequestContext(request))
         if form.is_valid():
             form.user = user
+            if form.cleaned_data["delete_account"]:
+                user.is_active = False;
+                user.showcaseDisabled = True;
+                user.save();
+                Notification.request_remove_userprofile_administrator(user.id)
+                messages.add_message(request, messages.SUCCESS,
+                     "Ihr Antrag wurde erfolgreich versendet und wird in Kürze von einem Moderator bearbeitet. Ihr Profil ist ab sofort deaktiviert und wird nach der Bestätigung des Admins gelöscht")
+                return HttpResponseRedirect(reverse('app_user:logout')+'?next=/')
 
-            changeUserData = form.save(commit=False)
-            changeUserData.user_id = user.id
-            changeUserData.save()
-            Notification.request_change_userprofile_administrator(user.id, changeUserData)
-            messages.add_message(request, messages.SUCCESS,
-                     "Ihr Antrag wurde erfolgreich versendet und wird in Kürze von einem Moderator bearbeitet. Sie erhalten anschließend eine Benachrichtigung")
-            return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk':request.user.id}))
+            else:
+                changeUserData = form.save(commit=False)
+                changeUserData.user_id = user.id
+                changeUserData.save()
+                Notification.request_change_userprofile_administrator(user.id, changeUserData)
+                messages.add_message(request, messages.SUCCESS,
+                         "Ihr Antrag wurde erfolgreich versendet und wird in Kürze von einem Moderator bearbeitet. Sie erhalten anschließend eine Benachrichtigung")
+                return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk':request.user.id}))
     else:
         form = CustomUpdateForm(data, initial=data)
-
     return render_to_response('app_user/user_update_form.html', {'form': form}, RequestContext(request))
 
-@login_required
 def user_details(request, pk):
     template_name = 'app_user/detail.html'
     user = User.objects.filter(id=pk).first()
     user.books_count = len(user.offer_set.exclude(active = False))
 
-    autoopen = 'false'
-    if request.method == "POST":
+    autoopen = {
+        'usernamemodal': 'false',
+        'imagemodal' : 'false'
+    }
+
+    if request.method == "POST" and request.POST.get("form") == "updateProfileImage":
+        form = UsernameForm()
+        imageform = ImageForm(request.POST, request.FILES)
+        if imageform.is_valid():
+            newImage = request.FILES.get('profileImage')
+            if request.user.id == user.id:
+                if newImage is not None:
+                    user.profileImage = newImage
+                    user.save()
+                elif ('delete_saved_image' in request.POST and request.POST['delete_saved_image'] == 'on'):
+                    user.profileImage = None
+                    user.save()
+            return HttpResponseRedirect(reverse('app_user:user-details', kwargs={'pk':request.user.id}))
+        else:
+            autoopen["imagemodal"] = 'true'
+    elif request.method == "POST" and request.POST.get("form") == "updateUsername" and user.id == request.user.id:
         form = UsernameForm(request.POST)
+        imageform = ImageForm()
         if form.is_valid():
             user.username = form.clean_username()
             user.save()
         else:
-            autoopen = 'true'
+            autoopen["usernamemodal"] = 'true'
     else:
         form = UsernameForm()
+        imageform = ImageForm(instance=user)
 
 
-    return render_to_response(template_name, {'user': user, 'form': form, 'autoopen': autoopen}, RequestContext(request))
+    return render_to_response(template_name, {'user': user, 'form': form, 'imageform' : imageform, 'autoopen': autoopen}, RequestContext(request))
 
 def confirm_email(request, uuid):
     confirmEmail = ConfirmEmail.objects.filter(uuid=uuid).first()
@@ -209,7 +248,7 @@ def changePassword(request):
     else:
         form = PasswordChangeForm(user=request.user)
     action = reverse('app_user:change_password')
-    return render_to_response('app_user/password.html', {'form': form, 'action': action}, RequestContext(request))
+    return render_to_response('app_user/password.html', {'form': form, 'action': action, 'title': 'Passwort ändern'}, RequestContext(request))
 
 def sendPasswordResetEmail(request):
     email = request.POST.get('email', '')
@@ -257,7 +296,7 @@ def password_reset(request):
     else:
         form = PasswordResetForm()
     action = reverse('app_user:reset_password')
-    return render_to_response('app_user/password.html', {'form': form, 'action': action}, RequestContext(request))
+    return render_to_response('app_user/password.html', {'form': form, 'action': action, 'title': 'Passwort vergessen'}, RequestContext(request))
 
 # Diese Methode setzt das Password eines Benutzers.
 def password_new(request, uuid):
@@ -281,12 +320,11 @@ def password_new(request, uuid):
     else:
         form = SetPasswordForm(user=user)
     action = reverse('app_user:new_password', kwargs={'uuid': uuid})
-    return render_to_response('app_user/password.html', {'form': form, 'action': action}, RequestContext(request))
+    return render_to_response('app_user/password.html', {'form': form, 'action': action, 'title': 'Neues Passwort'}, RequestContext(request))
 
-@login_required
-def user_ratings(request, id):
-    user = User.objects.filter(pk=id).first()
-    ratings = SellerRating.objects.filter(rated_user_id=id)
+def user_ratings(request, pk):
+    user = get_object_or_404(User, id=pk)
+    ratings = SellerRating.objects.filter(rated_user_id=pk)
     return render_to_response('app_user/user_ratings.html',{'rated_user':user,'ratings':ratings},RequestContext(request))
 
 def change_user_profile(request, change_user_data_id, accepted):
@@ -299,6 +337,7 @@ def change_user_profile(request, change_user_data_id, accepted):
         user.last_name = change_user_data.last_name
         user.email = change_user_data.email
         user.location = change_user_data.location
+        user.paypal = change_user_data.paypal
 
         user.save()
 
@@ -306,13 +345,68 @@ def change_user_profile(request, change_user_data_id, accepted):
     Notification.request_change_userprofile_customer(request.user.id, user.id, accepted)
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def change_user_profile_decline(request, change_user_data_id):
     change_user_profile(request, change_user_data_id, False)
     messages.add_message(request, messages.SUCCESS, 'Antrag auf Benutzerdatenänderung wurde erfolgreich abgelehnt')
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def change_user_profile_accept(request, change_user_data_id):
     change_user_profile(request, change_user_data_id, True)
     messages.add_message(request, messages.SUCCESS, 'Benutzerdaten wurden erfolgreich aktualisiert')
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def remove_user(request, remove_user_id):
+
+    '''Loesche Buecher'''
+    books = Book.objects.filter(user_id = remove_user_id)
+    for book in books:
+        book.delete()
+
+    '''Loesche Schaufenster'''
+    offers = Offer.objects.filter(seller_user_id = remove_user_id)
+    for offer in offers:
+        offer.delete()
+
+
+    user = get_object_or_404(User, id=remove_user_id)
+    receiver_user = user
+    user.delete()
+
+    DeleteAccountEmailThread(receiver_user).start()
+
+    messages.add_message(request, messages.SUCCESS, 'Benutzer und alle seine Aktvitäten wurden erfolgreich gelöscht')
+    return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
+
+# Call via AJAX
+@login_required
+def toggleStaff(request, pk):
+    if request.method == 'POST' and request.user.is_superuser:
+        user = User.objects.filter(id=pk).first()
+        is_staff = user.is_staff
+        user.is_staff = not is_staff
+        user.save()
+        return JsonResponse({'state': not is_staff})
+    return JsonResponse({'error': True})
+
+
+class DeleteAccountEmailThread(threading.Thread):
+    def __init__(self, recipient):
+        self.subject = 'book²: ' + ('Ihre Account-Daten wurden gelöscht')
+
+        self.emailMessage = 'Hallo '+ recipient.first_name + ' '+ recipient.last_name +',<br><br>'
+        self.emailMessage += "Ihre Account-Daten wurden gelöscht."
+        self.emailMessage += '<br><br>Ihr Book²-Team'
+
+        self.recipient = recipient
+        self.address = self.recipient.email
+        threading.Thread.__init__(self)
+
+    def run (self):
+        if(self.recipient.enabled_notifications_via_email):
+            send_mail(self.subject, self.emailMessage, settings.EMAIL_HOST_USER,
+                      [self.address], fail_silently=True, html_message=self.emailMessage)

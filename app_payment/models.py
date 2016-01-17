@@ -2,7 +2,6 @@
 
 from django.db import models
 
-import json
 from datetime import datetime, timedelta
 from django.core.validators import MaxValueValidator, MinValueValidator
 
@@ -10,6 +9,8 @@ from django.forms import ModelForm
 
 from paypal.standard.models import *
 from paypal.standard.ipn.models import PayPalIPN
+
+import uuid
 
 # Create your models here.
 class Payment(models.Model):
@@ -29,6 +30,7 @@ class Payment(models.Model):
     custom = models.CharField(max_length=255)
     source = models.CharField(max_length=255)
     created_at = models.DateTimeField()
+    shipped = models.BooleanField(default=False)
 
     def init_process(self, offer, user, source):
         self.book = offer.book
@@ -42,9 +44,6 @@ class Payment(models.Model):
         self.currency_code = 'EUR'
         self.invoice = datetime.now().strftime('%Y%m%d-%H%M%S')+"-book-"+str(self.book.id)+"-seller-"+str(self.seller_user.id)
         self.source = source
-
-        self.save() # get id for custom JSON
-        self.custom = json.dumps({'payment_id': self.id})
 
     def save(self, *args, **kwargs):
         ''' On save, update created_at '''
@@ -71,8 +70,8 @@ class SellerRating(models.Model):
      payment = models.ForeignKey(Payment,related_name='rated_payment')
      rating_user = models.ForeignKey('app_user.User',related_name='rating_buyer')
      rated_user = models.ForeignKey('app_user.User',related_name='rated_seller')
-     rating = models.PositiveIntegerField(validators=[MinValueValidator(0),MaxValueValidator(10)])
-     textrating = models.CharField(max_length=200)
+     rating = models.PositiveIntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
+     textrating = models.CharField(max_length=200, blank=True)
      updatedAt  = models.DateField('updated_at')
      createdAt  = models.DateField('created_at')
      def save(self, *args, **kwargs):
