@@ -22,25 +22,32 @@
 
                 <a id="logo-container" href="/" class="brand-logo"><i class="material-icons left">chrome_reader_mode</i>Book²</a>
                 <ul class="right hide-on-med-and-down">
-
-                        <li><a class="btn-flat" href="/accounts/2/showcase?next=/" role="button">Schaufenster</a></li>
-                        <li><a class="btn-flat" href="/archive/?next=/" role="button">Archiv</a></li>
-                        <li><a class="btn-flat" href="/accounts/2/?next=/" role="button">Profil</a></li>
-                        <li><a class="btn-flat" href="/logout/?next=/" role="button">Abmelden</a></li>
-
+                    {% if request.user.is_authenticated %}
+                      <li><a class="btn-flat" href="{% url 'app_book:showcase' user.id %}">Schaufenster</a></li>
+                      <li><a class="btn-flat" href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
+                      <li><a class="btn-flat" href="{% url 'app_user:user-details' user.id %}">Profil</a></li>
+                      <li><a class="btn-flat" href="{% url 'logout' %}?next=/">Abmelden</a></li>
+                    {% else %}
+                        <li><a class="btn-flat" href="{% url 'app_user:login' %}">Anmelden</a></li>
+                        <li><a class="btn-flat" href="{% url 'app_user:register' %}">Registrieren</a></li>
+                    {% endif %}
                 </ul>
 
                 <ul style="left: -250px;" id="nav-mobile" class="side-nav">
-                    <li><a href="/showcases">Schaufenster</a></li>
-                    <li><a href="/books">Bücher</a></li>
+                    <li><a href="{% url 'app_book:showcases' %}">Alle Schaufenster</a></li>
+                    <li><a href="{% url 'app_book:books' %}">Alle Bücher</a></li>
                     <hr>
-
-                        <li><a href="/accounts/2/showcase">Mein Schaufenster</a></li>
-                        <li><a href="/archive/">Archiv</a></li>
-                        <li><a href="/accounts/2/">Mein Profil</a></li>
-                        <li><a href="/accounts/password/">Passwort ändern</a></li>
-                        <li><a href="/logout/?next=/">Abmelden</a></li>
-
+                    {% if request.user.is_authenticated %}
+                      <li><a href="{% url 'app_book:showcase' user.id %}">Mein Schaufenster</a></li>
+                      <li><a href="{% url 'app_book:archivesPage' %}">Archiv</a></li>
+                      <li><a href="{% url 'app_notification:notificationsPage' %}">Benachrichtigungen</a></li>
+                      <li><a href="{% url 'app_user:user-details' user.id %}">Mein Profil</a></li>
+                      <li><a href="{% url 'app_user:change_password' %}">Passwort ändern</a></li>
+                      <li><a href="{% url 'logout' %}?next=/">Abmelden</a></li>
+                    {% else %}
+                        <li><a href="{% url 'app_user:login' %}">Anmelden</a></li>
+                        <li><a href="{% url 'app_user:register' %}">Registrieren</a></li>
+                    {% endif %}
                 </ul>
 
             </div>
