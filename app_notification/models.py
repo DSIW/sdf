@@ -165,6 +165,10 @@ class Notification(models.Model):
         buyer = get_object_or_404(User, id=notification.sender_user.id)
         seller = get_object_or_404(User, id=notification.receiver_user.id)
         book = get_object_or_404(Book, id=notification.book.id)
+        payment = Payment.objects.filter(book=book).last()
+
+        payment.shipped = True
+        payment.save()
 
         # Buchversand bestaetigt
         subject = 'Das Buch ' + book.name + ' wurde verschickt.'
