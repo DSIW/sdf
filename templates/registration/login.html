@@ -11,7 +11,7 @@
     <div class="container-wrapper">
         <div class="container">
             <div class="row">
-                <div class="col m8 s12">
+                <div class="col s12">
                     {% if form.errors %}
                     <div class="z-depth-1 alert alert-error">{{ form.username.label }} oder {{ form.password.label }} sind falsch!</div>
                     {% endif %}
@@ -33,20 +33,6 @@
                         {# Assumes you setup the password_reset view in your URLconf #}
                         <p><a href="{% url 'password_reset' %}">Passwort vergessen?</a></p>
                     </form>
-                </div>
-
-                <div class="col m4 s12">
-                    <div class="login-hint">
-                        <strong>Login-Hinweis:</strong>
-                        <ul>
-                            <li class="code">max@book2.de:123456</li>
-                            <li class="code">martin@mustermann.de:123456</li>
-                            <li class="code">marie@book2.de:123456</li>
-                            <li class="code">admin@admin.de:123456</li>
-                            <li class="code">jens@book2.de:123456</li>
-                            <li class="code">s0535844@htw-berlin.de:123456</li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
