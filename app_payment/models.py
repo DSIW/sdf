@@ -30,6 +30,7 @@ class Payment(models.Model):
     custom = models.CharField(max_length=255)
     source = models.CharField(max_length=255)
     created_at = models.DateTimeField()
+    shipped = models.BooleanField(default=False)
 
     def init_process(self, offer, user, source):
         self.book = offer.book
