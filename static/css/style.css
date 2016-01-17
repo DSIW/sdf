@@ -37,6 +37,7 @@ h3 > span {
   background-color: #fff;
   padding: 0 7px;
   box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+  box-decoration-break: clone;
 }
 h3 > span:empty {
   opacity: 0;
@@ -238,7 +239,7 @@ form .input-field img {
 .title-type {
   font-weight: 300;
   font-size: 2.1rem;
-  line-height: 2.1rem;
+  min-height: 2.85rem;
 }
 
 input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
@@ -644,7 +645,7 @@ a.btn-flat:hover {
 }
 .showcase .card-open {
   position: absolute;
-  right: 6px;
+  right: 0;
   top: 319px;
   padding: 10px;
 }
