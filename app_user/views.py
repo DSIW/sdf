@@ -1,4 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
+import threading
+from django.core.mail import send_mail
 from django.http import HttpRequest
 from django.utils.crypto import get_random_string
 from django.utils.html import format_html
@@ -372,8 +374,10 @@ def remove_user(request, remove_user_id):
 
 
     user = get_object_or_404(User, id=remove_user_id)
+    receiver_user = user
     user.delete()
 
+    DeleteAccountEmailThread(receiver_user).start()
 
     messages.add_message(request, messages.SUCCESS, 'Benutzer und alle seine Aktvitäten wurden erfolgreich gelöscht')
     return HttpResponseRedirect(reverse('app_notification:notificationsPage'))
@@ -388,3 +392,21 @@ def toggleStaff(request, pk):
         user.save()
         return JsonResponse({'state': not is_staff})
     return JsonResponse({'error': True})
+
+
+class DeleteAccountEmailThread(threading.Thread):
+    def __init__(self, recipient):
+        self.subject = 'book²: ' + ('Ihre Account-Daten wurden gelöscht')
+
+        self.emailMessage = 'Hallo '+ recipient.first_name + ' '+ recipient.last_name +',<br><br>'
+        self.emailMessage += "Ihre Account-Daten wurden gelöscht."
+        self.emailMessage += '<br><br>Ihr Book²-Team'
+
+        self.recipient = recipient
+        self.address = self.recipient.email
+        threading.Thread.__init__(self)
+
+    def run (self):
+        if(self.recipient.enabled_notifications_via_email):
+            send_mail(self.subject, self.emailMessage, settings.EMAIL_HOST_USER,
+                      [self.address], fail_silently=True, html_message=self.emailMessage)
