@@ -214,7 +214,7 @@ def import_data():
     auth_user_3.is_staff = False
     auth_user_3.is_active = True
     auth_user_3.date_joined = dateutil.parser.parse("2015-11-08T14:22:49.437731+00:00")
-    auth_user_3.profileImage = 'images/profiles/profile_4.jpg'
+    auth_user_3.profileImage = 'images/profiles/profile_5.jpg'
     auth_user_3 = importer.save_or_locate(auth_user_3)
 
     auth_user_4 = User()
@@ -230,7 +230,7 @@ def import_data():
     auth_user_4.is_staff = False
     auth_user_4.is_active = True
     auth_user_4.date_joined = dateutil.parser.parse("2015-12-08T14:21:49.434251+00:00")
-    auth_user_4.profileImage = 'images/profiles/profile_5.png'
+    auth_user_4.profileImage = 'images/profiles/profile_6.png'
     auth_user_4 = importer.save_or_locate(auth_user_4)
 
     auth_user_5 = User()
@@ -246,7 +246,7 @@ def import_data():
     auth_user_5.is_staff = False
     auth_user_5.is_active = True
     auth_user_5.date_joined = dateutil.parser.parse("2015-12-08T14:21:49.434251+00:00")
-    auth_user_5.profileImage = 'images/profiles/profile_6.png'
+    auth_user_5.profileImage = 'images/profiles/profile_7.png'
     auth_user_5 = importer.save_or_locate(auth_user_5)
 
     auth_user_6 = User()
@@ -262,7 +262,7 @@ def import_data():
     auth_user_6.is_staff = False
     auth_user_6.is_active = True
     auth_user_6.date_joined = dateutil.parser.parse("2015-12-08T14:21:49.434251+00:00")
-    auth_user_6.profileImage = 'images/profiles/profile_12.jpg'
+    auth_user_6.profileImage = 'images/profiles/profile_8.jpg'
     auth_user_6 = importer.save_or_locate(auth_user_6)
 
     auth_user_7 = User()
@@ -278,7 +278,7 @@ def import_data():
     auth_user_7.is_staff = False
     auth_user_7.is_active = True
     auth_user_7.date_joined = dateutil.parser.parse("2016-01-12T13:21:49.434251+00:00")
-    auth_user_7.profileImage = 'images/profiles/profile_11.jpg'
+    auth_user_7.profileImage = 'images/profiles/profile_9.jpg'
     auth_user_7 = importer.save_or_locate(auth_user_7)
 
     auth_user_8 = User()
